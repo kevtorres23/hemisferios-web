@@ -18,9 +18,9 @@ function Navbar(props: NavbarProps) {
     const toggleOpen = () => setOpen((cur) => !cur);
 
     return (
-        <div className="absolute top-0 w-full flex flex-col gap-6 border-b border-slate-200 py-4 md:px-16 px-8">
+        <div className="absolute top-0 w-full bg-white flex flex-col gap-6 border-b border-slate-200 py-4 md:px-16 px-8">
             <div className="w-full justify-between items-center flex flex-row">
-                <Image src={Logo} alt="Logo" className="w-42 h-auto" />
+                <Image src={Logo} alt="Logo" className="sm:w-42 w-32 h-auto" />
 
                 {/* Links visible for >=1024px screen width */}
                 <div className="links-container lg:flex hidden flex-row gap-8 w-auto items-center justify-center">
