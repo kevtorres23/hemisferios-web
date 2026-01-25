@@ -1,6 +1,7 @@
 import Navbar from "@/website-components/Navbar";
 import Footer from "@/website-components/Footer";
 import HeroSection from "@/sections/HeroSection";
+import WorkingMethod from "@/sections/HomeWorkingMethod";
 
 export default function Home() {
   return (
@@ -8,6 +9,8 @@ export default function Home() {
       <Navbar activePage="home" />
 
       <HeroSection />
+
+      <WorkingMethod />
 
       <Footer />
     </div>

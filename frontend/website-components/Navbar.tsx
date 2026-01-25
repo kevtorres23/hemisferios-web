@@ -18,7 +18,7 @@ function Navbar(props: NavbarProps) {
     const toggleOpen = () => setOpen((cur) => !cur);
 
     return (
-        <div className="absolute z-999 top-0 w-full bg-white flex flex-col gap-6 border-b border-slate-200 py-4 md:px-16 px-8">
+        <div className="sticky z-999 top-0 w-full bg-white flex flex-col gap-6 border-b border-slate-200 py-4 md:px-16 px-8">
             <div className="w-full justify-between items-center flex flex-row">
                 <Image src={Logo} alt="Logo" className="sm:w-42 w-32 h-auto" />
 

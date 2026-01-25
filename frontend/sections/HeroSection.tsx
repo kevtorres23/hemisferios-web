@@ -7,7 +7,7 @@ import blob from "../public/blob.png";
 
 function HeroSection() {
     return (
-        <main className="relative overflow-hidden w-full flex lg:flex-row flex-col sm:gap-20 gap-14 justify-center items-center lg:px-0 sm:px-16 px-8 lg:py-20 md:py-32 py-36 lg:h-screen h-auto">
+        <main className="relative overflow-hidden w-full flex lg:flex-row flex-col sm:gap-20 gap-14 justify-center items-center lg:px-0 sm:px-16 px-8 lg:pt-24 lg:pb-36 md:py-20 py-16 h-auto">
             <div className="absolute xl:-left-52 md:-left-46 sm:-left-48 -left-30 sm:top-32 top-48 z-900">
                 <Image src={blob} alt="" className="xl:w-70 sm:w-60 w-40 opacity-15" />
             </div>
@@ -17,7 +17,7 @@ function HeroSection() {
             </div>
 
             {/* Content */}
-            <div className="info flex flex-col lg:gap-6 sm:gap-4 gap-7 lg:items-start items-center xl:max-w-125 lg:max-w-md md:max-w-xl xl:mr-20 mr-0 lg:mt-10 mt-0">
+            <div className="info flex flex-col lg:gap-6 sm:gap-4 gap-7 lg:items-start items-center xl:max-w-125 lg:max-w-md md:max-w-xl xl:mr-20 mr-0">
 
                 <p className="lg:text-5xl/14 text-4xl/12 lg:text-start text-center font-semibold text-slate-950 tracking-tighter w-full">Estimulación, rehabilitación e integración <span className="text-indigo-500">completa.</span></p>
                 <p className="text-base font-normal/7 lg:text-start text-center text-slate-600 w-full">Somos un centro de terapia infantil donde trabajamos para abordar y mejorar diferentes aspectos del funcionamiento cognitivo y comunicativo.</p>
