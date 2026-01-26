@@ -1,9 +1,9 @@
 import Navbar from "@/website-components/Navbar";
 import Footer from "@/website-components/Footer";
-import HeroSection from "@/sections/HeroSection";
+import HeroSection from "@/sections/HomeHeroSection";
 import WorkingMethod from "@/sections/HomeWorkingMethod";
-import TherapyAreas from "@/sections/TherapyAreas";
-import patient from "../public/patient.png";
+import TherapyAreas from "@/sections/HomeTherapyAreas";
+import ConstantGrowth from "@/sections/HomeConstantGrowth";
 
 export default function Home() {
 
@@ -15,7 +15,9 @@ export default function Home() {
 
       <WorkingMethod />
 
-      <TherapyAreas/>
+      <TherapyAreas />
+
+      <ConstantGrowth />
 
       <Footer />
     </div>

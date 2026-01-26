@@ -3,7 +3,7 @@ import { Brain, Settings, Smile, Sparkles } from "lucide-react";
 
 function WorkingMethod() {
     return (
-        <section className="w-full xl:h-screen h-auto sm:py-24 py-16 sm:px-20 px-8 bg-indigo-500 flex items-center justify-center flex-col sm:gap-20 gap-12">
+        <section className="w-full h-auto sm:py-32 py-16 sm:px-20 px-8 bg-indigo-500 flex items-center justify-center flex-col sm:gap-20 gap-12">
 
             <div className="header max-w-3xl flex flex-col items-center justify-center gap-6">
                 <h1 className="lg:text-5xl/14 sm:text-4xl/12 text-3xl/10 text-center font-semibold text-white tracking-tighter w-full">
