@@ -1,6 +1,7 @@
 import Image, { StaticImageData } from "next/image";
 import NormalButton from "@/website-components/NormalButton";
 import patient from "../public/patient.png";
+import SectionBadge from "@/website-components/SectionBadge";
 
 function TherapyAreas() {
     return (
@@ -9,7 +10,9 @@ function TherapyAreas() {
             {/* Content */}
             <div className="info flex flex-col lg:gap-6 sm:gap-4 gap-7 lg:items-start items-center xl:max-w-125 lg:max-w-md md:max-w-xl xl:mr-20 mr-0">
 
-                <h1 className="lg:text-5xl/14 text-4xl/12 lg:text-start text-center font-semibold text-slate-950 tracking-tighter w-full">
+                <SectionBadge name="ÁREAS DE TERAPIA" />
+
+                <h1 className="md:text-4xl/12 text-3xl/10 lg:text-start text-center font-semibold text-slate-950 tracking-tighter w-full">
                     Nos especializamos en la terapia <span className="text-teal-500">de lenguaje</span> y <span className="text-sky-500">cognitiva</span>.
                 </h1>
 
