@@ -18,6 +18,8 @@ function HeroSection() {
 
     return (
         <main className="relative overflow-hidden w-full flex lg:flex-row flex-col sm:gap-20 gap-14 justify-center items-center lg:px-0 sm:px-16 px-8 lg:pt-24 lg:pb-36 md:py-20 py-16 h-auto">
+            
+            {/* Decoration Blobs */}
             <div className="absolute xl:-left-52 md:-left-46 sm:-left-48 -left-30 sm:top-32 top-48 z-900">
                 <Image src={blob} alt="" className="xl:w-70 sm:w-60 w-40 opacity-15" />
             </div>

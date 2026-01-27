@@ -34,6 +34,7 @@ function Navbar(props: NavbarProps) {
                     </Link>
 
                     <NavbarLink text="Sobre nosotros" active={currentPage === "about-us" ? true : false} />
+                    
                     <NavbarLink text="Contacto" active={currentPage === "contact" ? true : false} />
                 </div>
 
@@ -51,10 +52,18 @@ function Navbar(props: NavbarProps) {
             {/* Collapsable menu for smaller screen sizes */}
             {open && (
                 <div className="w-full flex flex-col gap-4 bg-slate-100 border border-slate-200 p-4 rounded-lg">
-                    <NavbarLink text="Inicio" active={true} />
-                    <NavbarLink text="Servicios y precios" active={false} />
-                    <NavbarLink text="Sobre nosotros" active={false} />
-                    <NavbarLink text="Contacto" active={false} />
+                    <Link href="/">
+                        <NavbarLink text="Inicio" active={currentPage === "home" ? true : false} />
+                    </Link>
+
+                    <Link href="services-and-prices">
+                        <NavbarLink text="Servicios y precios" active={currentPage === "services" ? true : false} />
+                    </Link>
+
+                    <NavbarLink text="Sobre nosotros" active={currentPage === "about-us" ? true : false} />
+
+                    <NavbarLink text="Contacto" active={currentPage === "contact" ? true : false} />
+
                     <div className="sm:hidden block">
                         <NormalButton text="Agendar una cita" />
                     </div>

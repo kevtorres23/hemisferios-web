@@ -5,13 +5,22 @@ import SectionBadge from "@/website-components/SectionBadge";
 import { isVisible } from "@/website-components/VisibilityDetector";
 import Image from "next/image";
 import kidsHighFive from "../../public/kids-high-five.png";
+import blob from "../../public/blob.png";
 
 function InitialSection() {
     const ref1 = useRef(null);
     const visibility = isVisible(ref1);
 
     return (
-        <div ref={ref1} className={`${visibility ? "opacity-100 top-0" : "opacity-0 top-12"} flex flex-col gap-10 relative items-center justify-center lg:px-20 sm:px-16 px-8 lg:py-12 md:py-10 py-14 h-auto transition-all ease-in duration-700`}>
+        <div ref={ref1} className={`${visibility ? "opacity-100 top-0" : "opacity-0 top-12"} flex flex-col gap-10 relative items-center justify-center lg:px-20 sm:px-16 px-8 lg:py-16 md:py-10 py-14 h-auto transition-all ease-in duration-700`}>
+            {/* Decoration Blobs */}
+            <div className="absolute xl:-left-74 md:-left-46 sm:-left-48 -left-24 sm:top-32 top-48 z-900">
+                <Image src={blob} alt="" className="xl:w-70 sm:w-60 w-32 opacity-15" />
+            </div>
+
+            <div className="absolute xl:-right-74 md:-right-46 sm:-right-48 -right-24 xl:bottom-64 md:bottom-56 bottom-96 z-900 scale-x-[-1]">
+                <Image src={blob} alt="" className="xl:w-70 sm:w-60 w-32 opacity-15" />
+            </div>
 
             <div className="flex flex-col w-full items-center justify-center gap-4">
                 <SectionBadge name="NUESTROS SERVICIOS" />
