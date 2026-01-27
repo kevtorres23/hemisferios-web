@@ -17,7 +17,7 @@ function Testimonials() {
     const cardsVisible = isVisible(ref2);
 
     return (
-        <section className="relative w-full h-auto sm:py-32 py-16 sm:px-20 px-8 bg-white flex items-center justify-center flex-col sm:gap-20 gap-12">
+        <section className="relative w-full h-auto pt-12 sm:pb-36 pb-16 sm:px-20 px-8 bg-white flex items-center justify-center flex-col sm:gap-20 gap-12">
 
             <div ref={ref1} className={`${titleVisible ? "opacity-100 top-0" : "opacity-0 top-10"} relative max-w-3xl flex flex-col items-center justify-center gap-6 transition-all ease-in duration-700`}>
                 <SectionBadge name="TESTIMONIOS" />

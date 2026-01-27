@@ -15,7 +15,7 @@ function Dynamism() {
     const isIllustrationVisible = isVisible(ref2);
 
     return (
-        <main className="relative overflow-hidden w-full flex lg:flex-row flex-col-reverse sm:gap-20 gap-12 justify-center items-center lg:px-0 sm:px-16 px-8 lg:py-36 md:py-20 py-16 h-auto">
+        <main className="relative overflow-hidden w-full flex lg:flex-row flex-col-reverse sm:gap-20 gap-12 justify-center items-center lg:px-0 sm:px-16 px-8 lg:py-36 md:py-28 py-16 h-auto">
 
             {/* Illustration */}
             <div ref={ref2} className={`${isIllustrationVisible ? "opacity-100" : "opacity-0"} transition-all ease-in duration-900`}>

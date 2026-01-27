@@ -33,11 +33,11 @@ export default function Home() {
       <Footer />
 
       {/* Decoration blobs */}
-      <div className="absolute xl:-right-48 md:-right-46 sm:-right-48 -right-30 top-520 z-900">
+      <div className="absolute xl:-right-48 md:-right-46 sm:-right-48 -right-30 sm:top-520 top-960 z-900">
         <Image src={blob} alt="" className="xl:w-70 sm:w-60 w-40 opacity-15" />
       </div>
 
-      <div className="absolute xl:-left-48 md:-left-46 sm:-left-48 -left-30 top-620 z-900">
+      <div className="absolute xl:-left-48 md:-left-46 sm:-left-48 -left-30 sm:top-620 top-1190 z-900">
         <Image src={blob} alt="" className="xl:w-70 sm:w-60 w-40 opacity-15 scale-x-[-1]" />
       </div>
 
