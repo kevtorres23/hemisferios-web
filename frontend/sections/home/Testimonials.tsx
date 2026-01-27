@@ -22,8 +22,8 @@ function Testimonials() {
             <div ref={ref1} className={`${titleVisible ? "opacity-100 top-0" : "opacity-0 top-10"} relative max-w-3xl flex flex-col items-center justify-center gap-6 transition-all ease-in duration-700`}>
                 <SectionBadge name="TESTIMONIOS" />
 
-                <h1 className="lg:text-5xl/14 sm:text-4xl/12 text-3xl/10 text-center font-semibold text-slate-900 tracking-tighter w-full">
-                    ¡Conoce lo que algunas personas han dicho de nosotros!
+                <h1 className="sm:text-4xl/12 text-3xl/10 text-center font-semibold text-slate-900 tracking-tighter w-full">
+                    ¡Conoce lo que algunas personas han dicho de nuestros servicios!
                 </h1>
 
                 <p className="sm:text-base text-sm font-normal/7 text-center text-slate-600 w-full">Hemos recolectado los testimonios de algunas personas que han confiado en nosotros previamente. ¡Puedes leerlos a continuación!</p>

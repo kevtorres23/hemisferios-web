@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import NormalButton from "./NormalButton";
 import NavbarLink from "./NavbarLink";
 import Image from "next/image";
@@ -8,7 +9,7 @@ import React, { useState } from "react";
 import { Menu } from "lucide-react";
 
 type NavbarProps = {
-    activePage: string;
+    activePage: "home" | "services" | "about-us" | "contact";
 }
 
 function Navbar(props: NavbarProps) {
@@ -24,8 +25,14 @@ function Navbar(props: NavbarProps) {
 
                 {/* Links visible for >=1024px screen width */}
                 <div className="links-container lg:flex hidden flex-row gap-8 w-auto items-center justify-center">
-                    <NavbarLink text="Inicio" active={currentPage === "home" ? true : false} />
-                    <NavbarLink text="Servicios y precios" active={currentPage === "services" ? true : false} />
+                    <Link href="/">
+                        <NavbarLink text="Inicio" active={currentPage === "home" ? true : false} />
+                    </Link>
+
+                    <Link href="services-and-prices">
+                        <NavbarLink text="Servicios y precios" active={currentPage === "services" ? true : false} />
+                    </Link>
+
                     <NavbarLink text="Sobre nosotros" active={currentPage === "about-us" ? true : false} />
                     <NavbarLink text="Contacto" active={currentPage === "contact" ? true : false} />
                 </div>
