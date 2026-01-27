@@ -1,14 +1,24 @@
-import Image, { StaticImageData } from "next/image";
+"use client";
+
+import { useRef } from "react";
+import Image from "next/image";
 import NormalButton from "@/website-components/NormalButton";
-import patient from "../public/patient.png";
+import patient from "../../public/patient.png";
 import SectionBadge from "@/website-components/SectionBadge";
+import { isVisible } from "@/website-components/VisibilityDetector";
 
 function TherapyAreas() {
+    const ref1 = useRef(null);
+    const isInfoVisible = isVisible(ref1);
+
+    const ref2 = useRef(null);
+    const isIllustrationVisible = isVisible(ref2);
+
     return (
-        <main className={`relative overflow-hidden w-full flex lg:flex-row flex-col sm:gap-20 gap-14 justify-center items-center lg:px-0 sm:px-16 px-8 lg:pt-24 lg:pb-36 md:py-20 py-16 h-auto`}>
+        <main className="relative overflow-x-hidden overflow-y-hidden w-full flex lg:flex-row flex-col sm:gap-20 gap-14 justify-center items-center lg:px-0 sm:px-16 px-8 lg:py-36 md:py-20 py-16 h-auto">
 
             {/* Content */}
-            <div className="info flex flex-col lg:gap-6 sm:gap-4 gap-7 lg:items-start items-center xl:max-w-125 lg:max-w-md md:max-w-xl xl:mr-20 mr-0">
+            <div ref={ref1} className={`${isInfoVisible ? "opacity-100" : "opacity-0"} info flex flex-col lg:gap-6 sm:gap-4 gap-5 lg:items-start items-center xl:max-w-125 lg:max-w-md md:max-w-xl xl:mr-20 mr-0 transition-all ease-in duration-400`}>
 
                 <SectionBadge name="ÁREAS DE TERAPIA" />
 
@@ -24,7 +34,7 @@ function TherapyAreas() {
             </div>
 
             {/* Illustration */}
-            <div className="">
+            <div ref={ref2} className={`${isIllustrationVisible ? "opacity-100" : "opacity-0"} transition-all ease-in duration-900`}>
                 <Image src={patient} alt="" className="xl:w-105 lg:w-96 sm:w-102 w-80" />
             </div>
 

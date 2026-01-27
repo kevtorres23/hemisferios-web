@@ -1,11 +1,21 @@
+"use client";
+
+import { useRef } from "react";
 import Image from "next/image";
 import NormalButton from "@/website-components/NormalButton";
 import TextButton from "@/website-components/TextButton";
 import BrainTag from "@/website-components/BrainTag";
-import brainIllustration from "../public/hero-brain.png"
-import blob from "../public/blob.png";
+import brainIllustration from "../../public/hero-brain.png"
+import blob from "../../public/blob.png";
+import { isVisible }  from "@/website-components/VisibilityDetector";
 
 function HeroSection() {
+    const ref1 = useRef(null);
+    const isInfoVisible = isVisible(ref1);
+
+    const ref2 = useRef(null);
+    const isIllustrationVisible = isVisible(ref2);
+
     return (
         <main className="relative overflow-hidden w-full flex lg:flex-row flex-col sm:gap-20 gap-14 justify-center items-center lg:px-0 sm:px-16 px-8 lg:pt-24 lg:pb-36 md:py-20 py-16 h-auto">
             <div className="absolute xl:-left-52 md:-left-46 sm:-left-48 -left-30 sm:top-32 top-48 z-900">
@@ -17,7 +27,7 @@ function HeroSection() {
             </div>
 
             {/* Content */}
-            <div className="info flex flex-col lg:gap-6 sm:gap-4 gap-7 lg:items-start items-center xl:max-w-125 lg:max-w-md md:max-w-xl xl:mr-20 mr-0">
+            <div ref={ref1} className={`${isInfoVisible ? "opacity-100" : "opacity-0"} info flex flex-col lg:gap-6 sm:gap-4 gap-7 lg:items-start items-center xl:max-w-125 lg:max-w-md md:max-w-xl xl:mr-20 mr-0 transition-all ease-in duration-400`}>
 
                 <p className="lg:text-5xl/14 text-4xl/12 lg:text-start text-center font-semibold text-slate-950 tracking-tighter w-full">Estimulación, rehabilitación e integración <span className="text-indigo-500">completa.</span></p>
                 <p className="text-base font-normal/7 lg:text-start text-center text-slate-600 w-full">Somos un centro de terapia infantil donde trabajamos para abordar y mejorar diferentes aspectos del funcionamiento cognitivo y comunicativo.</p>
@@ -29,7 +39,7 @@ function HeroSection() {
             </div>
 
             {/* Illustration */}
-            <div className="relative">
+            <div ref={ref2} className={`${isIllustrationVisible ? "opacity-100" : "opacity-0"} relative transition-all ease-in duration-900`}>
                 <div className="sm:hidden w-full flex flex-row items-center justify-between">
                     <BrainTag text="Comunicación" positionStyle="" />
                     <BrainTag text="Cognición" positionStyle="" />
