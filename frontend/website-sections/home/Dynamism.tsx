@@ -32,7 +32,7 @@ function Dynamism() {
                 </h1>
 
                 <p className="text-base font-normal/7 lg:text-end text-center text-slate-600 w-full">
-                    Nos esforzamos por mantener un ambiente divertido en cada una de nuestras sesiones de terapia, con el objetivo de reforzar el aprendizaje del paciente.
+                    Te presentamos una descripción completa de los servicios que ofrecemos en nuestro centro, y los precios que tienen las sesiones de terapia.
                 </p>
 
                 <NormalButton text="Conoce más de nosotros" />

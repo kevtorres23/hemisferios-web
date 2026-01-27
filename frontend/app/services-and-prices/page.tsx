@@ -2,6 +2,7 @@ import Navbar from "@/website-components/Navbar";
 import Footer from "@/website-components/Footer";
 import InitialSection from "@/website-sections/services-and-prices/InitialSection";
 import Services from "@/website-sections/services-and-prices/Services";
+import Prices from "@/website-sections/services-and-prices/Prices";
 
 export default function ServicesAndPrices() {
   return (
@@ -13,6 +14,8 @@ export default function ServicesAndPrices() {
         <InitialSection />
 
         <Services />
+
+        <Prices />
 
         <Footer />
       </div>
