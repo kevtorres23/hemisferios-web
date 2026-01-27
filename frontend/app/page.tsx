@@ -7,6 +7,7 @@ import ConstantGrowth from "@/sections/home/ConstantGrowth";
 import Dynamism from "@/sections/home/Dynamism";
 import blob from "../public/blob2.png";
 import Image from "next/image";
+import Testimonials from "@/sections/home/Testimonials";
 
 export default function Home() {
 
@@ -31,6 +32,8 @@ export default function Home() {
       <ConstantGrowth />
 
       <Dynamism />
+
+      <Testimonials />
 
       <Footer />
     </div>
