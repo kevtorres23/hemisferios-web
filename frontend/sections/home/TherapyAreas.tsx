@@ -15,7 +15,7 @@ function TherapyAreas() {
     const isIllustrationVisible = isVisible(ref2);
 
     return (
-        <main className="relative overflow-x-hidden overflow-y-hidden w-full flex lg:flex-row flex-col sm:gap-20 gap-14 justify-center items-center lg:px-0 sm:px-16 px-8 lg:py-36 md:py-20 py-16 h-auto">
+        <section className="relative overflow-x-hidden overflow-y-hidden w-full flex lg:flex-row flex-col sm:gap-20 gap-14 justify-center items-center lg:px-0 sm:px-16 px-8 lg:py-36 md:py-20 py-16 h-auto">
 
             {/* Content */}
             <div ref={ref1} className={`${isInfoVisible ? "opacity-100" : "opacity-0"} info flex flex-col lg:gap-6 sm:gap-4 gap-5 lg:items-start items-center xl:max-w-125 lg:max-w-md md:max-w-xl xl:mr-20 mr-0 transition-all ease-in duration-400`}>
@@ -38,7 +38,7 @@ function TherapyAreas() {
                 <Image src={patient} alt="" className="xl:w-105 lg:w-96 sm:w-102 w-80" />
             </div>
 
-        </main>
+        </section>
     )
 }
 
