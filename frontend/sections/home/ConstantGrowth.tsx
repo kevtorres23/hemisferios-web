@@ -1,8 +1,15 @@
+"use client";
+
+import { useRef } from "react";
 import SectionBadge from "@/website-components/SectionBadge";
+import { isVisible } from "@/website-components/VisibilityDetector";
 
 function ConstantGrowth() {
+    const ref1 = useRef(null);
+    const visibility = isVisible(ref1);
+
     return (
-        <div className="items-center justify-center lg:px-20 sm:px-16 px-8 lg:pb-36 md:pb-20 pb-16 h-auto">
+        <div ref={ref1} className={`${visibility ? "opacity-100 top-0" : "opacity-0 top-12"} relative items-center justify-center lg:px-20 sm:px-16 px-8 lg:py-12 md:py-10 py-14 h-auto transition-all ease-in duration-700`}>
 
             <div className="flex flex-col w-full items-center justify-center gap-4">
                 <SectionBadge name="CRECIMIENTO CONSTANTE" />
