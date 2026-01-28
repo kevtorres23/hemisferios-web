@@ -33,8 +33,10 @@ function Navbar(props: NavbarProps) {
                         <NavbarLink text="Servicios y precios" active={currentPage === "services" ? true : false} />
                     </Link>
 
-                    <NavbarLink text="Sobre nosotros" active={currentPage === "about-us" ? true : false} />
-                    
+                    <Link href="about-us">
+                        <NavbarLink text="Sobre nosotros" active={currentPage === "about-us" ? true : false} />
+                    </Link>
+
                     <NavbarLink text="Contacto" active={currentPage === "contact" ? true : false} />
                 </div>
 
@@ -60,7 +62,9 @@ function Navbar(props: NavbarProps) {
                         <NavbarLink text="Servicios y precios" active={currentPage === "services" ? true : false} />
                     </Link>
 
-                    <NavbarLink text="Sobre nosotros" active={currentPage === "about-us" ? true : false} />
+                    <Link href="about-us">
+                        <NavbarLink text="Sobre nosotros" active={currentPage === "about-us" ? true : false} />
+                    </Link>
 
                     <NavbarLink text="Contacto" active={currentPage === "contact" ? true : false} />
 
