@@ -29,7 +29,7 @@ function HeroSection() {
             </div>
 
             {/* Content */}
-            <div ref={ref1} className={`${isInfoVisible ? "opacity-100" : "opacity-0"} info flex flex-col lg:gap-6 sm:gap-4 gap-7 lg:items-start items-center xl:max-w-125 lg:max-w-md md:max-w-xl xl:mr-20 mr-0 transition-all ease-in duration-400`}>
+            <div ref={ref1} className={`${isInfoVisible ? "opacity-100 top-0" : "opacity-0 top-20"} relative info flex flex-col lg:gap-6 sm:gap-4 gap-7 lg:items-start items-center xl:max-w-125 lg:max-w-md md:max-w-xl xl:mr-20 mr-0 transition-all ease-out duration-1000`}>
 
                 <p className="lg:text-5xl/14 text-4xl/12 lg:text-start text-center font-semibold text-slate-950 tracking-tighter w-full">Estimulación, rehabilitación e integración <span className="text-indigo-500">completa.</span></p>
                 <p className="text-base font-normal/7 lg:text-start text-center text-slate-600 w-full">Somos un centro de terapia infantil donde trabajamos para abordar y mejorar diferentes aspectos del funcionamiento cognitivo y comunicativo.</p>

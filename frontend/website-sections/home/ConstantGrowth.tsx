@@ -9,7 +9,7 @@ function ConstantGrowth() {
     const visibility = isVisible(ref1);
 
     return (
-        <div ref={ref1} className={`${visibility ? "opacity-100 top-0" : "opacity-0 top-12"} relative items-center justify-center lg:px-20 sm:px-16 px-8 lg:py-12 md:py-10 py-14 h-auto transition-all ease-in duration-700`}>
+        <div ref={ref1} className={`${visibility ? "opacity-100 top-0" : "opacity-0 top-20"} relative items-center justify-center lg:px-20 sm:px-16 px-8 lg:py-12 md:py-10 py-14 h-auto transition-all ease-out duration-700`}>
 
             <div className="flex flex-col w-full items-center justify-center gap-4">
                 <SectionBadge name="CRECIMIENTO CONSTANTE" />

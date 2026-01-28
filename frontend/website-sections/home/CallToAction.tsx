@@ -18,7 +18,7 @@ function CallToAction() {
         <section className="relative bg-indigo-500 overflow-x-hidden overflow-y-hidden w-full flex lg:flex-row flex-col sm:gap-20 gap-14 justify-center items-center lg:px-0 sm:px-16 px-8 lg:py-32 md:py-24 py-16 h-auto">
 
             {/* Content */}
-            <div ref={ref1} className={`${isInfoVisible ? "opacity-100" : "opacity-0"} info flex flex-col lg:gap-6 sm:gap-4 gap-5 lg:items-start items-center xl:max-w-125 lg:max-w-md md:max-w-xl xl:mr-20 mr-0 transition-all ease-in duration-400`}>
+            <div ref={ref1} className={`${isInfoVisible ? "opacity-100 top-0" : "opacity-0 top-20"} relative info flex flex-col lg:gap-6 sm:gap-4 gap-5 lg:items-start items-center xl:max-w-125 lg:max-w-md md:max-w-xl xl:mr-20 mr-0 transition-all ease-out duration-800`}>
 
                 <h1 className="lg:text-5xl/14 sm:text-4xl/12 text-3xl/10 lg:text-start text-center font-semibold text-white tracking-tighter w-full">
                     ¡Agenda ya una cita con nosotros!
