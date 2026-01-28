@@ -10,7 +10,7 @@ type SectionProps = {
 
 function MissionAndVission(props: SectionProps) {
     return (
-        <section className={`w-full bg-white lg:pt-36 pb-12 px-20 flex ${props.type === "mission" ? "lg:flex-row-reverse" : "lg:flex-row"} flex-col md:gap-28 gap-10 items-center justify-center`}>
+        <section className={`w-full bg-white lg:py-36 md:py-28 py-24 lg:px-20 sm:px-14 px-8 flex ${props.type === "mission" ? "lg:flex-row-reverse" : "lg:flex-row"} flex-col md:gap-28 gap-10 items-center justify-center`}>
             <div className={`text flex flex-col gap-6 ${props.type === "mission" ? "lg:items-end" : "lg:items-start"} items-center justify-center lg:max-w-lg`}>
                 <SectionBadge name={props.type === "mission" ? "NUESTRA MISIÓN" : "NUESTRA VISIÓN"} />
 
