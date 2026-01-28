@@ -6,6 +6,7 @@ import missionImage from "../../public/about-us-2.svg";
 import vissionImage from "../../public/about-us-3.svg";
 import ValuesAndAdvantages from "@/website-sections/about-us/Values&Advantages";
 import ValueBox from "@/website-components/ValueBox";
+import CurrentTeam from "@/website-sections/about-us/CurrentTeam";
 import { UserLock, ShieldCheck, Heart } from "lucide-react";
 
 function AboutUs() {
@@ -63,6 +64,8 @@ function AboutUs() {
                         icon={<Heart size={30} />}
                     />
                 </ValuesAndAdvantages>
+
+                <CurrentTeam />
 
                 <Footer />
             </div>
