@@ -37,7 +37,9 @@ function Navbar(props: NavbarProps) {
                         <NavbarLink text="Sobre nosotros" active={currentPage === "about-us" ? true : false} />
                     </Link>
 
-                    <NavbarLink text="Contacto" active={currentPage === "contact" ? true : false} />
+                    <Link href="contact">
+                        <NavbarLink text="Contacto" active={currentPage === "contact" ? true : false} />
+                    </Link>
                 </div>
 
                 {/* Right container with the "Create an appointment" and collapsible menu buttons */}
@@ -66,7 +68,9 @@ function Navbar(props: NavbarProps) {
                         <NavbarLink text="Sobre nosotros" active={currentPage === "about-us" ? true : false} />
                     </Link>
 
-                    <NavbarLink text="Contacto" active={currentPage === "contact" ? true : false} />
+                    <Link href="contact">
+                        <NavbarLink text="Contacto" active={currentPage === "contact" ? true : false} />
+                    </Link>
 
                     <div className="sm:hidden block">
                         <NormalButton text="Agendar una cita" />
