@@ -119,7 +119,7 @@ function ContactForm({ sendMessageObject }: { sendMessageObject: (messageObject:
 
             </form>
 
-            <button form="contactForm" type="submit" className="bg-indigo-500 text-white tracking-tight text-base px-4 py-2 flex flex-row items-center justify-center gap-2 rounded-lg cursor-pointer font-normal hover:bg-indigo-400">
+            <button form="contactForm" type="submit" className="bg-indigo-500 text-white tracking-tight text-base px-4 py-2 flex flex-row items-center justify-center gap-2 rounded-lg cursor-pointer font-normal hover:bg-indigo-400 sm:w-auto w-full">
                 Enviar comentario
                 <ArrowRight size={18} />
             </button>
