@@ -1,24 +1,62 @@
+"use client";
+
 import Image from "next/image";
 import SectionBadge from "@/website-components/SectionBadge";
 import notebook from "../../public/notebook.png";
 import ContactForm from "@/website-components/ContactForm";
+import NormalButton from "@/website-components/NormalButton";
+import { useState } from "react";
+import { CheckCircle } from "lucide-react";
+
+type MessageType = {
+    name: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+    message: string;
+}
 
 function WrittenMessage() {
+    const [isFormSent, setIsFormSent] = useState(false);
+
+    function receiveMessageObject(messageObject: MessageType) {
+        console.log(messageObject);
+
+        // Add the logic to send the comment to the database.
+
+        setIsFormSent(true);
+    }
+
     return (
-        <section className="lg:px-25 md:px-16 px-8 flex lg:flex-row flex-col lg:pt-24 lg:pb-40 sm:py-24 py-20 gap-30">
+        <section className="xl:px-25 lg:px-20 md:px-16 px-8 flex lg:flex-row flex-col lg:pt-24 lg:pb-40 sm:py-24 py-20 xl:gap-30 sm:gap-15 gap-10">
             <div className="flex flex-col md:gap-4 items-center justify-center">
-                <SectionBadge name="¡CONTÁCTANOS!"/>
+                <SectionBadge name="¡CONTÁCTANOS!" />
 
                 <h1 className={`sm:text-4xl text-3xl font-semibold text-slate-900 tracking-tighter text-center`}>¿Tienes alguna duda o comentarios?</h1>
-                
+
                 <p className={`sm:text-base text-sm font-normal text-slate-600 text-center`}>
                     ¡Envíanos lo que quieras decirnos! Llena el siguiente formulario y envíanos tu comentario. Nos pondremos en contacto contigo en cuanto lo recibamos.
                 </p>
 
-                <Image alt="" src={notebook} className="w-96"/>
+                <Image alt="" src={notebook} className="w-96" />
             </div>
 
-            <ContactForm />
+            {isFormSent === false && (
+                <ContactForm sendMessageObject={receiveMessageObject} />
+            )}
+
+            {isFormSent === true && (
+                <div className="lg:max-w-xl w-full flex flex-col items-center justify-center lg:p-7 sm:p-5 p-4 border border-slate-200 bg-slate-50 rounded-xl gap-5">
+                    <CheckCircle size={64} className="text-indigo-500" />
+
+                    <div className="flex flex-col gap-2 items-center justify-center">
+                        <h1 className="text-2xl text-slate-900 font-semibold tracking-tighter text-center">¡Mensaje enviado correctamente!</h1>
+                        <p className="text-base text-slate-500 font-normal text-center">Pronto nos contactaremos contigo para darte una respuesta.</p>
+                    </div>
+
+                    <NormalButton text="Enviar otro mensaje" onClick={() => setIsFormSent(false)}/>
+                </div>
+            )}
         </section>
     )
 }
