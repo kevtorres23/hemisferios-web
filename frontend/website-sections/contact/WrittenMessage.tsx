@@ -1,10 +1,11 @@
 import Image from "next/image";
 import SectionBadge from "@/website-components/SectionBadge";
 import notebook from "../../public/notebook.png";
+import ContactForm from "@/website-components/ContactForm";
 
 function WrittenMessage() {
     return (
-        <section className="lg:px-25 md:px-16 px-8 flex lg:flex-row flex-col lg:pt-24 lg:pb-40 sm:py-24 py-20">
+        <section className="lg:px-25 md:px-16 px-8 flex lg:flex-row flex-col lg:pt-24 lg:pb-40 sm:py-24 py-20 gap-30">
             <div className="flex flex-col md:gap-4 items-center justify-center">
                 <SectionBadge name="¡CONTÁCTANOS!"/>
 
@@ -16,6 +17,8 @@ function WrittenMessage() {
 
                 <Image alt="" src={notebook} className="w-96"/>
             </div>
+
+            <ContactForm />
         </section>
     )
 }
