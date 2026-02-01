@@ -1,13 +1,23 @@
+"use client";
+
 import SectionBadge from "@/website-components/SectionBadge";
 import Image from "next/image";
 import notification from "../../public/notification.png";
 import ContactChannel from "@/website-components/ContactChannel";
 import { Phone, Mail, MapPin } from "lucide-react";
+import { useRef } from "react";
+import { isVisible } from "@/website-components/VisibilityDetector";
 
 function OtherChannels() {
+    const ref1 = useRef(null);
+    const isContentVisible = isVisible(ref1);
+
+    const ref2 = useRef(null);
+    const isFormVisible = isVisible(ref2);
+
     return (
         <section className="xl:px-25 lg:px-20 md:px-16 px-8 flex lg:flex-row flex-col-reverse lg:pt-0 lg:pb-40 sm:py-24 py-12 xl:gap-30 gap-15 items-center justify-center">
-            <div className="lg:max-w-xl w-full flex flex-col items-center justify-center md:p-8 p-5 border border-slate-200 bg-slate-50 rounded-xl gap-5">
+            <div ref={ref1} className={`${isContentVisible ? 'opacity-100' : 'opacity-0'} relative lg:max-w-xl w-full flex flex-col items-center justify-center md:p-8 sm:p-5 p-4 border border-slate-200 bg-slate-50 rounded-xl gap-5 transition-opacity duration-900 ease-in`}>
 
                 <h1 className="text-xl font-semibold text-slate-800 tracking-tight self-start">Medios de Contacto</h1>
 
@@ -35,7 +45,7 @@ function OtherChannels() {
                 />
             </div>
 
-            <div className="flex flex-col gap-12 items-center justify-center">
+            <div ref={ref2} className={`${isFormVisible ? 'top-0 opacity-100' : 'top-20 opacity-0'} relative flex flex-col gap-12 items-center justify-center transition-all ease-out duration-1500`}>
 
                 <div className="flex flex-col gap-4 items-center justify-center">
                     <SectionBadge name="OTROS MEDIOS" />

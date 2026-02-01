@@ -4,6 +4,8 @@ import Input from "./Input";
 import { useState } from "react";
 import { ArrowRight, CircleAlert } from "lucide-react";
 import { ContactMessage } from "@/modules/Classes";
+import { useRef } from "react";
+import { isVisible } from "@/website-components/VisibilityDetector";
 
 type MessageType = {
     name: string;
@@ -29,6 +31,8 @@ function ContactForm({ sendMessageObject }: { sendMessageObject: (messageObject:
     const [numberValidation, setNumberValidation] = useState(false);
     const [commentValidation, setCommentValidation] = useState(false);
 
+    const ref1 = useRef(null);
+    const isFormVisible = isVisible(ref1);
 
     // Function to save the input's responses in an object.
     function shootData() {
@@ -59,7 +63,7 @@ function ContactForm({ sendMessageObject }: { sendMessageObject: (messageObject:
     }
 
     return (
-        <div className="lg:max-w-xl w-full flex flex-col items-start lg:p-7 sm:p-5 p-4 border border-slate-200 bg-slate-50 rounded-xl gap-4">
+        <div ref={ref1} className={`${isFormVisible ? 'opacity-100' : 'opacity-0'} lg:max-w-xl w-full flex flex-col items-start lg:p-7 sm:p-5 p-4 border border-slate-200 bg-slate-50 rounded-xl gap-4 transition-opacity duration-700 ease-in`}>
             <h1 className="text-xl font-semibold text-slate-800 tracking-tight">Formulario de Contacto</h1>
 
             <div className="divisory-line w-full h-px bg-slate-200"></div>

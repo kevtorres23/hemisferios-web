@@ -7,6 +7,8 @@ import ContactForm from "@/website-components/ContactForm";
 import NormalButton from "@/website-components/NormalButton";
 import { useState } from "react";
 import { CheckCircle } from "lucide-react";
+import { useRef } from "react";
+import { isVisible } from "@/website-components/VisibilityDetector";
 
 type MessageType = {
     name: string;
@@ -19,6 +21,9 @@ type MessageType = {
 function WrittenMessage() {
     const [isFormSent, setIsFormSent] = useState(false);
 
+    const ref1 = useRef(null);
+    const isContentVisible = isVisible(ref1);
+
     function receiveMessageObject(messageObject: MessageType) {
         console.log(messageObject);
 
@@ -29,7 +34,7 @@ function WrittenMessage() {
 
     return (
         <section className="xl:px-25 lg:px-20 md:px-16 px-8 flex lg:flex-row flex-col lg:pt-24 lg:pb-40 sm:py-24 py-12 xl:gap-30 gap-15">
-            <div className="flex flex-col gap-12 items-center justify-center">
+            <div ref={ref1} className={`${isContentVisible ? 'top-0 opacity-100' : 'top-20 opacity-0'} relative flex flex-col gap-12 items-center justify-center transition-all ease-out duration-1200`}>
                 <div className="flex flex-col gap-4 items-center justify-center">
                     <SectionBadge name="¡CONTÁCTANOS!" />
 
