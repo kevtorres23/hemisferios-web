@@ -29,16 +29,18 @@ function WrittenMessage() {
 
     return (
         <section className="xl:px-25 lg:px-20 md:px-16 px-8 flex lg:flex-row flex-col lg:pt-24 lg:pb-40 sm:py-24 py-12 xl:gap-30 gap-15">
-            <div className="flex flex-col gap-4 items-center justify-center">
-                <SectionBadge name="¡CONTÁCTANOS!" />
+            <div className="flex flex-col gap-12 items-center justify-center">
+                <div className="flex flex-col gap-4 items-center justify-center">
+                    <SectionBadge name="¡CONTÁCTANOS!" />
 
-                <h1 className={`sm:text-4xl text-3xl font-semibold text-slate-900 tracking-tighter text-center`}>¿Tienes alguna duda o comentarios?</h1>
+                    <h1 className={`sm:text-4xl/12 text-3xl font-semibold text-slate-900 tracking-tighter text-center`}>¿Tienes alguna duda, sugerencia o comentario?</h1>
 
-                <p className={`sm:text-base text-sm font-normal text-slate-600 text-center`}>
-                    ¡Envíanos lo que quieras decirnos! Llena el siguiente formulario y envíanos tu comentario. Nos pondremos en contacto contigo en cuanto lo recibamos.
-                </p>
+                    <p className={`sm:text-base text-sm font-normal text-slate-600 text-center w-10/12`}>
+                        ¡Envíanos lo que quieras decirnos! Llena el siguiente formulario y envíanos tu comentario. Nos pondremos en contacto contigo en cuanto lo recibamos.
+                    </p>
+                </div>
 
-                <Image alt="" src={notebook} className="lg:w-80 sm:w-72 w-56" />
+                <Image alt="" src={notebook} className="lg:w-60 sm:w-72 w-56" />
             </div>
 
             {isFormSent === false && (
@@ -54,7 +56,7 @@ function WrittenMessage() {
                         <p className="text-base text-slate-500 font-normal text-center">Pronto nos contactaremos contigo para darte una respuesta.</p>
                     </div>
 
-                    <NormalButton text="Enviar otro mensaje" onClick={() => setIsFormSent(false)}/>
+                    <NormalButton text="Enviar otro mensaje" onClick={() => setIsFormSent(false)} />
                 </div>
             )}
         </section>
