@@ -6,7 +6,7 @@ import { Phone, Mail, MapPin } from "lucide-react";
 
 function OtherChannels() {
     return (
-        <section className="xl:px-25 lg:px-20 md:px-16 px-8 flex lg:flex-row flex-col lg:pt-0 lg:pb-40 sm:py-24 py-12 xl:gap-30 gap-15 items-center justify-center">
+        <section className="xl:px-25 lg:px-20 md:px-16 px-8 flex lg:flex-row flex-col-reverse lg:pt-0 lg:pb-40 sm:py-24 py-12 xl:gap-30 gap-15 items-center justify-center">
             <div className="lg:max-w-xl w-full flex flex-col items-center justify-center md:p-8 p-5 border border-slate-200 bg-slate-50 rounded-xl gap-5">
 
                 <h1 className="text-xl font-semibold text-slate-800 tracking-tight self-start">Medios de Contacto</h1>
@@ -31,7 +31,7 @@ function OtherChannels() {
                     color="bg-pink-500"
                     icon={<MapPin size={18} color="white" />}
                     name="Dirección del centro"
-                    description="Valle Verde S/N, Colonia La Esperanza, Durango, Durango."
+                    description="Valle Florido S/N, Colonia La Esperanza, Durango, Durango."
                 />
             </div>
 
