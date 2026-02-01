@@ -1,6 +1,7 @@
 import Navbar from "@/website-components/Navbar"
 import Footer from "@/website-components/Footer";
 import WrittenMessage from "@/website-sections/contact/WrittenMessage";
+import OtherChannels from "@/website-sections/contact/OtherChannels";
 
 function Contact() {
     return (
@@ -9,6 +10,8 @@ function Contact() {
 
             <div className="relative overflow-x-hidden overflow-y-hidden flex flex-col min-h-screen items-center justify-center bg-white font-sans dark:bg-black">
                 <WrittenMessage />
+
+                <OtherChannels />
 
                 <Footer />
             </div>

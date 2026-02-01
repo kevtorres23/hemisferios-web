@@ -3,7 +3,7 @@
 import Input from "./Input";
 import { useState } from "react";
 import { ArrowRight, CircleAlert } from "lucide-react";
-import { ContactMessage } from "@/website-modules/Classes";
+import { ContactMessage } from "@/modules/Classes";
 
 type MessageType = {
     name: string;
