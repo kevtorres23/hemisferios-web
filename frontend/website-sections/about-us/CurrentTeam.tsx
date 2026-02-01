@@ -29,6 +29,7 @@ function CurrentTeam() {
                 <Image src={blob} alt="" className="xl:w-70 sm:w-60 w-40 opacity-20" />
             </div>
 
+            {/* Content */}
             <div ref={ref1} className={`${isTitleVisible ? "opacity-100 top-0" : "opacity-0 top-20"} relative flex flex-col gap-4 items-center justify-center w-full transition-all ease-out duration-800`}>
                 <h1 className="text-slate-900 font-semibold tracking-tighter text-center lg:text-5xl sm:text-4xl text-3xl">¡Conoce a nuestro equipo actual!</h1>
                 <p className="text-slate-600 font-normal text-center sm:text-base text-sm max-w-xl">Todos nosotros trabajamos en conjunto para hacer que Hemisferios funcione y continúe siendo el lugar que es.</p>

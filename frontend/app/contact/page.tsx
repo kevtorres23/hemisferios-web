@@ -2,6 +2,7 @@ import Navbar from "@/website-components/Navbar"
 import Footer from "@/website-components/Footer";
 import WrittenMessage from "@/website-sections/contact/WrittenMessage";
 import OtherChannels from "@/website-sections/contact/OtherChannels";
+import LocationMap from "@/website-sections/contact/LocationMap";
 
 function Contact() {
     return (
@@ -12,6 +13,8 @@ function Contact() {
                 <WrittenMessage />
 
                 <OtherChannels />
+
+                <LocationMap />
 
                 <Footer />
             </div>
