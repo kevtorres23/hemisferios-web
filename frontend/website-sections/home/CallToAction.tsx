@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { isVisible } from "@/website-components/VisibilityDetector";
+import { isVisible } from "@/modules/VisibilityDetector";
 import WhiteButton from "@/website-components/WhiteButton";
 import SectionBadge from "@/website-components/SectionBadge";
 import Image from "next/image";

@@ -8,7 +8,7 @@ import NormalButton from "@/website-components/NormalButton";
 import { useState } from "react";
 import { CheckCircle } from "lucide-react";
 import { useRef } from "react";
-import { isVisible } from "@/website-components/VisibilityDetector";
+import { isVisible } from "@/modules/VisibilityDetector";
 
 type MessageType = {
     name: string;

@@ -6,7 +6,7 @@ import notification from "../../public/notification.png";
 import ContactChannel from "@/website-components/ContactChannel";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { useRef } from "react";
-import { isVisible } from "@/website-components/VisibilityDetector";
+import { isVisible } from "@/modules/VisibilityDetector";
 
 function OtherChannels() {
     const ref1 = useRef(null);

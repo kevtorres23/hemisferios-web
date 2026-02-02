@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import SectionBadge from "@/website-components/SectionBadge";
-import { isVisible } from "@/website-components/VisibilityDetector";
+import { isVisible } from "@/modules/VisibilityDetector";
 
 function ConstantGrowth() {
     const ref1 = useRef(null);

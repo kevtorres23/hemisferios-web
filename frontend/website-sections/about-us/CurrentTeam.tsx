@@ -4,7 +4,7 @@ import TeamMember from "@/website-components/TeamMember";
 import ArletPicture from "../../public/person2.png";
 import Image from "next/image";
 import blob from "../../public/blob3.png";
-import { isVisible } from "@/website-components/VisibilityDetector";
+import { isVisible } from "@/modules/VisibilityDetector";
 import { useRef } from "react";
 
 function CurrentTeam() {
