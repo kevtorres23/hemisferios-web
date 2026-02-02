@@ -7,7 +7,7 @@ import TextButton from "@/website-components/TextButton";
 import BrainTag from "@/website-components/BrainTag";
 import brainIllustration from "../../public/hero-brain.png"
 import blob from "../../public/blob.png";
-import { isVisible }  from "@/website-components/VisibilityDetector";
+import { isVisible }  from "@/modules/VisibilityDetector";
 
 function HeroSection() {
     const ref1 = useRef(null);

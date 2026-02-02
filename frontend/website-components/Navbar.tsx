@@ -9,7 +9,7 @@ import React, { useState } from "react";
 import { Menu } from "lucide-react";
 
 type NavbarProps = {
-    activePage: "home" | "services" | "about-us" | "contact";
+    activePage: "home" | "services" | "about-us" | "contact" | "none";
 }
 
 function Navbar(props: NavbarProps) {
@@ -44,9 +44,10 @@ function Navbar(props: NavbarProps) {
 
                 {/* Right container with the "Create an appointment" and collapsible menu buttons */}
                 <div className="flex flex-row gap-4 items-center justify-center">
-                    <div className="sm:block hidden">
+                    <Link href={"book-appointment"} className="sm:block hidden">
                         <NormalButton text="Agendar una cita" />
-                    </div>
+                    </Link>
+
                     <button onClick={toggleOpen} className="bg-slate-100 border-2 border-slate-200 p-2.5 rounded-lg lg:hidden block text-slate-500">
                         <Menu />
                     </button>
@@ -72,9 +73,9 @@ function Navbar(props: NavbarProps) {
                         <NavbarLink text="Contacto" active={currentPage === "contact" ? true : false} />
                     </Link>
 
-                    <div className="sm:hidden block">
+                    <Link href={"book-appointment"} className="sm:hidden block">
                         <NormalButton text="Agendar una cita" />
-                    </div>
+                    </Link>
                 </div>
             )}
         </div>

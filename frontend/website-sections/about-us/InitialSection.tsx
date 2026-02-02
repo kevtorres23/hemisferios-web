@@ -2,7 +2,7 @@
 
 import initialSectionImage from "../../public/about-us-1.svg";
 import { useRef } from "react";
-import { isVisible } from "@/website-components/VisibilityDetector";
+import { isVisible } from "@/modules/VisibilityDetector";
 import Image from "next/image";
 
 function InitialSection() {

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { ArrowRight, CircleAlert } from "lucide-react";
 import { ContactMessage } from "@/modules/Classes";
 import { useRef } from "react";
-import { isVisible } from "@/website-components/VisibilityDetector";
+import { isVisible } from "@/modules/VisibilityDetector";
 
 type MessageType = {
     name: string;
@@ -41,7 +41,7 @@ function ContactForm({ sendMessageObject }: { sendMessageObject: (messageObject:
     }
 
     // Function to get the inputs through validations before saving the responses.
-    function shootValidations(e: any) {
+    function shootValidations(e: React.FormEvent) {
         e.preventDefault();
 
         // Validate the inputs are not empty.
@@ -69,6 +69,7 @@ function ContactForm({ sendMessageObject }: { sendMessageObject: (messageObject:
             <div className="divisory-line w-full h-px bg-slate-200"></div>
 
             <form id="contactForm" onSubmit={(e) => shootValidations(e)} className="flex flex-col gap-4 w-full">
+                
                 <div className="input-row flex md:flex-row flex-col gap-4 w-full items-center justify-center">
                     <div className="name-field flex flex-col gap-2 w-full">
                         <Input type="text" textValue={name} onInputChange={(e) => setName(e.target.value)} label="Nombre:" />

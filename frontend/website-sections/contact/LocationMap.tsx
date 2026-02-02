@@ -3,7 +3,7 @@
 import SectionBadge from "@/website-components/SectionBadge";
 import Image from "next/image";
 import blob from "../../public/blob.png";
-import { isVisible } from "@/website-components/VisibilityDetector";
+import { isVisible } from "@/modules/VisibilityDetector";
 import { useRef } from "react";
 
 function LocationMap() {

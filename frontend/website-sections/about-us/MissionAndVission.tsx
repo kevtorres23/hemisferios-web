@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Image, { StaticImageData } from "next/image";
 import SectionBadge from "@/website-components/SectionBadge";
-import { isVisible } from "@/website-components/VisibilityDetector";
+import { isVisible } from "@/modules/VisibilityDetector";
 
 type SectionProps = {
     type: "mission" | "vission";
