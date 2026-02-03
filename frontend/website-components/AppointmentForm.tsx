@@ -3,8 +3,10 @@
 import { useRef, useState } from "react";
 import { isVisible } from "../modules/VisibilityDetector";
 import Input from "./Input";
+import SelectInput from "./SelectInput";
 import { CircleCheck, CircleAlert } from "lucide-react";
 import { Appointment } from "@/modules/Classes";
+import InputWarning from "./InputWarning";
 
 type AppointmentType = {
     patientName: string;
@@ -35,9 +37,7 @@ function AppointmentForm({ sendAppointmentObject }: { sendAppointmentObject: (ap
     const ref1 = useRef(null);
     const isFormVisible = isVisible(ref1);
 
-    function handleDateChange(e: string) {
-        setDate(e);
-    }
+    const dateItems = ["Lunes 14", "Martes 15", "Miércoles 16", "Jueves 17", "Viernes 18", "Sábado 19", "Domingo 20", "Lunes 14", "Martes 15", "Miércoles 16", "Jueves 17", "Viernes 18", "Sábado 19", "Domingo 20"];
 
     function shootValidations(e: React.FormEvent) {
         e.preventDefault();
@@ -71,62 +71,34 @@ function AppointmentForm({ sendAppointmentObject }: { sendAppointmentObject: (ap
                 <div className="name-field flex flex-col gap-2 w-full">
                     <Input type="text" textValue={patientName} label="Nombre(s) del paciente" onInputChange={(e) => setPatientName(e.target.value)} />
                     {nameValidation && (
-                        <div className="flex flex-row gap-1 items-center">
-                            <CircleAlert size={14} className="text-red-500" />
-                            <p className="text-xs font-medium text-red-500">Por favor, escribe el nombre o los nombres del paciente.</p>
-                        </div>
+                        <InputWarning message="Por favor, escribe el nombre o los nombres del paciente." />
                     )}
                 </div>
 
                 <div className="father-surname-field flex flex-col gap-2 w-full">
                     <Input type="text" textValue={fatherSurname} label="Apellido paterno del paciente:" onInputChange={(e) => setFatherSurname(e.target.value)} />
-                    {fatherSurnameValid && (
-                        <div className="flex flex-row gap-1 items-center">
-                            <CircleAlert size={14} className="text-red-500" />
-                            <p className="text-xs font-medium text-red-500">Por favor, escribe el apellido paterno del paciente.</p>
-                        </div>
-                    )}
+                    {fatherSurnameValid && <InputWarning message="Por favor, escribe el apellido paterno." />}
                 </div>
 
                 <div className="mother-surname-field flex flex-col gap-2 w-full">
                     <Input type="text" textValue={motherSurname} label="Apellido materno del paciente:" onInputChange={(e) => setMotherSurname(e.target.value)} />
-                    {motherSurnameValid && (
-                        <div className="flex flex-row gap-1 items-center">
-                            <CircleAlert size={14} className="text-red-500" />
-                            <p className="text-xs font-medium text-red-500">Por favor, escribe el apellido materno del paciente.</p>
-                        </div>
-                    )}
+                    {motherSurnameValid && <InputWarning message="Por favor, escribe el apellido materno." />}
                 </div>
 
                 <div className="phone-field flex flex-col gap-2 w-full">
                     <Input type="text" textValue={phoneNumber} label="Número de teléfono del adulto responsable:" onInputChange={(e) => setPhoneNumber(e.target.value)} />
-                    {numberValidation && (
-                        <div className="flex flex-row gap-1 items-center">
-                            <CircleAlert size={14} className="text-red-500" />
-                            <p className="text-xs font-medium text-red-500">Por favor, escribe un número de teléfono válido.</p>
-                        </div>
-                    )}
+                    {numberValidation && <InputWarning message="Por favor, escribe un número de teléfono válido."/> }
                 </div>
 
                 <div className="input-row flex md:flex-row flex-col gap-4 w-full items-center justify-center">
                     <div className="date-field flex flex-col gap-2 w-full">
-                        <Input type="date" textValue={date} label="Fecha de la cita:" onInputChange={(val) => setDate(val)} />
-                        {dateValidation && (
-                            <div className="flex flex-row gap-1 items-center">
-                                <CircleAlert size={14} className="text-red-500" />
-                                <p className="text-xs font-medium text-red-500">Por favor, selecciona una fecha.</p>
-                            </div>
-                        )}
+                        <SelectInput label="Fecha de la cita:" value={date} onInputChange={(val) => setDate(val)} items={dateItems} />
+                        {dateValidation && <InputWarning message="Por favor, selecciona una fecha."/> }
                     </div>
 
                     <div className="hour-field flex flex-col gap-2 w-full">
-                        <Input type="hour" textValue={hour} label="Hora de la cita:" onInputChange={(val) => setHour(val)} />
-                        {hourValidation && (
-                            <div className="flex flex-row gap-1 items-center">
-                                <CircleAlert size={14} className="text-red-500" />
-                                <p className="text-xs font-medium text-red-500">Por favor, selecciona una hora.</p>
-                            </div>
-                        )}
+                        <SelectInput label="Fecha de la cita:" value={hour} onInputChange={(val) => setHour(val)} items={dateItems} />
+                        {hourValidation && <InputWarning message="Por favor, selecciona una hora."/> }
                     </div>
                 </div>
 
