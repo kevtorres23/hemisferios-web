@@ -17,10 +17,6 @@ type AppointmentType = {
 
 function BookAppointment() {
 
-    function receiveAppointmentObject(appointmentObject: AppointmentType) {
-        console.log(appointmentObject);
-    }
-
     return (
         <>
             <Navbar activePage="none" />
@@ -58,7 +54,7 @@ function BookAppointment() {
                         </div>
                     </div>
 
-                    <AppointmentForm sendAppointmentObject={receiveAppointmentObject} />
+                    <AppointmentForm />
 
                     <div className="lg:hidden block w-full">
                         <ChannelBox showContainer={false} title="¿Quieres contactarnos?" areChannelsGray={true} />

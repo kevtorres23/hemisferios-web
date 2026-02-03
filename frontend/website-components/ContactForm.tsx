@@ -6,6 +6,8 @@ import { ArrowRight, CircleAlert } from "lucide-react";
 import { ContactMessage } from "@/website-modules/Classes";
 import { useRef } from "react";
 import { isVisible } from "@/website-modules/VisibilityDetector";
+import { AppointmentInputChange } from "@/website-modules/InputChangeHandlers";
+
 
 type MessageType = {
     name: string;
@@ -72,7 +74,7 @@ function ContactForm({ sendMessageObject }: { sendMessageObject: (messageObject:
                 
                 <div className="input-row flex md:flex-row flex-col gap-4 w-full items-center justify-center">
                     <div className="name-field flex flex-col gap-2 w-full">
-                        <Input type="text" textValue={name} onInputChange={(e) => setName(e.target.value)} label="Nombre:" />
+                        <Input type="text" textValue={name} onInputChange={(e) => setName(e.target.value)} label="Nombre:" activeValidation={} />
                         {nameValidation && (
                             <div className="flex flex-row gap-1 items-center">
                                 <CircleAlert size={14} className="text-red-500" />

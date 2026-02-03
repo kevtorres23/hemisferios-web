@@ -1,13 +1,15 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { isVisible } from "../website-modules/VisibilityDetector";
 import Input from "./Input";
 import SelectInput from "./SelectInput";
-import { CircleCheck, CircleAlert } from "lucide-react";
+import { CircleCheck } from "lucide-react";
 import { Appointment } from "@/website-modules/Classes";
 import InputWarning from "./InputWarning";
 import { AppointmentInputChange, AppointmentSelectChange } from "@/website-modules/InputChangeHandlers";
+import { useAppointmentStore } from "@/website-modules/StoreAppointment";
+import { redirect } from 'next/navigation';
 
 type AppointmentType = {
     patientName: string;
@@ -18,7 +20,7 @@ type AppointmentType = {
     hour: string;
 }
 
-function AppointmentForm({ sendAppointmentObject }: { sendAppointmentObject: (appointmentObject: AppointmentType) => void; }) {
+function AppointmentForm() {
     // Variables of the form inputs.
     const [patientName, setPatientName] = useState("");
     const [motherSurname, setMotherSurname] = useState("");
@@ -60,9 +62,13 @@ function AppointmentForm({ sendAppointmentObject }: { sendAppointmentObject: (ap
         setValidationsShot(false);
     }
 
+    const saveAppointment = useAppointmentStore((state: any) => state.saveAppointment);
+
     function shootData() {
         const appointmentObject = new Appointment(patientName, motherSurname, fatherSurname, phoneNumber, date, hour);
-        sendAppointmentObject(appointmentObject);
+        saveAppointment(appointmentObject);
+        
+        redirect('/finished-appointment');
     }
 
     const ref1 = useRef(null);
