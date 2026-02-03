@@ -1,19 +1,8 @@
-import { Label } from '@/components/ui/label';
-import { Calendar, Clock4 } from "lucide-react";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue
-} from '@/components/ui/select'
-
 type InputProps = {
     label: string;
     type: "text" | "tel" | "email" | "comment";
     textValue?: string;
+    activeValidation: boolean;
     onInputChange: (e: any) => void;
 }
 
@@ -30,7 +19,7 @@ function Input(props: InputProps) {
                         </p>
                     </div>
 
-                    <input type={props.type} value={props.textValue} onChange={props.onInputChange} className="w-full py-2 px-3 bg-white border border-slate-200 rounded-md text-sm font-normal slate-800" />
+                    <input type={props.type} value={props.textValue} onChange={props.onInputChange} className={`w-full py-2 px-3 ${props.activeValidation ? "border-red-400" : "border-slate-200"} bg-white border rounded-md text-sm font-normal slate-800`} />
                 </label>
             );
 

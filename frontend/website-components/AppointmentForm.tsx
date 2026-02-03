@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { isVisible } from "../modules/VisibilityDetector";
 import Input from "./Input";
 import SelectInput from "./SelectInput";
@@ -27,6 +27,7 @@ function AppointmentForm({ sendAppointmentObject }: { sendAppointmentObject: (ap
     const [hour, setHour] = useState("");
 
     // Input validations.
+    const [validationsShot, setValidationsShot] = useState(false);
     const [nameValidation, setNameValidation] = useState(false);
     const [motherSurnameValid, setMotherSurnameValid] = useState(false);
     const [fatherSurnameValid, setFatherSurnameValid] = useState(false);
@@ -34,12 +35,23 @@ function AppointmentForm({ sendAppointmentObject }: { sendAppointmentObject: (ap
     const [dateValidation, setDateValidation] = useState(false);
     const [hourValidation, setHourValidation] = useState(false);
 
-    const ref1 = useRef(null);
-    const isFormVisible = isVisible(ref1);
-
     const dateItems = ["Lunes 14", "Martes 15", "Miércoles 16", "Jueves 17", "Viernes 18", "Sábado 19", "Domingo 20", "Lunes 14", "Martes 15", "Miércoles 16", "Jueves 17", "Viernes 18", "Sábado 19", "Domingo 20"];
 
+    // Name validation.
+    function onNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setPatientName(e.currentTarget.value);
+
+        if (!patientName && (validationsShot === true)) {
+            setNameValidation(true);
+        } else {
+            setNameValidation(false);
+        }
+
+        setValidationsShot(false);
+    }
+
     function shootValidations(e: React.FormEvent) {
+        setValidationsShot(true);
         e.preventDefault();
 
         // Validate the inputs are not empty.
@@ -62,6 +74,9 @@ function AppointmentForm({ sendAppointmentObject }: { sendAppointmentObject: (ap
         sendAppointmentObject(appointmentObject);
     }
 
+    const ref1 = useRef(null);
+    const isFormVisible = isVisible(ref1);
+
     return (
         <div ref={ref1} className={`${isFormVisible ? 'opacity-100' : 'opacity-0'} lg:max-w-xl w-full flex flex-col items-start lg:p-7 sm:p-5 p-4 border border-slate-200 bg-slate-50 rounded-xl gap-4 transition-opacity duration-700 ease-in`}>
             <h1 className="text-xl font-semibold text-slate-800 tracking-tight">Formulario de Citas</h1>
@@ -69,36 +84,36 @@ function AppointmentForm({ sendAppointmentObject }: { sendAppointmentObject: (ap
             <form id="appointmentForm" onSubmit={(e) => shootValidations(e)} className="flex flex-col gap-4 w-full">
 
                 <div className="name-field flex flex-col gap-2 w-full">
-                    <Input type="text" textValue={patientName} label="Nombre(s) del paciente" onInputChange={(e) => setPatientName(e.target.value)} />
+                    <Input type="text" textValue={patientName} label="Nombre(s) del paciente" onInputChange={onNameChange} activeValidation={nameValidation} />
                     {nameValidation && (
                         <InputWarning message="Por favor, escribe el nombre o los nombres del paciente." />
                     )}
                 </div>
 
                 <div className="father-surname-field flex flex-col gap-2 w-full">
-                    <Input type="text" textValue={fatherSurname} label="Apellido paterno del paciente:" onInputChange={(e) => setFatherSurname(e.target.value)} />
+                    <Input type="text" textValue={fatherSurname} label="Apellido paterno del paciente:" onInputChange={(e) => setFatherSurname(e.target.value)} activeValidation={fatherSurnameValid}/>
                     {fatherSurnameValid && <InputWarning message="Por favor, escribe el apellido paterno." />}
                 </div>
 
                 <div className="mother-surname-field flex flex-col gap-2 w-full">
-                    <Input type="text" textValue={motherSurname} label="Apellido materno del paciente:" onInputChange={(e) => setMotherSurname(e.target.value)} />
+                    <Input type="text" textValue={motherSurname} label="Apellido materno del paciente:" onInputChange={(e) => setMotherSurname(e.target.value)} activeValidation={motherSurnameValid} />
                     {motherSurnameValid && <InputWarning message="Por favor, escribe el apellido materno." />}
                 </div>
 
                 <div className="phone-field flex flex-col gap-2 w-full">
-                    <Input type="text" textValue={phoneNumber} label="Número de teléfono del adulto responsable:" onInputChange={(e) => setPhoneNumber(e.target.value)} />
-                    {numberValidation && <InputWarning message="Por favor, escribe un número de teléfono válido."/> }
+                    <Input type="text" textValue={phoneNumber} label="Número de teléfono del adulto responsable:" onInputChange={(e) => setPhoneNumber(e.target.value)} activeValidation={numberValidation} />
+                    {numberValidation && <InputWarning message="Por favor, escribe un número de teléfono válido." />}
                 </div>
 
                 <div className="input-row flex md:flex-row flex-col gap-4 w-full items-center justify-center">
                     <div className="date-field flex flex-col gap-2 w-full">
                         <SelectInput label="Fecha de la cita:" value={date} onInputChange={(val) => setDate(val)} items={dateItems} />
-                        {dateValidation && <InputWarning message="Por favor, selecciona una fecha."/> }
+                        {dateValidation && <InputWarning message="Por favor, selecciona una fecha." />}
                     </div>
 
                     <div className="hour-field flex flex-col gap-2 w-full">
                         <SelectInput label="Fecha de la cita:" value={hour} onInputChange={(val) => setHour(val)} items={dateItems} />
-                        {hourValidation && <InputWarning message="Por favor, selecciona una hora."/> }
+                        {hourValidation && <InputWarning message="Por favor, selecciona una hora." />}
                     </div>
                 </div>
 
