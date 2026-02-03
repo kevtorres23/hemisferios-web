@@ -16,6 +16,7 @@ type SelectProps = {
     value: string;
     onInputChange: (val: string) => void;
     items: React.ReactNode[];
+    activeValidation: boolean;
 }
 
 function SelectInput(props: SelectProps) {
@@ -25,7 +26,7 @@ function SelectInput(props: SelectProps) {
         <div className='w-full space-y-2'>
             <Label className="text-slate-500 font-normal" htmlFor={id}>{props.label} <span className="text-red-500 text-lg font-semibold">*</span></Label>
             <Select value={props.value} onValueChange={(val) => props.onInputChange(val)}>
-                <SelectTrigger id={id} className='w-full bg-white py-2 px-3'>
+                <SelectTrigger id={id} className={`w-full bg-white py-2 px-3 ${props.activeValidation ? "border border-red-500" : ""}`}>
                     <SelectValue placeholder={
                         <div className="flex flex-row gap-2 items-center">
                             <Calendar size={16} />

@@ -3,9 +3,9 @@
 import Input from "./Input";
 import { useState } from "react";
 import { ArrowRight, CircleAlert } from "lucide-react";
-import { ContactMessage } from "@/modules/Classes";
+import { ContactMessage } from "@/website-modules/Classes";
 import { useRef } from "react";
-import { isVisible } from "@/modules/VisibilityDetector";
+import { isVisible } from "@/website-modules/VisibilityDetector";
 
 type MessageType = {
     name: string;

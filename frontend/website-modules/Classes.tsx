@@ -40,4 +40,16 @@ class Appointment {
     }
 }
 
-export { ContactMessage, Appointment };
+class AppointmentInput {
+    value: string;
+    isValidationActive: boolean;
+    validationMsg: string;
+
+    constructor(value: string, isValidationActive: boolean, validationMsg: string) {
+        this.value = value;
+        this.isValidationActive = isValidationActive;
+        this.validationMsg = validationMsg;
+    }
+}
+
+export { ContactMessage, Appointment, AppointmentInput };

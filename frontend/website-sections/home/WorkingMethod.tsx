@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import TechniqueCard from "@/website-components/TechniqueCard";
 import { Brain, Settings, Smile, Sparkles } from "lucide-react";
-import { isVisible } from "@/modules/VisibilityDetector";
+import { isVisible } from "@/website-modules/VisibilityDetector";
 
 function WorkingMethod() {
     const ref1 = useRef(null);
