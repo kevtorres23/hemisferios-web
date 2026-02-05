@@ -6,7 +6,7 @@ import { ArrowRight, CircleAlert } from "lucide-react";
 import { ContactMessage } from "@/website-modules/Classes";
 import { useRef } from "react";
 import { isVisible } from "@/website-modules/VisibilityDetector";
-import { AppointmentInputChange } from "@/website-modules/InputChangeHandlers";
+import { InputChange } from "@/website-modules/InputChangeHandlers";
 
 
 type MessageType = {
@@ -27,6 +27,7 @@ function ContactForm({ sendMessageObject }: { sendMessageObject: (messageObject:
     const [comment, setComment] = useState("");
 
     // Input validations.
+    const [validationsShot, setValidationsShot] = useState(false);
     const [emailValidation, setEmailValidation] = useState(false);
     const [nameValidation, setNameValidation] = useState(false);
     const [lastNameValidation, setLastNameValidation] = useState(false);
@@ -44,6 +45,7 @@ function ContactForm({ sendMessageObject }: { sendMessageObject: (messageObject:
 
     // Function to get the inputs through validations before saving the responses.
     function shootValidations(e: React.FormEvent) {
+        setValidationsShot(true);
         e.preventDefault();
 
         // Validate the inputs are not empty.
@@ -62,6 +64,8 @@ function ContactForm({ sendMessageObject }: { sendMessageObject: (messageObject:
         } else {
             shootData();
         }
+
+        setValidationsShot(false);
     }
 
     return (
@@ -71,10 +75,10 @@ function ContactForm({ sendMessageObject }: { sendMessageObject: (messageObject:
             <div className="divisory-line w-full h-px bg-slate-200"></div>
 
             <form id="contactForm" onSubmit={(e) => shootValidations(e)} className="flex flex-col gap-4 w-full">
-                
+
                 <div className="input-row flex md:flex-row flex-col gap-4 w-full items-center justify-center">
                     <div className="name-field flex flex-col gap-2 w-full">
-                        <Input type="text" textValue={name} onInputChange={(e) => setName(e.target.value)} label="Nombre:" activeValidation={} />
+                        <Input type="text" textValue={name} onInputChange={(e) => InputChange(e, name, setName, validationsShot, setNameValidation)} label="Nombre:" activeValidation={nameValidation} />
                         {nameValidation && (
                             <div className="flex flex-row gap-1 items-center">
                                 <CircleAlert size={14} className="text-red-500" />
@@ -84,7 +88,7 @@ function ContactForm({ sendMessageObject }: { sendMessageObject: (messageObject:
                     </div>
 
                     <div className="last-name-field flex flex-col gap-2 w-full">
-                        <Input type="text" textValue={lastName} onInputChange={(e) => setLastName(e.target.value)} label="Apellido:" />
+                        <Input type="text" textValue={lastName} onInputChange={(e) => InputChange(e, lastName, setLastName, validationsShot, setLastNameValidation)} label="Apellido:" activeValidation={lastNameValidation} />
                         {lastNameValidation && (
                             <div className="flex flex-row gap-1 items-center">
                                 <CircleAlert size={14} className="text-red-500" />
@@ -95,7 +99,7 @@ function ContactForm({ sendMessageObject }: { sendMessageObject: (messageObject:
                 </div>
 
                 <div className="phone-number-field last-name-field flex flex-col gap-2 w-full">
-                    <Input type="text" textValue={phoneNumber} onInputChange={(e) => setPhoneNumber(e.target.value)} label="Número de teléfono:" />
+                    <Input type="text" textValue={phoneNumber} onInputChange={(e) => InputChange(e, phoneNumber, setPhoneNumber, validationsShot, setNumberValidation)} label="Número de teléfono:" activeValidation={numberValidation} />
                     {numberValidation && (
                         <div className="flex flex-row gap-1 items-center">
                             <CircleAlert size={14} className="text-red-500" />
@@ -105,7 +109,7 @@ function ContactForm({ sendMessageObject }: { sendMessageObject: (messageObject:
                 </div>
 
                 <div className="email-field last-name-field flex flex-col gap-2 w-full">
-                    <Input type="text" textValue={email} onInputChange={(e) => setEmail(e.target.value)} label="Correo electrónico:" />
+                    <Input type="text" textValue={email} onInputChange={(e) => InputChange(e, email, setEmail, validationsShot, setEmailValidation)} label="Correo electrónico:" activeValidation={emailValidation} />
                     {emailValidation && (
                         <div className="flex flex-row gap-1 items-center">
                             <CircleAlert size={14} className="text-red-500" />
@@ -115,7 +119,7 @@ function ContactForm({ sendMessageObject }: { sendMessageObject: (messageObject:
                 </div>
 
                 <div className="comment-field last-name-field flex flex-col gap-2 w-full">
-                    <Input type="comment" textValue={comment} onInputChange={(e) => setComment(e.target.value)} label="Comentario:" />
+                    <Input type="comment" textValue={comment} onInputChange={(e) => InputChange(e, comment, setComment, validationsShot, setCommentValidation)} label="Comentario:" activeValidation={commentValidation} />
                     {commentValidation && (
                         <div className="flex flex-row gap-1 items-center">
                             <CircleAlert size={14} className="text-red-500" />

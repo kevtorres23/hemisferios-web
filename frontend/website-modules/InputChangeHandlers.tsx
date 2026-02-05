@@ -1,7 +1,8 @@
 import { Dispatch, SetStateAction } from "react";
 
-// Function that manipulates an input's value and validation state.
-function AppointmentInputChange(
+// The following two functions manipulate an input's value and validation state.
+
+function InputChange(
     e: React.ChangeEvent<HTMLInputElement>,
     input: string,
     setInput: Dispatch<SetStateAction<string>>,
@@ -18,6 +19,8 @@ function AppointmentInputChange(
         setInputValid(false);
     };
 }
+
+// This function manipulates a select's value and validation state.
 
 function AppointmentSelectChange(
     value: string,
@@ -37,4 +40,4 @@ function AppointmentSelectChange(
     };
 }
 
-export { AppointmentInputChange, AppointmentSelectChange };
+export { InputChange, AppointmentSelectChange };

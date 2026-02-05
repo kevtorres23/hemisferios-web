@@ -7,7 +7,7 @@ import SelectInput from "./SelectInput";
 import { CircleCheck } from "lucide-react";
 import { Appointment } from "@/website-modules/Classes";
 import InputWarning from "./InputWarning";
-import { AppointmentInputChange, AppointmentSelectChange } from "@/website-modules/InputChangeHandlers";
+import { InputChange, AppointmentSelectChange } from "@/website-modules/InputChangeHandlers";
 import { useAppointmentStore } from "@/website-modules/StoreAppointment";
 import { redirect } from 'next/navigation';
 
@@ -81,24 +81,24 @@ function AppointmentForm() {
             <form id="appointmentForm" onSubmit={(e) => shootValidations(e)} className="flex flex-col gap-4 w-full">
 
                 <div className="name-field flex flex-col gap-2 w-full">
-                    <Input type="text" textValue={patientName} label="Nombre(s) del paciente" onInputChange={(e) => AppointmentInputChange(e, patientName, setPatientName, validationsShot, setNameValidation)} activeValidation={nameValidation} />
+                    <Input type="text" textValue={patientName} label="Nombre(s) del paciente" onInputChange={(e) => InputChange(e, patientName, setPatientName, validationsShot, setNameValidation)} activeValidation={nameValidation} />
                     {nameValidation && (
                         <InputWarning message="Por favor, escribe el nombre o los nombres del paciente." />
                     )}
                 </div>
 
                 <div className="father-surname-field flex flex-col gap-2 w-full">
-                    <Input type="text" textValue={fatherSurname} label="Apellido paterno del paciente:" onInputChange={(e) => AppointmentInputChange(e, fatherSurname, setFatherSurname, validationsShot, setFatherSurnameValid)} activeValidation={fatherSurnameValid} />
+                    <Input type="text" textValue={fatherSurname} label="Apellido paterno del paciente:" onInputChange={(e) => InputChange(e, fatherSurname, setFatherSurname, validationsShot, setFatherSurnameValid)} activeValidation={fatherSurnameValid} />
                     {fatherSurnameValid && <InputWarning message="Por favor, escribe el apellido paterno." />}
                 </div>
 
                 <div className="mother-surname-field flex flex-col gap-2 w-full">
-                    <Input type="text" textValue={motherSurname} label="Apellido materno del paciente:" onInputChange={(e) => AppointmentInputChange(e, motherSurname, setMotherSurname, validationsShot, setMotherSurnameValid)} activeValidation={motherSurnameValid} />
+                    <Input type="text" textValue={motherSurname} label="Apellido materno del paciente:" onInputChange={(e) => InputChange(e, motherSurname, setMotherSurname, validationsShot, setMotherSurnameValid)} activeValidation={motherSurnameValid} />
                     {motherSurnameValid && <InputWarning message="Por favor, escribe el apellido materno." />}
                 </div>
 
                 <div className="phone-field flex flex-col gap-2 w-full">
-                    <Input type="text" textValue={phoneNumber} label="Número de teléfono del adulto responsable:" onInputChange={(e) => AppointmentInputChange(e, phoneNumber, setPhoneNumber, validationsShot, setNumberValidation)} activeValidation={numberValidation} />
+                    <Input type="text" textValue={phoneNumber} label="Número de teléfono del adulto responsable:" onInputChange={(e) => InputChange(e, phoneNumber, setPhoneNumber, validationsShot, setNumberValidation)} activeValidation={numberValidation} />
                     {numberValidation && <InputWarning message="Por favor, escribe un número de teléfono válido." />}
                 </div>
 
