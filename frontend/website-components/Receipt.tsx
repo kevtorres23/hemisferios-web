@@ -1,5 +1,9 @@
 import SectionBadge from "./SectionBadge";
 import { Download, House } from "lucide-react";
+import Link from "next/link";
+import { Clock4 } from "lucide-react";
+import Image from "next/image";
+import whiteLogo from "../public/white-logo.png";
 
 type ReceiptProps = {
     patientName: string;
@@ -8,21 +12,29 @@ type ReceiptProps = {
     phoneNumber: string;
     date: string;
     hour: string;
+    creationDate: string;
+    creationTime: string;
 }
 
 function Receipt(props: ReceiptProps) {
     return (
         <div className={`lg:max-w-lg w-full flex flex-col items-start border border-slate-200 bg-slate-50 rounded-xl gap-5 transition-opacity duration-700 ease-in`}>
             <div className="receipt-header w-full p-6 bg-indigo-500 flex flex-col gap-2 rounded-t-xl">
-                <h1 className="text-xl tracking-tight font-semibold text-white">Comprobante de la Cita</h1>
-                <p className="text-slate-100 font-normal">Generada el 14/01/2026, a las 10:45 a.m.</p>
+                <Image src={whiteLogo} alt="Centro Terapéutico Hemisferios" className="w-28"/>
+                <h1 className="text-2xl tracking-tight font-semibold text-white">Comprobante de Cita</h1>
+                <div className="flex flex-col gap-3 items-start">
+                    <div className="flex flex-row gap-1 items-center">
+                        <Clock4 size={16} color="white" />
+                        <p className="text-slate-100 font-normal text-sm">Generada el {props.creationDate}, a las {props.creationTime}</p>
+                    </div>
+                </div>
             </div>
 
             <div className="patient-info fl flex flex-col gap-5 sm:px-6 px-4 w-full items-start">
                 <SectionBadge name="INFORMACIÓN DEL PACIENTE" />
 
                 <div className="data-row flex sm:flex-row flex-col md:items-center items-start justify-start gap-4 w-full">
-                    <div className="info-block flex flex-col gap-3 w-1/2">
+                    <div className="info-block flex flex-col gap-1 w-1/2">
                         <p className="text-sm font-normal text-slate-500">
                             Nombre(s)
                         </p>
@@ -32,7 +44,7 @@ function Receipt(props: ReceiptProps) {
                         </p>
                     </div>
 
-                    <div className="info-block flex flex-col gap-3">
+                    <div className="info-block flex flex-col gap-1">
                         <p className="text-sm font-normal text-slate-500">
                             Apellido paterno
                         </p>
@@ -44,7 +56,7 @@ function Receipt(props: ReceiptProps) {
                 </div>
 
                 <div className="data-row flex sm:flex-row flex-col md:items-center items-start justify-start gap-4 w-full">
-                    <div className="info-block flex flex-col gap-3 w-1/2">
+                    <div className="info-block flex flex-col gap-1 w-1/2">
                         <p className="text-sm font-normal text-slate-500">
                             Apellido materno
                         </p>
@@ -54,7 +66,7 @@ function Receipt(props: ReceiptProps) {
                         </p>
                     </div>
 
-                    <div className="info-block flex flex-col gap-3">
+                    <div className="info-block flex flex-col gap-1">
                         <p className="text-sm font-normal text-slate-500">
                             Teléfono del adulto
                         </p>
@@ -72,7 +84,7 @@ function Receipt(props: ReceiptProps) {
                 <SectionBadge name="INFORMACIÓN DE LA CITA" />
 
                 <div className="data-row flex sm:flex-row flex-col md:items-center items-start justify-start gap-4 w-full">
-                    <div className="info-block flex flex-col gap-3 w-1/2">
+                    <div className="info-block flex flex-col gap-1 w-1/2">
                         <p className="text-sm font-normal text-slate-500">
                             Fecha
                         </p>
@@ -82,7 +94,7 @@ function Receipt(props: ReceiptProps) {
                         </p>
                     </div>
 
-                    <div className="info-block flex flex-col gap-3">
+                    <div className="info-block flex flex-col gap-1">
                         <p className="text-sm font-normal text-slate-500">
                             Hora
                         </p>
@@ -95,14 +107,16 @@ function Receipt(props: ReceiptProps) {
             </div>
 
             <div className="w-full flex flex-col gap-4 items-start px-6 pb-6">
-                <button className="bg-indigo-500 text-white w-full flex flex-row gap-2 items-center justify-center sm:text-base text-sm tracking-tight px-4 py-2 rounded-lg cursor-pointer font-normal border border-indigo-500 hover:bg-indigo-100">
-                    <Download size={18} color="white"/>
+                <button className="bg-indigo-500 text-white w-full flex flex-row gap-2 items-center justify-center sm:text-base text-sm tracking-tight px-4 py-2 rounded-lg cursor-pointer font-normal border border-indigo-500 hover:bg-indigo-400">
+                    <Download size={18} color="white" />
                     Descargar en PDF
                 </button>
-                <button className="bg-white text-indigo-500 w-full flex flex-row gap-2 items-center justify-center tracking-tight sm:text-base text-sm px-4 py-2 rounded-lg cursor-pointer font-normal border border-indigo-500 hover:bg-indigo-100">
-                    <House size={18}/>
-                    Regresar al inicio
-                </button>
+                <Link href={"/"} className="w-full">
+                    <button className="bg-white text-indigo-500 w-full flex flex-row gap-2 items-center justify-center tracking-tight sm:text-base text-sm px-4 py-2 rounded-lg cursor-pointer font-normal border border-indigo-500 hover:bg-indigo-100">
+                        <House size={18} />
+                        Regresar al inicio
+                    </button>
+                </Link>
             </div>
         </div>
     )

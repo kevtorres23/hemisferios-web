@@ -11,15 +11,6 @@ import { InputChange, AppointmentSelectChange } from "@/website-modules/InputCha
 import { useAppointmentStore } from "@/website-modules/StoreAppointment";
 import { redirect } from 'next/navigation';
 
-type AppointmentType = {
-    patientName: string;
-    motherSurname: string;
-    fatherSurname: string;
-    phoneNumber: string;
-    date: string;
-    hour: string;
-}
-
 function AppointmentForm() {
     // Variables of the form inputs.
     const [patientName, setPatientName] = useState("");
@@ -28,6 +19,8 @@ function AppointmentForm() {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [date, setDate] = useState("");
     const [hour, setHour] = useState("");
+    const [creationDate, setCreationDate] = useState("");
+    const [creationTime, setCreationTime] = useState("");
 
     // Input validations.
     const [validationsShot, setValidationsShot] = useState(false);
@@ -39,6 +32,7 @@ function AppointmentForm() {
     const [hourValidation, setHourValidation] = useState(false);
 
     const dateItems = ["Lunes 14", "Martes 15", "Miércoles 16", "Jueves 17", "Viernes 18", "Sábado 19", "Domingo 20", "Lunes 14", "Martes 15", "Miércoles 16", "Jueves 17", "Viernes 18", "Sábado 19", "Domingo 20"];
+    const saveAppointment = useAppointmentStore((state: any) => state.saveAppointment);
 
     // Name validation.
     function shootValidations(e: React.FormEvent) {
@@ -62,12 +56,15 @@ function AppointmentForm() {
         setValidationsShot(false);
     }
 
-    const saveAppointment = useAppointmentStore((state: any) => state.saveAppointment);
-
     function shootData() {
-        const appointmentObject = new Appointment(patientName, motherSurname, fatherSurname, phoneNumber, date, hour);
+        const time = new Date();
+        const currentDate = time.getDate() + "/" + (time.getMonth() + 1) + "/" + time.getFullYear();
+        const currentTime = time.getHours() + ":" + time.getMinutes() + " horas";
+
+        const appointmentObject = new Appointment(patientName, motherSurname, fatherSurname, phoneNumber, date, hour, currentDate, currentTime);
+
         saveAppointment(appointmentObject);
-        
+
         redirect('/finished-appointment');
     }
 

@@ -28,15 +28,19 @@ class Appointment {
     phoneNumber: string;
     date: string;
     hour: string;
+    creationDate: string;
+    creationTime: string;
 
     // Defining the constructor.
-    constructor(patientName: string, motherSurname: string, fatherSurname: string, phoneNumber: string, date: string, hour: string) {
+    constructor(patientName: string, motherSurname: string, fatherSurname: string, phoneNumber: string, date: string, hour: string, creationDate: string, creationTime: string) {
         this.patientName = patientName;
         this.motherSurname = motherSurname;
         this.fatherSurname = fatherSurname;
         this.phoneNumber = phoneNumber;
         this.date = date;
         this.hour = hour;
+        this.creationDate = creationDate;
+        this.creationTime = creationTime;
     }
 }
 

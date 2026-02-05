@@ -9,8 +9,6 @@ function InputChange(
     areValidationsShot: boolean,
     setInputValid: Dispatch<SetStateAction<boolean>>) {
 
-    console.log("change detected");
-
     setInput(e.currentTarget.value);
 
     if (!input && (areValidationsShot === true)) {
@@ -28,8 +26,6 @@ function AppointmentSelectChange(
     setInput: Dispatch<SetStateAction<string>>,
     areValidationsShot: boolean,
     setInputValid: Dispatch<SetStateAction<boolean>>) {
-
-    console.log("select detected");
 
     setInput(value);
 
