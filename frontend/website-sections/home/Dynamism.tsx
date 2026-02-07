@@ -5,7 +5,7 @@ import Image from "next/image";
 import NormalButton from "@/website-components/NormalButton";
 import kids from "../../public/kids.png";
 import SectionBadge from "@/website-components/SectionBadge";
-import { isVisible } from "@/modules/VisibilityDetector";
+import { isVisible } from "@/website-modules/VisibilityDetector";
 
 function Dynamism() {
     const ref1 = useRef(null);

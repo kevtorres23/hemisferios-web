@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import TestimonialCard from "@/website-components/TestimonialCard";
-import { isVisible } from "@/modules/VisibilityDetector";
+import { isVisible } from "@/website-modules/VisibilityDetector";
 import person1 from "../../public/person1.png";
 import person2 from "../../public/person2.png";
 import person3 from "../../public/person3.png";

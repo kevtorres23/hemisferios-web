@@ -6,7 +6,8 @@ import notification from "../../public/notification.png";
 import ContactChannel from "@/website-components/ContactChannel";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { useRef } from "react";
-import { isVisible } from "@/modules/VisibilityDetector";
+import { isVisible } from "@/website-modules/VisibilityDetector";
+import ChannelBox from "@/website-components/ChannelBox";
 
 function OtherChannels() {
     const ref1 = useRef(null);
@@ -17,32 +18,8 @@ function OtherChannels() {
 
     return (
         <section className="xl:px-25 lg:px-20 md:px-16 px-8 flex lg:flex-row flex-col-reverse lg:pt-0 lg:pb-40 sm:py-24 py-12 xl:gap-30 gap-15 items-center justify-center">
-            <div ref={ref1} className={`${isContentVisible ? 'opacity-100' : 'opacity-0'} relative lg:max-w-xl w-full flex flex-col items-center justify-center md:p-8 sm:p-5 p-4 border border-slate-200 bg-slate-50 rounded-xl gap-5 transition-opacity duration-900 ease-in`}>
-
-                <h1 className="text-xl font-semibold text-slate-800 tracking-tight self-start">Medios de Contacto</h1>
-
-                <div className="w-full flex sm:flex-row flex-col gap-5">
-                    <ContactChannel
-                        color="bg-green-500"
-                        icon={<Phone size={18} color="white" />}
-                        name="Número de teléfono"
-                        description="618-206-8767"
-                    />
-
-                    <ContactChannel
-                        color="bg-orange-500"
-                        icon={<Mail size={18} color="white" />}
-                        name="Correo electrónico"
-                        description="arlet28torres@gmail.com"
-                    />
-                </div>
-
-                <ContactChannel
-                    color="bg-pink-500"
-                    icon={<MapPin size={18} color="white" />}
-                    name="Dirección del centro"
-                    description="Valle Florido S/N, Colonia La Esperanza, Durango, Durango."
-                />
+            <div ref={ref1} className={`${isContentVisible ? 'opacity-100' : 'opacity-0'} transition-opacity duration-900 ease-in lg:max-w-xl w-full`}>
+                <ChannelBox showContainer={true} title="Medios de Contacto" areChannelsGray={false}/>
             </div>
 
             <div ref={ref2} className={`${isFormVisible ? 'top-0 opacity-100' : 'top-20 opacity-0'} relative flex flex-col gap-12 items-center justify-center transition-all ease-out duration-1500`}>

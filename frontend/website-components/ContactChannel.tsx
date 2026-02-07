@@ -2,12 +2,13 @@ type ChannelProps = {
     color: string;
     icon: React.ReactNode;
     name: string;
+    isGray: boolean;
     description: string;
 }
 
 function ContactChannel(props: ChannelProps) {
     return (
-        <div className="bg-white rounded-lg border border-slate-200 flex flex-col items-start justify-start gap-4 w-full p-4">
+        <div className={`${props.isGray ? "bg-slate-50" : "bg-white"} rounded-lg border border-slate-200 flex flex-col items-start justify-start gap-4 w-full p-4`}>
             <div className={`flex items-center justify-center rounded-lg p-2 ${props.color}`}>
                 {props.icon}
             </div>
