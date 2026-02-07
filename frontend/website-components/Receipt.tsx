@@ -3,7 +3,8 @@ import { Download, House } from "lucide-react";
 import Link from "next/link";
 import { Clock4 } from "lucide-react";
 import Image from "next/image";
-import whiteLogo from "../public/white-logo.png";
+import whiteLogo from "../public/white-logo.png";import dynamic from "next/dynamic";
+import PrintableReceipt from "@/website-modules/PDFHandling/PDFGenerator";
 
 type ReceiptProps = {
     patientName: string;
@@ -16,16 +17,26 @@ type ReceiptProps = {
     creationTime: string;
 }
 
+const PDFDownloadLink = dynamic(
+    () => import("@react-pdf/renderer").then((mod) => mod.PDFDownloadLink),
+    {
+        ssr: false,
+        loading: () => <p>Loading...</p>,
+    },
+);
+
 function Receipt(props: ReceiptProps) {
+    const documentName = "Hemisferios Cita " + props.creationDate;
+
     return (
         <div className={`lg:max-w-lg w-full flex flex-col items-start border border-slate-200 bg-slate-50 rounded-xl gap-5 transition-opacity duration-700 ease-in`}>
             <div className="receipt-header w-full p-6 bg-indigo-500 flex flex-col gap-2 rounded-t-xl">
-                <Image src={whiteLogo} alt="Centro Terapéutico Hemisferios" className="w-28"/>
+                <Image src={whiteLogo} alt="Centro Terapéutico Hemisferios" className="w-28" />
                 <h1 className="text-2xl tracking-tight font-semibold text-white">Comprobante de Cita</h1>
                 <div className="flex flex-col gap-3 items-start">
-                    <div className="flex flex-row gap-1 items-center">
-                        <Clock4 size={16} color="white" />
-                        <p className="text-slate-100 font-normal text-sm">Generada el {props.creationDate}, a las {props.creationTime}</p>
+                    <div className="flex flex-row sm:gap-1 gap-0.5 sm:items-center items-start">
+                        <Clock4 size={18} color="white" className="sm:block hidden sm:mt-0 mt-0.5" />
+                        <p className="text-slate-100 text-wrap font-normal text-base">Generada el {props.creationDate}, a las {props.creationTime}</p>
                     </div>
                 </div>
             </div>
@@ -107,10 +118,22 @@ function Receipt(props: ReceiptProps) {
             </div>
 
             <div className="w-full flex flex-col gap-4 items-start px-6 pb-6">
-                <button className="bg-indigo-500 text-white w-full flex flex-row gap-2 items-center justify-center sm:text-base text-sm tracking-tight px-4 py-2 rounded-lg cursor-pointer font-normal border border-indigo-500 hover:bg-indigo-400">
-                    <Download size={18} color="white" />
-                    Descargar en PDF
-                </button>
+                <PDFDownloadLink className="w-full" document={<PrintableReceipt
+                    patientName={props.patientName}
+                    fatherSurname={props.fatherSurname}
+                    motherSurname={props.motherSurname}
+                    phoneNumber={props.phoneNumber}
+                    date={props.date}
+                    hour={props.hour}
+                    creationDate={props.creationDate}
+                    creationTime={props.creationTime}
+                />
+                } fileName={documentName}>
+                    <button className="bg-indigo-500 text-white w-full flex flex-row gap-2 items-center justify-center sm:text-base text-sm tracking-tight px-4 py-2 rounded-lg cursor-pointer font-normal border border-indigo-500 hover:bg-indigo-400">
+                        <Download size={18} color="white" />
+                        Descargar en PDF
+                    </button>
+                </PDFDownloadLink>
                 <Link href={"/"} className="w-full">
                     <button className="bg-white text-indigo-500 w-full flex flex-row gap-2 items-center justify-center tracking-tight sm:text-base text-sm px-4 py-2 rounded-lg cursor-pointer font-normal border border-indigo-500 hover:bg-indigo-100">
                         <House size={18} />

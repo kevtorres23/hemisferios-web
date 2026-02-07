@@ -7,6 +7,8 @@ import Image from "next/image";
 import music from "../../public/music.png";
 import Receipt from "@/website-components/Receipt";
 import { Check } from "lucide-react";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import PrintableReceipt from "@/website-modules/PDFHandling/PDFGenerator";
 
 function FinishedAppointment() {
     const createdAppointment = useAppointmentStore((state: any) => state.createdAppointment); // Bringing the just-created appointment object.
@@ -16,8 +18,7 @@ function FinishedAppointment() {
             <Navbar activePage="none" />
 
             <div className="relative overflow-x-hidden overflow-y-hidden flex flex-col min-h-screen items-center justify-center bg-white font-sans dark:bg-black">
-
-                <section className="xl:px-20 w-full lg:px-20 md:px-16 px-8 flex lg:flex-row flex-col lg:pt-24 lg:pb-40 sm:py-24 py-12 lg:items-start justify-center items-center xl:gap-30 lg:gap-15 gap-20">
+                <section className="xl:px-20 w-full lg:px-20 md:px-16 px-8 flex lg:flex-row flex-col lg:pt-20 lg:pb-40 sm:py-24 py-12 lg:items-start justify-center items-center xl:gap-30 lg:gap-15 gap-20">
                     <div className={`relative flex flex-col gap-12 lg:items-start lg:justify-start items-center justify-center w-full max-w-lg`}>
                         <div className="flex flex-col gap-4 lg:items-start lg:justify-start items-center justify-center">
                             <div className="rounded-[50%] flex items-center justify-center p-2.5 bg-teal-500">
@@ -31,7 +32,7 @@ function FinishedAppointment() {
                             </p>
                         </div>
 
-                        <Image alt="" src={music} className="lg:w-60 sm:w-72 w-56" />
+                        <Image alt="" src={music} className="lg:w-72 sm:w-72 w-56" />
                     </div>
 
                     <Receipt
