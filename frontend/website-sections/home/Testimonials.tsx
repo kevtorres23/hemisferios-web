@@ -26,7 +26,7 @@ function Testimonials() {
                     ¡Conoce lo que algunas personas han dicho de nuestros servicios!
                 </h1>
 
-                <p className="sm:text-base text-sm font-normal/7 text-center text-slate-600 w-full">Hemos recolectado los testimonios de algunas personas que han confiado en nosotros previamente. ¡Puedes leerlos a continuación!</p>
+                <p className="text-base font-normal/7 text-center text-slate-600 w-full">Hemos recolectado los testimonios de algunas personas que han confiado en nosotros previamente. ¡Puedes leerlos a continuación!</p>
             </div>
 
             <div ref={ref2} className={`${cardsVisible ? "opacity-100 top-0" : "opacity-0 top-16"} relative w-full h-auto grid xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-8 transition-all ease-out duration-1500`}>

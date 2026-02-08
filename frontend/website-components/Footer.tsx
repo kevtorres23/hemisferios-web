@@ -24,12 +24,12 @@ function Footer() {
 
                     <div className="flex flex-row gap-1 items-center justify-center">
                         <Phone width={14} className="text-slate-600" />
-                        <p className={"text-sm tracking-tight text-slate-500 font-normal"}>618-206-8767</p>
+                        <p className={"sm:text-sm text-base tracking-tight text-slate-500 font-normal"}>618-206-8767</p>
                     </div>
 
                     <div className="flex flex-row gap-1 items-center justify-center">
                         <Mail width={14} className="text-slate-600" />
-                        <p className={"text-sm tracking-tight text-slate-500 font-normal"}>arlet28torres@gmail.com</p>
+                        <p className={"sm:text-sm text-base tracking-tight text-slate-500 font-normal"}>arlet28torres@gmail.com</p>
                     </div>
                 </div>
 

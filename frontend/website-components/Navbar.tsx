@@ -74,7 +74,9 @@ function Navbar(props: NavbarProps) {
                     </Link>
 
                     <Link href={"book-appointment"} className="sm:hidden block">
-                        <NormalButton text="Agendar una cita" />
+                        <button className="bg-indigo-500 text-white tracking-tight text-base px-4 w-full py-2 rounded-lg cursor-pointer font-normal hover:bg-indigo-400">
+                            Agendar una cita
+                        </button>
                     </Link>
                 </div>
             )}

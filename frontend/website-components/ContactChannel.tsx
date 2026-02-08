@@ -14,7 +14,7 @@ function ContactChannel(props: ChannelProps) {
             </div>
 
             <div className="flex flex-col gap-1">
-                <h1 className="sm:text-base text-sm font-medium text-slate-900 tracking-tight">{props.name}</h1>
+                <h1 className="text-base font-medium text-slate-900 tracking-tight">{props.name}</h1>
 
                 <p className="text-sm font-normal text-slate-500 break-all">{props.description}</p>
             </div>

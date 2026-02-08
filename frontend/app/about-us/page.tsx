@@ -2,8 +2,8 @@ import Navbar from "@/website-components/Navbar"
 import Footer from "@/website-components/Footer"
 import InitialSection from "@/website-sections/about-us/InitialSection";
 import MissionAndVission from "@/website-sections/about-us/MissionAndVission";
-import missionImage from "../../public/about-us-2.svg";
-import vissionImage from "../../public/about-us-3.svg";
+import missionImage from "../../public/about-us-2.png";
+import vissionImage from "../../public/about-us-3.png";
 import ValuesAndAdvantages from "@/website-sections/about-us/Values&Advantages";
 import ValueBox from "@/website-components/ValueBox";
 import CurrentTeam from "@/website-sections/about-us/CurrentTeam";

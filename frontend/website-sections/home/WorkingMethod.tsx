@@ -19,7 +19,7 @@ function WorkingMethod() {
                 <h1 className="lg:text-5xl/14 sm:text-4xl/12 text-3xl/10 text-center font-semibold text-white tracking-tighter w-full">
                     Mantenemos un enfoque cien por ciento orientado al paciente.
                 </h1>
-                <p className="sm:text-base text-sm font-normal/7 text-center text-white sm:w-8/12 w-full">Ofrecemos terapia de comunicación y lenguaje enfocada en atender y trabajar las áreas de mejora del paciente, mediante el uso de las siguientes técnicas.</p>
+                <p className="text-base font-normal/7 text-center text-white sm:w-8/12 w-full">Ofrecemos terapia de comunicación y lenguaje enfocada en atender y trabajar las áreas de mejora del paciente, mediante el uso de las siguientes técnicas.</p>
             </div>
 
             <div ref={ref2} className={`${cardsVisible ? "opacity-100 top-0" : "opacity-0 top-16"} relative w-full h-auto grid xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-8 transition-all ease-out duration-1500`}>

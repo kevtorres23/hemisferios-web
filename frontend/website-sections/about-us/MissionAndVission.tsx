@@ -26,7 +26,7 @@ function MissionAndVission(props: SectionProps) {
 
                 <h1 className={`sm:text-4xl text-3xl font-semibold text-slate-900 tracking-tighter ${props.type === "mission" ? "lg:text-end" : "lg:text-start"} text-center`}>{props.title}</h1>
 
-                <p className={`sm:text-base text-sm font-normal text-slate-600 ${props.type === "mission" ? "lg:text-end" : "lg:text-start"} text-center`}>{props.description}</p>
+                <p className={`text-base font-normal text-slate-600 ${props.type === "mission" ? "lg:text-end" : "lg:text-start"} text-center`}>{props.description}</p>
             </div>
 
             <div ref={ref2} className={`${isIllustrationVisible ? "opacity-100" : "opacity-0"} transition-opacity ease-in duration-1000`}>

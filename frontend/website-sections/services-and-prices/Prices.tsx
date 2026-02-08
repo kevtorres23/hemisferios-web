@@ -25,7 +25,7 @@ export default function Prices() {
 
                     <h1 className="price md:text-5xl text-5xl font-medium tracking-tighter">$350</h1>
 
-                    <p className="description md:text-base text-sm font-normal">Este es el precio por cada una de nuestras sesiones cuando se toman en días escogidos por el adulto responsable.</p>
+                    <p className="description text-base font-normal">Este es el precio por cada una de nuestras sesiones cuando se toman en días escogidos por el adulto responsable.</p>
                 </div>
 
                 <div className="card2 flex flex-col md:gap-3 gap-4 items-start w-full md:p-6 p-5 rounded-xl bg-white border-2 border-indigo-500">
@@ -35,7 +35,7 @@ export default function Prices() {
 
                     <h1 className="price text-5xl text-slate-900 font-medium tracking-tighter">$5000</h1>
 
-                    <p className="description md:text-base text-sm text-slate-600 font-normal">Este es el precio por cada una de nuestras sesiones cuando se toman un día escogido.</p>
+                    <p className="description text-base text-slate-600 font-normal">Este es el precio por cada una de nuestras sesiones cuando se toman un día escogido.</p>
                 </div>
             </div>
 

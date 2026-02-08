@@ -15,7 +15,7 @@ function TestimonialCard(props: TestimonialProps) {
 
             <h2 className="text-lg font-medium tracking-tight text-slate-900">{props.personName}</h2>
 
-            <p className="sm:text-base text-sm font-normal text-slate-500">{props.text}</p>
+            <p className="text-sm font-normal text-slate-500">{props.text}</p>
         </div>
     )
 }

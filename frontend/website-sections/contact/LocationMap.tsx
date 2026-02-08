@@ -30,7 +30,7 @@ function LocationMap() {
 
                 <h1 className="text-slate-900 font-semibold tracking-tighter text-center lg:text-5xl sm:text-4xl text-3xl">Acude a nuestras instalaciones</h1>
 
-                <p className="text-slate-600 font-normal text-center sm:text-base text-sm max-w-xl">Si te gustaría resolver una cuestión presencialmente, o tienes una cita programada, por favor, acude a nuestras oficinas. ¡Te atenderemos con mucho gusto!</p>
+                <p className="text-slate-600 font-normal text-center text-base max-w-xl">Si te gustaría resolver una cuestión presencialmente, o tienes una cita programada, por favor, acude a nuestras oficinas. ¡Te atenderemos con mucho gusto!</p>
             </div>
 
             <iframe ref={ref2} src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d531.1313227433435!2d-104.65295524025055!3d24.034475088367735!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x869bb7da2ca425f9%3A0xac8aaeccf362c068!2sValle%20Florido%2010%2C%20La%20Esperanza%2C%2034080%20Durango%2C%20Dgo.!5e0!3m2!1ses-419!2smx!4v1769908041760!5m2!1ses-419!2smx"

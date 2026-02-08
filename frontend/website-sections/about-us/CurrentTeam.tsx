@@ -32,7 +32,7 @@ function CurrentTeam() {
             {/* Content */}
             <div ref={ref1} className={`${isTitleVisible ? "opacity-100 top-0" : "opacity-0 top-20"} relative flex flex-col gap-4 items-center justify-center w-full transition-all ease-out duration-800`}>
                 <h1 className="text-slate-900 font-semibold tracking-tighter text-center lg:text-5xl sm:text-4xl text-3xl">¡Conoce a nuestro equipo actual!</h1>
-                <p className="text-slate-600 font-normal text-center sm:text-base text-sm max-w-xl">Todos nosotros trabajamos en conjunto para hacer que Hemisferios funcione y continúe siendo el lugar que es.</p>
+                <p className="text-slate-600 font-normal text-center text-base max-w-xl">Todos nosotros trabajamos en conjunto para hacer que Hemisferios funcione y continúe siendo el lugar que es.</p>
             </div>
 
             <div ref={ref2} className={`${isRow1Visible ? "opacity-100 top-0" : "opacity-0 top-20"} relative row1 flex sm:flex-row flex-col md:gap-20 sm:gap-15 gap-10 items-center justify-center transition-all ease-out duration-800`}>

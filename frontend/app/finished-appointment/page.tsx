@@ -7,8 +7,7 @@ import Image from "next/image";
 import music from "../../public/music.png";
 import Receipt from "@/website-components/Receipt";
 import { Check } from "lucide-react";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import PrintableReceipt from "@/website-modules/PDFHandling/PDFGenerator";
+
 
 function FinishedAppointment() {
     const createdAppointment = useAppointmentStore((state: any) => state.createdAppointment); // Bringing the just-created appointment object.

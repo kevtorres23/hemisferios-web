@@ -29,7 +29,7 @@ function OtherChannels() {
 
                     <h1 className={`sm:text-4xl/12 text-3xl font-semibold text-slate-900 tracking-tighter text-center`}>También puedes contactarnos por los siguientes medios.</h1>
 
-                    <p className={`sm:text-base text-sm font-normal text-slate-600 text-center w-10/12`}>
+                    <p className={`text-base font-normal text-slate-600 text-center w-10/12`}>
                         Ponemos a tu disposición diversas maneras para que puedas comunicarte con nosotros fácilmente.
                     </p>
                 </div>

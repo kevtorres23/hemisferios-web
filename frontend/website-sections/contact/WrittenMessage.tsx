@@ -40,7 +40,7 @@ function WrittenMessage() {
 
                     <h1 className={`sm:text-4xl/12 text-3xl font-semibold text-slate-900 tracking-tighter text-center`}>¿Tienes alguna duda, sugerencia o comentario?</h1>
 
-                    <p className={`sm:text-base text-sm font-normal text-slate-600 text-center w-10/12`}>
+                    <p className={`text-base font-normal text-slate-600 text-center w-10/12`}>
                         ¡Envíanos lo que quieras decirnos! Llena el siguiente formulario y envíanos tu comentario. Nos pondremos en contacto contigo en cuanto lo recibamos.
                     </p>
                 </div>

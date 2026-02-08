@@ -24,22 +24,22 @@ function SelectInput(props: SelectProps) {
 
     return (
         <div className='w-full space-y-2'>
-            <Label className="text-slate-500 font-normal" htmlFor={id}>{props.label} <span className="text-red-500 text-lg font-semibold">*</span></Label>
+            <Label className="text-slate-500 font-normal text-base" htmlFor={id}>{props.label} <span className="text-red-500 text-lg font-semibold">*</span></Label>
             <Select value={props.value} onValueChange={(val) => props.onInputChange(val)}>
-                <SelectTrigger id={id} className={`w-full bg-white py-2 px-3 ${props.activeValidation ? "border border-red-500" : ""}`}>
-                    <SelectValue placeholder={
+                <SelectTrigger id={id} className={`w-full bg-white text-base py-2 px-3 ${props.activeValidation ? "border border-red-500" : ""}`}>
+                    <SelectValue className="text-base" placeholder={
                         <div className="flex flex-row gap-2 items-center">
                             <Calendar size={16} />
                             <p>Selecciona un día</p>
                         </div>
                     } />
                 </SelectTrigger>
-                <SelectContent className="bg-white" sideOffset={5} position="popper">
-                    <SelectGroup className="h-80 overflow-y-scroll">
-                        <SelectLabel>Fecha de la cita</SelectLabel>
+                <SelectContent className="bg-white text-base" sideOffset={5} position="popper">
+                    <SelectGroup className="h-80 overflow-y-scroll text-base">
+                        <SelectLabel className="text-sm">Fecha de la cita</SelectLabel>
                         {/* Map the available dates from the database*/}
                         {props.items.map((item, id) =>
-                            <SelectItem key={id} value={id.toString()}>{item}</SelectItem>
+                            <SelectItem className="text-sm" key={id} value={id.toString()}>{item}</SelectItem>
                         )}
                     </SelectGroup>
                 </SelectContent>
