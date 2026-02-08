@@ -4,7 +4,7 @@ type linkProp = {
 
 function FooterLink(props: linkProp) {
     return (
-        <p className={"sm:text-sm text-base tracking-tight text-slate-600 hover:text-slate-900 font-normal"}>{props.text}</p>
+        <p className={"text-base tracking-tight text-slate-600 hover:text-slate-900 font-normal"}>{props.text}</p>
     )
 }
 

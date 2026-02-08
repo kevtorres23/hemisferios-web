@@ -14,7 +14,7 @@ function Input(props: InputProps) {
             return (
                 <label className="label gap-3 flex flex-col w-full">
                     <div className="flex flex-row gap-2">
-                        <p className="text-slate-500 text-base m-0 p-0">
+                        <p className="text-slate-500 sm:text-sm text-base m-0 p-0">
                             {props.label} <span className="text-red-500 text-lg font-semibold">*</span>
                         </p>
                     </div>
@@ -27,7 +27,7 @@ function Input(props: InputProps) {
             return (
                 <label className="label gap-2 flex flex-col w-full">
                     <div className="flex flex-row gap-2">
-                        <p className="text-slate-500 text-base m-0 p-0">
+                        <p className="text-slate-500 sm:text-sm text-base m-0 p-0">
                             {props.label} <span className="text-red-500 text-lg font-semibold">*</span>
                         </p>
                     </div>
