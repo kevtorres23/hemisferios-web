@@ -61,7 +61,7 @@ function AppointmentForm() {
         const currentDate = time.getDate() + "/" + (time.getMonth() + 1) + "/" + time.getFullYear();
         const currentTime = time.getHours() + ":" + time.getMinutes() + " horas";
 
-        const appointmentObject = new Appointment(patientName, motherSurname, fatherSurname, phoneNumber, date, hour, currentDate, currentTime);
+        const appointmentObject = new Appointment(patientName, motherSurname, fatherSurname, phoneNumber, date, hour, time);
 
         saveAppointment(appointmentObject);
 

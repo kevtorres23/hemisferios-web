@@ -3,7 +3,7 @@ import { Download, House } from "lucide-react";
 import Link from "next/link";
 import { Clock4 } from "lucide-react";
 import Image from "next/image";
-import whiteLogo from "../public/white-logo.png";import dynamic from "next/dynamic";
+import whiteLogo from "../public/white-logo.png"; import dynamic from "next/dynamic";
 import PrintableReceipt from "@/website-modules/PDFHandling/PDFGenerator";
 
 type ReceiptProps = {
@@ -13,8 +13,7 @@ type ReceiptProps = {
     phoneNumber: string;
     date: string;
     hour: string;
-    creationDate: string;
-    creationTime: string;
+    timestamp: Date
 }
 
 const PDFDownloadLink = dynamic(
@@ -26,7 +25,10 @@ const PDFDownloadLink = dynamic(
 );
 
 function Receipt(props: ReceiptProps) {
-    const documentName = "Hemisferios Cita " + props.creationDate;
+    const creationDate = props.timestamp.getDate() + "/" + (props.timestamp.getMonth() + 1) + "/" + props.timestamp.getFullYear();
+    const creationTime = props.timestamp.getHours() + ":" + props.timestamp.getMinutes() + " horas";
+
+    const documentName = "Hemisferios Cita " + creationDate;
 
     return (
         <div className={`lg:max-w-lg w-full flex flex-col items-start border border-slate-200 bg-slate-50 rounded-xl gap-5 transition-opacity duration-700 ease-in`}>
@@ -36,7 +38,7 @@ function Receipt(props: ReceiptProps) {
                 <div className="flex flex-col gap-3 items-start">
                     <div className="flex flex-row sm:gap-1 gap-0.5 sm:items-center items-start">
                         <Clock4 size={18} color="white" className="sm:block hidden sm:mt-0 mt-0.5" />
-                        <p className="text-slate-100 text-wrap font-normal text-base">Generada el {props.creationDate}, a las {props.creationTime}</p>
+                        <p className="text-slate-100 text-wrap font-normal text-base">Generada el {creationDate}, a las {creationTime}</p>
                     </div>
                 </div>
             </div>
@@ -125,8 +127,8 @@ function Receipt(props: ReceiptProps) {
                     phoneNumber={props.phoneNumber}
                     date={props.date}
                     hour={props.hour}
-                    creationDate={props.creationDate}
-                    creationTime={props.creationTime}
+                    creationDate={creationDate}
+                    creationTime={creationTime}
                 />
                 } fileName={documentName}>
                     <button className="bg-indigo-500 text-white w-full flex flex-row gap-2 items-center justify-center sm:text-base text-sm tracking-tight px-4 py-2 rounded-lg cursor-pointer font-normal border border-indigo-500 hover:bg-indigo-400">
