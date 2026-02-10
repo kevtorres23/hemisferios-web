@@ -1,7 +1,8 @@
-import Appointment from "../models/Appointments.js";
+import Appointment from "../models/Appointments.ts";
+import { Request, Response } from 'express';
 import colors from "colors";
 
-export async function getAllAppointments(_, res) {
+export async function getAllAppointments(_: Request, res: Response) {
     try {
         const appointments = await Appointment.find().sort({ createdAt: -1 }); // "await" means: before continuing, wait until you receive this, and send it back to me.
         res.status(200).json(appointments);
@@ -12,7 +13,7 @@ export async function getAllAppointments(_, res) {
     }
 };
 
-export async function getAppointmentById(req, res) {
+export async function getAppointmentById(req: Request, res: Response) {
     try {
         const targetAppointment = await Appointment.findById(req.params.id); // "await" means: before continuing, wait until you receive this, and send it back to me.
         res.status(200).json(targetAppointment);
@@ -23,7 +24,7 @@ export async function getAppointmentById(req, res) {
     }
 };
 
-export async function createAppointment(req, res) {
+export async function createAppointment(req: Request, res: Response) {
     try {
         const {
             patientName,
@@ -54,7 +55,7 @@ export async function createAppointment(req, res) {
     }
 };
 
-export async function updateAppointment(req, res) {
+export async function updateAppointment(req: Request, res: Response) {
     try {
         const {
             patientName,
@@ -85,7 +86,7 @@ export async function updateAppointment(req, res) {
     }
 };
 
-export async function deleteAppointment(req, res) {
+export async function deleteAppointment(req: Request, res: Response) {
     try {
         const deletedAppointment = await Appointment.findByIdAndDelete(req.params.id);
 

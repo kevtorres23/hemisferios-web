@@ -1,6 +1,5 @@
 import express from "express";
 import dotenv from "dotenv";
-import cors from "cors";
 import colors from "colors";
 import appointmentRoutes from "./routes/appointmentRoutes.js";
 import { connectDB } from "../config/db.js";
@@ -18,8 +17,6 @@ app.use(rateLimiter);
 
 app.use("/api/appointments", appointmentRoutes);
 // We'll add here the rest of the routes, such as contact messages, clients, therapists, etc...
-
-app.use(cors());
 
 // Connecting to the DB first, and then connecting to the port.
 connectDB().then(() => {
