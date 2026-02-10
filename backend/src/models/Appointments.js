@@ -5,11 +5,11 @@ const appointmentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    motherSurname: {
+    fatherSurname: {
         type: String,
         required: true
     },
-    fatherSurname: {
+    motherSurname: {
         type: String,
         required: true
     },
@@ -26,7 +26,7 @@ const appointmentSchema = new mongoose.Schema({
         required: true
     },
 },
-    {timestamps: true}
+    { timestamps: true }
 );
 
 const Appointment = mongoose.model("Appointment", appointmentSchema);

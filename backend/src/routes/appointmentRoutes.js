@@ -1,11 +1,13 @@
 import express from "express";
-import { getAllAppointments, createAppointment, updateAppointment, deleteAppointment } from "../controllers/appointmentControllers.js";
+import { getAllAppointments, getAppointmentById, createAppointment, updateAppointment, deleteAppointment } from "../controllers/appointmentControllers.js";
 
 const router = express.Router();
 
 // Route definition.
 
 router.get("/", getAllAppointments);
+
+router.get("/:id", getAppointmentById);
 
 router.post("/", createAppointment);
 

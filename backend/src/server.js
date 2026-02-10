@@ -13,6 +13,9 @@ const port = process.env.PORT;
 // Calling the connection method.
 connectDB();
 
+// Middleware
+app.use(express.json());
+
 app.use("/api/appointments", appointmentRoutes);
 // We'll add here the rest of the routes, such as contact messages, clients, therapists, etc...
 

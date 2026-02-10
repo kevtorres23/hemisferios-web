@@ -14,27 +14,23 @@ class ContactMessage {
         this.email = email;
         this.message = message;
     }
-
-    displayVideogame() {
-        console.log(this.name, this.lastName, this.phoneNumber, this.email, this.message);
-    }
 }
 
 class Appointment {
     // Class initializers.
     patientName: string;
-    motherSurname: string;
     fatherSurname: string;
+    motherSurname: string;
     phoneNumber: string;
     date: string;
     hour: string;
     timestamp: Date;
 
     // Defining the constructor.
-    constructor(patientName: string, motherSurname: string, fatherSurname: string, phoneNumber: string, date: string, hour: string, timestamp: Date) {
+    constructor(patientName: string, fatherSurname: string, motherSurname: string, phoneNumber: string, date: string, hour: string, timestamp: Date) {
         this.patientName = patientName;
-        this.motherSurname = motherSurname;
         this.fatherSurname = fatherSurname;
+        this.motherSurname = motherSurname;
         this.phoneNumber = phoneNumber;
         this.date = date;
         this.hour = hour;
