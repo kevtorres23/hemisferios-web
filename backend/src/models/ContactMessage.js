@@ -1,15 +1,11 @@
 import mongoose from "mongoose";
 
-const appointmentSchema = new mongoose.Schema({
-    patientName: {
+const contactMsgSchema = new mongoose.Schema({
+    name: {
         type: String,
         required: true
     },
-    fatherSurname: {
-        type: String,
-        required: true
-    },
-    motherSurname: {
+    lastName: {
         type: String,
         required: true
     },
@@ -17,18 +13,18 @@ const appointmentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    date: {
+    email: {
         type: String,
         required: true
     },
-    hour: {
+    message: {
         type: String,
         required: true
-    },
+    }
 },
     { timestamps: true }
 );
 
-const Appointment = mongoose.model("Appointment", appointmentSchema);
+const ContactMsg = mongoose.model("ContactMsg", contactMsgSchema);
 
-export default Appointment;
+export default ContactMsg;
