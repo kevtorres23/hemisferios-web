@@ -63,4 +63,4 @@ export async function deleteMessage(req, res) {
         console.error("Error in the deleteMessage controller", error)
         res.status(500).json({ message: "Internal server error." })
     }
-}
+};

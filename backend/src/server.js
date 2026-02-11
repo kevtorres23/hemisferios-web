@@ -4,6 +4,8 @@ import cors from "cors";
 import colors from "colors";
 import appointmentRoutes from "./routes/appointmentRoutes.js";
 import contactMsgRoutes from "./routes/contactMsgRoutes.js";
+import patientRoutes from "./routes/patientRoutes.js";
+import therapistRoutes from "./routes/therapistRoutes.js";
 import { connectDB } from "../config/db.js";
 import rateLimiter from "../middlewares/rateLimiter.js";
 
@@ -19,7 +21,8 @@ app.use(rateLimiter);
 
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/messages", contactMsgRoutes);
-// We'll add here the rest of the routes, such as contact messages, clients, therapists, etc...
+app.use("/api/patients", patientRoutes);
+app.use("/api/therapists", therapistRoutes);
 
 app.use(cors());
 
