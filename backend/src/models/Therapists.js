@@ -19,7 +19,9 @@ const therapistSchema = new mongoose.Schema({
     },
     schedule: {
         type: [{
-            patient: String
+            patient: String,
+            hour: String,
+            day: String,
         }],
         required: true
     }

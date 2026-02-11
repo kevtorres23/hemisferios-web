@@ -6,6 +6,7 @@ import appointmentRoutes from "./routes/appointmentRoutes.js";
 import contactMsgRoutes from "./routes/contactMsgRoutes.js";
 import patientRoutes from "./routes/patientRoutes.js";
 import therapistRoutes from "./routes/therapistRoutes.js";
+import availabilityRoutes from "./routes/availabilityRoutes.js";
 import { connectDB } from "../config/db.js";
 import rateLimiter from "../middlewares/rateLimiter.js";
 
@@ -23,6 +24,7 @@ app.use("/api/appointments", appointmentRoutes);
 app.use("/api/messages", contactMsgRoutes);
 app.use("/api/patients", patientRoutes);
 app.use("/api/therapists", therapistRoutes);
+app.use("/api/availability", availabilityRoutes);
 
 app.use(cors());
 
