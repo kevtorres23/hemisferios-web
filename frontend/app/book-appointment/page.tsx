@@ -1,21 +1,12 @@
 "use client";
 
-import Navbar from "@/website-components/Navbar"
-import Footer from "@/website-components/Footer";
+import Navbar from "@/website/components/Navbar"
+import Footer from "@/website/components/Footer";
 import { CircleCheck } from "lucide-react";
-import AppointmentForm from "@/website-components/AppointmentForm";
-import ChannelBox from "@/website-components/ChannelBox";
+import AppointmentForm from "@/website/components/AppointmentForm";
+import ChannelBox from "@/website/components/ChannelBox";
 import { useRef } from "react";
-import { isVisible } from "@/website-modules/VisibilityDetector";
-
-type AppointmentType = {
-    patientName: string;
-    motherSurname: string;
-    fatherSurname: string;
-    phoneNumber: string;
-    date: string;
-    hour: string;
-}
+import { isVisible } from "@/website/modules/VisibilityDetector";
 
 function BookAppointment() {
     const ref1 = useRef(null);

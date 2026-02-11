@@ -1,9 +1,9 @@
 "use client";
 
-import SectionBadge from "@/website-components/SectionBadge";
+import SectionBadge from "@/website/components/SectionBadge";
 import Image from "next/image";
-import blob from "../../public/blob.png";
-import { isVisible } from "@/website-modules/VisibilityDetector";
+import blob from "../../../public/blob.png";
+import { isVisible } from "@/website/modules/VisibilityDetector";
 import { useRef } from "react";
 
 function LocationMap() {

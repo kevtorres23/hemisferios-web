@@ -7,8 +7,7 @@ type Appointment = {
     phoneNumber: string;
     date: string;
     hour: string;
-    creationDate: string;
-    creationTime: string;
+    timestamp: Date;
 }
 
 export const useAppointmentStore = create((set) => ({
@@ -21,8 +20,7 @@ export const useAppointmentStore = create((set) => ({
             phoneNumber: appointmentObject.phoneNumber,
             date: appointmentObject.date,
             hour: appointmentObject.hour,
-            creationDate: appointmentObject.creationDate,
-            creationTime: appointmentObject.creationTime
+            timestamp: appointmentObject.timestamp,
         }
     }),
 }))

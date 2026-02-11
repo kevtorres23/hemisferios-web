@@ -4,7 +4,7 @@ import Link from "next/link";
 import NormalButton from "./NormalButton";
 import NavbarLink from "./NavbarLink";
 import Image from "next/image";
-import Logo from "../public/hemisferios-logo.png";
+import Logo from "../../public/hemisferios-logo.png";
 import React, { useState } from "react";
 import { Menu } from "lucide-react";
 

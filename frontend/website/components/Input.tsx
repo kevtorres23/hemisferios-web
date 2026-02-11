@@ -19,7 +19,7 @@ function Input(props: InputProps) {
                         </p>
                     </div>
 
-                    <input type={props.type} value={props.textValue} onChange={props.onInputChange} className={`w-full py-2 px-3 ${props.activeValidation ? "border-red-400" : "border-slate-200"} bg-white border rounded-md text-base font-normal slate-800`} />
+                    <input type={props.type} value={props.textValue} onChange={props.onInputChange} className={`w-full py-2 px-3 ${props.activeValidation ? "border-red-400" : "border-slate-200"} bg-white border rounded-md sm:text-sm text-base font-normal slate-800`} />
                 </label>
             );
 

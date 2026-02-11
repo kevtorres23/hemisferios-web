@@ -1,14 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import SectionBadge from "@/website-components/SectionBadge";
-import notebook from "../../public/notebook.png";
-import ContactForm from "@/website-components/ContactForm";
-import NormalButton from "@/website-components/NormalButton";
+import SectionBadge from "@/website/components/SectionBadge";
+import notebook from "../../../public/notebook.png";
+import ContactForm from "@/website/components/ContactForm";
+import NormalButton from "@/website/components/NormalButton";
 import { useState } from "react";
 import { CheckCircle } from "lucide-react";
 import { useRef } from "react";
-import { isVisible } from "@/website-modules/VisibilityDetector";
+import { isVisible } from "@/website/modules/VisibilityDetector";
 
 type MessageType = {
     name: string;

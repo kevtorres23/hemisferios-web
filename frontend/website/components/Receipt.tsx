@@ -3,8 +3,8 @@ import { Download, House } from "lucide-react";
 import Link from "next/link";
 import { Clock4 } from "lucide-react";
 import Image from "next/image";
-import whiteLogo from "../public/white-logo.png"; import dynamic from "next/dynamic";
-import PrintableReceipt from "@/website-modules/PDFHandling/PDFGenerator";
+import whiteLogo from "../../public/white-logo.png"; import dynamic from "next/dynamic";
+import PrintableReceipt from "@/website/modules/PDFHandling/PDFGenerator";
 
 type ReceiptProps = {
     patientName: string;
@@ -25,6 +25,8 @@ const PDFDownloadLink = dynamic(
 );
 
 function Receipt(props: ReceiptProps) {
+    console.log(typeof(props.timestamp), props.timestamp);
+
     const creationDate = props.timestamp.getDate() + "/" + (props.timestamp.getMonth() + 1) + "/" + props.timestamp.getFullYear();
     const creationTime = props.timestamp.getHours() + ":" + props.timestamp.getMinutes() + " horas";
 

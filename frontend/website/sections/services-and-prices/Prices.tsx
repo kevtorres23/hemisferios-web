@@ -1,4 +1,4 @@
-import SectionBadge from "@/website-components/SectionBadge"
+import SectionBadge from "@/website/components/SectionBadge"
 
 export default function Prices() {
     return (

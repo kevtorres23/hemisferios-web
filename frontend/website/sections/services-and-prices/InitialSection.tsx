@@ -1,11 +1,11 @@
 "use client";
 
 import { useRef } from "react";
-import SectionBadge from "@/website-components/SectionBadge";
-import { isVisible } from "@/website-modules/VisibilityDetector";
+import SectionBadge from "@/website/components/SectionBadge";
+import { isVisible } from "@/website/modules/VisibilityDetector";
 import Image from "next/image";
-import kidsHighFive from "../../public/kids-high-five.png";
-import blob from "../../public/blob.png";
+import kidsHighFive from "../../../public/kids-high-five.png";
+import blob from "../../../public/blob.png";
 
 function InitialSection() {
     const ref1 = useRef(null);

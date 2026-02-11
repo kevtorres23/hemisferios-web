@@ -1,11 +1,11 @@
 "use client";
 
 import { useRef } from "react";
-import { isVisible } from "@/website-modules/VisibilityDetector";
-import WhiteButton from "@/website-components/WhiteButton";
-import SectionBadge from "@/website-components/SectionBadge";
+import { isVisible } from "@/website/modules/VisibilityDetector";
+import WhiteButton from "@/website/components/WhiteButton";
+import SectionBadge from "@/website/components/SectionBadge";
 import Image from "next/image";
-import workTime from "../../public/work-time.png"
+import workTime from "../../../public/work-time.png"
 
 function CallToAction() {
     const ref1 = useRef(null);

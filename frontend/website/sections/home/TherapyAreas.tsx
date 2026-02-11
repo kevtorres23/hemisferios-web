@@ -2,10 +2,10 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import NormalButton from "@/website-components/NormalButton";
-import patient from "../../public/patient.png";
-import SectionBadge from "@/website-components/SectionBadge";
-import { isVisible } from "@/website-modules/VisibilityDetector";
+import NormalButton from "@/website/components/NormalButton";
+import patient from "../../../public/patient.png";
+import SectionBadge from "@/website/components/SectionBadge";
+import { isVisible } from "@/website/modules/VisibilityDetector";
 
 function TherapyAreas() {
     const ref1 = useRef(null);

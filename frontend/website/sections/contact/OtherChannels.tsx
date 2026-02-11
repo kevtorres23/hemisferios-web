@@ -1,13 +1,13 @@
 "use client";
 
-import SectionBadge from "@/website-components/SectionBadge";
+import SectionBadge from "@/website/components/SectionBadge";
 import Image from "next/image";
-import notification from "../../public/notification.png";
-import ContactChannel from "@/website-components/ContactChannel";
+import notification from "../../../public/notification.png";
+import ContactChannel from "@/website/components/ContactChannel";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { useRef } from "react";
-import { isVisible } from "@/website-modules/VisibilityDetector";
-import ChannelBox from "@/website-components/ChannelBox";
+import { isVisible } from "@/website/modules/VisibilityDetector";
+import ChannelBox from "@/website/components/ChannelBox";
 
 function OtherChannels() {
     const ref1 = useRef(null);

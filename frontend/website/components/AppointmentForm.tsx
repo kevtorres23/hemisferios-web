@@ -1,14 +1,14 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { isVisible } from "../website-modules/VisibilityDetector";
+import { isVisible } from "../modules/VisibilityDetector";
 import Input from "./Input";
 import SelectInput from "./SelectInput";
 import { CircleCheck } from "lucide-react";
-import { Appointment } from "@/website-modules/Classes";
+import { Appointment } from "@/website/modules/Classes";
 import InputWarning from "./InputWarning";
-import { InputChange, AppointmentSelectChange } from "@/website-modules/InputChangeHandlers";
-import { useAppointmentStore } from "@/website-modules/StoreAppointment";
+import { InputChange, AppointmentSelectChange } from "@/website/modules/InputChangeHandlers";
+import { useAppointmentStore } from "@/website/modules/StoreAppointment";
 import { redirect } from 'next/navigation';
 
 function AppointmentForm() {
@@ -101,12 +101,12 @@ function AppointmentForm() {
 
                 <div className="input-row flex md:flex-row flex-col gap-4 w-full items-center justify-center">
                     <div className="date-field flex flex-col gap-2 w-full">
-                        <SelectInput label="Fecha de la cita:" value={date} onInputChange={(val) => AppointmentSelectChange(val, date, setDate, validationsShot, setDateValidation)} activeValidation={dateValidation} items={dateItems} />
+                        <SelectInput selectType="date" label="Fecha de la cita:" value={date} onInputChange={(val) => AppointmentSelectChange(val, date, setDate, validationsShot, setDateValidation)} activeValidation={dateValidation} items={dateItems} />
                         {dateValidation && <InputWarning message="Por favor, selecciona una fecha." />}
                     </div>
 
                     <div className="date-field flex flex-col gap-2 w-full">
-                        <SelectInput label="Hora de la cita:" value={hour} onInputChange={(val) => AppointmentSelectChange(val, hour, setHour, validationsShot, setHourValidation)} activeValidation={hourValidation} items={dateItems} />
+                        <SelectInput selectType="hour" label="Hora de la cita:" value={hour} onInputChange={(val) => AppointmentSelectChange(val, hour, setHour, validationsShot, setHourValidation)} activeValidation={hourValidation} items={dateItems} />
                         {hourValidation && <InputWarning message="Por favor, selecciona una fecha." />}
                     </div>
                 </div>

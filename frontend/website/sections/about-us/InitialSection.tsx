@@ -1,8 +1,8 @@
 "use client";
 
-import initialSectionImage from "../../public/about-us-1.png";
+import initialSectionImage from "../../../public/about-us-1.png";
 import { useRef } from "react";
-import { isVisible } from "@/website-modules/VisibilityDetector";
+import { isVisible } from "@/website/modules/VisibilityDetector";
 import Image from "next/image";
 
 function InitialSection() {

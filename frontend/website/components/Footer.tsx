@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Logo from "../public/hemisferios-logo.png";
+import Logo from "../../public/hemisferios-logo.png";
 import FooterLink from "./FooterLink";
 import { Phone, Mail, Instagram, Facebook } from "lucide-react";
 import Link from "next/link";

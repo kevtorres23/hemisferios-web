@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import SectionBadge from "@/website-components/SectionBadge";
-import { isVisible } from "@/website-modules/VisibilityDetector";
+import SectionBadge from "@/website/components/SectionBadge";
+import { isVisible } from "@/website/modules/VisibilityDetector";
 
 function ConstantGrowth() {
     const ref1 = useRef(null);

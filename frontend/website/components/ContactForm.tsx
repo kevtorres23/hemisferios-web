@@ -3,10 +3,10 @@
 import Input from "./Input";
 import { useState } from "react";
 import { ArrowRight, CircleAlert } from "lucide-react";
-import { ContactMessage } from "@/website-modules/Classes";
+import { ContactMessage } from "@/website/modules/Classes";
 import { useRef } from "react";
-import { isVisible } from "@/website-modules/VisibilityDetector";
-import { InputChange } from "@/website-modules/InputChangeHandlers";
+import { isVisible } from "@/website/modules/VisibilityDetector";
+import { InputChange } from "@/website/modules/InputChangeHandlers";
 
 
 type MessageType = {

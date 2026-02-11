@@ -1,13 +1,13 @@
 "use client";
 
 import { useRef } from "react";
-import TestimonialCard from "@/website-components/TestimonialCard";
-import { isVisible } from "@/website-modules/VisibilityDetector";
-import person1 from "../../public/person1.png";
-import person2 from "../../public/person2.png";
-import person3 from "../../public/person3.png";
-import person4 from "../../public/person4.png";
-import SectionBadge from "@/website-components/SectionBadge";
+import TestimonialCard from "@/website/components/TestimonialCard";
+import { isVisible } from "@/website/modules/VisibilityDetector";
+import person1 from "../../../public/person1.png";
+import person2 from "../../../public/person2.png";
+import person3 from "../../../public/person3.png";
+import person4 from "../../../public/person4.png";
+import SectionBadge from "@/website/components/SectionBadge";
 
 function Testimonials() {
     const ref1 = useRef(null);

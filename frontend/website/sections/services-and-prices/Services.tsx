@@ -1,7 +1,7 @@
-import TherapyType from "@/website-components/TherapyType";
-import TherapyDefinition from "@/website-components/TherapyDefinition";
-import TherapySigns from "@/website-components/TherapySigns";
-import SignCard from "@/website-components/SignCard";
+import TherapyType from "@/website/components/TherapyType";
+import TherapyDefinition from "@/website/components/TherapyDefinition";
+import TherapySigns from "@/website/components/TherapySigns";
+import SignCard from "@/website/components/SignCard";
 import { Speech, BrainCog } from "lucide-react";
 
 function Services() {

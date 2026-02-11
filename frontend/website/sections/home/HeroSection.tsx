@@ -2,12 +2,12 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import NormalButton from "@/website-components/NormalButton";
-import TextButton from "@/website-components/TextButton";
-import BrainTag from "@/website-components/BrainTag";
-import brainIllustration from "../../public/hero-brain.png"
-import blob from "../../public/blob.png";
-import { isVisible }  from "@/website-modules/VisibilityDetector";
+import NormalButton from "@/website/components/NormalButton";
+import TextButton from "@/website/components/TextButton";
+import BrainTag from "@/website/components/BrainTag";
+import brainIllustration from "../../../public/hero-brain.png"
+import blob from "../../../public/blob.png";
+import { isVisible }  from "@/website/modules/VisibilityDetector";
 
 function HeroSection() {
     const ref1 = useRef(null);
