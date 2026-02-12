@@ -1,15 +1,24 @@
 "use client";
 
-import { useRef, useState } from "react";
+import axios from "axios";
+import { useEffect, useRef, useState } from "react";
 import { isVisible } from "../modules/VisibilityDetector";
 import Input from "./Input";
-import SelectInput from "./SelectInput";
+import SelectDateInput from "./SelectDateInput";
+import SelectHourInput from "./SelectHourInput";
 import { CircleCheck } from "lucide-react";
 import { Appointment } from "@/website/modules/Classes";
 import InputWarning from "./InputWarning";
 import { InputChange, AppointmentSelectChange } from "@/website/modules/InputChangeHandlers";
 import { useAppointmentStore } from "@/website/modules/StoreAppointment";
 import { redirect } from 'next/navigation';
+import manageAvailability from "../modules/ManageAvailability";
+
+type WeekDayObject = {
+    writtenDate: string,
+    databaseId: string,
+    formattedDate: string,
+};
 
 function AppointmentForm() {
     // Variables of the form inputs.
@@ -18,9 +27,12 @@ function AppointmentForm() {
     const [fatherSurname, setFatherSurname] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [date, setDate] = useState("");
+    const [formattedDate, setFormattedDate] = useState("");
+    const [writtenDate, setWrittenDate] = useState("");
     const [hour, setHour] = useState("");
-    const [creationDate, setCreationDate] = useState("");
-    const [creationTime, setCreationTime] = useState("");
+    const [availability, setAvailability] = useState([]);
+    const [availDays, setAvailDays] = useState<{ currentWeekList: WeekDayObject[], nextWeekList: WeekDayObject[] }>({ currentWeekList: [], nextWeekList: [] });
+    const [availHours, setAvailHours] = useState<string[]>();
 
     // Input validations.
     const [validationsShot, setValidationsShot] = useState(false);
@@ -31,8 +43,61 @@ function AppointmentForm() {
     const [dateValidation, setDateValidation] = useState(false);
     const [hourValidation, setHourValidation] = useState(false);
 
-    const dateItems = ["Lunes 14", "Martes 15", "Miércoles 16", "Jueves 17", "Viernes 18", "Sábado 19", "Domingo 20", "Lunes 14", "Martes 15", "Miércoles 16", "Jueves 17", "Viernes 18", "Sábado 19", "Domingo 20"];
     const saveAppointment = useAppointmentStore((state: any) => state.saveAppointment);
+
+    useEffect(() => {
+        const fetchAvailability = async () => {
+            try {
+                // Variable definition.
+                const res = await axios.get("http://localhost:5001/api/availability"); // Getting availability from the backend.
+                const day = date; // Create a copy of the 'date' string.
+                const dayToArray = day.split(""); // Convert the string into a character-separated array.
+                const firstCharacter = dayToArray[0]; // Getting the week mark ('c' or 'n') set in the 'Manage Availability' module.
+                dayToArray.splice(0, 1); // Now, we can remove the week mark.
+
+                // Using the backend's response.
+                setAvailability(res.data);
+                const calculatedDays = manageAvailability(res.data);
+                setAvailDays(calculatedDays);
+
+                var finalDayName = "";
+
+                // Rebuilding the day's name by summing the array's items.
+                for (let i = 0; i < dayToArray.length; i++) {
+                    finalDayName += dayToArray[i];
+                };
+
+
+                if (firstCharacter === "c") {
+                    // Searching for the formatted date in the CURRENT week list of days, based on its database ID.
+                    for (let i = 0; i < calculatedDays.currentWeekList.length; i++) {
+                        if (calculatedDays.currentWeekList[i].databaseId === date) {
+                            setFormattedDate(calculatedDays.currentWeekList[i].formattedDate);
+                            setWrittenDate(calculatedDays.currentWeekList[i].writtenDate);
+                        };
+                    };
+
+                    setAvailHours(availability[0][finalDayName]);
+
+                } else if (firstCharacter === "n") {
+                    // Searching for the formatted date in the NEXT week list of days, based on its database ID.
+                    for (let i = 0; i < calculatedDays.nextWeekList.length; i++) {
+                        if (calculatedDays.nextWeekList[i].databaseId === date) {
+                            setFormattedDate(calculatedDays.nextWeekList[i].formattedDate);
+                            setWrittenDate(calculatedDays.nextWeekList[i].writtenDate);
+                        };
+                    };
+
+                    setAvailHours(availability[1][finalDayName]);
+                }
+
+            } catch (error) {
+                console.log("Error fetching notes", error);
+            };
+
+        };
+        fetchAvailability();
+    }, [date]);
 
     // Name validation.
     function shootValidations(e: React.FormEvent) {
@@ -58,12 +123,13 @@ function AppointmentForm() {
 
     function shootData() {
         const time = new Date();
-        const currentDate = time.getDate() + "/" + (time.getMonth() + 1) + "/" + time.getFullYear();
-        const currentTime = time.getHours() + ":" + time.getMinutes() + " horas";
 
-        const appointmentObject = new Appointment(patientName, motherSurname, fatherSurname, phoneNumber, date, hour, time);
+        const receiptAppointmentObj = new Appointment(patientName, motherSurname, fatherSurname, phoneNumber, writtenDate, hour, time);
+        const databaseAppointmentObj = new Appointment(patientName, motherSurname, fatherSurname, phoneNumber, formattedDate, hour, time);
 
-        saveAppointment(appointmentObject);
+        saveAppointment(receiptAppointmentObj);
+
+        axios.post("http://localhost:5001/api/appointments", databaseAppointmentObj);
 
         redirect('/finished-appointment');
     }
@@ -101,12 +167,12 @@ function AppointmentForm() {
 
                 <div className="input-row flex md:flex-row flex-col gap-4 w-full items-center justify-center">
                     <div className="date-field flex flex-col gap-2 w-full">
-                        <SelectInput selectType="date" label="Fecha de la cita:" value={date} onInputChange={(val) => AppointmentSelectChange(val, date, setDate, validationsShot, setDateValidation)} activeValidation={dateValidation} items={dateItems} />
+                        <SelectDateInput selectType="date" label="Fecha de la cita:" value={date} onInputChange={(val) => AppointmentSelectChange(val, date, setDate, validationsShot, setDateValidation)} activeValidation={dateValidation} items={availDays} />
                         {dateValidation && <InputWarning message="Por favor, selecciona una fecha." />}
                     </div>
 
                     <div className="date-field flex flex-col gap-2 w-full">
-                        <SelectInput selectType="hour" label="Hora de la cita:" value={hour} onInputChange={(val) => AppointmentSelectChange(val, hour, setHour, validationsShot, setHourValidation)} activeValidation={hourValidation} items={dateItems} />
+                        <SelectHourInput selectType="hour" label="Hora de la cita:" value={hour} onInputChange={(val) => AppointmentSelectChange(val, hour, setHour, validationsShot, setHourValidation)} activeValidation={hourValidation} items={availHours} />
                         {hourValidation && <InputWarning message="Por favor, selecciona una fecha." />}
                     </div>
                 </div>

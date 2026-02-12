@@ -50,8 +50,8 @@ function HeroSection() {
                 <Image src={brainIllustration} alt="" className="xl:w-105 lg:w-96 sm:w-102 w-80" />
 
                 <div className="sm:hidden w-full flex flex-row items-center justify-between">
-                    <BrainTag text="Comunicación" positionStyle="" />
-                    <BrainTag text="Cognición" positionStyle="" />
+                    <BrainTag text="Aprendizaje" positionStyle="" />
+                    <BrainTag text="Lenguaje" positionStyle="" />
                 </div>
 
                 <BrainTag text="Comunicación" positionStyle="sm:top-6 sm:left-[-96px] sm:block hidden" />

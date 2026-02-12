@@ -1,31 +1,35 @@
 import mongoose from "mongoose";
 
 const availabilitySchema = new mongoose.Schema({
-    weekRange: {
+    weekStart: {
         type: String,
         required: true
     },
-    monday: {
+    weekFinish: {
+        type: String,
+        required: true
+    },
+    lunes: {
         type: [String],
         required: true,
     },
-    tuesday: {
+    martes: {
         type: [String],
         required: true,
     },
-    wednesday: {
+    miercoles: {
         type: [String],
         required: true,
     },
-    thursday: {
+    jueves: {
         type: [String],
         required: true,
     },
-    friday: {
+    viernes: {
         type: [String],
         required: true,
     },
-    saturday: {
+    sabado: {
         type: [String],
         required: true,
     }

@@ -25,8 +25,6 @@ const PDFDownloadLink = dynamic(
 );
 
 function Receipt(props: ReceiptProps) {
-    console.log(typeof(props.timestamp), props.timestamp);
-
     const creationDate = props.timestamp.getDate() + "/" + (props.timestamp.getMonth() + 1) + "/" + props.timestamp.getFullYear();
     const creationTime = props.timestamp.getHours() + ":" + props.timestamp.getMinutes() + " horas";
 
@@ -105,7 +103,7 @@ function Receipt(props: ReceiptProps) {
                         </p>
 
                         <p className="text-sm font-normal text-slate-900">
-                            16 de febrero, 2026
+                            {props.date}
                         </p>
                     </div>
 
@@ -115,7 +113,7 @@ function Receipt(props: ReceiptProps) {
                         </p>
 
                         <p className="text-sm font-normal text-slate-900">
-                            10:00 horas
+                            {props.hour} horas
                         </p>
                     </div>
                 </div>

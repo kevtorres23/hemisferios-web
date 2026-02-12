@@ -18,6 +18,9 @@ const port = process.env.PORT;
 // Middlewares: functions that run in the middle of a response and a request. They are executed before sending the response back.
 app.use(express.json()); // Parse JSON bodies and allow access to req.body
 app.use(rateLimiter);
+app.use(cors({
+    origin: "http://localhost:3000"
+}));
 
 
 app.use("/api/appointments", appointmentRoutes);

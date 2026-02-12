@@ -1,5 +1,5 @@
 import { useId } from "react";
-import { Calendar, Clock4 } from "lucide-react";
+import { Clock4 } from "lucide-react";
 import { Label } from '@/components/ui/label';
 import {
     Select,
@@ -7,22 +7,22 @@ import {
     SelectGroup,
     SelectItem,
     SelectLabel,
+    SelectSeparator,
     SelectTrigger,
     SelectValue
-} from '@/components/ui/select';
+} from '@/components/ui/select'
 
 type SelectProps = {
     label: string;
     value: string;
     onInputChange: (val: string) => void;
-    items: React.ReactNode[];
+    items: string[] | undefined;
     activeValidation: boolean;
     selectType: "date" | "hour";
-}
+};
 
-function SelectInput(props: SelectProps) {
+function SelectHourInput(props: SelectProps) {
     const id = useId();
-
     return (
         <div className='w-full space-y-2'>
             <Label className="text-slate-500 font-normal sm:text-sm text-base" htmlFor={id}>{props.label} <span className="text-red-500 text-lg font-semibold">*</span></Label>
@@ -30,27 +30,17 @@ function SelectInput(props: SelectProps) {
                 <SelectTrigger id={id} className={`w-full bg-white sm:text-sm text-base py-2 px-3 ${props.activeValidation ? "border border-red-500" : ""}`}>
                     <SelectValue className="" placeholder={
                         <div className="flex flex-row gap-2 items-center">
-                            {props.selectType === "date" && (
-                                <>
-                                    <Calendar size={16} />
-                                    <p className="sm:text-sm text-base">Selecciona un día</p>
-                                </>
-                            )}
-                            {props.selectType === "hour" && (
-                                <>
-                                    <Clock4 size={16} />
-                                    <p className="sm:text-sm text-base">Selecciona una hora</p>
-                                </>
-                            )}
+                            <Clock4 size={16} />
+                            <p className="sm:text-sm text-base">Selecciona una hora</p>
                         </div>
                     } />
                 </SelectTrigger>
                 <SelectContent className="bg-white text-sm" sideOffset={5} position="popper">
                     <SelectGroup className="h-80 overflow-y-scroll">
-                        <SelectLabel className="text-sm">{props.selectType === "date" ? "Fecha de la cita" : "Hora de la cita"}</SelectLabel>
+                        <SelectLabel className="text-sm">Hora de la cita</SelectLabel>
                         {/* Map the available dates from the database*/}
-                        {props.items.map((item, id) =>
-                            <SelectItem className="text-sm" key={id} value={id.toString()}>{item}</SelectItem>
+                        {props.items?.map((item, id) =>
+                            <SelectItem className="text-sm" key={id} value={item}>{item}</SelectItem>
                         )}
                     </SelectGroup>
                 </SelectContent>
@@ -59,4 +49,4 @@ function SelectInput(props: SelectProps) {
     )
 }
 
-export default SelectInput;
+export default SelectHourInput;
