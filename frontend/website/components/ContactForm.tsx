@@ -7,6 +7,7 @@ import { ContactMessage } from "@/website/modules/Classes";
 import { useRef } from "react";
 import { isVisible } from "@/website/modules/VisibilityDetector";
 import { InputChange } from "@/website/modules/InputChangeHandlers";
+import axios from "axios";
 
 
 type MessageType = {
@@ -24,7 +25,7 @@ function ContactForm({ sendMessageObject }: { sendMessageObject: (messageObject:
     const [lastName, setLastName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [email, setEmail] = useState("");
-    const [comment, setComment] = useState("");
+    const [message, setMessage] = useState("");
 
     // Input validations.
     const [validationsShot, setValidationsShot] = useState(false);
@@ -32,15 +33,16 @@ function ContactForm({ sendMessageObject }: { sendMessageObject: (messageObject:
     const [nameValidation, setNameValidation] = useState(false);
     const [lastNameValidation, setLastNameValidation] = useState(false);
     const [numberValidation, setNumberValidation] = useState(false);
-    const [commentValidation, setCommentValidation] = useState(false);
+    const [messageValidation, setMessageValidation] = useState(false);
 
     const ref1 = useRef(null);
     const isFormVisible = isVisible(ref1);
 
     // Function to save the input's responses in an object.
     function shootData() {
-        const messageObject = new ContactMessage(name, lastName, phoneNumber, email, comment);
+        const messageObject = new ContactMessage(name, lastName, phoneNumber, email, message);
         sendMessageObject(messageObject);
+        axios.post("http://localhost:5001/api/messages", messageObject);
     }
 
     // Function to get the inputs through validations before saving the responses.
@@ -52,7 +54,7 @@ function ContactForm({ sendMessageObject }: { sendMessageObject: (messageObject:
         if (!name) { setNameValidation(true); };
         if (!lastName) { setLastNameValidation(true); };
         if (!phoneNumber) { setNumberValidation(true); };
-        if (!comment) { setCommentValidation(true); };
+        if (!message) { setMessageValidation(true); };
 
         let emailRegex = /\w+@\w+.[a-z]+/i
 
@@ -119,8 +121,8 @@ function ContactForm({ sendMessageObject }: { sendMessageObject: (messageObject:
                 </div>
 
                 <div className="comment-field last-name-field flex flex-col gap-2 w-full">
-                    <Input type="comment" textValue={comment} onInputChange={(e) => InputChange(e, comment, setComment, validationsShot, setCommentValidation)} label="Comentario:" activeValidation={commentValidation} />
-                    {commentValidation && (
+                    <Input type="comment" textValue={message} onInputChange={(e) => InputChange(e, message, setMessage, validationsShot, setMessageValidation)} label="Comentario:" activeValidation={messageValidation} />
+                    {messageValidation && (
                         <div className="flex flex-row gap-1 items-center">
                             <CircleAlert size={14} className="text-red-500" />
                             <p className="text-xs font-medium text-red-500">Por favor, escribe tu primer apellido.</p>

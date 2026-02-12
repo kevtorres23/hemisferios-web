@@ -28,6 +28,7 @@ function AppointmentForm() {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [date, setDate] = useState("");
     const [formattedDate, setFormattedDate] = useState("");
+    const [writtenDate, setWrittenDate] = useState("");
     const [hour, setHour] = useState("");
     const [availability, setAvailability] = useState([]);
     const [availDays, setAvailDays] = useState<{ currentWeekList: WeekDayObject[], nextWeekList: WeekDayObject[] }>({ currentWeekList: [], nextWeekList: [] });
@@ -72,6 +73,7 @@ function AppointmentForm() {
                     for (let i = 0; i < calculatedDays.currentWeekList.length; i++) {
                         if (calculatedDays.currentWeekList[i].databaseId === date) {
                             setFormattedDate(calculatedDays.currentWeekList[i].formattedDate);
+                            setWrittenDate(calculatedDays.currentWeekList[i].writtenDate);
                         };
                     };
 
@@ -82,6 +84,7 @@ function AppointmentForm() {
                     for (let i = 0; i < calculatedDays.nextWeekList.length; i++) {
                         if (calculatedDays.nextWeekList[i].databaseId === date) {
                             setFormattedDate(calculatedDays.nextWeekList[i].formattedDate);
+                            setWrittenDate(calculatedDays.nextWeekList[i].writtenDate);
                         };
                     };
 
@@ -121,9 +124,12 @@ function AppointmentForm() {
     function shootData() {
         const time = new Date();
 
-        const appointmentObject = new Appointment(patientName, motherSurname, fatherSurname, phoneNumber, formattedDate, hour, time);
+        const receiptAppointmentObj = new Appointment(patientName, motherSurname, fatherSurname, phoneNumber, writtenDate, hour, time);
+        const databaseAppointmentObj = new Appointment(patientName, motherSurname, fatherSurname, phoneNumber, formattedDate, hour, time);
 
-        saveAppointment(appointmentObject);
+        saveAppointment(receiptAppointmentObj);
+
+        axios.post("http://localhost:5001/api/appointments", databaseAppointmentObj);
 
         redirect('/finished-appointment');
     }
