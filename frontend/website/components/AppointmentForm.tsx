@@ -1,15 +1,18 @@
 "use client";
 
-import { useRef, useState } from "react";
+import axios from "axios";
+import { useEffect, useRef, useState } from "react";
 import { isVisible } from "../modules/VisibilityDetector";
 import Input from "./Input";
-import SelectInput from "./SelectInput";
+import SelectDateInput from "./SelectDateInput";
+import SelectHourInput from "./SelectHourInput";
 import { CircleCheck } from "lucide-react";
 import { Appointment } from "@/website/modules/Classes";
 import InputWarning from "./InputWarning";
 import { InputChange, AppointmentSelectChange } from "@/website/modules/InputChangeHandlers";
 import { useAppointmentStore } from "@/website/modules/StoreAppointment";
 import { redirect } from 'next/navigation';
+import manageAvailability from "../modules/ManageAvailability";
 
 function AppointmentForm() {
     // Variables of the form inputs.
@@ -19,8 +22,8 @@ function AppointmentForm() {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [date, setDate] = useState("");
     const [hour, setHour] = useState("");
-    const [creationDate, setCreationDate] = useState("");
-    const [creationTime, setCreationTime] = useState("");
+    const [availDays, setAvailDays] = useState<{currentWeekList: string[], nextWeekList: string[]}>({currentWeekList: [], nextWeekList: []});
+    const [availHours, setAvailHours] = useState<string[]>();
 
     // Input validations.
     const [validationsShot, setValidationsShot] = useState(false);
@@ -33,6 +36,24 @@ function AppointmentForm() {
 
     const dateItems = ["Lunes 14", "Martes 15", "Miércoles 16", "Jueves 17", "Viernes 18", "Sábado 19", "Domingo 20", "Lunes 14", "Martes 15", "Miércoles 16", "Jueves 17", "Viernes 18", "Sábado 19", "Domingo 20"];
     const saveAppointment = useAppointmentStore((state: any) => state.saveAppointment);
+
+    useEffect(() => {
+        const fetchAvailability = async () => {
+            try {
+                const res = await axios.get("http://localhost:5001/api/availability");
+
+                const calculatedDays = manageAvailability(res.data);
+
+                setAvailDays(calculatedDays);
+
+                console.log(res.data);
+            } catch (error) {
+                console.log("Error fetching notes", error);
+            };
+        };
+
+        fetchAvailability();
+    }, []);
 
     // Name validation.
     function shootValidations(e: React.FormEvent) {
@@ -58,8 +79,6 @@ function AppointmentForm() {
 
     function shootData() {
         const time = new Date();
-        const currentDate = time.getDate() + "/" + (time.getMonth() + 1) + "/" + time.getFullYear();
-        const currentTime = time.getHours() + ":" + time.getMinutes() + " horas";
 
         const appointmentObject = new Appointment(patientName, motherSurname, fatherSurname, phoneNumber, date, hour, time);
 
@@ -101,12 +120,12 @@ function AppointmentForm() {
 
                 <div className="input-row flex md:flex-row flex-col gap-4 w-full items-center justify-center">
                     <div className="date-field flex flex-col gap-2 w-full">
-                        <SelectInput selectType="date" label="Fecha de la cita:" value={date} onInputChange={(val) => AppointmentSelectChange(val, date, setDate, validationsShot, setDateValidation)} activeValidation={dateValidation} items={dateItems} />
+                        <SelectDateInput selectType="date" label="Fecha de la cita:" value={date} onInputChange={(val) => AppointmentSelectChange(val, date, setDate, validationsShot, setDateValidation)} activeValidation={dateValidation} items={availDays} />
                         {dateValidation && <InputWarning message="Por favor, selecciona una fecha." />}
                     </div>
 
                     <div className="date-field flex flex-col gap-2 w-full">
-                        <SelectInput selectType="hour" label="Hora de la cita:" value={hour} onInputChange={(val) => AppointmentSelectChange(val, hour, setHour, validationsShot, setHourValidation)} activeValidation={hourValidation} items={dateItems} />
+                        <SelectHourInput selectType="hour" label="Hora de la cita:" value={hour} onInputChange={(val) => AppointmentSelectChange(val, hour, setHour, validationsShot, setHourValidation)} activeValidation={hourValidation} items={dateItems} />
                         {hourValidation && <InputWarning message="Por favor, selecciona una fecha." />}
                     </div>
                 </div>
