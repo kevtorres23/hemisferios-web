@@ -61,7 +61,7 @@ function manageAvailability(availability: Availability) {
 
     while (tomorrow <= 6) {
         // Get today's day name and calculate today's month number by summing the value of tomorrow to the value of the start of the week.
-        // Therefore, the expression within the 'push()' would be equal to Wednesday 11 (which is today), then Thursday 12, then Friday 13, and Saturday 14.
+        // Therefore, the expression within the 'push()' would be equal to Friday 13 (which is tomorrow), and then Saturday 14.
         let currentWeekDayName = weekDays[tomorrow.toString() as keyof WeekDayType];
         let currentWeekMonthDay = Number(currentWeekStart) + (tomorrow - 1);
         let currentWeekMonthName = months[currentWeekMonth as keyof MonthType];
