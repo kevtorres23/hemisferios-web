@@ -48,7 +48,7 @@ type Availability = AvailabilityContent[];
 function manageAvailability(availability: Availability) {
     // Current variables.
     const current = new Date(); // Get the current date.
-    let currentDay = current.getDay(); // Get today's day number.
+    let tomorrow = current.getDay() + 1; // Get tomorrow's day number.
     const currentWeekStart = availability[0].weekStart[0] + availability[0].weekStart[1]; // Accessing the first two characters of the "weekStart" string to get the day number.
     const currentWeekMonth = availability[0].weekStart[3] + availability[0].weekStart[4]; // Accessing the last two characters of the "weekStart" string to get the month number.
     const daysCurrentWeek = [];
@@ -59,22 +59,22 @@ function manageAvailability(availability: Availability) {
     const nextWeekMonth = availability[1].weekStart[3] + availability[1].weekStart[4];
     const daysNextWeek = [];
 
-    while (currentDay <= 6) {
-        // Get today's day name and calculate today's month number by summing the value of currentDay to the value of the start of the week.
+    while (tomorrow <= 6) {
+        // Get today's day name and calculate today's month number by summing the value of tomorrow to the value of the start of the week.
         // Therefore, the expression within the 'push()' would be equal to Wednesday 11 (which is today), then Thursday 12, then Friday 13, and Saturday 14.
-        let currentWeekDayName = weekDays[currentDay.toString() as keyof WeekDayType];
-        let currentWeekMonthDay = Number(currentWeekStart) + (currentDay - 1);
+        let currentWeekDayName = weekDays[tomorrow.toString() as keyof WeekDayType];
+        let currentWeekMonthDay = Number(currentWeekStart) + (tomorrow - 1);
         let currentWeekMonthName = months[currentWeekMonth as keyof MonthType];
 
         const currentWeekDayObj = {
             writtenDate: currentWeekDayName + " " + currentWeekMonthDay + " de " + currentWeekMonthName,
-            databaseId: "c" + weekDays[currentDay.toString() as keyof WeekDayType].toLowerCase(), // "c" for "current": to identify it in the database.
+            databaseId: "c" + weekDays[tomorrow.toString() as keyof WeekDayType].toLowerCase(), // "c" for "current": to identify it in the database.
             formattedDate: currentWeekMonthDay + "/" + currentWeekMonth,
         }
 
         daysCurrentWeek.push(currentWeekDayObj);
 
-        currentDay += 1;
+        tomorrow += 1;
     };
 
     while (nextWeekDay <= 6) {
