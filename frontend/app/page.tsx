@@ -1,14 +1,14 @@
-import Navbar from "@/website-components/Navbar";
-import Footer from "@/website-components/Footer";
-import HeroSection from "@/website-sections/home/HeroSection";
-import WorkingMethod from "@/website-sections/home/WorkingMethod";
-import TherapyAreas from "@/website-sections/home/TherapyAreas";
-import ConstantGrowth from "@/website-sections/home/ConstantGrowth";
-import Dynamism from "@/website-sections/home/Dynamism";
+import Navbar from "@/website/components/Navbar";
+import Footer from "@/website/components/Footer";
+import HeroSection from "@/website/sections/home/HeroSection";
+import WorkingMethod from "@/website/sections/home/WorkingMethod";
+import TherapyAreas from "@/website/sections/home/TherapyAreas";
+import ConstantGrowth from "@/website/sections/home/ConstantGrowth";
+import Dynamism from "@/website/sections/home/Dynamism";
 import blob from "../public/blob2.png";
 import Image from "next/image";
-import Testimonials from "@/website-sections/home/Testimonials";
-import CallToAction from "@/website-sections/home/CallToAction";
+import Testimonials from "@/website/sections/home/Testimonials";
+import CallToAction from "@/website/sections/home/CallToAction";
 
 export default function Home() {
 

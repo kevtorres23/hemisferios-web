@@ -1,0 +1,53 @@
+class ContactMessage {
+    // Defining the class initializers.
+    name: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+    message: string;
+
+    // Defining the constructor.
+    constructor(name: string, lastName: string, phoneNumber: string, email: string, message: string) {
+        this.name = name;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.message = message;
+    }
+}
+
+class Appointment {
+    // Class initializers.
+    patientName: string;
+    fatherSurname: string;
+    motherSurname: string;
+    phoneNumber: string;
+    date: string;
+    hour: string;
+    timestamp: Date;
+
+    // Defining the constructor.
+    constructor(patientName: string, fatherSurname: string, motherSurname: string, phoneNumber: string, date: string, hour: string, timestamp: Date) {
+        this.patientName = patientName;
+        this.fatherSurname = fatherSurname;
+        this.motherSurname = motherSurname;
+        this.phoneNumber = phoneNumber;
+        this.date = date;
+        this.hour = hour;
+        this.timestamp = timestamp;
+    }
+}
+
+class AppointmentInput {
+    value: string;
+    isValidationActive: boolean;
+    validationMsg: string;
+
+    constructor(value: string, isValidationActive: boolean, validationMsg: string) {
+        this.value = value;
+        this.isValidationActive = isValidationActive;
+        this.validationMsg = validationMsg;
+    }
+}
+
+export { ContactMessage, Appointment, AppointmentInput };

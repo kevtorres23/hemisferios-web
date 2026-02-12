@@ -1,16 +1,17 @@
 "use client";
 
-import Navbar from "@/website-components/Navbar"
-import Footer from "@/website-components/Footer";
-import { useAppointmentStore } from "@/website-modules/StoreAppointment";
+import Navbar from "@/website/components/Navbar"
+import Footer from "@/website/components/Footer";
+import { useAppointmentStore } from "@/website/modules/StoreAppointment";
 import Image from "next/image";
 import music from "../../public/music.png";
-import Receipt from "@/website-components/Receipt";
+import Receipt from "@/website/components/Receipt";
 import { Check } from "lucide-react";
 
 
 function FinishedAppointment() {
     const createdAppointment = useAppointmentStore((state: any) => state.createdAppointment); // Bringing the just-created appointment object.
+    console.log(createdAppointment);
 
     return (
         <>
@@ -41,8 +42,7 @@ function FinishedAppointment() {
                         phoneNumber={createdAppointment.phoneNumber}
                         date={createdAppointment.date}
                         hour={createdAppointment.hour}
-                        creationDate={createdAppointment.creationDate}
-                        creationTime={createdAppointment.creationTime}
+                        timestamp={createdAppointment.timestamp}
                     />
 
                 </section>
