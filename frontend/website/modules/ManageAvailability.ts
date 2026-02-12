@@ -9,20 +9,19 @@ type AvailabilityContent = {
     saturday: [string];
 };
 
-// 
-
 type WeekDaysNum = "0" | "1" | "2" | "3" | "4" | "5" | "6"; // Numbers of the week days, where Sunday is 0.
-type WeekDaysName = "Domingo" | "Lunes" | "Martes" | "Miércoles" | "Jueves" | "Viernes" | "Sábado"; // Names of the week days.
+type WeekDaysName = "Domingo" | "Lunes" | "Martes" | "Miercoles" | "Jueves" | "Viernes" | "Sabado"; // Names of the week days.
+
 type WeekDayType = Record<WeekDaysNum, WeekDaysName>; // With Record, we limit and pair the week day's numbers to their corresponding names.
 
 const weekDays: WeekDayType = {
     "0": "Domingo",
     "1": "Lunes",
     "2": "Martes",
-    "3": "Miércoles",
+    "3": "Miercoles",
     "4": "Jueves",
     "5": "Viernes",
-    "6": "Sábado"
+    "6": "Sabado"
 };
 
 type MonthNum = "00" | "01" | "02" | "03" | "04" | "05" | "06" | "07" | "08" | "09" | "10" | "11"; // Numbers of the months, where January is 0.
@@ -49,15 +48,15 @@ type Availability = AvailabilityContent[];
 function manageAvailability(availability: Availability) {
     // Current variables.
     const current = new Date(); // Get the current date.
-    let currentDay = current.getDay(); // Today.
+    let currentDay = current.getDay(); // Get today's day number.
     const currentWeekStart = availability[0].weekStart[0] + availability[0].weekStart[1]; // Accessing the first two characters of the "weekStart" string to get the day number.
     const currentWeekMonth = availability[0].weekStart[3] + availability[0].weekStart[4]; // Accessing the last two characters of the "weekStart" string to get the month number.
     const daysCurrentWeek = [];
 
     // Upcoming variables.
     let nextWeekDay = 1; // Next week's Monday.
-    const nextWeekMonth = availability[1].weekStart[3] + availability[1].weekStart[4];
     const nextWeekStart = availability[1].weekStart[0] + availability[1].weekStart[1];
+    const nextWeekMonth = availability[1].weekStart[3] + availability[1].weekStart[4];
     const daysNextWeek = [];
 
     while (currentDay <= 6) {
@@ -67,17 +66,30 @@ function manageAvailability(availability: Availability) {
         let currentWeekMonthDay = Number(currentWeekStart) + (currentDay - 1);
         let currentWeekMonthName = months[currentWeekMonth as keyof MonthType];
 
-        daysCurrentWeek.push(currentWeekDayName + " " + currentWeekMonthDay + " de " + currentWeekMonthName);
+        const currentWeekDayObj = {
+            writtenDate: currentWeekDayName + " " + currentWeekMonthDay + " de " + currentWeekMonthName,
+            databaseId: "c" + weekDays[currentDay.toString() as keyof WeekDayType].toLowerCase(), // "c" for "current": to identify it in the database.
+            formattedDate: currentWeekMonthDay + "/" + currentWeekMonth,
+        }
+
+        daysCurrentWeek.push(currentWeekDayObj);
 
         currentDay += 1;
     };
 
     while (nextWeekDay <= 6) {
+        // This loop uses the same logic as the the previous one, but with the upcoming variables.
         let nextWeekDayName = weekDays[nextWeekDay.toString() as keyof WeekDayType];
         let nextWeekMonthDay = Number(nextWeekStart) + (nextWeekDay - 1);
         let nextWeekMonthName = months[nextWeekMonth as keyof MonthType];
 
-        daysNextWeek.push(nextWeekDayName + " " + nextWeekMonthDay + " de " + nextWeekMonthName);
+        const nextWeekDayObj = {
+            writtenDate: nextWeekDayName + " " + nextWeekMonthDay + " de " + nextWeekMonthName,
+            databaseId: "n" + weekDays[nextWeekDay.toString() as keyof WeekDayType].toLowerCase(), // "n" for "next", to identify it in the database.
+            formattedDate: nextWeekMonthDay + "/" + nextWeekMonth + "/" + current.getFullYear(),
+        }
+
+        daysNextWeek.push(nextWeekDayObj);
 
         nextWeekDay += 1;
     };

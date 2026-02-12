@@ -14,6 +14,12 @@ import { useAppointmentStore } from "@/website/modules/StoreAppointment";
 import { redirect } from 'next/navigation';
 import manageAvailability from "../modules/ManageAvailability";
 
+type WeekDayObject = {
+    writtenDate: string,
+    databaseId: string,
+    formattedDate: string,
+};
+
 function AppointmentForm() {
     // Variables of the form inputs.
     const [patientName, setPatientName] = useState("");
@@ -21,8 +27,10 @@ function AppointmentForm() {
     const [fatherSurname, setFatherSurname] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [date, setDate] = useState("");
+    const [formattedDate, setFormattedDate] = useState("");
     const [hour, setHour] = useState("");
-    const [availDays, setAvailDays] = useState<{currentWeekList: string[], nextWeekList: string[]}>({currentWeekList: [], nextWeekList: []});
+    const [availability, setAvailability] = useState([]);
+    const [availDays, setAvailDays] = useState<{ currentWeekList: WeekDayObject[], nextWeekList: WeekDayObject[] }>({ currentWeekList: [], nextWeekList: [] });
     const [availHours, setAvailHours] = useState<string[]>();
 
     // Input validations.
@@ -34,26 +42,59 @@ function AppointmentForm() {
     const [dateValidation, setDateValidation] = useState(false);
     const [hourValidation, setHourValidation] = useState(false);
 
-    const dateItems = ["Lunes 14", "Martes 15", "Miércoles 16", "Jueves 17", "Viernes 18", "Sábado 19", "Domingo 20", "Lunes 14", "Martes 15", "Miércoles 16", "Jueves 17", "Viernes 18", "Sábado 19", "Domingo 20"];
     const saveAppointment = useAppointmentStore((state: any) => state.saveAppointment);
 
     useEffect(() => {
         const fetchAvailability = async () => {
             try {
-                const res = await axios.get("http://localhost:5001/api/availability");
+                // Variable definition.
+                const res = await axios.get("http://localhost:5001/api/availability"); // Getting availability from the backend.
+                const day = date; // Create a copy of the 'date' string.
+                const dayToArray = day.split(""); // Convert the string into a character-separated array.
+                const firstCharacter = dayToArray[0]; // Getting the week mark ('c' or 'n') set in the 'Manage Availability' module.
+                dayToArray.splice(0, 1); // Now, we can remove the week mark.
 
+                // Using the backend's response.
+                setAvailability(res.data);
                 const calculatedDays = manageAvailability(res.data);
-
                 setAvailDays(calculatedDays);
 
-                console.log(res.data);
+                var finalDayName = "";
+
+                // Rebuilding the day's name by summing the array's items.
+                for (let i = 0; i < dayToArray.length; i++) {
+                    finalDayName += dayToArray[i];
+                };
+
+
+                if (firstCharacter === "c") {
+                    // Searching for the formatted date in the CURRENT week list of days, based on its database ID.
+                    for (let i = 0; i < calculatedDays.currentWeekList.length; i++) {
+                        if (calculatedDays.currentWeekList[i].databaseId === date) {
+                            setFormattedDate(calculatedDays.currentWeekList[i].formattedDate);
+                        };
+                    };
+
+                    setAvailHours(availability[0][finalDayName]);
+
+                } else if (firstCharacter === "n") {
+                    // Searching for the formatted date in the NEXT week list of days, based on its database ID.
+                    for (let i = 0; i < calculatedDays.nextWeekList.length; i++) {
+                        if (calculatedDays.nextWeekList[i].databaseId === date) {
+                            setFormattedDate(calculatedDays.nextWeekList[i].formattedDate);
+                        };
+                    };
+
+                    setAvailHours(availability[1][finalDayName]);
+                }
+
             } catch (error) {
                 console.log("Error fetching notes", error);
             };
-        };
 
+        };
         fetchAvailability();
-    }, []);
+    }, [date]);
 
     // Name validation.
     function shootValidations(e: React.FormEvent) {
@@ -80,7 +121,7 @@ function AppointmentForm() {
     function shootData() {
         const time = new Date();
 
-        const appointmentObject = new Appointment(patientName, motherSurname, fatherSurname, phoneNumber, date, hour, time);
+        const appointmentObject = new Appointment(patientName, motherSurname, fatherSurname, phoneNumber, formattedDate, hour, time);
 
         saveAppointment(appointmentObject);
 
@@ -125,7 +166,7 @@ function AppointmentForm() {
                     </div>
 
                     <div className="date-field flex flex-col gap-2 w-full">
-                        <SelectHourInput selectType="hour" label="Hora de la cita:" value={hour} onInputChange={(val) => AppointmentSelectChange(val, hour, setHour, validationsShot, setHourValidation)} activeValidation={hourValidation} items={dateItems} />
+                        <SelectHourInput selectType="hour" label="Hora de la cita:" value={hour} onInputChange={(val) => AppointmentSelectChange(val, hour, setHour, validationsShot, setHourValidation)} activeValidation={hourValidation} items={availHours} />
                         {hourValidation && <InputWarning message="Por favor, selecciona una fecha." />}
                     </div>
                 </div>

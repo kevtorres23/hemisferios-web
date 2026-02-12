@@ -17,23 +17,23 @@ export async function createAvailability(req, res) {
         const {
             weekStart,
             weekFinish,
-            monday,
-            tuesday,
-            wednesday,
-            thursday,
-            friday,
-            saturday,
+            lunes,
+            martes,
+            miercoles,
+            jueves,
+            viernes,
+            sabado,
         } = req.body;
 
         const newAvailability = new Availability({
             weekStart,
             weekFinish,
-            monday,
-            tuesday,
-            wednesday,
-            thursday,
-            friday,
-            saturday,
+            lunes,
+            martes,
+            miercoles,
+            jueves,
+            viernes,
+            sabado,
         });
 
         const savedAvailability = await newAvailability.save();
@@ -51,23 +51,23 @@ export async function updateAvailability(req, res) {
         const {
             weekStart,
             weekFinish,
-            monday,
-            tuesday,
-            wednesday,
-            thursday,
-            friday,
-            saturday,
+            lunes,
+            martes,
+            miercoles,
+            jueves,
+            viernes,
+            sabado,
         } = req.body;
 
         const updatedAvailability = await Availability.findByIdAndUpdate(req.params.id, {
             weekStart,
             weekFinish,
-            monday,
-            tuesday,
-            wednesday,
-            thursday,
-            friday,
-            saturday,
+            lunes,
+            martes,
+            miercoles,
+            jueves,
+            viernes,
+            sabado,
         }, { new: true });
 
         if (!updatedAvailability) return res.status(404).json({ message: "Availability not found" }); // Handling possible issues with the passed ID.

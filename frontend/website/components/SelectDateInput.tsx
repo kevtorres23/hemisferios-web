@@ -10,13 +10,19 @@ import {
     SelectSeparator,
     SelectTrigger,
     SelectValue
-} from '@/components/ui/select'
+} from '@/components/ui/select';
+
+type WeekDayObject = {
+    writtenDate: string,
+    formattedDate: string,
+    databaseId: string,
+}
 
 type SelectProps = {
     label: string;
     value: string;
     onInputChange: (val: string) => void;
-    items: { currentWeekList: string[], nextWeekList: string[] };
+    items: { currentWeekList: WeekDayObject[], nextWeekList: WeekDayObject[] };
     activeValidation: boolean;
     selectType: "date" | "hour";
 }
@@ -39,14 +45,14 @@ function SelectDateInput(props: SelectProps) {
                     <SelectGroup>
                         <SelectLabel>Esta semana</SelectLabel>
                         {props.items.currentWeekList.map((item, id) =>
-                            <SelectItem className="text-sm" key={id} value={item}>{item}</SelectItem>
+                            <SelectItem className="text-sm" key={id} value={item.databaseId}>{item.writtenDate}</SelectItem>
                         )}
                     </SelectGroup>
                     <SelectSeparator />
                     <SelectGroup>
                         <SelectLabel>Próxima semana</SelectLabel>
                         {props.items.nextWeekList.map((item, id) =>
-                            <SelectItem className="text-sm" key={id} value={item}>{item}</SelectItem>
+                            <SelectItem className="text-sm" key={id} value={item.databaseId}>{item.writtenDate}</SelectItem>
                         )}
                     </SelectGroup>
                     <SelectSeparator />

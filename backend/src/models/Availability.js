@@ -9,27 +9,27 @@ const availabilitySchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    monday: {
+    lunes: {
         type: [String],
         required: true,
     },
-    tuesday: {
+    martes: {
         type: [String],
         required: true,
     },
-    wednesday: {
+    miercoles: {
         type: [String],
         required: true,
     },
-    thursday: {
+    jueves: {
         type: [String],
         required: true,
     },
-    friday: {
+    viernes: {
         type: [String],
         required: true,
     },
-    saturday: {
+    sabado: {
         type: [String],
         required: true,
     }

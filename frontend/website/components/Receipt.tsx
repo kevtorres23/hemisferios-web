@@ -103,7 +103,7 @@ function Receipt(props: ReceiptProps) {
                         </p>
 
                         <p className="text-sm font-normal text-slate-900">
-                            16 de febrero, 2026
+                            {props.date}
                         </p>
                     </div>
 
@@ -113,7 +113,7 @@ function Receipt(props: ReceiptProps) {
                         </p>
 
                         <p className="text-sm font-normal text-slate-900">
-                            10:00 horas
+                            {props.hour} horas
                         </p>
                     </div>
                 </div>
