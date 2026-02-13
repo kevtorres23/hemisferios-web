@@ -6,6 +6,7 @@ import { useLoginStore } from "../modules/LoginStore";
 import { redirect } from 'next/navigation';
 import Input from "./Input";
 import InputWarning from "@/website/components/InputWarning";
+import MobileNavbar from "./MobileNavbar";
 
 type LoginStore = {
     adminEmail: string,
@@ -58,61 +59,65 @@ function SystemLayout(props: SystemLayoutProps) {
         redirect("/system");
     } else {
         return (
-            <div className="relative overflow-x-hidden overflow-y-hidden min-h-screen flex md:flex-row flex-col items-center justify-center bg-slate-100 font-sans dark:bg-black">
-                <SmallModal title="Cerrar sesión"
-                    message="¿Estás segur@ de que quieres salir del sistema?"
-                    isVisible={logoutModal} onClose={() => setLogoutModal(false)}
-                    confirmationBtnText="Cerrar sesión"
-                    onSave={() => updateSessionStatus(false)}
-                />
+            <>
+                <MobileNavbar activePage={props.sidebarPage} onLogoutPressed={() => setLogoutModal(true)} onCredentialsPressed={() => setCredentialsModal(true)}/>
 
-                <SmallModal title="Configurar credenciales de sesión"
-                    message="Estas son las credenciales con las que inicias sesión a este sistema. Puedes actualizarlas editando los campos. "
-                    isVisible={credentialsModal} onClose={() => setCredentialsModal(false)}
-                    confirmationBtnText="Guardar cambios"
-                    onSave={() => onSaveCredentials}
-                    btnType="submit"
-                    btnForm="updateCredentialsForm"
-                >
+                <div className="relative overflow-x-hidden overflow-y-hidden min-h-screen flex md:flex-row flex-col items-center justify-center bg-slate-100 font-sans dark:bg-black">
+                    <SmallModal title="Cerrar sesión"
+                        message="¿Estás segur@ de que quieres salir del sistema?"
+                        isVisible={logoutModal} onClose={() => setLogoutModal(false)}
+                        confirmationBtnText="Cerrar sesión"
+                        onSave={() => updateSessionStatus(false)}
+                    />
 
-                    <form action="" id="updateCredentialsForm" onSubmit={(e) => onSaveCredentials(e)} className="flex flex-row w-full gap-3">
-                        <div className=" flex flex-col gap-2 w-full">
-                            <Input type="text"
-                                label="Correo electrónico:"
-                                grayBg={true} value={credentialEmail}
-                                onInputChange={(e: React.ChangeEvent<HTMLInputElement>) => setCredentialEmail(e.currentTarget.value)}
-                                activeValidation={!credentialEmail && areValidsActive}
-                            />
+                    <SmallModal title="Configurar credenciales de sesión"
+                        message="Estas son las credenciales con las que inicias sesión a este sistema. Puedes actualizarlas editando los campos. "
+                        isVisible={credentialsModal} onClose={() => setCredentialsModal(false)}
+                        confirmationBtnText="Guardar cambios"
+                        onSave={() => onSaveCredentials}
+                        btnType="submit"
+                        btnForm="updateCredentialsForm"
+                    >
 
-                            {(!credentialEmail && areValidsActive) && (
-                                <InputWarning message="Por favor, ingresa un correo." />
-                            )}
-                        </div>
+                        <form action="" id="updateCredentialsForm" onSubmit={(e) => onSaveCredentials(e)} className="flex flex-row w-full gap-3">
+                            <div className=" flex flex-col gap-2 w-full">
+                                <Input type="text"
+                                    label="Correo electrónico:"
+                                    grayBg={true} value={credentialEmail}
+                                    onInputChange={(e: React.ChangeEvent<HTMLInputElement>) => setCredentialEmail(e.currentTarget.value)}
+                                    activeValidation={!credentialEmail && areValidsActive}
+                                />
 
-                        <div className=" flex flex-col gap-2 w-full">
-                            <Input type="text"
-                                label="Contraseña:"
-                                grayBg={true} value={credentialPassword}
-                                onInputChange={(e: React.ChangeEvent<HTMLInputElement>) => setCredentialPassword(e.currentTarget.value)}
-                                activeValidation={!credentialPassword && areValidsActive}
-                            />
+                                {(!credentialEmail && areValidsActive) && (
+                                    <InputWarning message="Por favor, ingresa un correo." />
+                                )}
+                            </div>
 
-                            {(!credentialPassword && areValidsActive) && (
-                                <InputWarning message="Por favor, ingresa una contraseña." />
-                            )}
-                        </div>
-                    </form>
+                            <div className=" flex flex-col gap-2 w-full">
+                                <Input type="text"
+                                    label="Contraseña:"
+                                    grayBg={true} value={credentialPassword}
+                                    onInputChange={(e: React.ChangeEvent<HTMLInputElement>) => setCredentialPassword(e.currentTarget.value)}
+                                    activeValidation={!credentialPassword && areValidsActive}
+                                />
 
-                </ SmallModal>
+                                {(!credentialPassword && areValidsActive) && (
+                                    <InputWarning message="Por favor, ingresa una contraseña." />
+                                )}
+                            </div>
+                        </form>
 
-                <SuccessModal text="¡Credenciales actualizadas!" isVisible={successModal} />
+                    </ SmallModal>
 
-                <Sidebar activePage="appointments" onLogoutPressed={() => setLogoutModal(true)} onCredentialsPressed={() => setCredentialsModal(true)} />
+                    <SuccessModal text="¡Credenciales actualizadas!" isVisible={successModal} />
 
-                <main className="min-h-screen w-full flex flex-col p-12">
-                    {props.children}
-                </main>
-            </div>
+                    <Sidebar activePage={props.sidebarPage} onLogoutPressed={() => setLogoutModal(true)} onCredentialsPressed={() => setCredentialsModal(true)} />
+
+                    <main className="min-h-screen w-full flex flex-col p-12">
+                        {props.children}
+                    </main>
+                </div>
+            </>
         );
     };
 };

@@ -4,10 +4,10 @@ import SidebarLink from "./SidebarLink";
 import { ClipboardClock, History, CircleUserRound, Heart, ChartBar, MessageCircle, Settings, LogOut } from "lucide-react";
 
 type SidebarProps = {
-    activePage: "appointments" | "history" | "patients" | "therapists" | "statistics" | "comments" | "";
+    activePage: "appointments" | "history" | "patients" | "therapists" | "statistics" | "comments" | string;
     onLogoutPressed: () => void;
     onCredentialsPressed: () => void;
-}
+};
 
 function Sidebar(props: SidebarProps) {
     return (

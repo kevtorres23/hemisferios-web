@@ -5,7 +5,7 @@ import NormalButton from "./NormalButton";
 import NavbarLink from "./NavbarLink";
 import Image from "next/image";
 import Logo from "../../public/hemisferios-logo.png";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Menu } from "lucide-react";
 
 type NavbarProps = {
@@ -14,7 +14,7 @@ type NavbarProps = {
 
 function Navbar(props: NavbarProps) {
     let currentPage = props.activePage;
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const toggleOpen = () => setOpen((cur) => !cur);
 
@@ -42,7 +42,7 @@ function Navbar(props: NavbarProps) {
                     </Link>
                 </div>
 
-                {/* Right container with the "Create an appointment" and collapsible menu buttons */}
+                {/* Right container with the "Create an appointment" and collapsible menu button */}
                 <div className="flex flex-row gap-4 items-center justify-center">
                     <Link href={"book-appointment"} className="sm:block hidden">
                         <NormalButton text="Agendar una cita" />
