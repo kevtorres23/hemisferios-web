@@ -4,8 +4,10 @@ import { persist } from "zustand/middleware";
 type LoginState = {
     adminEmail: string,
     adminPassword: string,
-    isUserLogged: boolean;
-    changeSessionStatus: (newStatus: boolean) => void;
+    isUserLogged: boolean,
+    changeSessionStatus: (newStatus: boolean) => void,
+    updateEmail: (newEmail: string) => void,
+    updatePassword: (newPassword: string) => void,
 }
 
 
@@ -16,7 +18,13 @@ export const useLoginStore = create<LoginState>()(
         isUserLogged: false,
         changeSessionStatus: (newStatus: boolean) => set({
             isUserLogged: newStatus
-        })
+        }),
+        updateEmail: (newEmail: string) => set({
+            adminEmail: newEmail
+        }),
+        updatePassword: (newPassword: string) => set({
+            adminPassword: newPassword
+        }),
     }),
         {
             name: 'login-storage',

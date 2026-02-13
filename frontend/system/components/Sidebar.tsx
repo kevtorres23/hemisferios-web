@@ -6,11 +6,12 @@ import { ClipboardClock, History, CircleUserRound, Heart, ChartBar, MessageCircl
 type SidebarProps = {
     activePage: "appointments" | "history" | "patients" | "therapists" | "statistics" | "comments" | "";
     onLogoutPressed: () => void;
+    onCredentialsPressed: () => void;
 }
 
 function Sidebar(props: SidebarProps) {
     return (
-        <div className="sticky min-h-screen lg:w-70 w-full p-6 bg-white border-r border-slate-200 flex flex-col items-center justify-between">
+        <div className="sticky min-h-screen w-70 p-6 bg-white border-r border-slate-200 md:flex hidden flex-col items-center justify-between">
             <div className="upper-section flex flex-col gap-4 items-center justify-center w-full">
                 <Image src={logo} alt="Logo" className="sm:w-32 w-28 h-auto" />
 
@@ -32,7 +33,7 @@ function Sidebar(props: SidebarProps) {
             </div>
 
             <div className="lower-section flex flex-col gap-2 w-full">
-                <SidebarLink name="Credenciales" icon={<Settings size={18} />} isActive={props.activePage === ""} />
+                <SidebarLink onClick={props.onCredentialsPressed} name="Credenciales" icon={<Settings size={18} />} isActive={props.activePage === ""} />
 
                 <SidebarLink onClick={props.onLogoutPressed} name="Cerrar sesión" icon={<LogOut size={18} />} isActive={props.activePage === ""} />
             </div>

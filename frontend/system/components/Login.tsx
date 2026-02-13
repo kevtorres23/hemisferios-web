@@ -69,7 +69,7 @@ function SystemLogin() {
                     <form id="loginForm" onSubmit={(e) => shootValidations(e)} className="inputs flex flex-col gap-4 w-full">
                         <Input grayBg={true} label="Correo electrónico:" type="text" textValue={email} activeValidation={emailValidation != ""} onInputChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.currentTarget.value)} />
                         {emailValidation && (
-                            <InputWarning message={emailValidation === "empty" ? "Por favor, ingresa un correo." : "El correo ingresado es incorrecto"} />
+                            <InputWarning message={emailValidation === "empty" ? "Por favor, ingresa un correo." : "El correo ingresado es incorrecto."} />
                         )}
 
                         <Input grayBg={true} label="Contraseña:" type="text" textValue={password} activeValidation={passwordValidation != ""} onInputChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.currentTarget.value)} />
