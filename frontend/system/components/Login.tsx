@@ -15,6 +15,7 @@ type LoginStore = {
     isUserLogged: boolean,
     changeSessionStatus: (newStatus: boolean) => void;
 }
+
 function SystemLogin() {
 
     // Input variables.
@@ -46,7 +47,6 @@ function SystemLogin() {
         if (email === savedEmail) {
             if (password === savedPassword) {
                 updateSessionStatus(true);
-                redirect("/system/appointments")
             } else {
                 setPasswordValidation("wrong");
             };
@@ -59,9 +59,9 @@ function SystemLogin() {
     }
 
     return (
-        <div className="relative overflow-x-hidden overflow-y-hidden flex flex-row min-h-screen items-center justify-center bg-white font-sans dark:bg-black">
-            <main className="login-container w-full min-h-screen bg-white flex flex-col items-center justify-center">
-                <div className="container flex flex-col gap-10 items-start justify-center lg:max-w-7/12">
+        <div className="relative overflow-x-hidden overflow-y-hidden flex sm:flex-row flex-col min-h-screen items-center justify-center bg-white font-sans dark:bg-black">
+            <main className="login-container w-full min-h-screen bg-white flex flex-col items-center justify-center sm:px-0 px-8 md:py-0 py-16">
+                <div className="container flex flex-col gap-10 items-start justify-center lg:max-w-7/12 sm:max-w-9/12">
                     <Image src={logo} alt="Logo" className="sm:w-42 w-32 h-auto" />
 
                     <h1 className="text-3xl font-semibold tracking-tighter text-slate-900">Iniciar sesión</h1>
@@ -87,14 +87,14 @@ function SystemLogin() {
                 </div>
             </main>
 
-            <main className="illustration-container w-full min-h-screen bg-indigo-500 flex flex-col items-center justify-center gap-12">
+            <main className="illustration-container w-full md:min-h-screen h-screen bg-indigo-500 flex flex-col items-center justify-center gap-12 lg:px-0 sm:px-10 px-8 md:py-0 py-16">
                 <div className="text flex flex-col gap-3 text-white">
-                    <h1 className="text-4xl font-semibold tracking-tighter">¡Bienvenid@ de vuelta!</h1>
+                    <h1 className="lg:text-4xl text-3xl font-semibold tracking-tighter text-center">¡Bienvenid@ de vuelta!</h1>
 
-                    <p className="text-base font-normal">Inicia sesión para acceder de nuevo al sistema.</p>
+                    <p className="text-base font-normal text-center">Inicia sesión para acceder de nuevo al sistema.</p>
                 </div>
 
-                <Image src={lofi} alt="Logo" className="sm:w-80 w-40 h-auto" />
+                <Image src={lofi} alt="Logo" className="md:w-80 w-60 h-auto" />
             </main>
         </div>
     )
