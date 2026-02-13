@@ -4,27 +4,58 @@ import Image from "next/image";
 import logo from "../../public/hemisferios-logo.png";
 import lofi from "../../public/lofi.png";
 import Input from "@/website/components/Input";
-import { InputChange } from "@/website/modules/InputChangeHandlers";
+import { redirect } from 'next/navigation';
 import InputWarning from "@/website/components/InputWarning";
 import { useState } from "react";
+import { useLoginStore } from "../modules/LoginStore";
 
+type LoginStore = {
+    adminEmail: string,
+    adminPassword: string,
+    isUserLogged: boolean,
+    changeSessionStatus: (newStatus: boolean) => void;
+}
 function SystemLogin() {
+
+    // Input variables.
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    // Validation variabkes.
+    // Validation variables.
     const [validationsShot, setValidationsShot] = useState(false);
-    const [emailValidation, setEmailValidation] = useState(false);
-    const [passwordValidation, setPasswordValidation] = useState(false);
+    const [emailValidation, setEmailValidation] = useState("");
+    const [passwordValidation, setPasswordValidation] = useState("");
+
+    // State variables (Zustand).
+    const savedEmail = useLoginStore((state: LoginStore) => state.adminEmail);
+    const savedPassword = useLoginStore((state: LoginStore) => state.adminPassword);
+    const updateSessionStatus = useLoginStore((state: LoginStore) => state.changeSessionStatus);
+    const sessionStore = useLoginStore((state: LoginStore) => state.isUserLogged);
+
+    if (sessionStore === true) {
+        redirect("/system/appointments");
+    }
 
     function shootValidations(e: React.FormEvent) {
         setValidationsShot(true);
         e.preventDefault(); // We prevent the form from reloading the page.
 
-        // Tal vez no habría necesidad de utilizar el módulo "InputChange". La validación de los inputs de este form pueden hacerse aquí mismo.
+        if (!email) setEmailValidation("empty");
+        if (!password) setPasswordValidation("empty");
 
-        if (!email) setEmailValidation(true);
-        if (!password) setPasswordValidation(true);
+        if (email === savedEmail) {
+            if (password === savedPassword) {
+                updateSessionStatus(true);
+                redirect("/system/appointments")
+            } else {
+                setPasswordValidation("wrong");
+            };
+        } else {
+            setEmailValidation("wrong");
+        };
+
+        setValidationsShot(false);
+
     }
 
     return (
@@ -36,12 +67,12 @@ function SystemLogin() {
                     <h1 className="text-3xl font-semibold tracking-tighter text-slate-900">Iniciar sesión</h1>
 
                     <form id="loginForm" onSubmit={(e) => shootValidations(e)} className="inputs flex flex-col gap-4 w-full">
-                        <Input grayBg={true} label="Correo electrónico:" type="text" textValue={email} activeValidation={emailValidation} onInputChange={(e) => InputChange(e, email, setEmail, validationsShot, setEmailValidation)} />
+                        <Input grayBg={true} label="Correo electrónico:" type="text" textValue={email} activeValidation={emailValidation != ""} onInputChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.currentTarget.value)} />
                         {emailValidation && (
-                            <InputWarning message="Por favor, escribe un correo electrónico." />
+                            <InputWarning message={emailValidation === "empty" ? "Por favor, ingresa un correo." : "El correo ingresado es incorrecto"} />
                         )}
 
-                        <Input grayBg={true} label="Contraseña:" type="text" textValue={password} activeValidation={passwordValidation} onInputChange={(e) => InputChange(e, password, setPassword, validationsShot, setPasswordValidation)} />
+                        <Input grayBg={true} label="Contraseña:" type="text" textValue={password} activeValidation={passwordValidation != ""} onInputChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.currentTarget.value)} />
                         {passwordValidation && (
                             <InputWarning message="Por favor, ingresa una contraseña." />
                         )}
