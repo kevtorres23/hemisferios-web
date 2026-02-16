@@ -18,6 +18,7 @@ class ContactMessage {
 
 class Appointment {
     // Class initializers.
+    status: string;
     patientName: string;
     fatherSurname: string;
     motherSurname: string;
@@ -27,7 +28,8 @@ class Appointment {
     timestamp: Date;
 
     // Defining the constructor.
-    constructor(patientName: string, fatherSurname: string, motherSurname: string, phoneNumber: string, date: string, hour: string, timestamp: Date) {
+    constructor(status: string, patientName: string, fatherSurname: string, motherSurname: string, phoneNumber: string, date: string, hour: string, timestamp: Date) {
+        this.status = status;
         this.patientName = patientName;
         this.fatherSurname = fatherSurname;
         this.motherSurname = motherSurname;

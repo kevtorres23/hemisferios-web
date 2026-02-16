@@ -1,13 +1,50 @@
 "use client";
 import SystemLayout from "@/system/components/SystemLayout";
-import PageTitle from "@/system/components/AppointmentPageTitle";
+import PageTitle from "@/system/components/appointments/AppointmentPageTitle";
+import SolidIconButton from "@/system/components/SolidIconButton";
+import AppointmentContainer from "@/system/components/appointments/AppointmentContainer";
+import FilterBar from "@/system/components/FilterBar";
+import { Plus, SquarePen } from "lucide-react";
+import { Main } from "next/document";
+import { useState } from "react";
+import { AppointmentType } from "@/system/modules/Types";
+import App from "next/app";
+
+type AppointmentDataset = AppointmentType[];
 
 function AppointmentDashboard() {
+    const [contentType, setContentType] = useState("cards");
+    const [searchValue, setSearchValue] = useState("");
+
+    const sampleAppointmentData: AppointmentDataset = [
+        {
+            status: "pending",
+            patientName: "Kevin",
+            fatherSurname: "Urbina",
+            motherSurname: "Torres",
+            phoneNumber: "6181889026",
+            date: "12 de febrero, 2026",
+            hour: "12:00",
+            timestamp: "today"
+        },
+    ];
+
     return (
         <SystemLayout sidebarPage="appointments">
             <div className="header flex flex-row w-full justify-between items-start">
-                <PageTitle title="Historial de Citas" desc="Consulta y administra las citas agendadas por los usuarios en la página web."/>
+                <PageTitle title="Registro de Citas" desc="Consulta y administra las citas agendadas por los usuarios en la página web." />
+
+                <div className="buttons flex flex-row gap-2">
+                    <SolidIconButton isActive={true} icon={<Plus size={18} />} text="Nueva cita manual" />
+                    <SolidIconButton isActive={false} icon={<SquarePen size={18} />} text="Editar disponibilidad" />
+                </div>
             </div>
+
+            <FilterBar firstElement={<p className="text-lg font-medium text-slate-800">
+                Hay <span className="font-semibold text-indigo-500">14</span> citas pendientes</p>}
+            />
+
+            <AppointmentContainer data={sampleAppointmentData} contentType={contentType} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
         </ SystemLayout>
     );
 };

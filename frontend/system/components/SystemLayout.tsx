@@ -113,7 +113,7 @@ function SystemLayout(props: SystemLayoutProps) {
 
                     <Sidebar activePage={props.sidebarPage} onLogoutPressed={() => setLogoutModal(true)} onCredentialsPressed={() => setCredentialsModal(true)} />
 
-                    <main className="min-h-screen w-full flex flex-col p-12">
+                    <main className="h-screen w-full flex flex-col gap-8 p-12">
                         {props.children}
                     </main>
                 </div>

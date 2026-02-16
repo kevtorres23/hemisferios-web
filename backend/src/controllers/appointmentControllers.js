@@ -26,6 +26,7 @@ export async function getAppointmentById(req, res) {
 export async function createAppointment(req, res) {
     try {
         const {
+            status,
             patientName,
             fatherSurname,
             motherSurname,
@@ -35,6 +36,7 @@ export async function createAppointment(req, res) {
         } = req.body;
 
         const newAppointment = new Appointment({
+            status,
             patientName,
             fatherSurname,
             motherSurname,
@@ -57,6 +59,7 @@ export async function createAppointment(req, res) {
 export async function updateAppointment(req, res) {
     try {
         const {
+            status,
             patientName,
             fatherSurname,
             motherSurname,
@@ -66,6 +69,7 @@ export async function updateAppointment(req, res) {
         } = req.body;
 
         const updatedAppointment = await Appointment.findByIdAndUpdate(req.params.id, {
+            status,
             patientName,
             fatherSurname,
             motherSurname,

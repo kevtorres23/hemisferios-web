@@ -41,21 +41,36 @@ function SystemLogin() {
         setValidationsShot(true);
         e.preventDefault(); // We prevent the form from reloading the page.
 
-        if (!email) setEmailValidation("empty");
-        if (!password) setPasswordValidation("empty");
-
-        if (email === savedEmail) {
-            if (password === savedPassword) {
-                updateSessionStatus(true);
-            } else {
-                setPasswordValidation("wrong");
-            };
-        } else {
-            setEmailValidation("wrong");
+        if (!email) {
+            setEmailValidation("empty")
+        };
+        if (!password) {
+            setPasswordValidation("empty")
         };
 
-        setValidationsShot(false);
+        if (email && password) {
+            if ((email === savedEmail) && (password === savedPassword)) {
+                updateSessionStatus(true);
+            };
 
+            if (email != savedEmail) {
+                setEmailValidation("wrong");
+            }
+
+            if (password != savedPassword) {
+                setPasswordValidation("wrong");
+            }
+        };
+    }
+
+    function onEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setEmail(e.currentTarget.value);
+        setEmailValidation("");
+    }
+
+    function onPasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setPassword(e.currentTarget.value);
+        setPasswordValidation("");
     }
 
     return (
@@ -67,14 +82,14 @@ function SystemLogin() {
                     <h1 className="text-3xl font-semibold tracking-tighter text-slate-900">Iniciar sesión</h1>
 
                     <form id="loginForm" onSubmit={(e) => shootValidations(e)} className="inputs flex flex-col gap-4 w-full">
-                        <Input grayBg={true} label="Correo electrónico:" type="text" textValue={email} activeValidation={emailValidation != ""} onInputChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.currentTarget.value)} />
-                        {emailValidation && (
+                        <Input grayBg={true} label="Correo electrónico:" type="text" textValue={email} activeValidation={emailValidation != ""} onInputChange={onEmailChange} />
+                        {(emailValidation != "") && (
                             <InputWarning message={emailValidation === "empty" ? "Por favor, ingresa un correo." : "El correo ingresado es incorrecto."} />
                         )}
 
-                        <Input grayBg={true} label="Contraseña:" type="text" textValue={password} activeValidation={passwordValidation != ""} onInputChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.currentTarget.value)} />
-                        {passwordValidation && (
-                            <InputWarning message="Por favor, ingresa una contraseña." />
+                        <Input grayBg={true} label="Contraseña:" type="text" textValue={password} activeValidation={passwordValidation != ""} onInputChange={onPasswordChange} />
+                        {(passwordValidation != "") && (
+                            <InputWarning message={passwordValidation === "empty" ? "Por favor, ingresa una contraseña." : "La contraseña ingresada es incorrecta."} />
                         )}
 
                     </form>
