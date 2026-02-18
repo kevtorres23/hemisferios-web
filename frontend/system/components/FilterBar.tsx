@@ -1,5 +1,5 @@
-import SolidIconButton from "./SolidIconButton";
-import OutlineIconButton from "./OutlineIconButton";
+import SolidIconButton from "./IconButton";
+import OutlineIconButton from "./WhiteIconButton";
 import { SquareChartGantt, CalendarDays } from "lucide-react";
 import { useState } from "react";
 

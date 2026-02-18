@@ -1,7 +1,7 @@
 "use client";
 import SystemLayout from "@/system/components/SystemLayout";
 import PageTitle from "@/system/components/appointments/AppointmentPageTitle";
-import SolidIconButton from "@/system/components/SolidIconButton";
+import IconButton from "@/system/components/IconButton";
 import AppointmentContainer from "@/system/components/appointments/AppointmentContainer";
 import FilterBar from "@/system/components/FilterBar";
 import { Plus, SquarePen } from "lucide-react";
@@ -55,8 +55,8 @@ function AppointmentDashboard() {
                 <PageTitle title="Registro de Citas" desc="Consulta y administra las citas agendadas por los usuarios en la página web." />
 
                 <div className="buttons flex lg:flex-row flex-col gap-3 lg:min-w-md sm:min-w-50 w-full sm:items-center sm:justify-end">
-                    <SolidIconButton isActive={true} icon={<Plus size={18} />} text="Nueva cita manual" />
-                    <SolidIconButton isActive={false} icon={<SquarePen size={18} />} text="Editar disponibilidad" />
+                    <IconButton isActive={true} icon={<Plus size={18} />} text="Nueva cita manual" />
+                    <IconButton isActive={false} icon={<SquarePen size={18} />} text="Editar disponibilidad" />
                 </div>
             </div>
 
