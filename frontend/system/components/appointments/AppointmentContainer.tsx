@@ -1,10 +1,9 @@
 import SearchBar from "../SearchBar";
 import AppointmentGrid from "./AppointmentGrid";
 import { AppointmentType } from "../../modules/Types";
+import FilterDropdown from "../FilterDropdown";
 
 type ContainerProps = {
-    filter?: React.ReactElement;
-    pageNavigator?: React.ReactElement;
     contentType: string;
     data: AppointmentType[];
     onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -17,8 +16,7 @@ function AppointmentContainer(props: ContainerProps) {
                 <SearchBar onInputChange={props.onSearchChange} placeholder="Buscar cita por nombre del paciente" />
 
                 <div className="filters flex flex-row gap-2">
-                    {props.filter}
-                    {props.pageNavigator}
+                    <FilterDropdown/>
                 </div>
             </div>
 
