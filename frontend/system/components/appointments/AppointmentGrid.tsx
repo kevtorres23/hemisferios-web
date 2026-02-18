@@ -7,7 +7,7 @@ type GridProps = {
 
 function AppointmentGrid (props: GridProps) {
     return (
-        <div className="grid w-full md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-6">
+        <div className="grid w-full lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-6">
             {props.data.map((item, id) => 
                 <AppointmentCard key={id}
                     status={item.status}

@@ -15,7 +15,7 @@ const tagStyles: TagFeatures = {
         name: "Terminada",
         color: "bg-[#22c55e]",
         textColor: "text-[#22c55e]",
-        bgColor: "bg-[rgb(244,63,94,0.08)]",
+        bgColor: "bg-[rgb(34,197,94,0.08)]",
         borderColor: "border-[#22c55e]",
     },
     pending: {
@@ -29,7 +29,7 @@ const tagStyles: TagFeatures = {
         name: "Cancelada",
         color: "bg-[#f43f5e]",
         textColor: "text-[#f43f5e]",
-        bgColor: "bg-[rgb(34,197,94,0.08)]",
+        bgColor: "bg-[rgb(244,63,94,0.08)]",
         borderColor: "border-[#f43f5e]"
     }
 };

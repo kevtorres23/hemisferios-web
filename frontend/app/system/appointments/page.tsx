@@ -27,14 +27,34 @@ function AppointmentDashboard() {
             hour: "12:00",
             timestamp: "today"
         },
+        {
+            status: "finished",
+            patientName: "Kevin",
+            fatherSurname: "Urbina",
+            motherSurname: "Torres",
+            phoneNumber: "6181889026",
+            date: "12 de febrero, 2026",
+            hour: "12:00",
+            timestamp: "today"
+        },
+        {
+            status: "cancelled",
+            patientName: "Kevin",
+            fatherSurname: "Urbina",
+            motherSurname: "Torres",
+            phoneNumber: "6181889026",
+            date: "12 de febrero, 2026",
+            hour: "12:00",
+            timestamp: "today"
+        }
     ];
 
     return (
         <SystemLayout sidebarPage="appointments">
-            <div className="header flex flex-row w-full justify-between items-start">
+            <div className="header flex sm:flex-row flex-col w-full justify-between items-start sm:gap-10 gap-6">
                 <PageTitle title="Registro de Citas" desc="Consulta y administra las citas agendadas por los usuarios en la página web." />
 
-                <div className="buttons flex flex-row gap-2">
+                <div className="buttons flex lg:flex-row flex-col gap-3 lg:min-w-md sm:min-w-50 w-full sm:items-center sm:justify-end">
                     <SolidIconButton isActive={true} icon={<Plus size={18} />} text="Nueva cita manual" />
                     <SolidIconButton isActive={false} icon={<SquarePen size={18} />} text="Editar disponibilidad" />
                 </div>

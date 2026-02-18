@@ -123,9 +123,10 @@ function AppointmentForm() {
 
     function shootData() {
         const time = new Date();
+        const status = "pending"; // The default status that appointments have when they are created.
 
-        const receiptAppointmentObj = new Appointment(patientName, motherSurname, fatherSurname, phoneNumber, writtenDate, hour, time);
-        const databaseAppointmentObj = new Appointment(patientName, motherSurname, fatherSurname, phoneNumber, formattedDate, hour, time);
+        const receiptAppointmentObj = new Appointment(status, patientName, fatherSurname, motherSurname, phoneNumber, writtenDate, hour, time);
+        const databaseAppointmentObj = new Appointment(status, patientName, fatherSurname, motherSurname, phoneNumber, formattedDate, hour, time);
 
         saveAppointment(receiptAppointmentObj);
 

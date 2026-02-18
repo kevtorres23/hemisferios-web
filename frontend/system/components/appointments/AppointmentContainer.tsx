@@ -12,7 +12,7 @@ type ContainerProps = {
 
 function AppointmentContainer(props: ContainerProps) {
     return (
-        <div className="w-hull flex h-full border border-slate-200 bg-white rounded-lg p-6 flex-col gap-6">
+        <div className="w-full flex h-full border border-slate-200 bg-white rounded-lg p-6 flex-col gap-6">
             <div className="flex md:flex-row flex-col items-center justify-between">
                 <SearchBar onInputChange={props.onSearchChange} placeholder="Buscar cita por nombre del paciente" />
 

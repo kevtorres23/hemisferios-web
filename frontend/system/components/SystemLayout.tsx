@@ -62,7 +62,7 @@ function SystemLayout(props: SystemLayoutProps) {
             <>
                 <MobileNavbar activePage={props.sidebarPage} onLogoutPressed={() => setLogoutModal(true)} onCredentialsPressed={() => setCredentialsModal(true)}/>
 
-                <div className="relative overflow-x-hidden overflow-y-hidden min-h-screen flex md:flex-row flex-col items-center justify-center bg-slate-100 font-sans dark:bg-black">
+                <div className="relative overflow-x-hidden overflow-y-hidden lg:min-h-screen h-auto flex md:flex-row flex-col items-center justify-center bg-slate-100 font-sans dark:bg-black">
                     <SmallModal title="Cerrar sesión"
                         message="¿Estás segur@ de que quieres salir del sistema?"
                         isVisible={logoutModal} onClose={() => setLogoutModal(false)}
@@ -113,7 +113,7 @@ function SystemLayout(props: SystemLayoutProps) {
 
                     <Sidebar activePage={props.sidebarPage} onLogoutPressed={() => setLogoutModal(true)} onCredentialsPressed={() => setCredentialsModal(true)} />
 
-                    <main className="h-screen w-full flex flex-col gap-8 p-12">
+                    <main className="lg:h-screen h-full w-full flex flex-col gap-8 sm:p-12 p-8 items-start justify-start">
                         {props.children}
                     </main>
                 </div>

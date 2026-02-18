@@ -6,10 +6,10 @@ function AppointmentCard(props: AppointmentType) {
     return (
         <div className="relative flex flex-col gap-3 rounded-md border border-slate-200 p-5 items-start justify-center overflow-y-hidden overflow-x-hidden">
 
-            <div className="absolute w-1 h-full bg-yellow-500 left-0"></div>
+            <div className={`absolute w-1 h-full ${props.status === "pending" ? "bg-yellow-500" : (props.status === "finished" ? "bg-green-500" : "bg-rose-500")} left-0`}></div>
 
             <div className="w-full flex flex-row justify-between items-center">
-                <AppointmentTag type="pending" />
+                <AppointmentTag type={props.status === "pending" ? "pending" : (props.status === "finished" ? "finished" : "cancelled")} />
 
                 <button className="cursor-pointer">
                     <Ellipsis size={24} className="text-slate-400" />
