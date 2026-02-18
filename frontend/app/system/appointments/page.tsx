@@ -46,7 +46,67 @@ function AppointmentDashboard() {
             date: "20/02/2026",
             hour: "12:00",
             timestamp: "today"
-        }
+        },
+        {
+            status: "pending",
+            patientName: "Kevin",
+            fatherSurname: "Urbina",
+            motherSurname: "Torres",
+            phoneNumber: "6181889026",
+            date: "20/02/2026",
+            hour: "12:00",
+            timestamp: "today"
+        },
+        {
+            status: "finished",
+            patientName: "Kevin",
+            fatherSurname: "Urbina",
+            motherSurname: "Torres",
+            phoneNumber: "6181889026",
+            date: "20/02/2026",
+            hour: "12:00",
+            timestamp: "today"
+        },
+        {
+            status: "cancelled",
+            patientName: "Kevin",
+            fatherSurname: "Urbina",
+            motherSurname: "Torres",
+            phoneNumber: "6181889026",
+            date: "20/02/2026",
+            hour: "12:00",
+            timestamp: "today"
+        },
+        {
+            status: "pending",
+            patientName: "Kevin",
+            fatherSurname: "Urbina",
+            motherSurname: "Torres",
+            phoneNumber: "6181889026",
+            date: "20/02/2026",
+            hour: "12:00",
+            timestamp: "today"
+        },
+        {
+            status: "finished",
+            patientName: "Kevin",
+            fatherSurname: "Urbina",
+            motherSurname: "Torres",
+            phoneNumber: "6181889026",
+            date: "20/02/2026",
+            hour: "12:00",
+            timestamp: "today"
+        },
+        {
+            status: "cancelled",
+            patientName: "Kevin",
+            fatherSurname: "Urbina",
+            motherSurname: "Torres",
+            phoneNumber: "6181889026",
+            date: "20/02/2026",
+            hour: "12:00",
+            timestamp: "today"
+        },
     ];
 
     return (
