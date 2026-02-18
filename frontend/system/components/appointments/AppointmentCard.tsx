@@ -16,7 +16,7 @@ function AppointmentCard(props: AppointmentType) {
                 </button>
             </div>
 
-            <p>{props.patientName} {props.fatherSurname} {props.motherSurname}</p>
+            <p className="text-base font-medium text-slate-900">{props.patientName} {props.fatherSurname} {props.motherSurname}</p>
 
             <div className="date flex flex-row gap-1 items-center justify-center text-slate-500">
                 <CalendarFold size={16} />
