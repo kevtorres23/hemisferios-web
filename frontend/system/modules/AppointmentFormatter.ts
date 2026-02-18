@@ -1,3 +1,5 @@
+// PURPOSE OF THE MODULE: to take the time and date values of an appointment with the database format, and return it in a more readable, user-friendly way.
+
 // Defining month types.
 type MonthNumbers = "01" | "02" | "03" | "04" | "05" | "06" | "07" | "08" | "09" | "10" | "11" | "12";
 type MonthNames = "enero" | "febrero" | "marzo" | "abril" | "mayo" | "junio" | "julio" | "agosto" | "septiembre" | "octubre" | "noviembre" | "diciembre";

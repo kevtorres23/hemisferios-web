@@ -7,12 +7,12 @@ import { useState } from "react";
 
 type ContainerProps = {
     contentType: string;
-    data: AppointmentType[];
+    data: AppointmentType[][]; // A list of a list of appointment objects.
     onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 function AppointmentContainer(props: ContainerProps) {
-    const [pages, setPages] = useState(3);
+    const [pages, setPages] = useState(props.data.length);
     const [currentPage, setCurrentPage] = useState(1);
 
     // Filter variables.
@@ -35,7 +35,7 @@ function AppointmentContainer(props: ContainerProps) {
             </div>
 
             {props.contentType === "cards" && (
-                <AppointmentGrid data={props.data} />
+                <AppointmentGrid data={props.data[currentPage - 1]} />
             )}
         </div>
     )

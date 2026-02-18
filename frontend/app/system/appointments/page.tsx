@@ -5,10 +5,9 @@ import IconButton from "@/system/components/IconButton";
 import AppointmentContainer from "@/system/components/appointments/AppointmentContainer";
 import FilterBar from "@/system/components/FilterBar";
 import { Plus, SquarePen } from "lucide-react";
-import { Main } from "next/document";
 import { useState } from "react";
 import { AppointmentType } from "@/system/modules/Types";
-import App from "next/app";
+import { pageSeparator } from "@/system/modules/PageSeparator";
 
 type AppointmentDataset = AppointmentType[];
 
@@ -107,7 +106,29 @@ function AppointmentDashboard() {
             hour: "12:00",
             timestamp: "today"
         },
+        {
+            status: "cancelled",
+            patientName: "Kevin",
+            fatherSurname: "Urbina",
+            motherSurname: "Torres",
+            phoneNumber: "6181889026",
+            date: "20/02/2026",
+            hour: "12:00",
+            timestamp: "today"
+        },
+        {
+            status: "cancelled",
+            patientName: "Kevin",
+            fatherSurname: "Urbina",
+            motherSurname: "Torres",
+            phoneNumber: "6181889026",
+            date: "20/02/2026",
+            hour: "12:00",
+            timestamp: "today"
+        },
     ];
+
+    const appointmentPages = pageSeparator(sampleAppointmentData);
 
     return (
         <SystemLayout sidebarPage="appointments">
@@ -124,7 +145,7 @@ function AppointmentDashboard() {
                 Hay <span className="font-semibold text-indigo-500">{sampleAppointmentData.length}</span> citas pendientes</p>}
             />
 
-            <AppointmentContainer data={sampleAppointmentData} contentType={contentType} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
+            <AppointmentContainer data={appointmentPages} contentType={contentType} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
         </ SystemLayout>
     );
 };
