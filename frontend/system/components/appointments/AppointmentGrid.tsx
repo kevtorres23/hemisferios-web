@@ -1,9 +1,10 @@
 import AppointmentCard from "./AppointmentCard";
 import { AppointmentType } from "@/system/modules/Types";
+import { dateFormatter, hourFormatter } from "@/system/modules/AppointmentFormatter";
 
 type GridProps = {
     data: AppointmentType[];
-}
+};
 
 function AppointmentGrid (props: GridProps) {
     return (
@@ -15,8 +16,8 @@ function AppointmentGrid (props: GridProps) {
                     fatherSurname={item.fatherSurname}
                     motherSurname={item.motherSurname}
                     phoneNumber={item.phoneNumber}
-                    date={item.date}
-                    hour={item.hour}
+                    date={dateFormatter(item.date)} // Pasar item.date primero por AppointmentFormatter().
+                    hour={hourFormatter(item.hour)} // Pasar item.hour primero por AppointmentFormatter().
                     timestamp={item.timestamp}
                 />
             )}

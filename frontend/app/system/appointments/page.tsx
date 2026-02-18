@@ -23,7 +23,7 @@ function AppointmentDashboard() {
             fatherSurname: "Urbina",
             motherSurname: "Torres",
             phoneNumber: "6181889026",
-            date: "12 de febrero, 2026",
+            date: "20/02/2026",
             hour: "12:00",
             timestamp: "today"
         },
@@ -33,7 +33,7 @@ function AppointmentDashboard() {
             fatherSurname: "Urbina",
             motherSurname: "Torres",
             phoneNumber: "6181889026",
-            date: "12 de febrero, 2026",
+            date: "20/02/2026",
             hour: "12:00",
             timestamp: "today"
         },
@@ -43,7 +43,7 @@ function AppointmentDashboard() {
             fatherSurname: "Urbina",
             motherSurname: "Torres",
             phoneNumber: "6181889026",
-            date: "12 de febrero, 2026",
+            date: "20/02/2026",
             hour: "12:00",
             timestamp: "today"
         }
@@ -61,7 +61,7 @@ function AppointmentDashboard() {
             </div>
 
             <FilterBar firstElement={<p className="text-lg font-medium text-slate-800">
-                Hay <span className="font-semibold text-indigo-500">14</span> citas pendientes</p>}
+                Hay <span className="font-semibold text-indigo-500">{sampleAppointmentData.length}</span> citas pendientes</p>}
             />
 
             <AppointmentContainer data={sampleAppointmentData} contentType={contentType} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
