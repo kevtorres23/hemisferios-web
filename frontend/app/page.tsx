@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <>
       <Navbar activePage="home" />
-      <div className="relative overflow-x-hidden overflow-y-hidden flex flex-col min-h-screen items-center justify-center bg-white font-sans dark:bg-black">
+      <div className="relative overflow-x-hidden overflow-y-hidden flex flex-col items-center justify-center bg-white font-sans dark:bg-black">
 
         <HeroSection />
 

@@ -36,7 +36,7 @@ const tagStyles: TagFeatures = {
 
 function AppointmentTag(props: TagProps) {
     return (
-        <div className={`flex flex-row gap-1 items-center justify-center border px-2 py-1 rounded-full ${tagStyles[props.type].textColor} ${tagStyles[props.type].bgColor} ${tagStyles[props.type].borderColor} `}>
+        <div className={`flex flex-row gap-1 items-center justify-center border px-2.5 py-0.5 rounded-full ${tagStyles[props.type].textColor} ${tagStyles[props.type].bgColor} ${tagStyles[props.type].borderColor} `}>
             <div className={`w-1.5 h-1.5 rounded-[50%] ${tagStyles[props.type].color}`}></div>
             <p className="text-xs font-medium">
                 {tagStyles[props.type].name}

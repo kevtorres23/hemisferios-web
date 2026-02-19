@@ -1,6 +1,6 @@
 import { AppointmentType } from "@/system/modules/Types";
 import AppointmentTag from "./AppointmentTag";
-import { CalendarFold, ClockIcon, Phone, Ellipsis } from "lucide-react";
+import { CalendarFold, ClockIcon, Phone, Ellipsis, CircleUserRound, Circle } from "lucide-react";
 
 function AppointmentCard(props: AppointmentType) {
     return (
@@ -38,4 +38,14 @@ function AppointmentCard(props: AppointmentType) {
     );
 };
 
-export default AppointmentCard;
+function AppointmentCardCalendar(props: AppointmentType) {
+    return (
+        <div className={`w-full flex flex-row cursor-pointer items-center justify-center px-2 py-1 gap-1.5 rounded-sm text-white ${props.status === "pending" ? "bg-yellow-500" : (props.status === "completed" ? "bg-green-500" : "bg-rose-500")}`}>
+            <CircleUserRound size={18} className="shrink"/>
+
+            <p className="font-medium text-sm truncate">{props.patientName} {props.fatherSurname}</p>
+        </div>
+    );
+};
+
+export { AppointmentCard, AppointmentCardCalendar };
