@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import IconButton from "../IconButton";
 import { useId } from "react";
 import { Label } from "@/components/ui/label";
@@ -14,6 +13,7 @@ import {
     SelectTrigger,
     SelectValue
 } from '@/components/ui/select';
+import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useState } from "react";
 import {
@@ -130,8 +130,6 @@ function FilterDropdown(props: FilterProps) {
                         <OptionCheckbox checked={cancelledChecked} onCheckedChange={() => setCancelledChecked(!cancelledChecked)} item={<AppointmentTag type="cancelled" />} />
                     </div>
                 </DropdownMenuGroup>
-
-
             </DropdownMenuContent>
         </DropdownMenu>
     )

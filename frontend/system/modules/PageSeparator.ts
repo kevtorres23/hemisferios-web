@@ -1,4 +1,4 @@
-// PURPOSE OF THE MODULE: receive all the appointments stored in the database and separate them in n pages that contain maximum nine appointments appointments each.
+// PURPOSE OF THE MODULE: to receive all the appointments stored in the database and separate them in 'n' pages that contain maximum nine appointments appointments each.
 
 import { AppointmentType } from "@/system/modules/Types";
 
@@ -17,7 +17,7 @@ function pageSeparator(appointments: AppointmentDataset) {
         appointmentStorer.push(appointments[i]);
     };
 
-    // If the iteration ends, and the page has less than 9 appointments, it will still be counted as a page. Therefore, let's push it.
+    // If the iteration ends, and the appointmentStorer has more than one appointment but less than 9, it will still be counted as a page. Therefore, let's push it.
     if (appointmentStorer.length > 0) {
         createdPages.push(appointmentStorer);
     }

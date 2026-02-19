@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 type NavigatorProps = {
     currentPage: number;
     finalPage: number;
+    labelStyles?: string;
+    labelText: string;
     onPreviousClick: () => void;
     onNextClick: () => void;
 }
@@ -44,14 +46,13 @@ function PageNavigator(props: NavigatorProps) {
     };
 
     return (
-        <div className="flex flex-row gap-2 items-center justify-center">
-            <p className="text-sm font-medium text-slate-500">Página:</p>
+        <div className="flex flex-row gap-3 items-center justify-center">
 
             <button onClick={onPreviousClick} disabled={isPreviousDisabled} className={`${isPreviousDisabled ? "bg-slate-100 text-slate-400" : "bg-white hover:bg-slate-200 text-slate-900 cursor-pointer"} font-normal border border-slate-200 p-2 flex flex-row items-center justify-center gap-1.5 rounded-md`}>
                 <ChevronLeft size={16} />
             </button>
 
-            <p className="text-sm">{currentPage} de {finalPage}</p>
+            <p className={`${props.labelStyles}`}>{props.labelText}</p>
 
             <button onClick={onNextClick} disabled={isNextDisabled} className={`${isNextDisabled ? "bg-slate-100 text-slate-400" : "bg-white hover:bg-slate-200 text-slate-900 cursor-pointer"} font-normal border border-slate-200 p-2 flex flex-row items-center justify-center gap-1.5 rounded-md`}>
                 <ChevronRight size={16} />
