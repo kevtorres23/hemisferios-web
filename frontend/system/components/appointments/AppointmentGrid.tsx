@@ -2,7 +2,7 @@ import SearchBar from "../SearchBar";
 import AppointmentCalendar from "./AppointmentCalendar";
 import PageNavigator from "../PageNavigator";
 import FilterDropdown from "./FilterDropdown";
-import AppointmentCard from "./AppointmentCard";
+import { AppointmentCard } from "./AppointmentCard";
 import { AppointmentType } from "@/system/modules/Types";
 import { dateFormatter, hourFormatter } from "@/system/modules/AppointmentFormatter";
 import { useState } from "react";

@@ -64,7 +64,7 @@ function SystemLayout(props: SystemLayoutProps) {
 
                 <Sidebar activePage={props.sidebarPage} onLogoutPressed={() => setLogoutModal(true)} onCredentialsPressed={() => setCredentialsModal(true)} />
 
-                <div className="relative overflow-x-hidden overflow-y-hidden lg:min-h-screen h-auto flex md:flex-row flex-col items-start justify-center bg-slate-100 font-sans dark:bg-black">
+                <div className="relative overflow-x-hidden md:ml-70 ml-0 lg:min-h-screen h-auto flex md:flex-row flex-col items-start justify-center bg-slate-100 font-sans dark:bg-black">
                     <SmallModal title="Cerrar sesión"
                         message="¿Estás segur@ de que quieres salir del sistema?"
                         isVisible={logoutModal} onClose={() => setLogoutModal(false)}
@@ -113,7 +113,7 @@ function SystemLayout(props: SystemLayoutProps) {
 
                     <SuccessModal text="¡Credenciales actualizadas!" isVisible={successModal} />
 
-                    <main className="relative md:ml-70 ml-0 h-auto w-full flex flex-col gap-8 sm:p-12 p-8 items-start justify-start">
+                    <main className="h-auto w-full flex flex-col gap-8 sm:p-12 p-8 items-start justify-start">
                         {props.children}
                     </main>
                 </div>

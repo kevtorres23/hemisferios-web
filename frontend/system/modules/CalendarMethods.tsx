@@ -16,4 +16,13 @@ function calendarHoursCreator(appointments: AppointmentType[]) {
     return calendarHours;
 };
 
-export default calendarHoursCreator;
+function daysDistance(todaysNum: number, comparativeDayNum: number) {
+    const days = [1, 2, 3, 4, 5, 6]; // This array represents the days with their corresponding number, where Monday is 1.
+
+    return (days.indexOf(todaysNum) - days.indexOf(comparativeDayNum)); // It returns the difference of days between today and another day (second argument).
+};
+
+// Soluciones para el calendario: Crear un objeto con toda la info.
+
+
+export { calendarHoursCreator, daysDistance };

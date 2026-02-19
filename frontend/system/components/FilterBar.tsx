@@ -26,7 +26,7 @@ function FilterBar(props: BarProps) {
             {props.firstElement}
 
             <div className="flex sm:flex-row flex-col gap-3 sm:items-center sm:justify-center sm:w-auto w-full">
-                <p className="text-sm font-medium text-slate-500">Vista:</p>
+                <p className="text-sm text-center font-medium text-slate-500">Vista:</p>
                 <SolidIconButton onClick={onCardsPressed} isActive={activeView === "cards"} icon={<SquareChartGantt size={18} />} text="Tarjetas" />
                 <SolidIconButton onClick={onCalendarPressed} isActive={activeView === "calendar"} icon={<CalendarDays size={18} />} text="Calendario" />
             </div>
