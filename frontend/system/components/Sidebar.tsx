@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import logo from "../../public/hemisferios-logo.png";
 import SidebarLink from "./SidebarLink";
 import { ClipboardClock, History, CircleUserRound, Heart, ChartBar, MessageCircle, Settings, LogOut } from "lucide-react";
@@ -18,9 +19,13 @@ function Sidebar(props: SidebarProps) {
                 <div className="divisory-line w-full h-px bg-slate-200"></div>
 
                 <div className="link-container flex flex-col gap-2 w-full">
-                    <SidebarLink name="Registro de citas" icon={<ClipboardClock size={18} />} isActive={props.activePage === "appointments"} />
+                    <Link href={"/system/appointments"}>
+                        <SidebarLink name="Registro de citas" icon={<ClipboardClock size={18} />} isActive={props.activePage === "appointments"} />
+                    </Link>
 
-                    <SidebarLink name="Historial de citas" icon={<History size={18} />} isActive={props.activePage === "history"} />
+                    <Link href={"/system/history"}>
+                        <SidebarLink name="Historial de citas" icon={<History size={18} />} isActive={props.activePage === "history"} />
+                    </Link>
 
                     <SidebarLink name="Pacientes" icon={<CircleUserRound size={18} />} isActive={props.activePage === "patients"} />
 

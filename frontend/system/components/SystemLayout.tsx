@@ -113,7 +113,7 @@ function SystemLayout(props: SystemLayoutProps) {
 
                     <SuccessModal text="¡Credenciales actualizadas!" isVisible={successModal} />
 
-                    <main className="h-auto w-full flex flex-col gap-8 sm:p-12 p-8 items-start justify-start">
+                    <main className="lg:h-screen h-auto w-full flex flex-col gap-8 sm:p-12 p-8 items-start justify-start">
                         {props.children}
                     </main>
                 </div>
