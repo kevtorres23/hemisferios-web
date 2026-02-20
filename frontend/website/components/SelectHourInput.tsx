@@ -7,7 +7,6 @@ import {
     SelectGroup,
     SelectItem,
     SelectLabel,
-    SelectSeparator,
     SelectTrigger,
     SelectValue
 } from '@/components/ui/select'
@@ -27,7 +26,7 @@ function SelectHourInput(props: SelectProps) {
         <div className='w-full space-y-2'>
             <Label className="text-slate-500 font-normal sm:text-sm text-base" htmlFor={id}>{props.label} <span className="text-red-500 text-lg font-semibold">*</span></Label>
             <Select value={props.value} onValueChange={(val) => props.onInputChange(val)}>
-                <SelectTrigger id={id} className={`w-full bg-white sm:text-sm text-base py-2 px-3 ${props.activeValidation ? "border border-red-500" : ""}`}>
+                <SelectTrigger id={id} className={`w-full bg-white sm:text-sm text-base cursor-pointer py-5 px-3 ${props.activeValidation ? "border border-red-500" : ""}`}>
                     <SelectValue className="" placeholder={
                         <div className="flex flex-row gap-2 items-center">
                             <Clock4 size={16} />
@@ -35,7 +34,7 @@ function SelectHourInput(props: SelectProps) {
                         </div>
                     } />
                 </SelectTrigger>
-                <SelectContent className="bg-white text-sm" sideOffset={5} position="popper">
+                <SelectContent className="bg-white text-sm z-999" sideOffset={5} position="popper">
                     <SelectGroup className="h-80 overflow-y-scroll">
                         <SelectLabel className="text-sm">Hora de la cita</SelectLabel>
                         {/* Map the available dates from the database*/}

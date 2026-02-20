@@ -2,13 +2,12 @@
 import SystemLayout from "@/system/components/SystemLayout";
 import EmptyState from "@/system/components/EmptyState";
 import { NewAppointmentModal } from "@/system/components/appointments/CRUDModals";
-import Image from "next/image";
+import SuccessModal from "@/system/components/modals/SuccessModal";
 import PageTitle from "@/system/components/PageTitle";
 import IconButton from "@/system/components/IconButton";
 import AppointmentGrid from "@/system/components/appointments/AppointmentGrid";
 import AppointmentCalendar from "@/system/components/appointments/AppointmentCalendar";
 import WhiteIconButton from "@/system/components/WhiteIconButton";
-import MediumModal from "@/system/components/modals/MediumModal";
 import FilterBar from "@/system/components/FilterBar";
 import { Plus, SquarePen } from "lucide-react";
 import { useState } from "react";
@@ -21,6 +20,7 @@ type AppointmentDataset = AppointmentType[];
 function AppointmentDashboard() {
     const [view, setView] = useState("cards");
     const [searchValue, setSearchValue] = useState("");
+    const [successModal, setSuccessModal] = useState(false);
     const [newAppointmentModal, setNewAppointmentModal] = useState(false);
 
     const data: AppointmentDataset = [
@@ -97,8 +97,9 @@ function AppointmentDashboard() {
     ];
 
     function onSaveAppointment() {
-        // Receives an appointment object from the modal and adds it to the database.
-        // We can build a global controller for the API calls and call that controller here.
+        setNewAppointmentModal(false);
+        setSuccessModal(true);
+        setTimeout(() => setSuccessModal(false), 3000)
     };
 
     let appointmentPages = pageSeparator(data);
@@ -111,9 +112,11 @@ function AppointmentDashboard() {
         <SystemLayout sidebarPage="appointments" isAnyModal={newAppointmentModal}
             modals={
                 <>
-                    <NewAppointmentModal isVisible={newAppointmentModal} onSaveAppointment={onSaveAppointment} onClose={() => setNewAppointmentModal(false)}/>
+                    <NewAppointmentModal onSave={onSaveAppointment} isVisible={newAppointmentModal} onSaveAppointment={onSaveAppointment} onClose={() => setNewAppointmentModal(false)} />
                 </>
             }>
+
+            <SuccessModal isVisible={successModal} text="¡Cita creada correctamente!" />
 
             <div className="header flex sm:flex-row flex-col justify-between items-start sm:gap-10 gap-6 w-full">
                 <PageTitle title="Registro de Citas" desc="Consulta y administra las citas agendadas por los usuarios en el sitio." />

@@ -119,7 +119,7 @@ function SystemLayout(props: SystemLayoutProps) {
 
                     <SuccessModal text="¡Credenciales actualizadas!" isVisible={successModal} />
 
-                    <main className={`w-full flex flex-col gap-8 sm:p-12 p-8 items-start justify-start ${(credentialsModal || props.isAnyModal ) ? "sm:h-screen h-0 overflow-hidden" : "h-auto"}`}>
+                    <main className={`w-full flex flex-col gap-8 sm:p-12 p-8 items-start justify-start ${(credentialsModal || props.isAnyModal ) ? "sm:h-screen h-auto overflow-hidden" : "h-auto"}`}>
                         {props.children}
                     </main>
                 </div>

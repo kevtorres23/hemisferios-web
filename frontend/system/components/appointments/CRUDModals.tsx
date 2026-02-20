@@ -1,27 +1,40 @@
+"use client";
+
 import MediumModal from "../modals/MediumModal";
+import { Appointment } from "@/website/modules/Classes";
+import AppointmentForm from "@/website/components/CreateAppointmentForm";
+import { useAppointmentStore } from "@/website/modules/StoreAppointment";
+import { redirect } from "next/navigation";
+import axios from "axios";
 import { useState } from "react";
 
 type ModalProps = {
     onSaveAppointment: () => void;
     isVisible: boolean;
     onClose: () => void;
-}
+    onSave: () => void;
+};
 
 function NewAppointmentModal(props: ModalProps) {
-    function saveBtnPressed() {
-        // Logic here to save the input's info in an object.
+    const saveAppointment = useAppointmentStore((state: any) => state.saveAppointment);
 
-        props.onSaveAppointment(); // Pass here the created object.
-    }
+    function saveBtnPressed(receiptObject: Appointment, databaseOject: Appointment) {
+        axios.post("http://localhost:5001/api/appointments", receiptObject);
+        saveAppointment(databaseOject);
+    };
 
     return (
         <MediumModal
             isVisible={props.isVisible}
+            btnType="submit"
+            btnForm="appointmentForm"
             onClose={props.onClose}
-            title="Create"
-            confirmationBtnText="Registrar cita"
-            onSave={saveBtnPressed}
+            title="Agendar una cita manualmente"
+            confirmationBtnText="Guardar cita"
+            onSave={props.onSave}
         >
+
+            <AppointmentForm sendData={saveBtnPressed} />
 
         </MediumModal>
     );
