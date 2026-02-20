@@ -20,6 +20,8 @@ type LoginStore = {
 type SystemLayoutProps = {
     sidebarPage: string,
     children: React.ReactNode;
+    modals: React.ReactNode;
+    isAnyModal: boolean;
 }
 
 function SystemLayout(props: SystemLayoutProps) {
@@ -107,14 +109,17 @@ function SystemLayout(props: SystemLayoutProps) {
                             )}
                         </div>
                     </form>
-
+                
+                {/* Any other modal(s) will be rendered here*/}
                 </ SmallModal>
+
+                {props.modals}
 
                 <div className="relative overflow-x-hidden md:ml-70 ml-0 lg:min-h-screen h-auto flex md:flex-row flex-col items-start justify-center bg-slate-100 font-sans dark:bg-black">
 
                     <SuccessModal text="¡Credenciales actualizadas!" isVisible={successModal} />
 
-                    <main className={`h-auto w-full flex flex-col gap-8 sm:p-12 p-8 items-start justify-start ${credentialsModal ? "h-screen overflow-hidden" : "h-auto"}`}>
+                    <main className={`w-full flex flex-col gap-8 sm:p-12 p-8 items-start justify-start ${(credentialsModal || props.isAnyModal ) ? "sm:h-screen h-0 overflow-hidden" : "h-auto"}`}>
                         {props.children}
                     </main>
                 </div>

@@ -1,6 +1,7 @@
 "use client";
 import SystemLayout from "@/system/components/SystemLayout";
 import EmptyState from "@/system/components/EmptyState";
+import { NewAppointmentModal } from "@/system/components/appointments/CRUDModals";
 import Image from "next/image";
 import PageTitle from "@/system/components/PageTitle";
 import IconButton from "@/system/components/IconButton";
@@ -20,6 +21,7 @@ type AppointmentDataset = AppointmentType[];
 function AppointmentDashboard() {
     const [view, setView] = useState("cards");
     const [searchValue, setSearchValue] = useState("");
+    const [newAppointmentModal, setNewAppointmentModal] = useState(false);
 
     const data: AppointmentDataset = [
         {
@@ -94,70 +96,52 @@ function AppointmentDashboard() {
         },
     ];
 
-    const appointmentPages = pageSeparator(data);
+    function onSaveAppointment() {
+        // Receives an appointment object from the modal and adds it to the database.
+        // We can build a global controller for the API calls and call that controller here.
+    };
+
+    let appointmentPages = pageSeparator(data);
 
     function onViewChange(selectedView: string) {
         setView(selectedView);
     };
 
-    if (data.length === 0) {
-        return (
-            <SystemLayout sidebarPage="appointments">
-                <div className="header flex sm:flex-row flex-col justify-between items-start sm:gap-10 gap-6 w-full">
-                    <PageTitle title="Registro de Citas" desc="Consulta y administra las citas agendadas por los usuarios en el sitio." />
+    return (
+        <SystemLayout sidebarPage="appointments" isAnyModal={newAppointmentModal}
+            modals={
+                <>
+                    <NewAppointmentModal isVisible={newAppointmentModal} onSaveAppointment={onSaveAppointment} onClose={() => setNewAppointmentModal(false)}/>
+                </>
+            }>
 
-                    <div className="buttons flex lg:flex-row flex-col gap-3 lg:min-w-110 sm:w-auto w-full sm:items-center sm:justify-end">
-                        <IconButton isActive={true} icon={<Plus size={18} />} text="Nueva cita manual" />
-                        <WhiteIconButton isIndigo={true} icon={<SquarePen size={18} />} text="Editar disponibilidad" />
-                    </div>
+            <div className="header flex sm:flex-row flex-col justify-between items-start sm:gap-10 gap-6 w-full">
+                <PageTitle title="Registro de Citas" desc="Consulta y administra las citas agendadas por los usuarios en el sitio." />
+
+                <div className="buttons flex lg:flex-row flex-col gap-3 lg:min-w-110 sm:w-auto w-full sm:items-center sm:justify-end">
+                    <IconButton onClick={() => setNewAppointmentModal(true)} isActive={true} icon={<Plus size={18} />} text="Nueva cita manual" />
+                    <WhiteIconButton isIndigo={true} icon={<SquarePen size={18} />} text="Editar disponibilidad" />
                 </div>
+            </div>
 
-                <FilterBar onViewChange={onViewChange} firstElement={<p className="text-lg font-medium text-slate-800">
-                    Hay <span className="font-semibold text-indigo-500">{data.length}</span> citas pendientes</p>}
-                />
+            <FilterBar onViewChange={onViewChange} firstElement={<p className="text-lg font-medium text-slate-800">
+                Hay <span className="font-semibold text-indigo-500">{data.length}</span> citas pendientes</p>}
+            />
 
+            {(data.length === 0) ? (
                 <EmptyState
                     header="¡No hay citas registradas aún!"
                     desc="Nuevas citas aparecerán aquí cuando sean creadas por una persona en la página, o por ti, manualmente."
                     image={appointmentsEmpty}
                 />
-            </ SystemLayout>
-        );
-
-    } else {
-        return (
-            <SystemLayout sidebarPage="appointments">
-                <div className="header flex sm:flex-row flex-col justify-between items-start sm:gap-10 gap-6 w-full">
-                    <PageTitle title="Registro de Citas" desc="Consulta y administra las citas agendadas por los usuarios en el sitio." />
-
-                    <div className="buttons flex lg:flex-row flex-col gap-3 lg:min-w-110 sm:w-auto w-full sm:items-center sm:justify-end">
-                        <IconButton isActive={true} icon={<Plus size={18} />} text="Nueva cita manual" />
-                        <WhiteIconButton isIndigo={true} icon={<SquarePen size={18} />} text="Editar disponibilidad" />
-                    </div>
-                </div>
-
-                <FilterBar onViewChange={onViewChange} firstElement={<p className="text-lg font-medium text-slate-800">
-                    Hay <span className="font-semibold text-indigo-500">{data.length}</span> citas pendientes</p>}
-                />
-
-                {data.length === 0 && (
-                    <div className="w-full h-full items-center justify-center">
-                        <Image src={appointmentsEmpty} alt="" className="w-40" />
-                    </div>
-                )
-
-                }
-
-                {view === "cards" && (
-                    <AppointmentGrid data={appointmentPages} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
-                )}
-
-                {view === "calendar" && (
-                    <AppointmentCalendar data={data} />
-                )}
-            </ SystemLayout>
-        );
-    };
+            ) : (view === "cards") ? (
+                <AppointmentGrid data={appointmentPages} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
+            ) : (view === "calendar") ? (
+                <AppointmentCalendar data={data} />
+            ) : <></>
+            }
+        </ SystemLayout>
+    );
 };
 
 export default AppointmentDashboard;
