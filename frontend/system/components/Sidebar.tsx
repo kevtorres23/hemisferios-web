@@ -12,7 +12,7 @@ type SidebarProps = {
 
 function Sidebar(props: SidebarProps) {
     return (
-        <div className="fixed z-999 top-0 w-70 p-6 h-screen bg-white border-r border-slate-200 md:flex hidden flex-col items-center justify-between">
+        <div className="fixed  top-0 w-70 p-6 h-screen bg-white border-r border-slate-200 md:flex hidden flex-col items-center justify-between">
             <div className="upper-section flex flex-col gap-4 items-center justify-center w-full">
                 <Image src={logo} alt="Logo" className="sm:w-32 w-28 h-auto" />
 

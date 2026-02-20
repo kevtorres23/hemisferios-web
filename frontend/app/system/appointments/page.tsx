@@ -7,6 +7,7 @@ import IconButton from "@/system/components/IconButton";
 import AppointmentGrid from "@/system/components/appointments/AppointmentGrid";
 import AppointmentCalendar from "@/system/components/appointments/AppointmentCalendar";
 import WhiteIconButton from "@/system/components/WhiteIconButton";
+import MediumModal from "@/system/components/modals/MediumModal";
 import FilterBar from "@/system/components/FilterBar";
 import { Plus, SquarePen } from "lucide-react";
 import { useState } from "react";
