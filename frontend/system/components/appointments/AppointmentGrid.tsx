@@ -10,6 +10,7 @@ import { useState } from "react";
 type GridProps = {
     data: AppointmentType[][]; // A list of a list of appointment objects.
     onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onActionSelected: (action: string) => void;
 }
 
 function AppointmentGrid(props: GridProps) {
@@ -39,9 +40,10 @@ function AppointmentGrid(props: GridProps) {
                 </div>
             </div>
 
-            <div className="grid w-full lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-2 grid-cols-1 gap-6">
+            <div className="grid w-full xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 grid-cols-1 gap-6">
                 {props.data[currentPage - 1].map((item, id) =>
-                    <AppointmentCard key={id}
+                    <AppointmentCard
+                        key={id}
                         status={item.status}
                         patientName={item.patientName}
                         fatherSurname={item.fatherSurname}
@@ -50,6 +52,7 @@ function AppointmentGrid(props: GridProps) {
                         date={dateFormatter(item.date)} // We pass item.date first by AppointmentFormatter().
                         hour={hourFormatter(item.hour)} // We pass item.date first by AppointmentFormatter().
                         timestamp={item.timestamp}
+                        onActionSelected={props.onActionSelected}
                     />
                 )}
             </div>

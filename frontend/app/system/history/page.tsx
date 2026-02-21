@@ -1,5 +1,9 @@
 "use client";
 import SystemLayout from "@/system/components/SystemLayout";
+import EmptyState from "@/system/components/EmptyState";
+import { NewAppointmentModal } from "@/system/components/modals/AppointmentActions";
+import AvailabilityModal from "@/system/components/modals/AvailabilityModal";
+import SuccessModal from "@/system/components/modals/SuccessModal";
 import PageTitle from "@/system/components/PageTitle";
 import IconButton from "@/system/components/IconButton";
 import AppointmentGrid from "@/system/components/appointments/AppointmentGrid";
@@ -8,18 +12,23 @@ import WhiteIconButton from "@/system/components/WhiteIconButton";
 import FilterBar from "@/system/components/FilterBar";
 import { Plus, SquarePen } from "lucide-react";
 import { useState } from "react";
+import historyEmpty from "../../../public/history-empty.png";
 import { AppointmentType } from "@/system/modules/Types";
 import { pageSeparator } from "@/system/modules/PageSeparator";
 
 type AppointmentDataset = AppointmentType[];
 
-function AppointmentDashboard() {
+function HistoryDashboard() {
     const [view, setView] = useState("cards");
     const [searchValue, setSearchValue] = useState("");
+    const [successAppointment, setSuccessAppointment] = useState(false);
+    const [successAvailability, setSuccessAvailability] = useState(false);
+    const [newAppointmentModal, setNewAppointmentModal] = useState(false);
+    const [availabilityModal, setAvailabilityModal] = useState(false);
 
-    const sampleAppointmentData: AppointmentDataset = [
+    const data: AppointmentDataset = [
         {
-            status: "finished",
+            status: "pending",
             patientName: "Kevin",
             fatherSurname: "Urbina",
             motherSurname: "Torres",
@@ -49,7 +58,7 @@ function AppointmentDashboard() {
             timestamp: "today"
         },
         {
-            status: "finished",
+            status: "pending",
             patientName: "Kevin",
             fatherSurname: "Urbina",
             motherSurname: "Torres",
@@ -79,7 +88,7 @@ function AppointmentDashboard() {
             timestamp: "today"
         },
         {
-            status: "cancelled",
+            status: "pending",
             patientName: "Kevin",
             fatherSurname: "Urbina",
             motherSurname: "Torres",
@@ -90,31 +99,29 @@ function AppointmentDashboard() {
         },
     ];
 
-    const appointmentPages = pageSeparator(sampleAppointmentData);
+    function onSaveAppointment() {
+        setNewAppointmentModal(false);
+        setSuccessAppointment(true);
+        setTimeout(() => setSuccessAppointment(false), 3000);
+    };
+
+    function onSaveAvailability() {
+        setAvailabilityModal(false);
+        setSuccessAvailability(true);
+        setTimeout(() => setSuccessAvailability(false), 3000)
+    };
+
+    let appointmentPages = pageSeparator(data);
 
     function onViewChange(selectedView: string) {
         setView(selectedView);
     };
 
     return (
-        <SystemLayout sidebarPage="history">
-            <div className="header flex sm:flex-row flex-col justify-between items-start sm:gap-10 gap-6 w-full">
-                <PageTitle title="Historial de Citas" desc="Consulta y administra las citas agendadas por los usuarios en el sitio." />
-            </div>
+        <SystemLayout sidebarPage="history" isAnyModal={newAppointmentModal || availabilityModal}>
 
-            <FilterBar onViewChange={onViewChange} firstElement={<p className="text-lg font-medium text-slate-800">
-                Hay <span className="font-semibold text-indigo-500">{sampleAppointmentData.length}</span> citas pendientes</p>}
-            />
-
-            {view === "cards" && (
-                <AppointmentGrid data={appointmentPages} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
-            )}
-
-            {view === "calendar" && (
-                <AppointmentCalendar data={sampleAppointmentData} />
-            )}
         </ SystemLayout>
     );
 };
 
-export default AppointmentDashboard;
+export default HistoryDashboard;
