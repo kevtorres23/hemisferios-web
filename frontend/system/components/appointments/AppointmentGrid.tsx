@@ -2,6 +2,7 @@ import SearchBar from "../SearchBar";
 import AppointmentCalendar from "./AppointmentCalendar";
 import PageNavigator from "../PageNavigator";
 import FilterDropdown from "./FilterDropdown";
+import StatusDropdown from "./StatusDropdown";
 import { AppointmentCard } from "./AppointmentCard";
 import { AppointmentType } from "@/system/modules/Types";
 import { dateFormatter, hourFormatter } from "@/system/modules/AppointmentFormatter";
@@ -11,6 +12,7 @@ type GridProps = {
     data: AppointmentType[][]; // A list of a list of appointment objects.
     onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onActionSelected: (action: string) => void;
+    page: "history" | "appointments";
 }
 
 function AppointmentGrid(props: GridProps) {
@@ -30,7 +32,13 @@ function AppointmentGrid(props: GridProps) {
                 <SearchBar onInputChange={props.onSearchChange} placeholder="Buscar cita por nombre del paciente" />
 
                 <div className="filters flex sm:flex-row flex-col gap-5 sm:w-auto w-full">
-                    <FilterDropdown intervalValue={intervalValue} onIntervalChange={onIntervalChange} />
+                    {props.page === "appointments" && (
+                        <FilterDropdown intervalValue={intervalValue} onIntervalChange={onIntervalChange} />
+                    )}
+
+                    {props.page === "history" && (
+                        <StatusDropdown isOnHistory={true} />
+                    )}
 
                     <div className="flex flex-row gap-3 items-center justify-center">
                         <p className="text-sm font-medium text-slate-500">Página:</p>
@@ -53,6 +61,7 @@ function AppointmentGrid(props: GridProps) {
                         hour={hourFormatter(item.hour)} // We pass item.date first by AppointmentFormatter().
                         timestamp={item.timestamp}
                         onActionSelected={props.onActionSelected}
+                        page={props.page}
                     />
                 )}
             </div>

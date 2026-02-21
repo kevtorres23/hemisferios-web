@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { CardActionContext, PageContext } from "@/app/system/appointments/page";
+import { CardActionContext } from "@/app/system/appointments/page";
 import {
     Ellipsis,
     CircleX,

@@ -2,34 +2,41 @@
 import SystemLayout from "@/system/components/SystemLayout";
 import EmptyState from "@/system/components/EmptyState";
 import { NewAppointmentModal, CancelAppointmentModal, ModifyAppointmentModal, RemoveAppointModal, CompleteAppointment, PendingAppointment } from "@/system/components/modals/AppointmentActions";
-import AvailabilityModal from "@/system/components/modals/AvailabilityModal";
 import SuccessModal from "@/system/components/modals/SuccessModal";
+import { useId } from "react";
 import PageTitle from "@/system/components/PageTitle";
-import IconButton from "@/system/components/IconButton";
 import AppointmentGrid from "@/system/components/appointments/AppointmentGrid";
 import AppointmentCalendar from "@/system/components/appointments/AppointmentCalendar";
-import WhiteIconButton from "@/system/components/WhiteIconButton";
 import FilterBar from "@/system/components/FilterBar";
-import { Plus, SquarePen } from "lucide-react";
 import { useState, createContext } from "react";
 import historyEmpty from "../../../public/history-empty.png";
 import { AppointmentType } from "@/system/modules/Types";
 import { pageSeparator } from "@/system/modules/PageSeparator";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue
+} from '@/components/ui/select'
 
-export const CardActionContext = createContext<(action: string) => void>(() => "");
+
+export const HistoryActionContext = createContext<(action: string) => void>(() => "");
+
 
 type AppointmentDataset = AppointmentType[];
 
 function AppointmentHistory() {
+    const id = useId();
     const [view, setView] = useState("cards");
     const [searchValue, setSearchValue] = useState("");
     const [cardAction, setCardAction] = useState("");
     const [success, setSuccess] = useState(false);
     const [successfulAction, setSuccessfulAction] = useState("");
-
-    // Modal variables.
-    const [newAppointmentModal, setNewAppointmentModal] = useState(false);
-    const [availabilityModal, setAvailabilityModal] = useState(false);
+    const [displayedMonth, setDisplayedMonth] = useState("Febrero");
+    const [displayedYear, setDisplayedYear] = useState("2026");
 
     const data: AppointmentDataset = [
         {
@@ -112,36 +119,6 @@ function AppointmentHistory() {
         setTimeout(() => setSuccess(false), 3000);
     };
 
-    function onSaveAppointment() {
-        setNewAppointmentModal(false);
-        showSuccessModal("¡Cita creada correctamente!");
-    };
-
-    function onSaveAvailability() {
-        setAvailabilityModal(false);
-        showSuccessModal("¡Disponibilidad actualizada correctamente!");
-    };
-
-    function onUpdateStatus(action: string) {
-        setCardAction("");
-
-        if (action === "complete") {
-            // Include the PUT controller to update the appointment's status.
-            showSuccessModal("¡Cita marcada como completa correctamente!");
-        } else if (action === "pending") {
-            // Include the PUT controller to update the appointment's status.
-            showSuccessModal("¡Cita marcada como pendiente correctamente!");
-        } else if (action === "cancel") {
-            // Include the PUT controller to update the appointment's status.
-            showSuccessModal("¡Cita cancelada correctamente!");
-        };
-    }
-
-    function onModifyAppointment() {
-        setCardAction(""); // Close the action modal.
-        // Include the PUT controller to update the appointment.
-        showSuccessModal("¡Cita actualizada correctamente!");
-    };
 
     function onRemoveAppointment() {
         setCardAction(""); // Close the action modal.
@@ -157,16 +134,13 @@ function AppointmentHistory() {
         setCardAction(action);
     };
 
+    const recordMonths = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    const recordYears = ["2026", "2025"];
+
     return (
-        <SystemLayout sidebarPage="appointments" isAnyModal={newAppointmentModal || availabilityModal || cardAction === "cancel" || cardAction === "complete" || cardAction === "modify" || cardAction === "remove" || cardAction === "pending"}
+        <SystemLayout sidebarPage="history" isAnyModal={cardAction === "cancel" || cardAction === "complete" || cardAction === "modify" || cardAction === "remove" || cardAction === "pending"}
             modals={
                 <>
-                    <NewAppointmentModal onSave={onSaveAppointment} isVisible={newAppointmentModal} onClose={() => setNewAppointmentModal(false)} />
-                    <AvailabilityModal onSave={onSaveAvailability} isVisible={availabilityModal} onClose={() => setAvailabilityModal(false)} />
-                    <CancelAppointmentModal onSave={() => onUpdateStatus("cancel")} isVisible={cardAction === "cancel"} onClose={() => setCardAction("")} />
-                    <CompleteAppointment onSave={() => onUpdateStatus("complete")} isVisible={cardAction === "complete"} onClose={() => setCardAction("")} />
-                    <PendingAppointment onSave={() => onUpdateStatus("pending")} isVisible={cardAction === "pending"} onClose={() => setCardAction("")} />
-                    <ModifyAppointmentModal onSave={onModifyAppointment} isVisible={cardAction === "modify"} onClose={() => setCardAction("")} />
                     <RemoveAppointModal onSave={onRemoveAppointment} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />
                 </>
             }>
@@ -174,16 +148,46 @@ function AppointmentHistory() {
             <SuccessModal isVisible={success} text={successfulAction} />
 
             <div className="header flex sm:flex-row flex-col justify-between items-start sm:gap-10 gap-6 w-full">
-                <PageTitle title="Registro de Citas" desc="Consulta y administra las citas agendadas por los usuarios en el sitio." />
-
-                <div className="buttons flex lg:flex-row flex-col gap-3 lg:min-w-110 sm:w-auto w-full sm:items-center sm:justify-end">
-                    <IconButton onClick={() => setNewAppointmentModal(true)} isActive={true} icon={<Plus size={18} />} text="Nueva cita manual" />
-                    <WhiteIconButton onClick={() => setAvailabilityModal(true)} isIndigo={true} icon={<SquarePen size={18} />} text="Editar disponibilidad" />
-                </div>
+                <PageTitle title="Historial de Citas" desc="Consulta las citas que han tenido lugar en Hemisferios." />
             </div>
 
-            <FilterBar onViewChange={onViewChange} firstElement={<p className="text-lg font-medium text-slate-800">
-                Hay <span className="font-semibold text-indigo-500">{data.length}</span> citas pendientes</p>}
+            <FilterBar onViewChange={onViewChange} firstElement={
+                <div className="flex sm:flex-row flex-col gap-2 items-center justify-center">
+                    <p className="text-lg text-nowrap font-medium text-slate-800">Registro de</p>
+
+                    <Select defaultValue="01" value={displayedMonth} onValueChange={(val) => setDisplayedMonth(val)}>
+                        <SelectTrigger id={id} className={`w-full bg-white sm:text-sm text-base cursor-pointer py-5 px-3`}>
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white text-sm z-999" sideOffset={5} position="popper">
+                            <SelectGroup className="h-80 overflow-y-scroll">
+                                <SelectLabel className="text-sm">Mes del registro:</SelectLabel>
+                                {/* Map the available record months */}
+                                {recordMonths.map((item, id) =>
+                                    <SelectItem className="text-sm" key={id} value={item}>{item}</SelectItem>
+                                )}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+
+                    <p className="text-lg font-medium text-slate-800">de</p>
+
+                    <Select defaultValue="01" value={displayedYear} onValueChange={(val) => setDisplayedYear(val)}>
+                        <SelectTrigger id={id} className={`w-full bg-white sm:text-sm text-base cursor-pointer py-2 px-3`}>
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white text-sm z-999" sideOffset={5} position="popper">
+                            <SelectGroup className="h-80 overflow-y-scroll">
+                                <SelectLabel className="text-sm">Año del registro:</SelectLabel>
+                                {/* Map the available record months */}
+                                {recordYears.map((item, id) =>
+                                    <SelectItem className="text-sm" key={id} value={item}>{item}</SelectItem>
+                                )}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
+            }
             />
 
             {(data.length === 0) ? (
@@ -193,11 +197,11 @@ function AppointmentHistory() {
                     image={historyEmpty}
                 />
             ) : (view === "cards") ? (
-                <CardActionContext.Provider value={onActionSelected}>
-                    <AppointmentGrid onActionSelected={onActionSelected} data={appointmentPages} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
-                </CardActionContext.Provider>
+                <HistoryActionContext.Provider value={onActionSelected}>
+                    <AppointmentGrid page="history" onActionSelected={onActionSelected} data={appointmentPages} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
+                </HistoryActionContext.Provider>
             ) : (view === "calendar") ? (
-                <AppointmentCalendar data={data} />
+                <AppointmentCalendar page="history" data={data} />
             ) : <></>
             }
         </ SystemLayout>
