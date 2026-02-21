@@ -9,7 +9,9 @@ import {
     Trash
 } from "lucide-react";
 import AppointmentDropdown from "./AppointmentDropdown";
-import { CardActionContext, PageContext } from "@/app/system/appointments/page";
+import { CardActionContext } from "@/app/system/appointments/page";
+import { HistoryActionContext } from "@/app/system/history/page";
+
 type CardProps = {
     status: string;
     patientName: string;
@@ -20,11 +22,12 @@ type CardProps = {
     hour: string;
     timestamp: string;
     onActionSelected: (action: string) => void;
+    page: "history" | "appointments";
 }
 
 function AppointmentCard(props: CardProps) {
     const setAction = useContext(CardActionContext);
-    const page = useContext(PageContext);
+    const setHistoryAction = useContext(HistoryActionContext);
 
     return (
         <div className="relative flex flex-col gap-1.5 overflow-y-visible rounded-md border border-slate-200 p-6 items-start justify-center overflow-x-hidden">
@@ -33,12 +36,12 @@ function AppointmentCard(props: CardProps) {
             <div className="relative w-full flex flex-row justify-between items-center">
                 <AppointmentTag type={props.status === "pending" ? "pending" : (props.status === "finished" ? "finished" : "cancelled")} />
 
-                {page === "appointments" && (
+                {props.page === "appointments" && (
                     <AppointmentDropdown appointmentStatus={props.status} />
                 )}
 
-                {page === "history" && (
-                    <Trash onClick={() => setAction("remove")} size={16} className="text-slate-600"/>
+                {props.page === "history" && (
+                    <Trash onClick={() => setHistoryAction("remove")} size={16} className="text-slate-600 cursor-pointer"/>
                 )}
             </div>
 

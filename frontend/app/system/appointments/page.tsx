@@ -17,7 +17,7 @@ import { AppointmentType } from "@/system/modules/Types";
 import { pageSeparator } from "@/system/modules/PageSeparator";
 
 export const CardActionContext = createContext<(action: string) => void>(() => "");
-export const PageContext = createContext("appointments");
+export const AppointmentPageContext = createContext("");
 
 type AppointmentDataset = AppointmentType[];
 
@@ -183,8 +183,11 @@ function AppointmentDashboard() {
                 </div>
             </div>
 
-            <FilterBar onViewChange={onViewChange} firstElement={<p className="text-lg font-medium text-slate-800">
-                Hay <span className="font-semibold text-indigo-500">{data.length}</span> citas pendientes</p>}
+            <FilterBar onViewChange={onViewChange} firstElement={
+                <p className="text-lg font-medium text-slate-800">
+                    Hay <span className="font-semibold text-indigo-500">{data.length}</span> citas pendientes
+                </p>
+            }
             />
 
             {(data.length === 0) ? (
@@ -194,13 +197,11 @@ function AppointmentDashboard() {
                     image={appointmentsEmpty}
                 />
             ) : (view === "cards") ? (
-                <PageContext.Provider value="appointments">
-                    <CardActionContext.Provider value={onActionSelected}>
-                        <AppointmentGrid onActionSelected={onActionSelected} data={appointmentPages} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
-                    </CardActionContext.Provider>
-                </PageContext.Provider>
+                <CardActionContext.Provider value={onActionSelected}>
+                    <AppointmentGrid page="appointments" onActionSelected={onActionSelected} data={appointmentPages} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
+                </CardActionContext.Provider>
             ) : (view === "calendar") ? (
-                <AppointmentCalendar data={data} />
+                <AppointmentCalendar page="appointments" data={data} />
             ) : <></>
             }
         </ SystemLayout>

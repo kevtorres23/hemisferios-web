@@ -24,6 +24,7 @@ type SpaceProps = {
 
 type CalendarUIProps = {
     data: AppointmentType[],
+    page: "history" | "appointments";
 };
 
 function CalendarDay(props: DayProps) {
