@@ -39,76 +39,6 @@ function AppointmentHistory() {
     const [displayedYear, setDisplayedYear] = useState("2026");
 
     const data: AppointmentDataset = [
-        {
-            status: "pending",
-            patientName: "Kevin",
-            fatherSurname: "Urbina",
-            motherSurname: "Torres",
-            phoneNumber: "6181889026",
-            date: "09/02/2026",
-            hour: "12:00",
-            timestamp: "today"
-        },
-        {
-            status: "finished",
-            patientName: "Kevin",
-            fatherSurname: "Urbina",
-            motherSurname: "Torres",
-            phoneNumber: "6181889026",
-            date: "10/02/2026",
-            hour: "15:00",
-            timestamp: "today"
-        },
-        {
-            status: "cancelled",
-            patientName: "Kevin",
-            fatherSurname: "Urbina",
-            motherSurname: "Torres",
-            phoneNumber: "6181889026",
-            date: "13/02/2026",
-            hour: "16:00",
-            timestamp: "today"
-        },
-        {
-            status: "pending",
-            patientName: "Kevin",
-            fatherSurname: "Urbina",
-            motherSurname: "Torres",
-            phoneNumber: "6181889026",
-            date: "14/02/2026",
-            hour: "15:00",
-            timestamp: "today"
-        },
-        {
-            status: "finished",
-            patientName: "Kevin",
-            fatherSurname: "Urbina",
-            motherSurname: "Torres",
-            phoneNumber: "6181889026",
-            date: "15/02/2026",
-            hour: "11:00",
-            timestamp: "today"
-        },
-        {
-            status: "cancelled",
-            patientName: "Kevin",
-            fatherSurname: "Urbina",
-            motherSurname: "Torres",
-            phoneNumber: "6181889026",
-            date: "16/02/2026",
-            hour: "12:00",
-            timestamp: "today"
-        },
-        {
-            status: "pending",
-            patientName: "Kevin",
-            fatherSurname: "Urbina",
-            motherSurname: "Torres",
-            phoneNumber: "6181889026",
-            date: "16/02/2026",
-            hour: "15:00",
-            timestamp: "today"
-        },
     ];
 
     let appointmentPages = pageSeparator(data);
@@ -152,40 +82,40 @@ function AppointmentHistory() {
             </div>
 
             <FilterBar onViewChange={onViewChange} firstElement={
-                <div className="flex sm:flex-row flex-col gap-2 items-center justify-center">
+                <div className="flex sm:flex-row flex-col gap-2 sm:items-center sm:justify-center sm:w-auto w-full">
                     <p className="text-lg text-nowrap font-medium text-slate-800">Registro de</p>
 
-                    <Select defaultValue="01" value={displayedMonth} onValueChange={(val) => setDisplayedMonth(val)}>
-                        <SelectTrigger id={id} className={`w-full bg-white sm:text-sm text-base cursor-pointer py-5 px-3`}>
-                            <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent className="bg-white text-sm z-999" sideOffset={5} position="popper">
-                            <SelectGroup className="h-80 overflow-y-scroll">
-                                <SelectLabel className="text-sm">Mes del registro:</SelectLabel>
-                                {/* Map the available record months */}
-                                {recordMonths.map((item, id) =>
-                                    <SelectItem className="text-sm" key={id} value={item}>{item}</SelectItem>
-                                )}
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
+                    <div className="flex flex-row gap-2 items-center justify-center">
+                        <Select defaultValue="01" value={displayedMonth} onValueChange={(val) => setDisplayedMonth(val)}>
+                            <SelectTrigger id={id} className={`w-full bg-white sm:text-sm text-base cursor-pointer py-5 px-3`}>
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent className="bg-white text-sm z-999" sideOffset={5} position="popper">
+                                <SelectGroup className="h-80 overflow-y-scroll">
+                                    <SelectLabel className="text-sm">Mes del registro:</SelectLabel>
+                                    {/* Map the available record months */}
+                                    {recordMonths.map((item, id) =>
+                                        <SelectItem className="text-sm" key={id} value={item}>{item}</SelectItem>
+                                    )}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
 
-                    <p className="text-lg font-medium text-slate-800">de</p>
-
-                    <Select defaultValue="01" value={displayedYear} onValueChange={(val) => setDisplayedYear(val)}>
-                        <SelectTrigger id={id} className={`w-full bg-white sm:text-sm text-base cursor-pointer py-2 px-3`}>
-                            <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent className="bg-white text-sm z-999" sideOffset={5} position="popper">
-                            <SelectGroup className="h-80 overflow-y-scroll">
-                                <SelectLabel className="text-sm">Año del registro:</SelectLabel>
-                                {/* Map the available record months */}
-                                {recordYears.map((item, id) =>
-                                    <SelectItem className="text-sm" key={id} value={item}>{item}</SelectItem>
-                                )}
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
+                        <Select defaultValue="01" value={displayedYear} onValueChange={(val) => setDisplayedYear(val)}>
+                            <SelectTrigger id={id} className={`w-full bg-white sm:text-sm text-base cursor-pointer py-2 px-3`}>
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent className="bg-white text-sm z-999" sideOffset={5} position="popper">
+                                <SelectGroup className="h-80 overflow-y-scroll">
+                                    <SelectLabel className="text-sm">Año del registro:</SelectLabel>
+                                    {/* Map the available record months */}
+                                    {recordYears.map((item, id) =>
+                                        <SelectItem className="text-sm" key={id} value={item}>{item}</SelectItem>
+                                    )}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </div>
                 </div>
             }
             />
