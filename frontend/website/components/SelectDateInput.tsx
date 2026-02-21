@@ -30,10 +30,10 @@ type SelectProps = {
 function SelectDateInput(props: SelectProps) {
     const id = useId();
     return (
-        <div className='w-full max-w-xs space-y-2'>
+        <div className='w-full space-y-2'>
             <Label className="text-slate-500 font-normal sm:text-sm text-base" htmlFor={id}>{props.label} <span className="text-red-500 text-lg font-semibold">*</span></Label>
             <Select value={props.value} onValueChange={(val) => props.onInputChange(val)}>
-                <SelectTrigger id={id} className={`w-full bg-white sm:text-sm text-base py-2 px-3 ${props.activeValidation ? "border border-red-500" : ""}`}>
+                <SelectTrigger id={id} className={`w-full bg-white sm:text-sm text-base cursor-pointer py-5 px-3 ${props.activeValidation ? "border border-red-500" : ""}`}>
                     <SelectValue className="" placeholder={
                         <div className="flex flex-row gap-2 items-center">
                             <Calendar size={16} />
@@ -41,7 +41,7 @@ function SelectDateInput(props: SelectProps) {
                         </div>
                     } />
                 </SelectTrigger>
-                <SelectContent className="bg-white" sideOffset={5} position="popper">
+                <SelectContent className="bg-white z-999" sideOffset={5} position="popper">
                     <SelectGroup>
                         <SelectLabel>Esta semana</SelectLabel>
                         {props.items.currentWeekList.map((item, id) =>

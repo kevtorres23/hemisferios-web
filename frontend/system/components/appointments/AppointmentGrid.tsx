@@ -13,7 +13,7 @@ type GridProps = {
 }
 
 function AppointmentGrid(props: GridProps) {
-    const [pages, setPages] = useState(props.data.length);
+    const [pages, setPages] = useState(props.data?.length);
     const [currentPage, setCurrentPage] = useState(1);
 
     // Filter variables.
@@ -47,8 +47,8 @@ function AppointmentGrid(props: GridProps) {
                         fatherSurname={item.fatherSurname}
                         motherSurname={item.motherSurname}
                         phoneNumber={item.phoneNumber}
-                        date={dateFormatter(item.date)} // Pasar item.date primero por AppointmentFormatter().
-                        hour={hourFormatter(item.hour)} // Pasar item.hour primero por AppointmentFormatter().
+                        date={dateFormatter(item.date)} // We pass item.date first by AppointmentFormatter().
+                        hour={hourFormatter(item.hour)} // We pass item.date first by AppointmentFormatter().
                         timestamp={item.timestamp}
                     />
                 )}
