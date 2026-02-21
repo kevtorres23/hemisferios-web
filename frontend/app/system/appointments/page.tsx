@@ -1,7 +1,8 @@
 "use client";
 import SystemLayout from "@/system/components/SystemLayout";
 import EmptyState from "@/system/components/EmptyState";
-import { NewAppointmentModal } from "@/system/components/appointments/CRUDModals";
+import { NewAppointmentModal } from "@/system/components/modals/AppointmentCRUDModals";
+import AvailabilityModal from "@/system/components/modals/AvailabilityModal";
 import SuccessModal from "@/system/components/modals/SuccessModal";
 import PageTitle from "@/system/components/PageTitle";
 import IconButton from "@/system/components/IconButton";
@@ -20,8 +21,10 @@ type AppointmentDataset = AppointmentType[];
 function AppointmentDashboard() {
     const [view, setView] = useState("cards");
     const [searchValue, setSearchValue] = useState("");
-    const [successModal, setSuccessModal] = useState(false);
+    const [successAppointment, setSuccessAppointment] = useState(false);
+    const [successAvailability, setSuccessAvailability] = useState(false);
     const [newAppointmentModal, setNewAppointmentModal] = useState(false);
+    const [availabilityModal, setAvailabilityModal] = useState(false);
 
     const data: AppointmentDataset = [
         {
@@ -98,8 +101,14 @@ function AppointmentDashboard() {
 
     function onSaveAppointment() {
         setNewAppointmentModal(false);
-        setSuccessModal(true);
-        setTimeout(() => setSuccessModal(false), 3000)
+        setSuccessAppointment(true);
+        setTimeout(() => setSuccessAppointment(false), 3000);
+    };
+
+    function onSaveAvailability() {
+        setAvailabilityModal(false);
+        setSuccessAvailability(true);
+        setTimeout(() => setSuccessAvailability(false), 3000)
     };
 
     let appointmentPages = pageSeparator(data);
@@ -109,21 +118,24 @@ function AppointmentDashboard() {
     };
 
     return (
-        <SystemLayout sidebarPage="appointments" isAnyModal={newAppointmentModal}
+        <SystemLayout sidebarPage="appointments" isAnyModal={newAppointmentModal || availabilityModal}
             modals={
                 <>
-                    <NewAppointmentModal onSave={onSaveAppointment} isVisible={newAppointmentModal} onSaveAppointment={onSaveAppointment} onClose={() => setNewAppointmentModal(false)} />
+                    <NewAppointmentModal onSave={onSaveAppointment} isVisible={newAppointmentModal} onClose={() => setNewAppointmentModal(false)} />
+                    <AvailabilityModal onSave={onSaveAvailability} isVisible={availabilityModal} onClose={() => setAvailabilityModal(false)} />
                 </>
             }>
 
-            <SuccessModal isVisible={successModal} text="¡Cita creada correctamente!" />
+            <SuccessModal isVisible={successAppointment} text="¡Cita creada correctamente!" />
+
+            <SuccessModal isVisible={successAvailability} text="¡Disponibilidad guardada correctamente!" />
 
             <div className="header flex sm:flex-row flex-col justify-between items-start sm:gap-10 gap-6 w-full">
                 <PageTitle title="Registro de Citas" desc="Consulta y administra las citas agendadas por los usuarios en el sitio." />
 
                 <div className="buttons flex lg:flex-row flex-col gap-3 lg:min-w-110 sm:w-auto w-full sm:items-center sm:justify-end">
                     <IconButton onClick={() => setNewAppointmentModal(true)} isActive={true} icon={<Plus size={18} />} text="Nueva cita manual" />
-                    <WhiteIconButton isIndigo={true} icon={<SquarePen size={18} />} text="Editar disponibilidad" />
+                    <WhiteIconButton onClick={() => setAvailabilityModal(true)} isIndigo={true} icon={<SquarePen size={18} />} text="Editar disponibilidad" />
                 </div>
             </div>
 

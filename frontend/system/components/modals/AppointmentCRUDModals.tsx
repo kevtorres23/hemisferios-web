@@ -1,19 +1,13 @@
 "use client";
 
-import MediumModal from "../modals/MediumModal";
+import MediumModal from "./MediumModal";
 import { Appointment } from "@/website/modules/Classes";
 import AppointmentForm from "@/website/components/CreateAppointmentForm";
 import { useAppointmentStore } from "@/website/modules/StoreAppointment";
+import { ModalProps } from "@/system/modules/Types";
 import { redirect } from "next/navigation";
 import axios from "axios";
 import { useState } from "react";
-
-type ModalProps = {
-    onSaveAppointment: () => void;
-    isVisible: boolean;
-    onClose: () => void;
-    onSave: () => void;
-};
 
 function NewAppointmentModal(props: ModalProps) {
     const saveAppointment = useAppointmentStore((state: any) => state.saveAppointment);

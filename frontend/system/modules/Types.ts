@@ -15,6 +15,12 @@ type TagType = {
     textColor: string;
     bgColor: string;
     borderColor: string;
-}
+};
 
-export type { AppointmentType, TagType };
+type ModalProps = {
+    isVisible: boolean;
+    onClose: () => void;
+    onSave: () => void;
+};
+
+export type { AppointmentType, TagType, ModalProps };
