@@ -1,7 +1,7 @@
 "use client";
 import SystemLayout from "@/system/components/SystemLayout";
 import EmptyState from "@/system/components/EmptyState";
-import { NewAppointmentModal } from "@/system/components/modals/AppointmentActions";
+import { NewAppointmentModal, CancelAppointmentModal, ModifyAppointmentModal, RemoveAppointModal, CompleteAppointment, PendingAppointment } from "@/system/components/modals/AppointmentActions";
 import AvailabilityModal from "@/system/components/modals/AvailabilityModal";
 import SuccessModal from "@/system/components/modals/SuccessModal";
 import PageTitle from "@/system/components/PageTitle";
@@ -11,18 +11,23 @@ import AppointmentCalendar from "@/system/components/appointments/AppointmentCal
 import WhiteIconButton from "@/system/components/WhiteIconButton";
 import FilterBar from "@/system/components/FilterBar";
 import { Plus, SquarePen } from "lucide-react";
-import { useState } from "react";
+import { useState, createContext } from "react";
 import historyEmpty from "../../../public/history-empty.png";
 import { AppointmentType } from "@/system/modules/Types";
 import { pageSeparator } from "@/system/modules/PageSeparator";
 
+export const CardActionContext = createContext<(action: string) => void>(() => "");
+
 type AppointmentDataset = AppointmentType[];
 
-function HistoryDashboard() {
+function AppointmentHistory() {
     const [view, setView] = useState("cards");
     const [searchValue, setSearchValue] = useState("");
-    const [successAppointment, setSuccessAppointment] = useState(false);
-    const [successAvailability, setSuccessAvailability] = useState(false);
+    const [cardAction, setCardAction] = useState("");
+    const [success, setSuccess] = useState(false);
+    const [successfulAction, setSuccessfulAction] = useState("");
+
+    // Modal variables.
     const [newAppointmentModal, setNewAppointmentModal] = useState(false);
     const [availabilityModal, setAvailabilityModal] = useState(false);
 
@@ -99,29 +104,104 @@ function HistoryDashboard() {
         },
     ];
 
+    let appointmentPages = pageSeparator(data);
+
+    function showSuccessModal(successMsg: string) {
+        setSuccess(true);
+        setSuccessfulAction(successMsg)
+        setTimeout(() => setSuccess(false), 3000);
+    };
+
     function onSaveAppointment() {
         setNewAppointmentModal(false);
-        setSuccessAppointment(true);
-        setTimeout(() => setSuccessAppointment(false), 3000);
+        showSuccessModal("¡Cita creada correctamente!");
     };
 
     function onSaveAvailability() {
         setAvailabilityModal(false);
-        setSuccessAvailability(true);
-        setTimeout(() => setSuccessAvailability(false), 3000)
+        showSuccessModal("¡Disponibilidad actualizada correctamente!");
     };
 
-    let appointmentPages = pageSeparator(data);
+    function onUpdateStatus(action: string) {
+        setCardAction("");
+
+        if (action === "complete") {
+            // Include the PUT controller to update the appointment's status.
+            showSuccessModal("¡Cita marcada como completa correctamente!");
+        } else if (action === "pending") {
+            // Include the PUT controller to update the appointment's status.
+            showSuccessModal("¡Cita marcada como pendiente correctamente!");
+        } else if (action === "cancel") {
+            // Include the PUT controller to update the appointment's status.
+            showSuccessModal("¡Cita cancelada correctamente!");
+        };
+    }
+
+    function onModifyAppointment() {
+        setCardAction(""); // Close the action modal.
+        // Include the PUT controller to update the appointment.
+        showSuccessModal("¡Cita actualizada correctamente!");
+    };
+
+    function onRemoveAppointment() {
+        setCardAction(""); // Close the action modal.
+        // Include the DELETE controller to remove the appointment.
+        showSuccessModal("Cita eliminada correctamente.");
+    };
 
     function onViewChange(selectedView: string) {
         setView(selectedView);
     };
 
-    return (
-        <SystemLayout sidebarPage="history" isAnyModal={newAppointmentModal || availabilityModal}>
+    function onActionSelected(action: string) {
+        setCardAction(action);
+    };
 
+    return (
+        <SystemLayout sidebarPage="appointments" isAnyModal={newAppointmentModal || availabilityModal || cardAction === "cancel" || cardAction === "complete" || cardAction === "modify" || cardAction === "remove" || cardAction === "pending"}
+            modals={
+                <>
+                    <NewAppointmentModal onSave={onSaveAppointment} isVisible={newAppointmentModal} onClose={() => setNewAppointmentModal(false)} />
+                    <AvailabilityModal onSave={onSaveAvailability} isVisible={availabilityModal} onClose={() => setAvailabilityModal(false)} />
+                    <CancelAppointmentModal onSave={() => onUpdateStatus("cancel")} isVisible={cardAction === "cancel"} onClose={() => setCardAction("")} />
+                    <CompleteAppointment onSave={() => onUpdateStatus("complete")} isVisible={cardAction === "complete"} onClose={() => setCardAction("")} />
+                    <PendingAppointment onSave={() => onUpdateStatus("pending")} isVisible={cardAction === "pending"} onClose={() => setCardAction("")} />
+                    <ModifyAppointmentModal onSave={onModifyAppointment} isVisible={cardAction === "modify"} onClose={() => setCardAction("")} />
+                    <RemoveAppointModal onSave={onRemoveAppointment} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />
+                </>
+            }>
+
+            <SuccessModal isVisible={success} text={successfulAction} />
+
+            <div className="header flex sm:flex-row flex-col justify-between items-start sm:gap-10 gap-6 w-full">
+                <PageTitle title="Registro de Citas" desc="Consulta y administra las citas agendadas por los usuarios en el sitio." />
+
+                <div className="buttons flex lg:flex-row flex-col gap-3 lg:min-w-110 sm:w-auto w-full sm:items-center sm:justify-end">
+                    <IconButton onClick={() => setNewAppointmentModal(true)} isActive={true} icon={<Plus size={18} />} text="Nueva cita manual" />
+                    <WhiteIconButton onClick={() => setAvailabilityModal(true)} isIndigo={true} icon={<SquarePen size={18} />} text="Editar disponibilidad" />
+                </div>
+            </div>
+
+            <FilterBar onViewChange={onViewChange} firstElement={<p className="text-lg font-medium text-slate-800">
+                Hay <span className="font-semibold text-indigo-500">{data.length}</span> citas pendientes</p>}
+            />
+
+            {(data.length === 0) ? (
+                <EmptyState
+                    header="¡No hay nada en el historial aún!"
+                    desc="Las citas aparecerán aquí cuando su fecha y hora establecidas hayan pasado."
+                    image={historyEmpty}
+                />
+            ) : (view === "cards") ? (
+                <CardActionContext.Provider value={onActionSelected}>
+                    <AppointmentGrid onActionSelected={onActionSelected} data={appointmentPages} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
+                </CardActionContext.Provider>
+            ) : (view === "calendar") ? (
+                <AppointmentCalendar data={data} />
+            ) : <></>
+            }
         </ SystemLayout>
     );
 };
 
-export default HistoryDashboard;
+export default AppointmentHistory;

@@ -17,6 +17,7 @@ import { AppointmentType } from "@/system/modules/Types";
 import { pageSeparator } from "@/system/modules/PageSeparator";
 
 export const CardActionContext = createContext<(action: string) => void>(() => "");
+export const PageContext = createContext("appointments");
 
 type AppointmentDataset = AppointmentType[];
 
@@ -24,8 +25,6 @@ function AppointmentDashboard() {
     const [view, setView] = useState("cards");
     const [searchValue, setSearchValue] = useState("");
     const [cardAction, setCardAction] = useState("");
-    const [successAppointment, setSuccessAppointment] = useState(false);
-    const [successAvailability, setSuccessAvailability] = useState(false);
     const [success, setSuccess] = useState(false);
     const [successfulAction, setSuccessfulAction] = useState("");
 
@@ -195,9 +194,11 @@ function AppointmentDashboard() {
                     image={appointmentsEmpty}
                 />
             ) : (view === "cards") ? (
-                <CardActionContext.Provider value={onActionSelected}>
-                    <AppointmentGrid onActionSelected={onActionSelected} data={appointmentPages} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
-                </CardActionContext.Provider>
+                <PageContext.Provider value="appointments">
+                    <CardActionContext.Provider value={onActionSelected}>
+                        <AppointmentGrid onActionSelected={onActionSelected} data={appointmentPages} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
+                    </CardActionContext.Provider>
+                </PageContext.Provider>
             ) : (view === "calendar") ? (
                 <AppointmentCalendar data={data} />
             ) : <></>

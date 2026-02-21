@@ -1,12 +1,15 @@
 import { AppointmentType } from "@/system/modules/Types";
+import { useContext } from "react";
 import AppointmentTag from "./AppointmentTag";
 import {
     CalendarFold,
     ClockIcon,
     Phone,
     CircleUserRound,
+    Trash
 } from "lucide-react";
 import AppointmentDropdown from "./AppointmentDropdown";
+import { CardActionContext, PageContext } from "@/app/system/appointments/page";
 type CardProps = {
     status: string;
     patientName: string;
@@ -16,10 +19,12 @@ type CardProps = {
     date: string;
     hour: string;
     timestamp: string;
-    onActionSelected: (action: string) => void; 
+    onActionSelected: (action: string) => void;
 }
 
 function AppointmentCard(props: CardProps) {
+    const setAction = useContext(CardActionContext);
+    const page = useContext(PageContext);
 
     return (
         <div className="relative flex flex-col gap-1.5 overflow-y-visible rounded-md border border-slate-200 p-6 items-start justify-center overflow-x-hidden">
@@ -28,7 +33,13 @@ function AppointmentCard(props: CardProps) {
             <div className="relative w-full flex flex-row justify-between items-center">
                 <AppointmentTag type={props.status === "pending" ? "pending" : (props.status === "finished" ? "finished" : "cancelled")} />
 
-                <AppointmentDropdown appointmentStatus={props.status}/>
+                {page === "appointments" && (
+                    <AppointmentDropdown appointmentStatus={props.status} />
+                )}
+
+                {page === "history" && (
+                    <Trash onClick={() => setAction("remove")} size={16} className="text-slate-600"/>
+                )}
             </div>
 
             <p className="text-base font-medium text-slate-900">{props.patientName} {props.fatherSurname} {props.motherSurname}</p>
