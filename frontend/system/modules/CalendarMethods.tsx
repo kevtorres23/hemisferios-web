@@ -1,6 +1,6 @@
 // PURPOSE OF THE MODULE: to perform calculations needed for the calendar or the availability.
 
-import { AppointmentType } from "@/system/modules/Types";
+import { AppointmentType } from "@/lib/Types";
 
 // This function returns the hours in which the appointments will take place during the week.
 function calendarHoursCreator(appointments: AppointmentType[]) {

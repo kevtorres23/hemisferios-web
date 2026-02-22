@@ -1,3 +1,5 @@
+import { PatientHistory } from "./Types";
+
 class ContactMessage {
     // Defining the class initializers.
     name: string;
@@ -13,8 +15,8 @@ class ContactMessage {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.message = message;
-    }
-}
+    };
+};
 
 class Appointment {
     // Class initializers.
@@ -37,8 +39,8 @@ class Appointment {
         this.date = date;
         this.hour = hour;
         this.timestamp = timestamp;
-    }
-}
+    };
+};
 
 class AppointmentInput {
     value: string;
@@ -49,7 +51,31 @@ class AppointmentInput {
         this.value = value;
         this.isValidationActive = isValidationActive;
         this.validationMsg = validationMsg;
-    }
-}
+    };
+};
 
-export { ContactMessage, Appointment, AppointmentInput };
+class Patient {
+    name: string;
+    fatherSurname: string;
+    motherSurname: string;
+    adultName: string;
+    contactNumber: string;
+    startingDate: string;
+    paymentFrequency: string;
+    paymentModality: string;
+    appointmentHistory: PatientHistory[];
+
+    constructor(name: string, fatherSurname: string, motherSurname: string, adultName: string, contactNumber: string, startingDate: string, paymentFrequency: string, paymentModality: string, appointmentHistory: PatientHistory[]) {
+        this.name = name;
+        this.fatherSurname = fatherSurname;
+        this.motherSurname = motherSurname;
+        this.adultName = adultName;
+        this.contactNumber = contactNumber;
+        this.startingDate = startingDate;
+        this.paymentFrequency = paymentFrequency;
+        this.paymentModality = paymentModality;
+        this.appointmentHistory = appointmentHistory;
+    };
+};
+
+export { ContactMessage, Appointment, AppointmentInput, Patient };

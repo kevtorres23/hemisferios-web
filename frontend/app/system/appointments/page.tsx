@@ -13,7 +13,7 @@ import FilterBar from "@/system/components/FilterBar";
 import { Plus, SquarePen } from "lucide-react";
 import { useState, createContext } from "react";
 import appointmentsEmpty from "../../../public/appointments-empty.png";
-import { AppointmentType } from "@/system/modules/Types";
+import { AppointmentType } from "@/lib/Types";
 import { pageSeparator } from "@/system/modules/PageSeparator";
 
 export const CardActionContext = createContext<(action: string) => void>(() => "");
@@ -24,13 +24,13 @@ type AppointmentDataset = AppointmentType[];
 function AppointmentDashboard() {
     const [view, setView] = useState("cards");
     const [searchValue, setSearchValue] = useState("");
-    const [cardAction, setCardAction] = useState("");
-    const [success, setSuccess] = useState(false);
     const [successfulAction, setSuccessfulAction] = useState("");
 
     // Modal variables.
     const [newAppointmentModal, setNewAppointmentModal] = useState(false);
     const [availabilityModal, setAvailabilityModal] = useState(false);
+    const [cardAction, setCardAction] = useState("");
+    const [success, setSuccess] = useState(false);
 
     const data: AppointmentDataset = [
         {
@@ -136,11 +136,10 @@ function AppointmentDashboard() {
             // Include the PUT controller to update the appointment's status.
             showSuccessModal("¡Cita cancelada correctamente!");
         };
-    }
+    };
 
     function onModifyAppointment() {
         setCardAction(""); // Close the action modal.
-        // Include the PUT controller to update the appointment.
         showSuccessModal("¡Cita actualizada correctamente!");
     };
 

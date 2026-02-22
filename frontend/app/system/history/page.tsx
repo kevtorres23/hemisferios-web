@@ -10,7 +10,7 @@ import AppointmentCalendar from "@/system/components/appointments/AppointmentCal
 import FilterBar from "@/system/components/FilterBar";
 import { useState, createContext } from "react";
 import historyEmpty from "../../../public/history-empty.png";
-import { AppointmentType } from "@/system/modules/Types";
+import { AppointmentType } from "@/lib/Types";
 import { pageSeparator } from "@/system/modules/PageSeparator";
 import {
     Select,
@@ -20,7 +20,7 @@ import {
     SelectLabel,
     SelectTrigger,
     SelectValue
-} from '@/components/ui/select'
+} from '@/components/ui/select';
 
 
 export const HistoryActionContext = createContext<(action: string) => void>(() => "");

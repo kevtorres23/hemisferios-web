@@ -31,11 +31,17 @@ function MobileNavbar(props: NavbarProps) {
             {/* Collapsable menu for smaller screen sizes */}
             {open && (
                 <div className="w-full flex flex-col gap-2 bg-slate-100 border border-slate-200 p-4 rounded-lg">
-                    <SidebarLink name="Registro de citas" icon={<ClipboardClock size={18} />} isActive={props.activePage === "appointments"} />
+                    <Link href={"/system/appointments"}>
+                        <SidebarLink name="Registro de citas" icon={<ClipboardClock size={18} />} isActive={props.activePage === "appointments"} />
+                    </Link>
 
-                    <SidebarLink name="Historial de citas" icon={<History size={18} />} isActive={props.activePage === "history"} />
+                    <Link href={"/system/history"}>
+                        <SidebarLink name="Historial de citas" icon={<History size={18} />} isActive={props.activePage === "history"} />
+                    </Link>
 
-                    <SidebarLink name="Pacientes" icon={<CircleUserRound size={18} />} isActive={props.activePage === "patients"} />
+                    <Link href={"/system/patients"}>
+                        <SidebarLink name="Pacientes" icon={<CircleUserRound size={18} />} isActive={props.activePage === "patients"} />
+                    </Link>
 
                     <SidebarLink name="Terapeutas" icon={<Heart size={18} />} isActive={props.activePage === "therapists"} />
 

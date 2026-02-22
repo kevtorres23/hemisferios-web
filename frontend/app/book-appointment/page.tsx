@@ -2,10 +2,10 @@
 
 import Navbar from "@/website/components/Navbar";
 import axios from "axios";
-import { Appointment } from "@/website/modules/Classes";
+import { Appointment } from "@/lib/Classes";
 import Footer from "@/website/components/Footer";
 import { CircleCheck } from "lucide-react";
-import AppointmentForm from "@/website/components/CreateAppointmentForm";
+import AppointmentForm from "@/website/components/NewAppointmentForm";
 import ChannelBox from "@/website/components/ChannelBox";
 import { useRef } from "react";
 import { isVisible } from "@/website/modules/VisibilityDetector";

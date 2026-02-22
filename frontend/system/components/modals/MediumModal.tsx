@@ -12,7 +12,7 @@ type ModalProps = {
     btnType?: "button" | "submit";
     btnForm?: string;
     confirmationBtnText: string;
-    onSave: () => void, // Function that will be triggered when the modal prompt is saved or accepted.
+    onSave?: () => void, // Function that will be triggered when the modal prompt is saved or accepted.
     onClose: () => void // Function to close the modal.
 }
 

@@ -1,4 +1,4 @@
-import { TagType } from "@/system/modules/Types";
+import { TagType } from "@/lib/Types";
 
 type TagProps = {
     type: "finished" | "pending" | "cancelled";

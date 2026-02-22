@@ -1,4 +1,4 @@
-import { AppointmentType } from "@/system/modules/Types";
+import { AppointmentType } from "@/lib/Types";
 import { useContext } from "react";
 import AppointmentTag from "./AppointmentTag";
 import {
