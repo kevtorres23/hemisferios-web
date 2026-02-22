@@ -20,7 +20,7 @@ function InputChange(
 
 // This function manipulates a select's value and validation state.
 
-function AppointmentSelectChange(
+function SelectChange(
     value: string,
     input: string,
     setInput: Dispatch<SetStateAction<string>>,
@@ -36,4 +36,4 @@ function AppointmentSelectChange(
     };
 }
 
-export { InputChange, AppointmentSelectChange };
+export { InputChange, SelectChange };

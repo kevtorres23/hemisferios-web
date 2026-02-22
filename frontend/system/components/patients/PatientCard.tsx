@@ -1,4 +1,4 @@
-import { PatientHistory } from "@/system/modules/Types";
+import { PatientHistory } from "@/lib/Types";
 import PaymentTag from "./PaymentTag";
 import { Button } from "@/components/ui/button";
 import { Ellipsis, SquarePen, Trash, UserRound, Phone, CircleUserRound, History } from "lucide-react";

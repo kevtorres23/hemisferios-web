@@ -4,7 +4,7 @@ import PageNavigator from "../PageNavigator";
 import FilterDropdown from "./FilterDropdown";
 import StatusDropdown from "./StatusDropdown";
 import { AppointmentCard } from "./AppointmentCard";
-import { AppointmentType } from "@/system/modules/Types";
+import { AppointmentType } from "@/lib/Types";
 import { dateFormatter, hourFormatter } from "@/system/modules/AppointmentFormatter";
 import { useState } from "react";
 

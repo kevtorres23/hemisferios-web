@@ -1,6 +1,6 @@
 // PURPOSE OF THE MODULE: to receive all the appointments stored in the database and separate them in 'n' pages that contain maximum nine appointments appointments each.
 
-import { AppointmentType, TherapistType } from "@/system/modules/Types";
+import { AppointmentType, TherapistType } from "@/lib/Types";
 
 type data = any[];
 

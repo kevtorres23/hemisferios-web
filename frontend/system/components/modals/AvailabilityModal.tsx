@@ -1,6 +1,6 @@
 import MediumModal from "./MediumModal";
 import Input from "@/website/components/Input";
-import { ModalProps } from "@/system/modules/Types";
+import { ModalProps } from "@/lib/Types";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import MultiSelect from "../MultiSelect";
 import { useState } from "react";

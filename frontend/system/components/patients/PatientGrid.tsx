@@ -3,7 +3,7 @@ import { useState } from "react";
 import PatientCard from "./PatientCard";
 import FilterDropdown from "../appointments/FilterDropdown";
 import PageNavigator from "../PageNavigator";
-import { PatientType } from "@/system/modules/Types";
+import { PatientType } from "@/lib/Types";
 
 type GridProps = {
     data: PatientType[][]; // A list containing the pages of a list of patient objects.

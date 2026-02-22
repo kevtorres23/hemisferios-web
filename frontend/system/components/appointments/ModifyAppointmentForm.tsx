@@ -6,7 +6,7 @@ import Input from "@/website/components/Input";
 import SelectDateInput from "@/website/components/SelectDateInput";
 import SelectHourInput from "@/website/components/SelectHourInput";
 import { CircleCheck } from "lucide-react";
-import { Appointment } from "@/website/modules/Classes";
+import { Appointment } from "@/lib/Classes";
 import InputWarning from "@/website/components/InputWarning";
 import { InputChange, AppointmentSelectChange } from "@/website/modules/InputChangeHandlers";
 import manageAvailability from "@/website/modules/ManageAvailability";

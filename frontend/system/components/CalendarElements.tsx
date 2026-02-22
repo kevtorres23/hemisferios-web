@@ -2,7 +2,7 @@
 
 import { calendarHoursCreator, daysDistance } from "../modules/CalendarMethods";
 import { AppointmentCardCalendar } from "./appointments/AppointmentCard";
-import { AppointmentType } from "../modules/Types";
+import { AppointmentType } from "../../lib/Types";
 
 type DayProps = {
     dayName?: string,

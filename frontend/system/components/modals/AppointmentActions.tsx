@@ -2,9 +2,9 @@
 
 import MediumModal from "./MediumModal";
 import SmallModal from "./SmallModal";
-import { Appointment } from "@/website/modules/Classes";
-import AppointmentForm from "@/website/components/CreateAppointmentForm";
-import { ModalProps } from "@/system/modules/Types";
+import { Appointment } from "@/lib/Classes";
+import AppointmentForm from "@/website/components/NewAppointmentForm";
+import { ModalProps } from "@/lib/Types";
 import axios from "axios";
 import { useState } from "react";
 
