@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import { PatientHistory } from "@/lib/Types";
+import { CardActionContext } from "@/app/system/patients/page";
 import PaymentTag from "./PaymentTag";
 import { Button } from "@/components/ui/button";
 import { Ellipsis, SquarePen, Trash, UserRound, Phone, CircleUserRound, History } from "lucide-react";
@@ -24,6 +26,8 @@ type PatientProps = {
 };
 
 function PatientCard(props: PatientProps) {
+    const setAction = useContext(CardActionContext);
+
     return (
         <div className="relative flex flex-col gap-2.5 overflow-y-visible rounded-md border border-slate-200 p-6 items-start justify-center overflow-x-hidden">
 
@@ -47,14 +51,14 @@ function PatientCard(props: PatientProps) {
                                 <p className="text-slate-800">Ver historial de citas</p>
                             </DropdownMenuItem>
 
-                            <DropdownMenuItem onClick={() => ""} className="flex flex-row gap-1.5 items-center">
+                            <DropdownMenuItem onClick={() => setAction("modify")} className="flex flex-row gap-1.5 items-center">
                                 <SquarePen size={16} className="text-slate-800" />
                                 <p className="text-slate-800">Modificar datos</p>
                             </DropdownMenuItem>
 
-                            <DropdownMenuItem onClick={() => ""} className="flex flex-row gap-1.5 items-center">
+                            <DropdownMenuItem onClick={() => setAction("remove")} className="flex flex-row gap-1.5 items-center">
                                 <Trash size={16} className="text-slate-800" />
-                                <p className="text-slate-800">Eliminar cita</p>
+                                <p className="text-slate-800">Eliminar paciente</p>
                             </DropdownMenuItem>
 
                         </DropdownMenuGroup>
@@ -75,7 +79,7 @@ function PatientCard(props: PatientProps) {
             </div>
 
             <div className="date flex flex-row gap-1 items-center justify-center">
-                <Phone size={16} className="text-slate-400"/>
+                <Phone size={16} className="text-slate-400" />
                 <p className="text-sm text-slate-900">
                     <span className="text-slate-400 font-medium">Contacto:</span> {props.contactNumber}
                 </p>

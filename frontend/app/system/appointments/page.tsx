@@ -140,7 +140,6 @@ function AppointmentDashboard() {
 
     function onModifyAppointment() {
         setCardAction(""); // Close the action modal.
-        // Include the PUT controller to update the appointment.
         showSuccessModal("¡Cita actualizada correctamente!");
     };
 

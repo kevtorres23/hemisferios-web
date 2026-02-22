@@ -20,10 +20,48 @@ function NewPatientModal(props: ModalProps) {
             confirmationBtnText="Registrar"
             onSave={props.onSave}
         >
-            <NewPatientForm sendData={saveBtnPressed}/>
+            <NewPatientForm sendData={saveBtnPressed} />
 
         </MediumModal>
     )
 };
 
-export { NewPatientModal };
+function ModifyPatientModal(props: ModalProps) {
+    function saveBtnPressed(patientObject: Patient) {
+        // PUT axios controller to update the appointment.
+    };
+
+    return (
+        <MediumModal
+            isVisible={props.isVisible}
+            btnType="submit"
+            btnForm="patientForm"
+            onClose={props.onClose}
+            title="Modificar datos del paciente"
+            confirmationBtnText="Guardar datos"
+            onSave={props.onSave}
+        >
+
+            <NewPatientForm isOnModify={true} sendData={saveBtnPressed} />
+
+        </MediumModal>
+    );
+};
+
+function RemovePatientModal(props: ModalProps) {
+    return (
+        <SmallModal
+            isVisible={props.isVisible}
+            title="Eliminar paciente"
+            message="¿Estás segur@ de que deseas eliminar este paciente?"
+            btnType="button"
+            onClose={props.onClose}
+            onSave={props.onSave}
+            confirmationBtnText="Eliminar"
+        >
+
+        </SmallModal>
+    );
+};
+
+export { NewPatientModal, ModifyPatientModal, RemovePatientModal };

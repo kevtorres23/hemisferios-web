@@ -12,6 +12,8 @@ function NewAppointmentModal(props: ModalProps) {
 
     function saveBtnPressed(receiptObject: Appointment, databaseOject: Appointment) {
         axios.post("http://localhost:5001/api/appointments", databaseOject);
+
+        props.onSave();
     };
 
     return (
@@ -22,7 +24,6 @@ function NewAppointmentModal(props: ModalProps) {
             onClose={props.onClose}
             title="Agendar una cita manualmente"
             confirmationBtnText="Guardar cita"
-            onSave={props.onSave}
         >
 
             <AppointmentForm sendData={saveBtnPressed} />
@@ -108,7 +109,7 @@ function ModifyAppointmentModal(props: ModalProps) {
             onSave={props.onSave}
         >
 
-            <AppointmentForm sendData={saveBtnPressed} />
+            <AppointmentForm isOnModify={true} sendData={saveBtnPressed} />
 
         </MediumModal>
     );

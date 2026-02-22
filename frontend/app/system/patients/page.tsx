@@ -1,6 +1,6 @@
 "use client";
 import SystemLayout from "@/system/components/SystemLayout";
-import { NewPatientModal } from "@/system/components/modals/PatientActions";
+import { NewPatientModal, ModifyPatientModal, RemovePatientModal } from "@/system/components/modals/PatientActions";
 import { pageSeparator } from "@/system/modules/PageSeparator";
 import IconButton from "@/system/components/IconButton";
 import SuccessModal from "@/system/components/modals/SuccessModal";
@@ -9,7 +9,9 @@ import { Plus, SquarePen } from "lucide-react";
 import PageTitle from "@/system/components/PageTitle";
 import { PatientType } from "@/lib/Types";
 import PatientGrid from "@/system/components/patients/PatientGrid";
-import { useState } from "react";
+import { useState, createContext } from "react";
+
+export const CardActionContext = createContext<(action: string) => void>(() => "");
 
 type PatientDataset = PatientType[];
 
@@ -40,6 +42,10 @@ function Patients() {
         }
     ];
 
+    function onActionSelected(action: string) {
+        setCardAction(action);
+    };
+
     let patientPages = pageSeparator(data);
 
     function showSuccessModal(successMsg: string) {
@@ -49,15 +55,32 @@ function Patients() {
     };
 
 
-    function onSavePatient() {
+    function savePatient() {
         setNewPatientModal(false);
         showSuccessModal("¡Paciente registrado correctamente!");
     };
 
+    function modifyPatient() {
+        setCardAction("");
+        showSuccessModal("¡Paciente actualizado correctamente!");
+    }
+
+    function removePatient() {
+        // DELETE axios controller.
+        setCardAction("");
+        showSuccessModal("Paciente eliminado correctamente.");
+    };
+
 
     return (
-        <SystemLayout sidebarPage="patients"
-            modals={<NewPatientModal onSave={onSavePatient} isVisible={newPatientModal} onClose={() => setNewPatientModal(false)} />}
+        <SystemLayout sidebarPage="patients" isAnyModal={newPatientModal || cardAction === "cancel" || cardAction === "modify"}
+            modals={
+                <>
+                    <NewPatientModal onSave={savePatient} isVisible={newPatientModal} onClose={() => setNewPatientModal(false)} />
+                    <RemovePatientModal onSave={removePatient} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />
+                    <ModifyPatientModal onSave={modifyPatient} isVisible={cardAction === "modify"} onClose={() => setCardAction("")} />
+                </>
+            }
         >
 
             <div className="header flex sm:flex-row flex-col justify-between items-start sm:gap-10 gap-6 w-full">
@@ -70,7 +93,9 @@ function Patients() {
 
             <SuccessModal isVisible={success} text={successfulAction} />
 
-            <PatientGrid data={patientPages} onSearchChange={() => ""} onActionSelected={() => ""} />
+            <CardActionContext.Provider value={onActionSelected}>
+                <PatientGrid data={patientPages} onSearchChange={() => ""} onActionSelected={() => ""} />
+            </CardActionContext.Provider>
         </ SystemLayout>
     );
 };
