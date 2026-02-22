@@ -1,6 +1,7 @@
 "use client";
 import SystemLayout from "@/system/components/SystemLayout";
 import { NewPatientModal, ModifyPatientModal, RemovePatientModal } from "@/system/components/modals/PatientActions";
+import PatientHistoryModal from "@/system/components/patients/PatientHistory";
 import { pageSeparator } from "@/system/modules/PageSeparator";
 import IconButton from "@/system/components/IconButton";
 import SuccessModal from "@/system/components/modals/SuccessModal";
@@ -39,7 +40,7 @@ function Patients() {
                     "hour": "09:00",
                 }
             ],
-        }
+        },
     ];
 
     function onActionSelected(action: string) {
@@ -71,14 +72,14 @@ function Patients() {
         showSuccessModal("Paciente eliminado correctamente.");
     };
 
-
     return (
-        <SystemLayout sidebarPage="patients" isAnyModal={newPatientModal || cardAction === "cancel" || cardAction === "modify"}
+        <SystemLayout sidebarPage="patients" isAnyModal={newPatientModal || cardAction === "cancel" || cardAction === "modify" || cardAction === "history"}
             modals={
                 <>
                     <NewPatientModal onSave={savePatient} isVisible={newPatientModal} onClose={() => setNewPatientModal(false)} />
                     <RemovePatientModal onSave={removePatient} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />
                     <ModifyPatientModal onSave={modifyPatient} isVisible={cardAction === "modify"} onClose={() => setCardAction("")} />
+                    <PatientHistoryModal historyData={data[0].appointmentHistory} isVisible={cardAction === "history"} onClose={() => setCardAction("")}/>
                 </>
             }
         >

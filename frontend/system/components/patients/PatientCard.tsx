@@ -46,7 +46,7 @@ function PatientCard(props: PatientProps) {
                     <DropdownMenuContent className="w-auto" align="start">
 
                         <DropdownMenuGroup className="">
-                            <DropdownMenuItem onClick={() => ""} className="flex flex-row gap-1.5 items-center">
+                            <DropdownMenuItem onClick={() => setAction("history")} className="flex flex-row gap-1.5 items-center">
                                 <History size={16} className="text-slate-800" />
                                 <p className="text-slate-800">Ver historial de citas</p>
                             </DropdownMenuItem>
