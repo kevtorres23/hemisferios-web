@@ -27,7 +27,9 @@ function Sidebar(props: SidebarProps) {
                         <SidebarLink name="Historial de citas" icon={<History size={18} />} isActive={props.activePage === "history"} />
                     </Link>
 
-                    <SidebarLink name="Pacientes" icon={<CircleUserRound size={18} />} isActive={props.activePage === "patients"} />
+                    <Link href={"/system/patients"}>
+                        <SidebarLink name="Pacientes" icon={<CircleUserRound size={18} />} isActive={props.activePage === "patients"} />
+                    </Link>
 
                     <SidebarLink name="Terapeutas" icon={<Heart size={18} />} isActive={props.activePage === "therapists"} />
 

@@ -9,6 +9,37 @@ type AppointmentType = {
     timestamp: string;
 };
 
+type PatientHistory = {
+    date: string;
+    hour: string;
+}
+
+type PatientType = {
+    name: string;
+    fatherSurname: string;
+    motherSurname: string;
+    adultName: string;
+    contactNumber: string;
+    startingDate: string;
+    paymentFrequency: string;
+    paymentModality: string;
+    appointmentHistory: PatientHistory[];
+};
+
+type TherapistSchedule = {
+    patient: string;
+    hour: string;
+    day: string;
+};
+
+type TherapistType = {
+    name: string;
+    lastName: string;
+    startingDate: string;
+    contactNumber: string;
+    schedule: TherapistSchedule[];
+};
+
 type TagType = {
     name: string;
     color: string;
@@ -23,4 +54,4 @@ type ModalProps = {
     onSave: () => void;
 };
 
-export type { AppointmentType, TagType, ModalProps };
+export type { AppointmentType, TagType, ModalProps, PatientType, TherapistType, PatientHistory };
