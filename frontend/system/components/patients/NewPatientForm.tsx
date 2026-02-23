@@ -3,7 +3,7 @@ import Input from "@/website/components/Input";
 import InputWarning from "@/website/components/InputWarning";
 import { InputChange, SelectChange } from "@/website/modules/InputChangeHandlers";
 import { SelectFrequency, SelectModality } from "./PaymentSelects";
-import { SelectStartingDate } from "./SelectStartingDate";
+import { SelectStartingDate } from "../SelectStartingDate";
 import { useState } from "react";
 
 type FormProps = {
@@ -21,7 +21,6 @@ function NewPatientForm(props: FormProps) {
     const [startingDate, setStartingDate] = useState("");
     const [paymentFrequency, setPaymentFrequency] = useState("");
     const [paymentModality, setPaymentModality] = useState("");
-    const [appointmentHistory, setAppointmentHistory] = useState("");
 
     // Input validations.
     const [validationsShot, setValidationsShot] = useState(false);
@@ -33,7 +32,6 @@ function NewPatientForm(props: FormProps) {
     const [startingDateValidation, setStartingDateValidation] = useState(false);
     const [frequencyValidation, setFrequencyValidation] = useState(false);
     const [modalityValidation, setModalityValidation] = useState(false);
-    const [historyValidation, setHistoryValidation] = useState(false);
 
     function shootValidations(e: React.FormEvent) {
         e.preventDefault();
@@ -63,11 +61,11 @@ function NewPatientForm(props: FormProps) {
                 <InputWarning message="Por favor, escribe el nombre del adulto responsable." />
             )}
 
-            <Input type="text" textValue={contactNumber} label="Número de contacto" onInputChange={(e) => InputChange(e, adultName, setAdultName, validationsShot, setAdultValidation)} activeValidation={adultValidation} />
-            {adultValidation && (
+            <Input type="text" textValue={contactNumber} label="Número de contacto" onInputChange={(e) => InputChange(e, contactNumber, setContactNumber, validationsShot, setNumberValidation)} activeValidation={numberValidation} />
+            {numberValidation && (
                 <InputWarning message="Por favor, ingresa un número de teléfono válido." />
             )}
-            
+
             <label className="label gap-3 flex flex-col w-full">
                 <div className="flex flex-row gap-2">
                     <p className="text-slate-500 sm:text-sm text-base m-0 p-0">
@@ -76,17 +74,20 @@ function NewPatientForm(props: FormProps) {
                 </div>
 
                 <SelectStartingDate />
+                {startingDateValidation && (
+                    <InputWarning message="Por favor, selecciona una fecha." />
+                )}
             </label>
 
             <div className="flex md:flex-row flex-col gap-4 items-center justify-center">
                 <div className="father-surname-field flex flex-col gap-2 w-full">
-                    <SelectFrequency label="frecuencia de terapia:" value={paymentFrequency} onInputChange={(val) => SelectChange(val, paymentFrequency, setPaymentFrequency, validationsShot, setFrequencyValidation)} activeValidation={frequencyValidation} />
-                    {fatherSurnameValid && <InputWarning message="Por favor, selecciona un tipo." />}
+                    <SelectFrequency label="Frecuencia de terapia:" value={paymentFrequency} onInputChange={(val) => SelectChange(val, paymentFrequency, setPaymentFrequency, validationsShot, setFrequencyValidation)} activeValidation={frequencyValidation} />
+                    {frequencyValidation && <InputWarning message="Por favor, selecciona un tipo." />}
                 </div>
 
                 <div className="mother-surname-field flex flex-col gap-2 w-full">
-                    <SelectModality label="Fecha de la cita:" value={paymentFrequency} onInputChange={(val) => SelectChange(val, paymentModality, setPaymentModality, validationsShot, setModalityValidation)} activeValidation={modalityValidation} />
-                    {motherSurnameValid && <InputWarning message="Por favor, selecciona un tipo." />}
+                    <SelectModality label="Tipo de pago:" value={paymentFrequency} onInputChange={(val) => SelectChange(val, paymentModality, setPaymentModality, validationsShot, setModalityValidation)} activeValidation={modalityValidation} />
+                    {modalityValidation && <InputWarning message="Por favor, selecciona un tipo." />}
                 </div>
             </div>
         </form>

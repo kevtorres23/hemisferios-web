@@ -1,9 +1,7 @@
-import { useContext } from "react";
-import { PatientHistory } from "@/lib/Types";
-import { CardActionContext } from "@/app/system/patients/page";
-import PaymentTag from "./PaymentTag";
+import { useState, useContext } from "react";
+import { CardActionContext } from "@/app/system/therapists/page";
 import { Button } from "@/components/ui/button";
-import { Ellipsis, SquarePen, Trash, UserRound, Phone, CircleUserRound, History } from "lucide-react";
+import { Ellipsis, SquarePen, Trash, Calendar, Phone, Heart, History } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -12,27 +10,30 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-type PatientProps = {
-    name: string;
-    fatherSurname: string;
-    motherSurname: string;
-    adultName: string;
-    contactNumber: string;
-    startingDate: string;
-    paymentFrequency: string;
-    paymentModality: string;
-    appointmentHistory: PatientHistory[];
+type TherapistSchedule = {
+    patient: string;
+    hour: string;
+    day: string;
 };
 
-function PatientCard(props: PatientProps) {
+type TherapistProps = {
+    name: string;
+    lastName: string;
+    startingDate: string;
+    contactNumber: string;
+    schedule: TherapistSchedule[];
+};
+
+function TherapistCard(props: TherapistProps) {
     const setAction = useContext(CardActionContext);
+    const [patientNum, setPatientNum] = useState(0);
 
     return (
         <div className="relative flex flex-col gap-2.5 overflow-y-visible rounded-md border border-slate-200 p-6 items-start justify-center overflow-x-hidden">
 
             <div className="relative w-full flex flex-row justify-between items-center">
-                <div className="user-badge p-1.5 rounded-md bg-[rgb(20,184,166,0.15)]">
-                    <CircleUserRound size={24} className="text-teal-500" />
+                <div className="user-badge p-1.5 rounded-md bg-[rgb(14,165,233,0.15)]">
+                    <Heart size={24} className="text-sky-500" />
                 </div>
 
                 <DropdownMenu>
@@ -45,9 +46,9 @@ function PatientCard(props: PatientProps) {
                     <DropdownMenuContent className="w-auto" align="start">
 
                         <DropdownMenuGroup className="">
-                            <DropdownMenuItem onClick={() => setAction("history")} className="flex flex-row gap-1.5 items-center">
+                            <DropdownMenuItem onClick={() => setAction("schedule")} className="flex flex-row gap-1.5 items-center">
                                 <History size={16} className="text-slate-800" />
-                                <p className="text-slate-800">Ver historial de citas</p>
+                                <p className="text-slate-800">Ver horario de la semana</p>
                             </DropdownMenuItem>
 
                             <DropdownMenuItem onClick={() => setAction("modify")} className="flex flex-row gap-1.5 items-center">
@@ -57,7 +58,7 @@ function PatientCard(props: PatientProps) {
 
                             <DropdownMenuItem onClick={() => setAction("remove")} className="flex flex-row gap-1.5 items-center">
                                 <Trash size={16} className="text-slate-800" />
-                                <p className="text-slate-800">Eliminar paciente</p>
+                                <p className="text-slate-800">Eliminar terapeuta</p>
                             </DropdownMenuItem>
 
                         </DropdownMenuGroup>
@@ -66,30 +67,25 @@ function PatientCard(props: PatientProps) {
                 </DropdownMenu>
             </div>
 
-            <p className="text-base font-medium text-slate-900">{props.name} {props.fatherSurname} {props.motherSurname}</p>
-
-            <PaymentTag modality={props.paymentModality} frequency={props.paymentFrequency} />
+            <p className="text-base font-medium text-slate-900">{props.name} {props.lastName}</p>
 
             <div className="date flex flex-row gap-1 items-center justify-center">
-                <UserRound size={16} className="text-slate-400" />
+                <Calendar size={16} className="text-slate-400" />
                 <p className="text-sm text-slate-900">
-                    <span className="text-slate-400 font-medium">Responsable:</span> {props.adultName}
+                    <span className="text-slate-400 font-medium">Inicio:</span> {props.startingDate}
                 </p>
             </div>
 
             <div className="date flex flex-row gap-1 items-center justify-center">
                 <Phone size={16} className="text-slate-400" />
                 <p className="text-sm text-slate-900">
-                    <span className="text-slate-400 font-medium">Contacto:</span> {props.contactNumber}
+                    <span className="text-slate-400 font-medium">Teléfono:</span> {props.contactNumber}
                 </p>
             </div>
 
-            <div className="flex flex-row gap-2">
-                <p className="text-sm font-medium text-indigo-500">Próximo pago: </p>
-                <p className="text-sm font-normal text-slate-900">10 de abril</p>
-            </div>
+            <p className="text-sm font-medium text-indigo-500">{patientNum} pacientes esta semana</p>
         </div>
     );
 };
 
-export default PatientCard;
+export default TherapistCard;

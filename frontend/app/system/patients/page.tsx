@@ -1,6 +1,8 @@
 "use client";
 import SystemLayout from "@/system/components/SystemLayout";
 import { NewPatientModal, ModifyPatientModal, RemovePatientModal } from "@/system/components/modals/PatientActions";
+import EmptyState from "@/system/components/EmptyState";
+import patientsEmpty from "../../../public/patients-empty.png";
 import PatientHistoryModal from "@/system/components/patients/PatientHistory";
 import { pageSeparator } from "@/system/modules/PageSeparator";
 import IconButton from "@/system/components/IconButton";
@@ -78,7 +80,7 @@ function Patients() {
                     <NewPatientModal onSave={savePatient} isVisible={newPatientModal} onClose={() => setNewPatientModal(false)} />
                     <RemovePatientModal onSave={removePatient} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />
                     <ModifyPatientModal onSave={modifyPatient} isVisible={cardAction === "modify"} onClose={() => setCardAction("")} />
-                    <PatientHistoryModal historyData={data[0].appointmentHistory} isVisible={cardAction === "history"} onClose={() => setCardAction("")}/>
+                    <PatientHistoryModal historyData={data[0].appointmentHistory} isVisible={cardAction === "history"} onClose={() => setCardAction("")} />
                 </>
             }
         >
@@ -93,10 +95,20 @@ function Patients() {
 
             <SuccessModal isVisible={success} text={successfulAction} />
 
-            <CardActionContext.Provider value={onActionSelected}>
-                <PatientGrid data={patientPages} onSearchChange={() => ""} onActionSelected={() => ""} />
-            </CardActionContext.Provider>
-        </ SystemLayout>
+
+            {(data.length === 0) ? (
+                <EmptyState
+                    header="¡No hay pacientes registrados aún!"
+                    desc="Empieza registrando un paciente para empezar a ver la lista."
+                    image={patientsEmpty}
+                />
+            ) : (
+                < CardActionContext.Provider value={onActionSelected}>
+                    <PatientGrid data={patientPages} onSearchChange={() => ""} onActionSelected={() => ""} />
+                </CardActionContext.Provider>
+            )}
+
+        </ SystemLayout >
     );
 };
 
