@@ -1,8 +1,8 @@
 // REUSABLE UI ELEMENTS USED TO BUILD THE APPOINTMENT CALENDAR.
 
-import { calendarHoursCreator, daysDistance } from "../modules/CalendarMethods";
-import { AppointmentCardCalendar } from "./appointments/AppointmentCard";
-import { AppointmentType } from "../../lib/Types";
+import { calendarHoursCreator, daysDistance } from "../../modules/CalendarMethods";
+import { AppointmentCardCalendar } from "./AppointmentCard";
+import { AppointmentType } from "../../../lib/Types";
 
 type DayProps = {
     dayName?: string,

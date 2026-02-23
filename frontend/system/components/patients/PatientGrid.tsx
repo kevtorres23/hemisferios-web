@@ -41,18 +41,14 @@ function PatientGrid(props: GridProps) {
                     <p className="text-sm font-medium text-slate-500">Filtrar por pago:</p>
 
                     <div className='space-y-2'>
-                        <Select value={paymentOption} onValueChange={(val) => setPaymentOption(val)}>
+                        <Select defaultValue="todos" value={paymentOption} onValueChange={(val) => setPaymentOption(val)}>
                             <SelectTrigger id={id} className={`bg-white sm:text-sm text-base cursor-pointer py-5 px-3`}>
-                                <SelectValue className="" placeholder={
-                                    <div className="flex flex-row gap-2 items-center">
-                                        <HandCoins size={16} />
-                                        <p className="sm:text-sm text-base">Tipo de pago</p>
-                                    </div>
-                                } />
+                                <SelectValue defaultValue="todos" className="" />
                             </SelectTrigger>
                             <SelectContent className="bg-white text-sm z-999" sideOffset={5} position="popper">
                                 <SelectGroup className="">
                                     <SelectLabel className="text-sm">Hora de la cita</SelectLabel>
+                                    <SelectItem className="text-sm" value="todos">Todo tipo</SelectItem>
                                     <SelectItem className="text-sm" value="tarjeta">Tarjeta</SelectItem>
                                     <SelectItem className="text-sm" value="efectivo">Efectivo</SelectItem>
                                 </SelectGroup>
@@ -81,7 +77,6 @@ function PatientGrid(props: GridProps) {
                         paymentFrequency={item.paymentFrequency}
                         paymentModality={item.paymentModality}
                         appointmentHistory={item.appointmentHistory}
-                        onActionSelected={() => ""}
                     />
                 )}
             </div>

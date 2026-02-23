@@ -43,7 +43,9 @@ function MobileNavbar(props: NavbarProps) {
                         <SidebarLink name="Pacientes" icon={<CircleUserRound size={18} />} isActive={props.activePage === "patients"} />
                     </Link>
 
-                    <SidebarLink name="Terapeutas" icon={<Heart size={18} />} isActive={props.activePage === "therapists"} />
+                    <Link href={"/system/patients"}>
+                        <SidebarLink name="Terapeutas" icon={<Heart size={18} />} isActive={props.activePage === "therapists"} />
+                    </Link>
 
                     <SidebarLink name="Estadísticas" icon={<ChartBar size={18} />} isActive={props.activePage === "statistics"} />
 

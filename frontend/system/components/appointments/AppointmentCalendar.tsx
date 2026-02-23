@@ -3,7 +3,7 @@
 import { useState } from "react";
 import PageNavigator from "../PageNavigator";
 import { AppointmentType } from "@/lib/Types";
-import { CalendarUI } from "../CalendarElements";
+import { CalendarUI } from "./CalendarElements";
 import StatusDropdown from "./StatusDropdown";
 
 type CalendarProps = {

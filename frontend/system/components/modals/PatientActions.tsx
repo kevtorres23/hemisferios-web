@@ -28,14 +28,14 @@ function NewPatientModal(props: ModalProps) {
 
 function ModifyPatientModal(props: ModalProps) {
     function saveBtnPressed(patientObject: Patient) {
-        // PUT axios controller to update the appointment.
+        // PUT axios controller to update the patient.
     };
 
     return (
         <MediumModal
             isVisible={props.isVisible}
             btnType="submit"
-            btnForm="patientForm"
+            btnForm="patientForm" // It should be "editPatientForm", find out how to change this dynamically.
             onClose={props.onClose}
             title="Modificar datos del paciente"
             confirmationBtnText="Guardar datos"
