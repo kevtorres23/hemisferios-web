@@ -40,6 +40,16 @@ type TherapistType = {
     schedule: TherapistSchedule[];
 };
 
+type CommentType = {
+    name: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+    message: string;
+    status: string; // It can be seen or unseen.
+    date: string;
+};
+
 type TagType = {
     name: string;
     color: string;
@@ -54,4 +64,11 @@ type ModalProps = {
     onSave: () => void;
 };
 
-export type { AppointmentType, TagType, ModalProps, PatientType, TherapistType, PatientHistory };
+export type {
+    AppointmentType,
+    TagType, ModalProps,
+    PatientType,
+    TherapistType,
+    PatientHistory,
+    CommentType
+};

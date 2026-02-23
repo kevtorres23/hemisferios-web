@@ -1,4 +1,4 @@
-import SolidIconButton from "./IconButton";
+import IconButton from "./IconButton";
 import OutlineIconButton from "./WhiteIconButton";
 import { SquareChartGantt, CalendarDays } from "lucide-react";
 import { useState } from "react";
@@ -29,8 +29,8 @@ function FilterBar(props: BarProps) {
                 <p className="text-sm self-center text-center font-medium text-slate-500">Vista:</p>
 
                 <div className="flex sm:flex-row flex-col gap-3 sm:items-center sm:justify-center">
-                    <SolidIconButton onClick={onCardsPressed} isActive={activeView === "cards"} icon={<SquareChartGantt size={18} />} text="Tarjetas" />
-                    <SolidIconButton onClick={onCalendarPressed} isActive={activeView === "calendar"} icon={<CalendarDays size={18} />} text="Calendario" />
+                    <IconButton onClick={onCardsPressed} isActive={activeView === "cards"} icon={<SquareChartGantt size={18} />} text="Tarjetas" />
+                    <IconButton onClick={onCalendarPressed} isActive={activeView === "calendar"} icon={<CalendarDays size={18} />} text="Calendario" />
                 </div>
             </div>
         </div>
