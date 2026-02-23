@@ -37,7 +37,9 @@ function Sidebar(props: SidebarProps) {
 
                     <SidebarLink name="Estadísticas" icon={<ChartBar size={18} />} isActive={props.activePage === "statistics"} />
 
-                    <SidebarLink name="Comentarios" icon={<MessageCircle size={18} />} isActive={props.activePage === "statistics"} />
+                    <Link href={"/system/comments"}>
+                        <SidebarLink name="Comentarios" icon={<MessageCircle size={18} />} isActive={props.activePage === "comments"} />
+                    </Link>
                 </div>
             </div>
 

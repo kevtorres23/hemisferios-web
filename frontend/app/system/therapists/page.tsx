@@ -1,4 +1,5 @@
 "use client";
+
 import SystemLayout from "@/system/components/SystemLayout";
 import { NewTherapistModal, ModifyTherapistModal, RemoveTherapistModal } from "@/system/components/modals/TherapistActions";
 import EmptyState from "@/system/components/EmptyState";
@@ -72,7 +73,7 @@ function Therapists() {
     };
 
     return (
-        <SystemLayout sidebarPage="therapists" isAnyModal={newTherapistModal || cardAction === "cancel" || cardAction === "modify" || cardAction === "history"}
+        <SystemLayout sidebarPage="therapists" isAnyModal={newTherapistModal || cardAction === "cancel" || cardAction === "modify" || cardAction === "history" || cardAction === "remove"}
             modals={
                 <>
                     <NewTherapistModal onSave={saveTherapist} isVisible={newTherapistModal} onClose={() => setNewTherapistModal(false)} />
@@ -99,11 +100,9 @@ function Therapists() {
                     image={therapistEmpty}
                 />
             ) : (cardAction === "schedule") ? (
-                <>
-                    <CardActionContext.Provider value={onActionSelected}>
-                        <TherapistSchedule data={data} mode="view" />
-                    </CardActionContext.Provider>
-                </>
+                <CardActionContext.Provider value={onActionSelected}>
+                    <TherapistSchedule data={data} mode="view" />
+                </CardActionContext.Provider>
             ) : (
                 <CardActionContext.Provider value={onActionSelected}>
                     <TherapistGrid data={therapistPages} onSearchChange={() => ""} />

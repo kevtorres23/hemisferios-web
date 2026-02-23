@@ -13,7 +13,7 @@ type ModalProps = {
     btnForm?: string;
     confirmationBtnText: string;
     onSave?: () => void, // Function that will be triggered when the modal prompt is saved or accepted.
-    onClose: () => void // Function to close the modal.
+    onClose?: () => void // Function to close the modal.
 }
 
 function MediumModal(props: ModalProps) {
@@ -36,7 +36,7 @@ function MediumModal(props: ModalProps) {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default MediumModal;
