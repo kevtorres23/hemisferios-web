@@ -6,6 +6,9 @@ import SystemLayout from "@/system/components/SystemLayout";
 import PageTitle from "@/system/components/PageTitle";
 import StatisticCard from "@/system/components/statistics/StatisticCard";
 import CircleChartCard from "@/system/components/statistics/CircleChartCard";
+import RelevantNumbersCard from "@/system/components/statistics/RelevantNumbers";
+import MostFrequentPatients from "@/system/components/statistics/MostFrequentPatients";
+import BarChartCard from "@/system/components/statistics/BarChartCard";
 import {
     Select,
     SelectContent,
@@ -55,9 +58,17 @@ function Statistics() {
                     <StatisticCard type="cancelled" number={12} percentage={-3.5} />
                 </div>
             </div>
-            
-            <div className="second-card-row gap-6 w-full lg:flex-row flex-col">
-                <CircleChartCard/>
+
+            <div className="second-card-row gap-6 w-full flex lg:flex-row flex-col">
+                <CircleChartCard />
+
+                <RelevantNumbersCard />
+            </div>
+
+            <div className="third-card-row gap-6 w-full flex lg:flex-row flex-col">
+                <MostFrequentPatients />
+
+                <BarChartCard />
             </div>
         </ SystemLayout>
     );
