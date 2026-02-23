@@ -1,4 +1,5 @@
 "use client";
+
 import SystemLayout from "@/system/components/SystemLayout";
 import EmptyState from "@/system/components/EmptyState";
 import { NewAppointmentModal, CancelAppointmentModal, ModifyAppointmentModal, RemoveAppointModal, CompleteAppointment, PendingAppointment } from "@/system/components/modals/AppointmentActions";
