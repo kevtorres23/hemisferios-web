@@ -7,6 +7,7 @@ import whiteLogo from "../../public/white-logo.png"; import dynamic from "next/d
 import PrintableReceipt from "@/website/modules/PDFHandling/PDFGenerator";
 
 type ReceiptProps = {
+    status: string;
     patientName: string;
     motherSurname: string;
     fatherSurname: string;
@@ -75,7 +76,7 @@ function Receipt(props: ReceiptProps) {
                         </p>
 
                         <p className="text-sm font-normal text-slate-900">
-                            {props.fatherSurname}
+                            {props.motherSurname}
                         </p>
                     </div>
 

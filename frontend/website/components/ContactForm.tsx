@@ -3,7 +3,7 @@
 import Input from "./Input";
 import { useState } from "react";
 import { ArrowRight, CircleAlert } from "lucide-react";
-import { ContactMessage } from "@/website/modules/Classes";
+import { ContactMessage } from "@/lib/Classes";
 import { useRef } from "react";
 import { isVisible } from "@/website/modules/VisibilityDetector";
 import { InputChange } from "@/website/modules/InputChangeHandlers";

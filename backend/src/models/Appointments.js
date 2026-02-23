@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const appointmentSchema = new mongoose.Schema({
+    status: {
+        type: String,
+        required: true,
+        default: "pending",
+    },
     patientName: {
         type: String,
         required: true
