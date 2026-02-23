@@ -5,7 +5,6 @@ import PatientHistoryModal from "@/system/components/patients/PatientHistory";
 import { pageSeparator } from "@/system/modules/PageSeparator";
 import IconButton from "@/system/components/IconButton";
 import SuccessModal from "@/system/components/modals/SuccessModal";
-import WhiteIconButton from "@/system/components/WhiteIconButton";
 import { Plus, SquarePen } from "lucide-react";
 import PageTitle from "@/system/components/PageTitle";
 import { PatientType } from "@/lib/Types";
