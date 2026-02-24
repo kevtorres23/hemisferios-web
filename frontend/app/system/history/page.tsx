@@ -1,18 +1,18 @@
 "use client";
 
-import SystemLayout from "@/system/components/SystemLayout";
-import EmptyState from "@/system/components/EmptyState";
-import { NewAppointmentModal, CancelAppointmentModal, ModifyAppointmentModal, RemoveAppointModal, CompleteAppointment, PendingAppointment } from "@/system/components/modals/AppointmentActions";
-import SuccessModal from "@/system/components/modals/SuccessModal";
+import SystemLayout from "@/components/system/SystemLayout";
+import EmptyState from "@/components/system/EmptyState";
+import { NewAppointmentModal, CancelAppointmentModal, ModifyAppointmentModal, RemoveAppointModal, CompleteAppointment, PendingAppointment } from "@/components/system/modals/AppointmentActions";
+import SuccessModal from "@/components/system/modals/SuccessModal";
 import { useId } from "react";
-import PageTitle from "@/system/components/PageTitle";
-import AppointmentGrid from "@/system/components/appointments/AppointmentGrid";
-import AppointmentCalendar from "@/system/components/appointments/AppointmentCalendar";
-import FilterBar from "@/system/components/FilterBar";
+import PageTitle from "@/components/system/PageTitle";
+import AppointmentGrid from "@/components/system/appointments/AppointmentGrid";
+import AppointmentCalendar from "@/components/system/appointments/AppointmentCalendar";
+import FilterBar from "@/components/system/FilterBar";
 import { useState, createContext } from "react";
 import historyEmpty from "../../../public/history-empty.png";
-import { AppointmentType } from "@/lib/Types";
-import { pageSeparator } from "@/system/modules/PageSeparator";
+import { AppointmentType } from "@/utils/types";
+import { pageSeparator } from "@/utils/system/page-separator";
 import {
     Select,
     SelectContent,

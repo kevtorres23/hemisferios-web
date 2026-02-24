@@ -1,8 +1,8 @@
-import Navbar from "@/website/components/Navbar"
-import Footer from "@/website/components/Footer";
-import WrittenMessage from "@/website/sections/contact/WrittenMessage";
-import OtherChannels from "@/website/sections/contact/OtherChannels";
-import LocationMap from "@/website/sections/contact/LocationMap";
+import Navbar from "@/components/website/Navbar"
+import Footer from "@/components/website/Footer";
+import WrittenMessage from "@/components/website/ui-sections/contact/WrittenMessage";
+import OtherChannels from "@/components/website/ui-sections/contact/OtherChannels";
+import LocationMap from "@/components/website/ui-sections/contact/LocationMap";
 
 function Contact() {
     return (

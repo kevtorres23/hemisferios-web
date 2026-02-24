@@ -30,6 +30,10 @@ const appointmentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    cancellationComment: {
+        type: String,
+        required: false,
+    },
 },
     { timestamps: true }
 );

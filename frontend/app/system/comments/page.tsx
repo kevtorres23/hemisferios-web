@@ -1,18 +1,18 @@
 "use client";
 
 import { useEffect } from "react";
-import SystemLayout from "@/system/components/SystemLayout";
-import { RemoveCommentModal, SeeCommentModal } from "@/system/components/modals/CommentActions";
+import SystemLayout from "@/components/system/SystemLayout";
+import { RemoveCommentModal, SeeCommentModal } from "@/components/system/modals/CommentActions";
 import { CircleDotDashed, BookCheck } from "lucide-react";
-import EmptyState from "@/system/components/EmptyState";
+import EmptyState from "@/components/system/EmptyState";
 import commentsEmpty from "../../../public/comments-empty.png";
-import PageTitle from "@/system/components/PageTitle";
+import PageTitle from "@/components/system/PageTitle";
 import { useState, createContext } from "react";
-import IconButton from "@/system/components/IconButton";
-import SuccessModal from "@/system/components/modals/SuccessModal";
-import { CommentType } from "@/lib/Types";
-import { pageSeparator } from "@/system/modules/PageSeparator";
-import CommentGrid from "@/system/components/comments/CommentGrid";
+import IconButton from "@/components/system/IconButton";
+import SuccessModal from "@/components/system/modals/SuccessModal";
+import { CommentType } from "@/utils/types";
+import { pageSeparator } from "@/utils/system/page-separator";
+import CommentGrid from "@/components/system/comments/CommentGrid";
 
 export const CardActionContext = createContext<(action: string) => void>(() => "");
 

@@ -1,18 +1,18 @@
 "use client";
 
-import SystemLayout from "@/system/components/SystemLayout";
-import { NewTherapistModal, ModifyTherapistModal, RemoveTherapistModal } from "@/system/components/modals/TherapistActions";
-import EmptyState from "@/system/components/EmptyState";
-import TherapistSchedule from "@/system/components/therapists/TherapistSchedule";
+import SystemLayout from "@/components/system/SystemLayout";
+import { NewTherapistModal, ModifyTherapistModal, RemoveTherapistModal } from "@/components/system/modals/TherapistActions";
+import EmptyState from "@/components/system/EmptyState";
+import TherapistSchedule from "@/components/system/therapists/TherapistSchedule";
 import therapistEmpty from "../../../public/therapists-empty.png";
-import { pageSeparator } from "@/system/modules/PageSeparator";
-import IconButton from "@/system/components/IconButton";
-import SuccessModal from "@/system/components/modals/SuccessModal";
+import { pageSeparator } from "@/utils/system/page-separator";
+import IconButton from "@/components/system/IconButton";
+import SuccessModal from "@/components/system/modals/SuccessModal";
 import { Plus, SquarePen } from "lucide-react";
-import PageTitle from "@/system/components/PageTitle";
-import { TherapistType } from "@/lib/Types";
+import PageTitle from "@/components/system/PageTitle";
+import { TherapistType } from "@/utils/types";
 import { useState, createContext } from "react";
-import TherapistGrid from "@/system/components/therapists/TherapistGrid";
+import TherapistGrid from "@/components/system/therapists/TherapistGrid";
 
 export const CardActionContext = createContext<(action: string) => void>(() => "");
 

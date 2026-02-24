@@ -2,13 +2,13 @@
 
 import { useState, useId } from "react";
 import { Calendar } from "lucide-react";
-import SystemLayout from "@/system/components/SystemLayout";
-import PageTitle from "@/system/components/PageTitle";
-import StatisticCard from "@/system/components/statistics/StatisticCard";
-import CircleChartCard from "@/system/components/statistics/CircleChartCard";
-import RelevantNumbersCard from "@/system/components/statistics/RelevantNumbers";
-import MostFrequentPatients from "@/system/components/statistics/MostFrequentPatients";
-import BarChartCard from "@/system/components/statistics/BarChartCard";
+import SystemLayout from "@/components/system/SystemLayout";
+import PageTitle from "@/components/system/PageTitle";
+import StatisticCard from "@/components/system/statistics/StatisticCard";
+import CircleChartCard from "@/components/system/statistics/CircleChartCard";
+import RelevantNumbersCard from "@/components/system/statistics/RelevantNumbers";
+import MostFrequentPatients from "@/components/system/statistics/MostFrequentPatients";
+import BarChartCard from "@/components/system/statistics/BarChartCard";
 import {
     Select,
     SelectContent,
