@@ -64,7 +64,7 @@ function MultiSelect(props: MultiSelectProps) {
                 defaultOptions={categories}
                 placeholder="Selecciona horas"
                 emptyIndicator={<p className='text-center text-sm'>Se seleccionaron todas las horas.</p>}
-                className='w-full h-full'
+                className='w-full'
             />
         </div>
     )

@@ -18,8 +18,8 @@ type ModalProps = {
 
 function MediumModal(props: ModalProps) {
     return (
-        <div className={`dark-background ${props.isVisible ? "absolute" : "hidden"} z-999 w-full h-screen top-0 left-0 bg-[rgb(0,0,0,0.25)] flex items-center justify-center`}>
-            <div className="modal-window fixed flex flex-col bg-white sm:max-h-10/12 no-scrollbar overflow-y-scroll sm:h-auto h-full sm:rounded-lg rounded-none p-6 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.2)] gap-5 max-w-xl w-full">
+        <div className={`dark-background ${props.isVisible ? "absolute" : "hidden"} z-99 w-full h-screen top-0 left-0 bg-[rgb(0,0,0,0.25)] flex items-center justify-center`}>
+            <div className="modal-window mb-20 fixed flex flex-col bg-white sm:max-h-10/12 no-scrollbar overflow-y-scroll sm:h-auto h-full sm:rounded-lg rounded-none p-6 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.2)] gap-5 max-w-xl w-full">
                 <h1 className="text-xl tracking-tight font-semibold text-slate-800">{props.title}</h1>
 
                 {/* Handle other operations */}

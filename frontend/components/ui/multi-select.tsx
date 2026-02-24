@@ -533,7 +533,7 @@ const MultipleSelector = ({
                 disabled ||
                 selected.length < 1 ||
                 selected.filter(s => s.fixed).length === selected.length) &&
-                'hidden'
+              'hidden'
             )}
             aria-label='Clear all'
           >
@@ -544,7 +544,7 @@ const MultipleSelector = ({
       <div className='relative'>
         <div
           className={cn(
-            'border-input absolute top-2 z-10 w-full overflow-hidden rounded-md border',
+            'border-input top-2 z-10 w-full overflow-hidden rounded-md border',
             'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
             !open && 'hidden'
           )}
@@ -552,7 +552,7 @@ const MultipleSelector = ({
         >
           {open && (
             <CommandList
-              className='bg-popover text-popover-foreground max-h-60 shadow-lg outline-hidden'
+              className='bg-popover text-popover-foreground shadow-lg outline-hidden'
               onMouseLeave={() => {
                 setOnScrollbar(false)
               }}
@@ -571,7 +571,7 @@ const MultipleSelector = ({
                   {CreatableItem()}
                   {!selectFirstItem && <CommandItem value='-' className='hidden' />}
                   {Object.entries(selectables).map(([key, dropdowns]) => (
-                    <CommandGroup key={key} heading={key} className='h-full overflow-auto'>
+                    <CommandGroup key={key} heading={key} className='overflow-auto'>
                       <>
                         {dropdowns.map(option => {
                           return (
