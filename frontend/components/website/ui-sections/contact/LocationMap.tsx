@@ -2,7 +2,7 @@
 
 import SectionBadge from "@/components/website/SectionBadge";
 import Image from "next/image";
-import blob from "../../../public/blob.png";
+import blob from "../../../../public/blob.png";
 import { isVisible } from "@/utils/website/visibility-detector";
 import { useRef } from "react";
 

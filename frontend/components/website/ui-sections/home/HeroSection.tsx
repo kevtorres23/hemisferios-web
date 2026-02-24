@@ -5,8 +5,8 @@ import Image from "next/image";
 import NormalButton from "@/components/website/NormalButton";
 import TextButton from "@/components/website/TextButton";
 import BrainTag from "@/components/website/BrainTag";
-import brainIllustration from "../../../public/hero-brain.png"
-import blob from "../../../public/blob.png";
+import brainIllustration from "../../../../public/hero-brain.png"
+import blob from "../../../../public/blob.png";
 import { isVisible }  from "@/utils/website/visibility-detector";
 
 function HeroSection() {

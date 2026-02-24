@@ -1,9 +1,9 @@
 "use client";
 
 import TeamMember from "@/components/website/TeamMember";
-import ArletPicture from "../../../public/person2.png";
+import ArletPicture from "../../../../public/person2.png";
 import Image from "next/image";
-import blob from "../../../public/blob3.png";
+import blob from "../../../../public/blob3.png";
 import { isVisible } from "@/utils/website/visibility-detector";
 import { useRef } from "react";
 

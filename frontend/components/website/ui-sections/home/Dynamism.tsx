@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import NormalButton from "@/components/website/NormalButton";
-import kids from "../../../public/kids.png";
+import kids from "../../../../public/kids.png";
 import SectionBadge from "@/components/website/SectionBadge";
 import { isVisible } from "@/utils/website/visibility-detector";
 
