@@ -21,6 +21,7 @@ type WeekDayObject = {
 
 type FormProps = {
     sendData: (receiptObject: Appointment, databaseOject: Appointment) => void;
+    formId: string;
     isOnModify?: boolean;
 };
 
@@ -134,7 +135,7 @@ function AppointmentForm(props: FormProps) {
     };
 
     return (
-        <form id="appointmentForm" onSubmit={(e) => shootValidations(e)} className="flex flex-col gap-4 w-full">
+        <form id={props.formId} onSubmit={(e) => shootValidations(e)} className="flex flex-col gap-4 w-full">
 
             <div className="name-field flex flex-col gap-2 w-full">
                 <Input type="text" textValue={patientName} label="Nombre(s) del paciente" onInputChange={(e) => InputChange(e, patientName, setPatientName, validationsShot, setNameValidation)} activeValidation={nameValidation} />

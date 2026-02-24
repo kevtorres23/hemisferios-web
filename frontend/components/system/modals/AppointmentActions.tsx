@@ -26,7 +26,7 @@ function NewAppointmentModal(props: ModalProps) {
             confirmationBtnText="Guardar cita"
         >
 
-            <AppointmentForm sendData={saveBtnPressed} />
+            <AppointmentForm sendData={saveBtnPressed} formId="appointmentForm" />
 
         </MediumModal>
     );
@@ -102,14 +102,14 @@ function ModifyAppointmentModal(props: ModalProps) {
         <MediumModal
             isVisible={props.isVisible}
             btnType="submit"
-            btnForm="appointmentForm"
+            btnForm="modifyAppointment"
             onClose={props.onClose}
             title="Modificar datos de la cita"
             confirmationBtnText="Guardar cambios"
             onSave={props.onSave}
         >
 
-            <AppointmentForm isOnModify={true} sendData={saveBtnPressed} />
+            <AppointmentForm isOnModify={true} sendData={saveBtnPressed} formId="modifyAppointment" />
 
         </MediumModal>
     );
