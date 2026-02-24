@@ -1,15 +1,15 @@
 "use client";
 
-import Navbar from "@/website/components/Navbar";
+import Navbar from "@/components/website/Navbar";
 import axios from "axios";
-import { Appointment } from "@/lib/Classes";
-import Footer from "@/website/components/Footer";
+import { Appointment } from "@/utils/classes";
+import Footer from "@/components/website/Footer";
 import { CircleCheck } from "lucide-react";
-import AppointmentForm from "@/website/components/NewAppointmentForm";
-import ChannelBox from "@/website/components/ChannelBox";
+import AppointmentForm from "@/components/website/NewAppointmentForm";
+import ChannelBox from "@/components/website/ChannelBox";
 import { useRef } from "react";
-import { isVisible } from "@/website/modules/VisibilityDetector";
-import { useAppointmentStore } from "@/website/modules/StoreAppointment";
+import { isVisible } from "@/utils/website/visibility-detector";
+import { useAppointmentStore } from "@/utils/website/store-appointments";
 import { redirect } from "next/navigation";
 
 function BookAppointment() {

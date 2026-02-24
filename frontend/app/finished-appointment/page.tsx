@@ -1,11 +1,11 @@
 "use client";
 
-import Navbar from "@/website/components/Navbar"
-import Footer from "@/website/components/Footer";
-import { useAppointmentStore } from "@/website/modules/StoreAppointment";
+import Navbar from "@/components/website/Navbar"
+import Footer from "@/components/website/Footer";
+import { useAppointmentStore } from "@/utils/website/store-appointments";
 import Image from "next/image";
 import music from "../../public/music.png";
-import Receipt from "@/website/components/Receipt";
+import Receipt from "@/components/website/Receipt";
 import { Check } from "lucide-react";
 
 

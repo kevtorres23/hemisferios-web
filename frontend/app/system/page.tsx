@@ -1,4 +1,4 @@
-import SystemLogin from "@/system/components/Login";
+import SystemLogin from "@/components/system/Login";
 
 function Home() {
     return (

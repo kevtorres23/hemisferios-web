@@ -8,7 +8,7 @@ import { Command as CommandPrimitive, useCommandState } from 'cmdk'
 import { XIcon } from 'lucide-react'
 
 import { Command, CommandGroup, CommandItem, CommandList } from '@/components/ui/command'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils/utils'
 
 export interface Option {
   value: string
