@@ -1,16 +1,16 @@
 "use client";
-import SystemLayout from "@/system/components/SystemLayout";
-import { NewPatientModal, ModifyPatientModal, RemovePatientModal } from "@/system/components/modals/PatientActions";
-import EmptyState from "@/system/components/EmptyState";
+import SystemLayout from "@/components/system/SystemLayout";
+import { NewPatientModal, ModifyPatientModal, RemovePatientModal } from "@/components/system/modals/PatientActions";
+import EmptyState from "@/components/system/EmptyState";
 import patientsEmpty from "../../../public/patients-empty.png";
-import PatientHistoryModal from "@/system/components/patients/PatientHistory";
-import { pageSeparator } from "@/system/modules/PageSeparator";
-import IconButton from "@/system/components/IconButton";
-import SuccessModal from "@/system/components/modals/SuccessModal";
+import PatientHistoryModal from "@/components/system/patients/PatientHistory";
+import { pageSeparator } from "@/utils/system/page-separator";
+import IconButton from "@/components/system/IconButton";
+import SuccessModal from "@/components/system/modals/SuccessModal";
 import { Plus, SquarePen } from "lucide-react";
-import PageTitle from "@/system/components/PageTitle";
-import { PatientType } from "@/lib/Types";
-import PatientGrid from "@/system/components/patients/PatientGrid";
+import PageTitle from "@/components/system/PageTitle";
+import { PatientType } from "@/utils/types";
+import PatientGrid from "@/components/system/patients/PatientGrid";
 import { useState, createContext } from "react";
 
 export const CardActionContext = createContext<(action: string) => void>(() => "");
