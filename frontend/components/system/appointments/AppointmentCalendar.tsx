@@ -1,5 +1,6 @@
 "use client";
 
+import { weekCreator } from "@/utils/system/calendar-methods";
 import { useState } from "react";
 import PageNavigator from "../PageNavigator";
 import { AppointmentType } from "@/utils/types";
@@ -10,6 +11,8 @@ type CalendarProps = {
     data: AppointmentType[];
     page: "history" | "appointments";
 };
+
+console.log(weekCreator(30, 5));
 
 function AppointmentCalendar(props: CalendarProps) {
     // State variables.
