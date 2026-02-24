@@ -5,7 +5,7 @@ import { isVisible } from "@/utils/website/visibility-detector";
 import WhiteButton from "@/components/website/WhiteButton";
 import SectionBadge from "@/components/website/SectionBadge";
 import Image from "next/image";
-import workTime from "../../../public/work-time.png"
+import workTime from "../../../../public/work-time.png"
 
 function CallToAction() {
     const ref1 = useRef(null);

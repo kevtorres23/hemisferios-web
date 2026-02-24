@@ -2,7 +2,7 @@
 
 import SectionBadge from "@/components/website/SectionBadge";
 import Image from "next/image";
-import notification from "../../../public/notification.png";
+import notification from "../../../../public/notification.png";
 import ContactChannel from "@/components/website/ContactChannel";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { useRef } from "react";

@@ -3,10 +3,10 @@
 import { useRef } from "react";
 import TestimonialCard from "@/components/website/TestimonialCard";
 import { isVisible } from "@/utils/website/visibility-detector";
-import person1 from "../../../public/person1.png";
-import person2 from "../../../public/person2.png";
-import person3 from "../../../public/person3.png";
-import person4 from "../../../public/person4.png";
+import person1 from "../../../../public/person1.png";
+import person2 from "../../../../public/person2.png";
+import person3 from "../../../../public/person3.png";
+import person4 from "../../../../public/person4.png";
 import SectionBadge from "@/components/website/SectionBadge";
 
 function Testimonials() {
