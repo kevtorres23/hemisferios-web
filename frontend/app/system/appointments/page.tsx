@@ -39,27 +39,27 @@ function AppointmentDashboard() {
             fatherSurname: "Urbina",
             motherSurname: "Torres",
             phoneNumber: "6181889026",
-            date: "09/02/2026",
-            hour: "12:00",
+            date: "28/02/2026",
+            hour: "11:00",
             timestamp: "today"
         },
         {
             status: "finished",
-            patientName: "Kevin",
+            patientName: "Keny",
             fatherSurname: "Urbina",
             motherSurname: "Torres",
             phoneNumber: "6181889026",
-            date: "10/02/2026",
-            hour: "15:00",
+            date: "23/02/2026",
+            hour: "11:00",
             timestamp: "today"
         },
         {
             status: "cancelled",
-            patientName: "Kevin",
+            patientName: "Kezy",
             fatherSurname: "Urbina",
             motherSurname: "Torres",
             phoneNumber: "6181889026",
-            date: "13/02/2026",
+            date: "23/02/2026",
             hour: "16:00",
             timestamp: "today"
         },
@@ -69,7 +69,7 @@ function AppointmentDashboard() {
             fatherSurname: "Urbina",
             motherSurname: "Torres",
             phoneNumber: "6181889026",
-            date: "14/02/2026",
+            date: "24/02/2026",
             hour: "15:00",
             timestamp: "today"
         },
@@ -79,7 +79,7 @@ function AppointmentDashboard() {
             fatherSurname: "Urbina",
             motherSurname: "Torres",
             phoneNumber: "6181889026",
-            date: "15/02/2026",
+            date: "25/02/2026",
             hour: "11:00",
             timestamp: "today"
         },
@@ -89,7 +89,7 @@ function AppointmentDashboard() {
             fatherSurname: "Urbina",
             motherSurname: "Torres",
             phoneNumber: "6181889026",
-            date: "16/02/2026",
+            date: "25/02/2026",
             hour: "12:00",
             timestamp: "today"
         },
@@ -99,8 +99,18 @@ function AppointmentDashboard() {
             fatherSurname: "Urbina",
             motherSurname: "Torres",
             phoneNumber: "6181889026",
-            date: "16/02/2026",
+            date: "25/02/2026",
             hour: "15:00",
+            timestamp: "today"
+        },
+        {
+            status: "completed",
+            patientName: "Arlet",
+            fatherSurname: "Torres",
+            motherSurname: "Urbina",
+            phoneNumber: "6181889026",
+            date: "27/02/2026",
+            hour: "12:00",
             timestamp: "today"
         },
     ];

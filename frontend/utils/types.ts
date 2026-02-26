@@ -6,7 +6,7 @@ type AppointmentType = {
     phoneNumber: string;
     date: string;
     hour: string;
-    timestamp: string;
+    timestamp?: string;
 };
 
 type PatientHistory = {

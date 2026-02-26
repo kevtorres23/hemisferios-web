@@ -1,6 +1,8 @@
 // REUSABLE UI ELEMENTS USED TO BUILD THE APPOINTMENT CALENDAR.
 
-import { calendarHoursCreator, daysDistance } from "../../../utils/system/calendar-methods";
+import { useState } from "react";
+import { calendarHoursCreator, hourSorter, calendarContentGenerator } from "../../../utils/system/calendar/calendar-methods";
+import { currentWeekList, nextWeekList } from "@/utils/system/calendar/calendar-variables-generation";
 import { AppointmentCardCalendar } from "./AppointmentCard";
 import { AppointmentType } from "../../../utils/types";
 
@@ -13,7 +15,7 @@ type DayProps = {
 };
 
 type HourProps = {
-    hour: string,
+    hour: string | number,
     isLast: boolean,
 };
 
@@ -25,7 +27,11 @@ type SpaceProps = {
 type CalendarUIProps = {
     data: AppointmentType[],
     page: "history" | "appointments";
+    week: number;
 };
+
+const date = new Date();
+const currentYear = date.getFullYear();
 
 function CalendarDay(props: DayProps) {
     return (
@@ -53,8 +59,12 @@ function CalendarSpace(props: SpaceProps) {
 };
 
 function CalendarUI(props: CalendarUIProps) {
+    const [appointmentFound, setAppointmentFound] = useState(false);
+    const [foundAppointment, setFoundAppointment] = useState<AppointmentType>();
+
     // Date variables.
-    const calendarHours = calendarHoursCreator(props.data); // An array containing hours that the appointments have and that will be displayed in the calendar.
+    const hours = calendarHoursCreator(props.data);
+    const calendarHours = hourSorter(hours); // A sorted array containing hours that the appointments have and that will be displayed in the calendar.
     const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 
     const date = new Date();
@@ -69,11 +79,20 @@ function CalendarUI(props: CalendarUIProps) {
                     <p className="opacity-0"> - </p>
                 </div>
 
-                {dayNames.map((_, id) => {
-                    return (id === 0 ? null :
+                {currentWeekList.map((_, id) => {
+                    return (
                         <CalendarDay
-                            dayName={dayNames[id]}
-                            dayNum={todayMonthNum - daysDistance(todayNum, id)}
+                            key={id}
+                            dayName={props.week === 1 ? (
+                                currentWeekList[id].dayName
+                            ) : (
+                                nextWeekList[id].dayName
+                            )}
+                            dayNum={props.week === 1 ? (
+                                currentWeekList[id].dayNum.number
+                            ) : (
+                                nextWeekList[id].dayNum.number
+                            )}
                             isActive={todayNum === id}
                             isFirst={false}
                             isLast={id === 6}
@@ -84,23 +103,49 @@ function CalendarUI(props: CalendarUIProps) {
             </div>
 
             {calendarHours.map((_, id) => {
-                var hours = calendarHours;
+                var hourId = id;
 
                 return (
-                    <div className="flex flex-row w-full">
+                    <div className="calendar-content flex flex-row w-full">
                         <CalendarHour
-                            hour={hours[id]}
+                            key={id}
+                            hour={calendarHours[id]}
                             isLast={id === (hours.length - 1)}
                         />
 
-                        {dayNames.map((_, id) => {
-                            return (id === 0 ? null :
-                                <CalendarSpace
-                                    content={""}
-                                    isLast={id === 6}
-                                />
-                            );
-                        }
+                        {props.week === 1 ? (
+                            currentWeekList.map((_, id) => {
+                                var dayId = id;
+                                var foundAppointment = calendarContentGenerator(currentWeekList, hourId, dayId, calendarHours, props.data);
+                                return (
+                                    <>
+                                        <CalendarSpace
+                                            key={id}
+                                            content={
+                                                foundAppointment != "" ? <AppointmentCardCalendar 
+                                                                        patientName={foundAppointment.patientName}
+                                                                        motherSurname={foundAppointment.motherSurname}
+                                                                        fatherSurname={foundAppointment.fatherSurname}
+                                                                        phoneNumber={foundAppointment.phoneNumber}
+                                                                        date={foundAppointment.date}
+                                                                        hour={foundAppointment.hour}
+                                                                        status={foundAppointment.status}/> 
+                                            : ""}
+                                            isLast={id === 5}
+                                        />
+                                    </>
+                                );
+                            })
+                        ) : (
+                            nextWeekList.map((_, id) => {
+                                return (
+                                    <CalendarSpace
+                                        content={""}
+                                        isLast={id === 6}
+                                        key={id}
+                                    />
+                                );
+                            })
                         )}
                     </div>
                 )

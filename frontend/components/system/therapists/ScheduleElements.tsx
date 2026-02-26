@@ -1,6 +1,6 @@
 // REUSABLE UI ELEMENTS USED TO BUILD THE THERAPISTS' SCHEDULE.
 
-import { calendarHoursCreator, daysDistance } from "../../../utils/system/calendar-methods";
+import { calendarHoursCreator, daysDistance } from "../../../utils/system/calendar/calendar-methods";
 import { PatientType, TherapistType } from "../../../utils/types";
 
 type DayProps = {
