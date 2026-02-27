@@ -65,7 +65,7 @@ type ModalProps = {
     onSave: () => void;
 };
 
-interface UpdateModalProps extends ModalProps {
+interface ActionModalProps extends ModalProps {
     updateElementId: number;
 };
 
@@ -73,7 +73,7 @@ export type {
     AppointmentType,
     TagType,
     ModalProps,
-    UpdateModalProps,
+    ActionModalProps,
     PatientType,
     TherapistType,
     PatientHistory,

@@ -1,5 +1,6 @@
 "use client";
 import SystemLayout from "@/components/system/SystemLayout";
+import triggerRerender from "@/utils/rerender-trigger";
 import EmptyState from "@/components/system/EmptyState";
 import { NewAppointmentModal, CancelAppointmentModal, ModifyAppointmentModal, RemoveAppointModal, CompleteAppointment, PendingAppointment } from "@/components/system/modals/AppointmentActions";
 import AvailabilityModal from "@/components/system/modals/AvailabilityModal";
@@ -11,11 +12,11 @@ import AppointmentCalendar from "@/components/system/appointments/AppointmentCal
 import WhiteIconButton from "@/components/system/WhiteIconButton";
 import FilterBar from "@/components/system/FilterBar";
 import { Plus, SquarePen } from "lucide-react";
-import { useState, createContext, useEffect } from "react";
+import { useState, createContext, useEffect, useReducer } from "react";
 import appointmentsEmpty from "../../../public/appointments-empty.png";
 import { AppointmentType } from "@/utils/types";
 import { pageSeparator } from "@/utils/system/page-separator";
-import axios from "axios";
+import api from "@/lib/axios";
 
 export const CardActionContext = createContext<(action: string, id: number) => void>(() => "");
 export const AppointmentPageContext = createContext("");
@@ -23,10 +24,12 @@ export const AppointmentPageContext = createContext("");
 type AppointmentDataset = AppointmentType[];
 
 function AppointmentDashboard() {
+
+    const [rerender, setRerender] = useState(false);
     const [view, setView] = useState("cards");
     const [searchValue, setSearchValue] = useState("");
     const [successfulAction, setSuccessfulAction] = useState("");
-    const [appointmentsData, setAppointmentsData] = useState([]);
+    const [appointmentsData, setAppointmentsData] = useState<any>([]);
     const [appointmentPages, setAppointmentPages] = useState<any[]>([]);
 
     // Modal variables.
@@ -40,19 +43,20 @@ function AppointmentDashboard() {
     useEffect(() => {
         const getAllAppointments = async () => {
             try {
-                const res = await axios.get("http://localhost:5001/api/appointments");
+                const res = await api.get("/appointments");
                 setAppointmentsData(res.data);
 
                 const separatedPages = pageSeparator(res.data); // Separate the obtained data from the database in pages.
                 setAppointmentPages(separatedPages);
                 setIsLoading(false);
+
             } catch (error) {
                 console.log("Error while fetching the appointments", error);
             }
         };
 
         getAllAppointments();
-    }, []);
+    }, [cardAction]);
 
     function showSuccessModal(successMsg: string) {
         setSuccess(true);
@@ -92,7 +96,8 @@ function AppointmentDashboard() {
 
     function onRemoveAppointment() {
         setCardAction(""); // Close the action modal.
-        // Include the DELETE controller to remove the appointment.
+        api.delete("/appointments/" + appointmentId);
+        setAppointmentsData((prev: AppointmentType[]) => prev.filter(appointment => appointment._id !== appointmentId));
         showSuccessModal("Cita eliminada correctamente.");
     };
 
@@ -134,7 +139,7 @@ function AppointmentDashboard() {
                     )}
 
                     {cardAction === "remove" && (
-                        <RemoveAppointModal onSave={onRemoveAppointment} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />
+                        <RemoveAppointModal updateElementId={appointmentId} onSave={onRemoveAppointment} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />
                     )}
 
                 </>

@@ -1,4 +1,5 @@
 import SearchBar from "../SearchBar";
+import { Dispatch, SetStateAction } from "react";
 import PageNavigator from "../PageNavigator";
 import FilterDropdown from "./FilterDropdown";
 import StatusDropdown from "./StatusDropdown";

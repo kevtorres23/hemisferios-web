@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
+import api from "@/lib/axios";
 import Input from "./Input";
 import SelectDateInput from "./SelectDateInput";
 import SelectHourInput from "./SelectHourInput";
@@ -19,6 +20,7 @@ type WeekDayObject = {
 
 type FormProps = {
     sendData: (receiptObject: Appointment, databaseOject: Appointment) => void;
+    modifyData: (databaseObject: Appointment) => void;
     isOnModify?: boolean;
     editionId: Appointment | any;
     formId: string;
@@ -26,17 +28,7 @@ type FormProps = {
 
 function AppointmentForm(props: FormProps) {
     console.log("editableId:", props.editionId);
-    const [modifiableData, setModifiableData] = useState<AppointmentType>({
-        patientName: "",
-        motherSurname: "",
-        fatherSurname: "",
-        phoneNumber: "",
-        date: "",
-        hour: "",
-        status: "",
-        timestamp: "",
-        _id: 10,
-    });
+    const [modifiableData, setModifiableData] = useState<AppointmentType>();
 
     useEffect(() => {
         const getEditableAppointment = async () => {
@@ -45,7 +37,7 @@ function AppointmentForm(props: FormProps) {
                 setModifiableData(res.data);
                 setPatientName(res.data.patientName);
                 setFatherSurname(res.data.fatherSurname);
-                setMotherSurname(res.data.fatherSurname);
+                setMotherSurname(res.data.motherSurname);
                 setPhoneNumber(res.data.phoneNumber);
                 setHour(res.data.hour);
                 setDate(res.data.date);
@@ -158,7 +150,7 @@ function AppointmentForm(props: FormProps) {
         }
 
         setValidationsShot(false);
-    }
+    };
 
     function shootData() {
         const time = new Date();
@@ -167,8 +159,16 @@ function AppointmentForm(props: FormProps) {
         const receiptAppointmentObj = new Appointment(status, patientName, fatherSurname, motherSurname, phoneNumber, writtenDate, hour, time);
         const databaseAppointmentObj = new Appointment(status, patientName, fatherSurname, motherSurname, phoneNumber, formattedDate, hour, time);
 
-        props.sendData(receiptAppointmentObj, databaseAppointmentObj);
+        console.log("Clickeado");
+
+        if (props.formId === "modifyForm") {
+            props.modifyData(databaseAppointmentObj);
+        } else {
+            props.sendData(receiptAppointmentObj, databaseAppointmentObj);
+        };
     };
+
+    console.log(props.formId);
 
     return (
         <form id={props.formId} onSubmit={(e) => shootValidations(e)} className="flex flex-col gap-4 w-full">
