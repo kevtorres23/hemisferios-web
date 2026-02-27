@@ -1,5 +1,4 @@
 // REUSABLE UI ELEMENTS USED TO BUILD THE APPOINTMENT CALENDAR.
-
 import { useState } from "react";
 import { calendarHoursCreator, hourSorter, calendarContentGenerator } from "../../../utils/system/calendar/calendar-methods";
 import { currentWeekList, nextWeekList } from "@/utils/system/calendar/calendar-variables-generation";
@@ -59,8 +58,6 @@ function CalendarSpace(props: SpaceProps) {
 };
 
 function CalendarUI(props: CalendarUIProps) {
-    const [appointmentFound, setAppointmentFound] = useState(false);
-    const [foundAppointment, setFoundAppointment] = useState<AppointmentType>();
 
     // Date variables.
     const hours = calendarHoursCreator(props.data);
@@ -69,8 +66,6 @@ function CalendarUI(props: CalendarUIProps) {
 
     const date = new Date();
     const todayNum = date.getDay(); // This is equal to today's week number, for example, 4 (for Jueves).
-    const todayName = dayNames[todayNum]; // This is equal to today's name, for example, "Jueves".
-    const todayMonthNum = date.getDate(); // This is equal to the day of the month, for example, 19.
 
     return (
         <div className="calendar w-full overflow-x-auto flex flex-col">
@@ -93,7 +88,7 @@ function CalendarUI(props: CalendarUIProps) {
                             ) : (
                                 nextWeekList[id].dayNum.number
                             )}
-                            isActive={todayNum === id}
+                            isActive={todayNum === id + 1}
                             isFirst={false}
                             isLast={id === 6}
                         />
@@ -108,7 +103,7 @@ function CalendarUI(props: CalendarUIProps) {
                 return (
                     <div className="calendar-content flex flex-row w-full">
                         <CalendarHour
-                            key={id}
+                            key={hourId}
                             hour={calendarHours[id]}
                             isLast={id === (hours.length - 1)}
                         />
@@ -120,17 +115,19 @@ function CalendarUI(props: CalendarUIProps) {
                                 return (
                                     <>
                                         <CalendarSpace
-                                            key={id}
+                                            key={dayId}
                                             content={
-                                                foundAppointment != "" ? <AppointmentCardCalendar 
-                                                                        patientName={foundAppointment.patientName}
-                                                                        motherSurname={foundAppointment.motherSurname}
-                                                                        fatherSurname={foundAppointment.fatherSurname}
-                                                                        phoneNumber={foundAppointment.phoneNumber}
-                                                                        date={foundAppointment.date}
-                                                                        hour={foundAppointment.hour}
-                                                                        status={foundAppointment.status}/> 
-                                            : ""}
+                                                foundAppointment != "" ? <AppointmentCardCalendar
+                                                    patientName={foundAppointment.patientName}
+                                                    motherSurname={foundAppointment.motherSurname}
+                                                    fatherSurname={foundAppointment.fatherSurname}
+                                                    phoneNumber={foundAppointment.phoneNumber}
+                                                    date={foundAppointment.date}
+                                                    hour={foundAppointment.hour}
+                                                    status={foundAppointment.status}
+                                                    page={props.page}
+                                                />
+                                                    : ""}
                                             isLast={id === 5}
                                         />
                                     </>

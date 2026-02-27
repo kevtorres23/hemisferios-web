@@ -3,15 +3,15 @@
 import MediumModal from "./MediumModal";
 import SmallModal from "./SmallModal";
 import { Appointment } from "@/utils/classes";
-import AppointmentForm from "@/components/website/NewAppointmentForm";
-import { ModalProps } from "@/utils/types";
+import AppointmentForm from "@/components/website/AppointmentForm";
+import { ModalProps, UpdateModalProps } from "@/utils/types";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function NewAppointmentModal(props: ModalProps) {
 
-    function saveBtnPressed(receiptObject: Appointment, databaseOject: Appointment) {
-        axios.post("http://localhost:5001/api/appointments", databaseOject);
+    function saveBtnPressed(receiptObject: Appointment, databaseObject: Appointment) {
+        axios.post("http://localhost:5001/api/appointments", databaseObject);
 
         props.onSave();
     };
@@ -20,13 +20,39 @@ function NewAppointmentModal(props: ModalProps) {
         <MediumModal
             isVisible={props.isVisible}
             btnType="submit"
-            btnForm="appointmentForm"
+            btnForm="creationForm"
             onClose={props.onClose}
             title="Agendar una cita manualmente"
             confirmationBtnText="Guardar cita"
         >
 
-            <AppointmentForm sendData={saveBtnPressed} />
+            <AppointmentForm formId="creationForm" isOnModify={false} sendData={saveBtnPressed} editionId={""} />
+
+        </MediumModal>
+    );
+};
+
+function ModifyAppointmentModal(props: UpdateModalProps) {
+
+    function saveBtnPressed(receiptObject: Appointment, databaseObject: Appointment) {
+        console.log("dbObject", databaseObject);
+
+        axios.put("http://localhost:5001/api/appointments/" + props.updateElementId, databaseObject);
+        props.onSave();
+    };
+
+    return (
+        <MediumModal
+            isVisible={props.isVisible}
+            btnType="submit"
+            btnForm="modifyForm"
+            onClose={props.onClose}
+            title="Modificar datos de la cita"
+            confirmationBtnText="Guardar cambios"
+            onSave={props.onSave}
+        >
+
+            <AppointmentForm formId="modifyForm" isOnModify={true} editionId={props.updateElementId} sendData={saveBtnPressed} />
 
         </MediumModal>
     );
@@ -77,7 +103,8 @@ function CancelAppointmentModal(props: ModalProps) {
     );
 };
 
-function PendingAppointment(props: ModalProps) {
+function PendingAppointment(props: UpdateModalProps) {
+
     return (
         <SmallModal
             isVisible={props.isVisible}
@@ -90,28 +117,6 @@ function PendingAppointment(props: ModalProps) {
         >
 
         </SmallModal>
-    );
-};
-
-function ModifyAppointmentModal(props: ModalProps) {
-    function saveBtnPressed(receiptObject: Appointment, databaseOject: Appointment) {
-        // PUT axios controller to upadte the appointment.
-    };
-
-    return (
-        <MediumModal
-            isVisible={props.isVisible}
-            btnType="submit"
-            btnForm="appointmentForm"
-            onClose={props.onClose}
-            title="Modificar datos de la cita"
-            confirmationBtnText="Guardar cambios"
-            onSave={props.onSave}
-        >
-
-            <AppointmentForm isOnModify={true} sendData={saveBtnPressed} />
-
-        </MediumModal>
     );
 };
 

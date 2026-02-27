@@ -5,7 +5,7 @@ import axios from "axios";
 import { Appointment } from "@/utils/classes";
 import Footer from "@/components/website/Footer";
 import { CircleCheck } from "lucide-react";
-import AppointmentForm from "@/components/website/NewAppointmentForm";
+import AppointmentForm from "@/components/website/AppointmentForm";
 import ChannelBox from "@/components/website/ChannelBox";
 import { useRef } from "react";
 import { isVisible } from "@/utils/website/visibility-detector";
@@ -67,9 +67,9 @@ function BookAppointment() {
                     <div ref={ref2} className={`${isFormVisible ? 'opacity-100' : 'opacity-0'} lg:max-w-xl w-full flex flex-col items-start lg:p-7 sm:p-5 p-4 border border-slate-200 bg-slate-50 rounded-xl gap-4 transition-opacity duration-700 ease-in`}>
                         <h1 className="text-xl font-semibold text-slate-800 tracking-tight">Formulario de Citas</h1>
 
-                        <AppointmentForm sendData={sendAppointmentData} />
+                        <AppointmentForm formId="newAppointmentForm" editionId={""} sendData={sendAppointmentData} />
 
-                        <button form="appointmentForm" type="submit" className="bg-indigo-500 text-white tracking-tight text-base px-4 py-2 flex flex-row items-center justify-center gap-2 rounded-lg cursor-pointer font-normal hover:bg-indigo-400 sm:w-auto w-full">
+                        <button form="newAppointmentForm" type="submit" className="bg-indigo-500 text-white tracking-tight text-base px-4 py-2 flex flex-row items-center justify-center gap-2 rounded-lg cursor-pointer font-normal hover:bg-indigo-400 sm:w-auto w-full">
                             Agendar cita
                             <CircleCheck size={18} />
                         </button>

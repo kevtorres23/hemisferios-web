@@ -1,4 +1,5 @@
-type AppointmentType = {
+interface AppointmentType {
+    _id: number;
     status: string;
     patientName: string;
     fatherSurname: string;
@@ -9,12 +10,12 @@ type AppointmentType = {
     timestamp?: string;
 };
 
-type PatientHistory = {
+interface PatientHistory {
     date: string;
     hour: string;
 }
 
-type PatientType = {
+interface PatientType {
     name: string;
     fatherSurname: string;
     motherSurname: string;
@@ -26,13 +27,13 @@ type PatientType = {
     appointmentHistory: PatientHistory[];
 };
 
-type TherapistSchedule = {
+interface TherapistSchedule {
     patient: string;
     hour: string;
     day: string;
 };
 
-type TherapistType = {
+interface TherapistType {
     name: string;
     lastName: string;
     startingDate: string;
@@ -64,9 +65,15 @@ type ModalProps = {
     onSave: () => void;
 };
 
+interface UpdateModalProps extends ModalProps {
+    updateElementId: number;
+};
+
 export type {
     AppointmentType,
-    TagType, ModalProps,
+    TagType,
+    ModalProps,
+    UpdateModalProps,
     PatientType,
     TherapistType,
     PatientHistory,

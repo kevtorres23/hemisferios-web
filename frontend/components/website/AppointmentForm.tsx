@@ -1,17 +1,15 @@
 "use client";
 
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
-import { isVisible } from "../../utils/website/visibility-detector";
+import { useEffect, useState } from "react";
 import Input from "./Input";
 import SelectDateInput from "./SelectDateInput";
 import SelectHourInput from "./SelectHourInput";
-import { CircleCheck } from "lucide-react";
 import { Appointment } from "@/utils/classes";
 import InputWarning from "./InputWarning";
 import { InputChange, SelectChange } from "@/utils/website/input-change-handlers";
-import { redirect } from 'next/navigation';
 import manageAvailability from "../../utils/website/manage-availability";
+import { AppointmentType } from "@/utils/types";
 
 type WeekDayObject = {
     writtenDate: string,
@@ -22,18 +20,57 @@ type WeekDayObject = {
 type FormProps = {
     sendData: (receiptObject: Appointment, databaseOject: Appointment) => void;
     isOnModify?: boolean;
+    editionId: Appointment | any;
+    formId: string;
 };
 
 function AppointmentForm(props: FormProps) {
+    console.log("editableId:", props.editionId);
+    const [modifiableData, setModifiableData] = useState<AppointmentType>({
+        patientName: "",
+        motherSurname: "",
+        fatherSurname: "",
+        phoneNumber: "",
+        date: "",
+        hour: "",
+        status: "",
+        timestamp: "",
+        _id: 10,
+    });
+
+    useEffect(() => {
+        const getEditableAppointment = async () => {
+            try {
+                const res = await axios.get("http://localhost:5001/api/appointments/" + props.editionId);
+                setModifiableData(res.data);
+                setPatientName(res.data.patientName);
+                setFatherSurname(res.data.fatherSurname);
+                setMotherSurname(res.data.fatherSurname);
+                setPhoneNumber(res.data.phoneNumber);
+                setHour(res.data.hour);
+                setDate(res.data.date);
+            } catch (error) {
+                console.log("Error detected", error);
+            };
+        };
+
+        if (props.isOnModify) {
+            getEditableAppointment();
+        };
+
+    }, []);
+
+    console.log("DATOS ENCONTRADOS", (modifiableData));
+
     // Variables for the form inputs.
     const [patientName, setPatientName] = useState("");
     const [motherSurname, setMotherSurname] = useState("");
     const [fatherSurname, setFatherSurname] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [date, setDate] = useState("");
+    const [hour, setHour] = useState("");
     const [formattedDate, setFormattedDate] = useState("");
     const [writtenDate, setWrittenDate] = useState("");
-    const [hour, setHour] = useState("");
     const [availability, setAvailability] = useState([]);
     const [availDays, setAvailDays] = useState<{ currentWeekList: WeekDayObject[], nextWeekList: WeekDayObject[] }>({ currentWeekList: [], nextWeekList: [] });
     const [availHours, setAvailHours] = useState<string[]>();
@@ -94,7 +131,7 @@ function AppointmentForm(props: FormProps) {
                 }
 
             } catch (error) {
-                console.log("Error fetching notes", error);
+                console.log("Error fetching availability", error);
             };
 
         };
@@ -134,7 +171,7 @@ function AppointmentForm(props: FormProps) {
     };
 
     return (
-        <form id="appointmentForm" onSubmit={(e) => shootValidations(e)} className="flex flex-col gap-4 w-full">
+        <form id={props.formId} onSubmit={(e) => shootValidations(e)} className="flex flex-col gap-4 w-full">
 
             <div className="name-field flex flex-col gap-2 w-full">
                 <Input type="text" textValue={patientName} label="Nombre(s) del paciente" onInputChange={(e) => InputChange(e, patientName, setPatientName, validationsShot, setNameValidation)} activeValidation={nameValidation} />
@@ -171,6 +208,6 @@ function AppointmentForm(props: FormProps) {
             </div>
         </form>
     )
-}
+};
 
 export default AppointmentForm;

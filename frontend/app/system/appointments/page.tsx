@@ -11,12 +11,13 @@ import AppointmentCalendar from "@/components/system/appointments/AppointmentCal
 import WhiteIconButton from "@/components/system/WhiteIconButton";
 import FilterBar from "@/components/system/FilterBar";
 import { Plus, SquarePen } from "lucide-react";
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 import appointmentsEmpty from "../../../public/appointments-empty.png";
 import { AppointmentType } from "@/utils/types";
 import { pageSeparator } from "@/utils/system/page-separator";
+import axios from "axios";
 
-export const CardActionContext = createContext<(action: string) => void>(() => "");
+export const CardActionContext = createContext<(action: string, id: number) => void>(() => "");
 export const AppointmentPageContext = createContext("");
 
 type AppointmentDataset = AppointmentType[];
@@ -25,97 +26,33 @@ function AppointmentDashboard() {
     const [view, setView] = useState("cards");
     const [searchValue, setSearchValue] = useState("");
     const [successfulAction, setSuccessfulAction] = useState("");
+    const [appointmentsData, setAppointmentsData] = useState([]);
+    const [appointmentPages, setAppointmentPages] = useState<any[]>([]);
 
     // Modal variables.
     const [newAppointmentModal, setNewAppointmentModal] = useState(false);
     const [availabilityModal, setAvailabilityModal] = useState(false);
     const [cardAction, setCardAction] = useState("");
+    const [appointmentId, setAppointmentId] = useState(0);
     const [success, setSuccess] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const data: AppointmentDataset = [
-        {
-            status: "pending",
-            patientName: "Kevin",
-            fatherSurname: "Urbina",
-            motherSurname: "Torres",
-            phoneNumber: "6181889026",
-            date: "28/02/2026",
-            hour: "11:00",
-            timestamp: "today"
-        },
-        {
-            status: "finished",
-            patientName: "Keny",
-            fatherSurname: "Urbina",
-            motherSurname: "Torres",
-            phoneNumber: "6181889026",
-            date: "23/02/2026",
-            hour: "11:00",
-            timestamp: "today"
-        },
-        {
-            status: "cancelled",
-            patientName: "Kezy",
-            fatherSurname: "Urbina",
-            motherSurname: "Torres",
-            phoneNumber: "6181889026",
-            date: "23/02/2026",
-            hour: "16:00",
-            timestamp: "today"
-        },
-        {
-            status: "pending",
-            patientName: "Kevin",
-            fatherSurname: "Urbina",
-            motherSurname: "Torres",
-            phoneNumber: "6181889026",
-            date: "24/02/2026",
-            hour: "15:00",
-            timestamp: "today"
-        },
-        {
-            status: "finished",
-            patientName: "Kevin",
-            fatherSurname: "Urbina",
-            motherSurname: "Torres",
-            phoneNumber: "6181889026",
-            date: "25/02/2026",
-            hour: "11:00",
-            timestamp: "today"
-        },
-        {
-            status: "cancelled",
-            patientName: "Kevin",
-            fatherSurname: "Urbina",
-            motherSurname: "Torres",
-            phoneNumber: "6181889026",
-            date: "25/02/2026",
-            hour: "12:00",
-            timestamp: "today"
-        },
-        {
-            status: "pending",
-            patientName: "Kevin",
-            fatherSurname: "Urbina",
-            motherSurname: "Torres",
-            phoneNumber: "6181889026",
-            date: "25/02/2026",
-            hour: "15:00",
-            timestamp: "today"
-        },
-        {
-            status: "completed",
-            patientName: "Arlet",
-            fatherSurname: "Torres",
-            motherSurname: "Urbina",
-            phoneNumber: "6181889026",
-            date: "27/02/2026",
-            hour: "12:00",
-            timestamp: "today"
-        },
-    ];
+    useEffect(() => {
+        const getAllAppointments = async () => {
+            try {
+                const res = await axios.get("http://localhost:5001/api/appointments");
+                setAppointmentsData(res.data);
 
-    let appointmentPages = pageSeparator(data);
+                const separatedPages = pageSeparator(res.data); // Separate the obtained data from the database in pages.
+                setAppointmentPages(separatedPages);
+                setIsLoading(false);
+            } catch (error) {
+                console.log("Error while fetching the appointments", error);
+            }
+        };
+
+        getAllAppointments();
+    }, []);
 
     function showSuccessModal(successMsg: string) {
         setSuccess(true);
@@ -163,21 +100,43 @@ function AppointmentDashboard() {
         setView(selectedView);
     };
 
-    function onActionSelected(action: string) {
+    function onActionSelected(action: string, number: number) {
         setCardAction(action);
+        setAppointmentId(number);
     };
 
     return (
         <SystemLayout sidebarPage="appointments" isAnyModal={newAppointmentModal || availabilityModal || cardAction === "cancel" || cardAction === "complete" || cardAction === "modify" || cardAction === "remove" || cardAction === "pending"}
             modals={
                 <>
-                    <NewAppointmentModal onSave={onSaveAppointment} isVisible={newAppointmentModal} onClose={() => setNewAppointmentModal(false)} />
-                    <AvailabilityModal onSave={onSaveAvailability} isVisible={availabilityModal} onClose={() => setAvailabilityModal(false)} />
-                    <CancelAppointmentModal onSave={() => onUpdateStatus("cancel")} isVisible={cardAction === "cancel"} onClose={() => setCardAction("")} />
-                    <CompleteAppointment onSave={() => onUpdateStatus("complete")} isVisible={cardAction === "complete"} onClose={() => setCardAction("")} />
-                    <PendingAppointment onSave={() => onUpdateStatus("pending")} isVisible={cardAction === "pending"} onClose={() => setCardAction("")} />
-                    <ModifyAppointmentModal onSave={onModifyAppointment} isVisible={cardAction === "modify"} onClose={() => setCardAction("")} />
-                    <RemoveAppointModal onSave={onRemoveAppointment} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />
+                    {newAppointmentModal && (
+                        <NewAppointmentModal onSave={onSaveAppointment} isVisible={newAppointmentModal} onClose={() => setNewAppointmentModal(false)} />
+                    )}
+
+                    {availabilityModal && (
+                        <AvailabilityModal onSave={onSaveAvailability} isVisible={availabilityModal} onClose={() => setAvailabilityModal(false)} />
+                    )}
+
+                    {cardAction === "cancel" && (
+                        <CancelAppointmentModal onSave={() => onUpdateStatus("cancel")} isVisible={cardAction === "cancel"} onClose={() => setCardAction("")} />
+                    )}
+
+                    {cardAction === "complete" && (
+                        <CompleteAppointment onSave={() => onUpdateStatus("complete")} isVisible={cardAction === "complete"} onClose={() => setCardAction("")} />
+                    )}
+
+                    {cardAction === "pending" && (
+                        <PendingAppointment updateElementId={appointmentId} onSave={() => onUpdateStatus("pending")} isVisible={cardAction === "pending"} onClose={() => setCardAction("")} />
+                    )}
+
+                    {cardAction === "modify" && (
+                        <ModifyAppointmentModal updateElementId={appointmentId} onSave={onModifyAppointment} isVisible={cardAction === "modify"} onClose={() => setCardAction("")} />
+                    )}
+
+                    {cardAction === "remove" && (
+                        <RemoveAppointModal onSave={onRemoveAppointment} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />
+                    )}
+
                 </>
             }>
 
@@ -194,25 +153,36 @@ function AppointmentDashboard() {
 
             <FilterBar onViewChange={onViewChange} firstElement={
                 <p className="text-lg font-medium text-slate-800">
-                    Hay <span className="font-semibold text-indigo-500">{data.length}</span> citas pendientes
+                    Hay <span className="font-semibold text-indigo-500">{appointmentsData.length}</span> citas pendientes
                 </p>
             }
             />
 
-            {(data.length === 0) ? (
+            {isLoading && (
+                <div className="w-full h-full flex items-center justify-center">
+                    <p className="text-xl font-semibold text-slate-800">Cargando citas...</p>
+                </div>
+            )}
+
+            {!isLoading && appointmentsData.length === 0 && (
                 <EmptyState
                     header="¡No hay citas registradas aún!"
                     desc="Nuevas citas aparecerán aquí cuando sean creadas por una persona en la página, o por ti, manualmente."
                     image={appointmentsEmpty}
                 />
-            ) : (view === "cards") ? (
+            )}
+
+            {appointmentsData.length > 0 && view === "cards" && (
                 <CardActionContext.Provider value={onActionSelected}>
-                    <AppointmentGrid page="appointments" onActionSelected={onActionSelected} data={appointmentPages} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
+                    <AppointmentGrid page="appointments" data={appointmentPages} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
                 </CardActionContext.Provider>
-            ) : (view === "calendar") ? (
-                <AppointmentCalendar page="appointments" data={data} />
-            ) : <></>
-            }
+            )}
+
+            {appointmentsData.length > 0 && view === "calendar" && (
+                <CardActionContext.Provider value={onActionSelected}>
+                    <AppointmentCalendar page="appointments" data={appointmentsData} />
+                </CardActionContext.Provider>
+            )}
         </ SystemLayout>
     );
 };

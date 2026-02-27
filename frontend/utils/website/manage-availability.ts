@@ -1,12 +1,12 @@
 type AvailabilityContent = {
     weekStart: string;
     weekFinish: string;
-    monday: [string];
-    tuesday: [string];
-    wednesday: [string];
-    thursday: [string];
-    friday: [string];
-    saturday: [string];
+    monday: string[];
+    tuesday: string[];
+    wednesday: string[];
+    thursday: string[];
+    friday: string[];
+    saturday: string[];
 };
 
 type WeekDaysNum = "0" | "1" | "2" | "3" | "4" | "5" | "6"; // Numbers of the week days, where Sunday is 0.
@@ -49,6 +49,7 @@ function manageAvailability(availability: Availability) {
     // Current variables.
     const current = new Date(); // Get the current date.
     let tomorrow = current.getDay() + 1; // Get tomorrow's day number.
+    const currentYear = current.getFullYear();
     const currentWeekStart = availability[0].weekStart[0] + availability[0].weekStart[1]; // Accessing the first two characters of the "weekStart" string to get the day number.
     const currentWeekMonth = availability[0].weekStart[3] + availability[0].weekStart[4]; // Accessing the last two characters of the "weekStart" string to get the month number.
     const daysCurrentWeek = [];
@@ -69,7 +70,7 @@ function manageAvailability(availability: Availability) {
         const currentWeekDayObj = {
             writtenDate: currentWeekDayName + " " + currentWeekMonthDay + " de " + currentWeekMonthName,
             databaseId: "c" + weekDays[tomorrow.toString() as keyof WeekDayType].toLowerCase(), // "c" for "current": to identify it in the database.
-            formattedDate: currentWeekMonthDay + "/" + currentWeekMonth,
+            formattedDate: currentWeekMonthDay + "/" + currentWeekMonth + currentYear,
         }
 
         daysCurrentWeek.push(currentWeekDayObj);
