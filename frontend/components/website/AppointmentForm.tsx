@@ -9,7 +9,7 @@ import SelectHourInput from "./SelectHourInput";
 import { Appointment } from "@/utils/classes";
 import InputWarning from "./InputWarning";
 import { InputChange, SelectChange } from "@/utils/website/input-change-handlers";
-import manageAvailability from "../../utils/website/manage-availability";
+import {formatAvailability} from "../../utils/website/format-availability";
 import { AppointmentType, DayFormat } from "@/utils/types";
 
 type WeekDayObject = {
@@ -55,13 +55,22 @@ function AppointmentForm(props: FormProps) {
             try {
                 // Variable definition.
                 const res = await api.get("/availability"); // Getting availability from the backend.
-                console.log("availability:", res.data);
                 setAvailability(res.data);
 
-                const formattedAvailability = manageAvailability(res.data);
-                console.log("Disponibilidad:", manageAvailability(res.data));
+                // Update day availability.
+                const formattedAvailability = formatAvailability(res.data);
                 setAvailDays(formattedAvailability);
-                setAvailHours(formattedAvailability[0][1].hours)
+
+                // Update hour availability based on the selected day.
+                formattedAvailability.forEach((dayList) => {
+                    dayList.forEach((day) => {
+                        if (day.databaseDate === date) {
+                            setAvailHours(day.hours);
+                            setFormattedDate(day.writtenDate);
+                            console.log(day.databaseDate, day.hours)
+                        };
+                    });
+                });
                 
                 formattedAvailability[0]
             } catch (error) {
@@ -120,10 +129,8 @@ function AppointmentForm(props: FormProps) {
         const time = new Date();
         const status = "pending"; // The default status that appointments have when they are created.
 
-        const receiptAppointmentObj = new Appointment(status, patientName, fatherSurname, motherSurname, phoneNumber, writtenDate, hour, time);
-        const databaseAppointmentObj = new Appointment(status, patientName, fatherSurname, motherSurname, phoneNumber, formattedDate, hour, time);
-
-        console.log("Clickeado");
+        const receiptAppointmentObj = new Appointment(status, patientName, fatherSurname, motherSurname, phoneNumber, formattedDate, hour, time);
+        const databaseAppointmentObj = new Appointment(status, patientName, fatherSurname, motherSurname, phoneNumber, date, hour, time);
 
         if (props.formId === "modifyForm") {
             props.modifyData(databaseAppointmentObj);
@@ -131,8 +138,6 @@ function AppointmentForm(props: FormProps) {
             props.sendData(receiptAppointmentObj, databaseAppointmentObj);
         };
     };
-
-    console.log(props.formId);
 
     return (
         <form id={props.formId} onSubmit={(e) => shootValidations(e)} className="flex flex-col gap-4 w-full">

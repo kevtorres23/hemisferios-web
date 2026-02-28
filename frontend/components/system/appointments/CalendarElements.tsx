@@ -1,5 +1,4 @@
 // REUSABLE UI ELEMENTS USED TO BUILD THE APPOINTMENT CALENDAR.
-import { useState } from "react";
 import { calendarHoursCreator, hourSorter, calendarContentGenerator } from "../../../utils/system/calendar/calendar-methods";
 import { currentWeekList, nextWeekList } from "@/utils/system/calendar/calendar-variables-generation";
 import { AppointmentCardCalendar } from "./AppointmentCard";
@@ -62,7 +61,6 @@ function CalendarUI(props: CalendarUIProps) {
     // Date variables.
     const hours = calendarHoursCreator(props.data);
     const calendarHours = hourSorter(hours); // A sorted array containing hours that the appointments have and that will be displayed in the calendar.
-    const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 
     const date = new Date();
     const todayNum = date.getDay(); // This is equal to today's week number, for example, 4 (for Jueves).
@@ -137,9 +135,24 @@ function CalendarUI(props: CalendarUIProps) {
                             })
                         ) : (
                             nextWeekList.map((_, id) => {
+                                var dayId = id;
+                                var foundAppointment = calendarContentGenerator(nextWeekList, hourId, dayId, calendarHours, props.data);
                                 return (
                                     <CalendarSpace
-                                        content={""}
+                                        content={
+                                            foundAppointment != "" ? <AppointmentCardCalendar
+                                            _id={foundAppointment._id}
+                                            cancellationComment={foundAppointment.cancellationComment}
+                                            patientName={foundAppointment.patientName}
+                                            motherSurname={foundAppointment.motherSurname}
+                                            fatherSurname={foundAppointment.fatherSurname}
+                                            phoneNumber={foundAppointment.phoneNumber}
+                                            date={foundAppointment.date}
+                                            hour={foundAppointment.hour}
+                                            status={foundAppointment.status}
+                                            page={props.page}
+                                        />
+                                            : ("")}
                                         isLast={id === 6}
                                         key={id}
                                     />

@@ -1,5 +1,7 @@
 // PURPOSE OF THE MODULE: to perform calculations needed for the calendar and the appointment availability.
 
+import { lessThanTen } from "@/utils/website/format-availability";
+
 // Global scope variables.
 const date = new Date();
 const days = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
@@ -54,6 +56,7 @@ function calendarHoursCreator(appointments: AppointmentType[]) {
     return calendarHours;
 };
 
+// Sorts the hours of the calendar in ascending order.
 function hourSorter(hoursArray: string[]) {
     const hours = hoursArray;
     const sortedArray = [];
@@ -79,18 +82,17 @@ function hourSorter(hoursArray: string[]) {
 
 // This function returns the difference of days between today and another day, positive por past days, negative for future ones.
 function daysDistance(todaysNum: number, comparativeDayNum: number) {
-    const days = [1, 2, 3, 4, 5, 6]; // This array represents the days with their corresponding number, where Monday is 1.
+    const days = [1, 2, 3, 4, 5, 6]; // Represents the days with their corresponding number, where Monday is 1.
 
-    return (days.indexOf(todaysNum) - days.indexOf(comparativeDayNum)); // Return the difference of days between today and another day (second argument).
+    return (days.indexOf(todaysNum) - days.indexOf(comparativeDayNum)); // Returns the difference of days between today and another day (second argument).
 };
 
-// Pairs the week's day names with their corresponding month number.
+// Pairs the week's day names with their corresponding month number based on today's day-of-the-month and the current month number.
 function weekCreator(todayMonthNum: number, monthNum: number) {
     const createdWeek: CreatedWeek[] = []; // Array to save the pairs of the current week's day names and month numbers.
     const todayWeekNum = date.getDay(); // This is equal to today's day in number, for example, 4 (for Jueves).
     const daysInCurrentMonth = getDaysInMonth(2026, monthNum + 1);
     const daysInPreviousMonth = getDaysInMonth(2026, monthNum);
-
     const month = monthNum;
 
     // Loop variables.
@@ -105,6 +107,7 @@ function weekCreator(todayMonthNum: number, monthNum: number) {
         day = days[i];
         num = todayMonthNum - distance;
 
+        // A normal case, the week is within the month's lower and upper limits.
         if ((num <= daysInCurrentMonth) && (num >= 1)) {
             createdWeek.push(
                 {
@@ -119,6 +122,7 @@ function weekCreator(todayMonthNum: number, monthNum: number) {
             continue;
         };
 
+        // If part of the week belongs to the previous month, we'll use the previousMonthCounter minus the calculated distance of days.
         if (num < 1) {
             createdWeek.push(
                 {
@@ -131,6 +135,7 @@ function weekCreator(todayMonthNum: number, monthNum: number) {
             );
         };
 
+        // Once the num counter exceeds the month's number of days, we'll use the newMonthCounter, to start on day 1 of the next month.
         if (num > daysInCurrentMonth) {
             createdWeek.push(
                 {
@@ -149,16 +154,22 @@ function weekCreator(todayMonthNum: number, monthNum: number) {
     return (createdWeek);
 };
 
+// Finds coincidences between the calendar's and the appointment's hour and days to then display them.
 function calendarContentGenerator(weekList: CreatedWeek[], hourId: number, dayId: number, calendarHours: (string | number)[], data: AppointmentType[]) {
+    
+    // Get the hour and day values that are currently being mapped in the calendar.
     let calendarHour = calendarHours[hourId];
-    let calendarDay = weekList[dayId].dayNum.number.toString();
-    let coincidence: AppointmentType | "" = "";
+    let calendarDay = lessThanTen(weekList[dayId].dayNum.number);
 
+    let coincidence: (AppointmentType | "") = ""; // Initializing the coincidence.
+
+    // The "data" parameter is the array of appointment objects brought from the database. We'll iterate over it.
     for (let i = 0; i < data.length; i++) {
         let dataDay = data[i].date[0] + data[i].date[1];
         let dataHour = data[i].hour;
 
-        if ((dataDay === calendarDay) && (dataHour === calendarHour)) {
+        // If the hour and date of the current calendar's position is equal to the hour and date of the indexed appointment, it's a match.
+        if ((dataDay === calendarDay.toString()) && (dataHour === calendarHour)) {
             coincidence = data[i];
             break;
         } else {
@@ -166,7 +177,7 @@ function calendarContentGenerator(weekList: CreatedWeek[], hourId: number, dayId
         }
     };
 
-    return coincidence;
+    return coincidence; // Return the matched appointment object.
 };
 
 export { nextWeekNum, calendarHoursCreator, daysDistance, weekCreator, hourSorter, calendarContentGenerator };

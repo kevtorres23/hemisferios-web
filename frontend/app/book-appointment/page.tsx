@@ -67,9 +67,9 @@ function BookAppointment() {
                     <div ref={ref2} className={`${isFormVisible ? 'opacity-100' : 'opacity-0'} lg:max-w-xl w-full flex flex-col items-start lg:p-7 sm:p-5 p-4 border border-slate-200 bg-slate-50 rounded-xl gap-4 transition-opacity duration-700 ease-in`}>
                         <h1 className="text-xl font-semibold text-slate-800 tracking-tight">Formulario de Citas</h1>
 
-                        <AppointmentForm formId="newAppointmentForm" editionId={""} sendData={sendAppointmentData} />
+                        <AppointmentForm modifyData={() => ""} formId="creationForm" editionId={""} sendData={sendAppointmentData} />
 
-                        <button form="newAppointmentForm" type="submit" className="bg-indigo-500 text-white tracking-tight text-base px-4 py-2 flex flex-row items-center justify-center gap-2 rounded-lg cursor-pointer font-normal hover:bg-indigo-400 sm:w-auto w-full">
+                        <button form="creationForm" type="submit" className="bg-indigo-500 text-white tracking-tight text-base px-4 py-2 flex flex-row items-center justify-center gap-2 rounded-lg cursor-pointer font-normal hover:bg-indigo-400 sm:w-auto w-full">
                             Agendar cita
                             <CircleCheck size={18} />
                         </button>
