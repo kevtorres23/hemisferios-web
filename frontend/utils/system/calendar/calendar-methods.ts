@@ -11,7 +11,7 @@ type CreatedWeek = {
         number: number,
         month: number,
     },
-}
+};
 
 // Global scope arrow functions.
 const getDaysInMonth = (year: number, month: number) => new Date(year, month, 0).getDate(); // Calculate the number of days in a given month.

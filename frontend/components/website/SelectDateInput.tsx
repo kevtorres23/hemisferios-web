@@ -11,6 +11,7 @@ import {
     SelectTrigger,
     SelectValue
 } from '@/components/ui/select';
+import { DayFormat } from "@/utils/types";
 
 type WeekDayObject = {
     writtenDate: string,
@@ -22,13 +23,14 @@ type SelectProps = {
     label: string;
     value: string;
     onInputChange: (val: string) => void;
-    items: { currentWeekList: WeekDayObject[], nextWeekList: WeekDayObject[] };
+    items: DayFormat[][] | undefined;
     activeValidation: boolean;
     selectType: "date" | "hour";
 }
 
 function SelectDateInput(props: SelectProps) {
     const id = useId();
+
     return (
         <div className='w-full space-y-2'>
             <Label className="text-slate-500 font-normal sm:text-sm text-base" htmlFor={id}>{props.label} <span className="text-red-500 text-lg font-semibold">*</span></Label>
@@ -42,20 +44,27 @@ function SelectDateInput(props: SelectProps) {
                     } />
                 </SelectTrigger>
                 <SelectContent className="bg-white z-999" sideOffset={5} position="popper">
-                    <SelectGroup>
-                        <SelectLabel>Esta semana</SelectLabel>
-                        {props.items.currentWeekList.map((item, id) =>
-                            <SelectItem className="text-sm" key={id} value={item.databaseId}>{item.writtenDate}</SelectItem>
-                        )}
-                    </SelectGroup>
-                    <SelectSeparator />
-                    <SelectGroup>
-                        <SelectLabel>Próxima semana</SelectLabel>
-                        {props.items.nextWeekList.map((item, id) =>
-                            <SelectItem className="text-sm" key={id} value={item.databaseId}>{item.writtenDate}</SelectItem>
-                        )}
-                    </SelectGroup>
-                    <SelectSeparator />
+                    {props.items === undefined ? (
+                        <SelectGroup>
+                            <SelectLabel>No hay disponibilidad</SelectLabel>
+                        </SelectGroup>
+                    ) : (
+                        <>
+                            <SelectGroup>
+                                <SelectLabel>Esta semana</SelectLabel>
+                                {props.items[0].map((day, id) =>
+                                    <SelectItem className="text-sm" key={id} value={day.databaseDate}>{day.writtenDate}</SelectItem>
+                                )}
+                            </SelectGroup>
+                            <SelectSeparator />
+                            <SelectGroup>
+                                <SelectLabel>Próxima semana</SelectLabel>
+                                {props.items[1].map((day, id) =>
+                                    <SelectItem className="text-sm" key={id} value={day.databaseDate}>{day.writtenDate}</SelectItem>
+                                )}
+                            </SelectGroup>
+                        </>
+                    )}
                 </SelectContent>
             </Select>
         </div>

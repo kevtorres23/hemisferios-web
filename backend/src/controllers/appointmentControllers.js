@@ -65,7 +65,8 @@ export async function updateAppointment(req, res) {
             motherSurname,
             phoneNumber,
             date,
-            hour
+            hour,
+            cancellationComment,
         } = req.body;
 
         const updatedAppointment = await Appointment.findByIdAndUpdate(req.params.id, {
@@ -75,7 +76,8 @@ export async function updateAppointment(req, res) {
             motherSurname,
             phoneNumber,
             date,
-            hour
+            hour,
+            cancellationComment,
         }, { new: true });
 
         if (!updatedAppointment) return res.status(404).json({ message: "Appointment not found" }); // Handling possible issues with the passed ID.

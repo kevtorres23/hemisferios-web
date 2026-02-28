@@ -118,6 +118,8 @@ function CalendarUI(props: CalendarUIProps) {
                                             key={dayId}
                                             content={
                                                 foundAppointment != "" ? <AppointmentCardCalendar
+                                                    _id={foundAppointment._id}
+                                                    cancellationComment={foundAppointment.cancellationComment}
                                                     patientName={foundAppointment.patientName}
                                                     motherSurname={foundAppointment.motherSurname}
                                                     fatherSurname={foundAppointment.fatherSurname}

@@ -1,10 +1,10 @@
 "use client";
 import SystemLayout from "@/components/system/SystemLayout";
-import triggerRerender from "@/utils/rerender-trigger";
 import EmptyState from "@/components/system/EmptyState";
+import { updateStatus } from "@/lib/update-appointment-status";
+import toast, { Toaster } from 'react-hot-toast';
 import { NewAppointmentModal, CancelAppointmentModal, ModifyAppointmentModal, RemoveAppointModal, CompleteAppointment, PendingAppointment } from "@/components/system/modals/AppointmentActions";
 import AvailabilityModal from "@/components/system/modals/AvailabilityModal";
-import SuccessModal from "@/components/system/modals/SuccessModal";
 import PageTitle from "@/components/system/PageTitle";
 import IconButton from "@/components/system/IconButton";
 import AppointmentGrid from "@/components/system/appointments/AppointmentGrid";
@@ -12,23 +12,21 @@ import AppointmentCalendar from "@/components/system/appointments/AppointmentCal
 import WhiteIconButton from "@/components/system/WhiteIconButton";
 import FilterBar from "@/components/system/FilterBar";
 import { Plus, SquarePen } from "lucide-react";
-import { useState, createContext, useEffect, useReducer } from "react";
+import { useState, createContext, useEffect } from "react";
 import appointmentsEmpty from "../../../public/appointments-empty.png";
 import { AppointmentType } from "@/utils/types";
 import { pageSeparator } from "@/utils/system/page-separator";
+import manageAvailability from "@/utils/website/manage-availability";
 import api from "@/lib/axios";
 
-export const CardActionContext = createContext<(action: string, id: number) => void>(() => "");
+export const CardActionContext = createContext<(action: string, id: string) => void>(() => "");
 export const AppointmentPageContext = createContext("");
 
 type AppointmentDataset = AppointmentType[];
 
 function AppointmentDashboard() {
-
-    const [rerender, setRerender] = useState(false);
     const [view, setView] = useState("cards");
     const [searchValue, setSearchValue] = useState("");
-    const [successfulAction, setSuccessfulAction] = useState("");
     const [appointmentsData, setAppointmentsData] = useState<any>([]);
     const [appointmentPages, setAppointmentPages] = useState<any[]>([]);
 
@@ -36,11 +34,13 @@ function AppointmentDashboard() {
     const [newAppointmentModal, setNewAppointmentModal] = useState(false);
     const [availabilityModal, setAvailabilityModal] = useState(false);
     const [cardAction, setCardAction] = useState("");
-    const [appointmentId, setAppointmentId] = useState(0);
+    const [appointmentId, setAppointmentId] = useState("");
     const [success, setSuccess] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        console.log("Cambio detectado");
+
         const getAllAppointments = async () => {
             try {
                 const res = await api.get("/appointments");
@@ -48,24 +48,28 @@ function AppointmentDashboard() {
 
                 const separatedPages = pageSeparator(res.data); // Separate the obtained data from the database in pages.
                 setAppointmentPages(separatedPages);
-                setIsLoading(false);
-
             } catch (error) {
                 console.log("Error while fetching the appointments", error);
+            } finally {
+                setIsLoading(false);
             }
         };
 
         getAllAppointments();
-    }, [cardAction]);
+
+        if (cardAction === "closed") {
+            getAllAppointments();
+        };
+
+    }, [cardAction, success]);
 
     function showSuccessModal(successMsg: string) {
-        setSuccess(true);
-        setSuccessfulAction(successMsg)
-        setTimeout(() => setSuccess(false), 3000);
+        toast.success(successMsg, { duration: 3500 });
     };
 
     function onSaveAppointment() {
         setNewAppointmentModal(false);
+        setCardAction("created");
         showSuccessModal("¡Cita creada correctamente!");
     };
 
@@ -75,39 +79,37 @@ function AppointmentDashboard() {
     };
 
     function onUpdateStatus(action: string) {
-        setCardAction("");
-
         if (action === "complete") {
-            // Include the PUT controller to update the appointment's status.
-            showSuccessModal("¡Cita marcada como completa correctamente!");
+            updateStatus(appointmentId, "finished");
+            showSuccessModal("¡Estatus de la cita actualizado!");
         } else if (action === "pending") {
-            // Include the PUT controller to update the appointment's status.
-            showSuccessModal("¡Cita marcada como pendiente correctamente!");
-        } else if (action === "cancel") {
-            // Include the PUT controller to update the appointment's status.
-            showSuccessModal("¡Cita cancelada correctamente!");
-        };
+            updateStatus(appointmentId, "pending");
+            showSuccessModal("¡Estatus de la cita actualizado!");
+        }
+
+        setCardAction("closed");
     };
 
+    function onCancelStatus() {
+        setCardAction("closed");
+        showSuccessModal("¡Cita cancelada correctamente!")
+    }
+
     function onModifyAppointment() {
-        setCardAction(""); // Close the action modal.
+        setCardAction("closed"); // Close the action modal.
         showSuccessModal("¡Cita actualizada correctamente!");
     };
 
     function onRemoveAppointment() {
-        setCardAction(""); // Close the action modal.
         api.delete("/appointments/" + appointmentId);
+        setCardAction("closed"); // Close the action modal.
         setAppointmentsData((prev: AppointmentType[]) => prev.filter(appointment => appointment._id !== appointmentId));
-        showSuccessModal("Cita eliminada correctamente.");
+        showSuccessModal("¡Cita eliminada correctamente!");
     };
 
-    function onViewChange(selectedView: string) {
-        setView(selectedView);
-    };
-
-    function onActionSelected(action: string, number: number) {
+    function onActionSelected(action: string, id: string) {
         setCardAction(action);
-        setAppointmentId(number);
+        setAppointmentId(id);
     };
 
     return (
@@ -123,7 +125,7 @@ function AppointmentDashboard() {
                     )}
 
                     {cardAction === "cancel" && (
-                        <CancelAppointmentModal onSave={() => onUpdateStatus("cancel")} isVisible={cardAction === "cancel"} onClose={() => setCardAction("")} />
+                        <CancelAppointmentModal updateElementId={appointmentId} onSave={onCancelStatus} isVisible={cardAction === "cancel"} onClose={() => setCardAction("")} />
                     )}
 
                     {cardAction === "complete" && (
@@ -145,7 +147,7 @@ function AppointmentDashboard() {
                 </>
             }>
 
-            <SuccessModal isVisible={success} text={successfulAction} />
+            <Toaster />
 
             <div className="header flex sm:flex-row flex-col justify-between items-start sm:gap-10 gap-6 w-full">
                 <PageTitle title="Registro de Citas" desc="Consulta y administra las citas agendadas por los usuarios en el sitio." />
@@ -156,10 +158,20 @@ function AppointmentDashboard() {
                 </div>
             </div>
 
-            <FilterBar onViewChange={onViewChange} firstElement={
-                <p className="text-lg font-medium text-slate-800">
-                    Hay <span className="font-semibold text-indigo-500">{appointmentsData.length}</span> citas pendientes
-                </p>
+            <FilterBar onViewChange={(selectedView: string) => setView(selectedView)} firstElement={
+                <>
+                    {appointmentsData.length === 1 && (
+                        <p className="text-lg font-medium text-slate-800">
+                            Hay <span className="font-semibold text-indigo-500">1</span> cita pendiente
+                        </p>
+                    )}
+
+                    {appointmentsData.length > 1 && (
+                        <p className="text-lg font-medium text-slate-800">
+                            Hay <span className="font-semibold text-indigo-500">{appointmentsData.length}</span> citas pendientes
+                        </p>
+                    )}
+                </>
             }
             />
 

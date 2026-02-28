@@ -10,7 +10,7 @@ import { Appointment } from "@/utils/classes";
 import InputWarning from "./InputWarning";
 import { InputChange, SelectChange } from "@/utils/website/input-change-handlers";
 import manageAvailability from "../../utils/website/manage-availability";
-import { AppointmentType } from "@/utils/types";
+import { AppointmentType, DayFormat } from "@/utils/types";
 
 type WeekDayObject = {
     writtenDate: string,
@@ -27,8 +27,50 @@ type FormProps = {
 };
 
 function AppointmentForm(props: FormProps) {
-    console.log("editableId:", props.editionId);
     const [modifiableData, setModifiableData] = useState<AppointmentType>();
+    // Variables for the form inputs.
+    const [patientName, setPatientName] = useState("");
+    const [motherSurname, setMotherSurname] = useState("");
+    const [fatherSurname, setFatherSurname] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [date, setDate] = useState("");
+    const [hour, setHour] = useState("");
+    const [formattedDate, setFormattedDate] = useState("");
+    const [writtenDate, setWrittenDate] = useState("");
+    const [availability, setAvailability] = useState([]);
+    const [availDays, setAvailDays] = useState<DayFormat[][]>();
+    const [availHours, setAvailHours] = useState<string[]>();
+
+    // Input validations.
+    const [validationsShot, setValidationsShot] = useState(false);
+    const [nameValidation, setNameValidation] = useState(false);
+    const [motherSurnameValid, setMotherSurnameValid] = useState(false);
+    const [fatherSurnameValid, setFatherSurnameValid] = useState(false);
+    const [numberValidation, setNumberValidation] = useState(false);
+    const [dateValidation, setDateValidation] = useState(false);
+    const [hourValidation, setHourValidation] = useState(false);
+
+    useEffect(() => {
+        const fetchAvailability = async () => {
+            try {
+                // Variable definition.
+                const res = await api.get("/availability"); // Getting availability from the backend.
+                console.log("availability:", res.data);
+                setAvailability(res.data);
+
+                const formattedAvailability = manageAvailability(res.data);
+                console.log("Disponibilidad:", manageAvailability(res.data));
+                setAvailDays(formattedAvailability);
+                setAvailHours(formattedAvailability[0][1].hours)
+                
+                formattedAvailability[0]
+            } catch (error) {
+                console.log("Error fetching availability", error);
+            };
+
+        };
+        fetchAvailability();
+    }, [date]);
 
     useEffect(() => {
         const getEditableAppointment = async () => {
@@ -51,84 +93,6 @@ function AppointmentForm(props: FormProps) {
         };
 
     }, []);
-
-    console.log("DATOS ENCONTRADOS", (modifiableData));
-
-    // Variables for the form inputs.
-    const [patientName, setPatientName] = useState("");
-    const [motherSurname, setMotherSurname] = useState("");
-    const [fatherSurname, setFatherSurname] = useState("");
-    const [phoneNumber, setPhoneNumber] = useState("");
-    const [date, setDate] = useState("");
-    const [hour, setHour] = useState("");
-    const [formattedDate, setFormattedDate] = useState("");
-    const [writtenDate, setWrittenDate] = useState("");
-    const [availability, setAvailability] = useState([]);
-    const [availDays, setAvailDays] = useState<{ currentWeekList: WeekDayObject[], nextWeekList: WeekDayObject[] }>({ currentWeekList: [], nextWeekList: [] });
-    const [availHours, setAvailHours] = useState<string[]>();
-
-    // Input validations.
-    const [validationsShot, setValidationsShot] = useState(false);
-    const [nameValidation, setNameValidation] = useState(false);
-    const [motherSurnameValid, setMotherSurnameValid] = useState(false);
-    const [fatherSurnameValid, setFatherSurnameValid] = useState(false);
-    const [numberValidation, setNumberValidation] = useState(false);
-    const [dateValidation, setDateValidation] = useState(false);
-    const [hourValidation, setHourValidation] = useState(false);
-
-    useEffect(() => {
-        const fetchAvailability = async () => {
-            try {
-                // Variable definition.
-                const res = await axios.get("http://localhost:5001/api/availability"); // Getting availability from the backend.
-                const day = date; // Create a copy of the 'date' string.
-                const dayToArray = day.split(""); // Convert the string into a character-separated array.
-                const firstCharacter = dayToArray[0]; // Getting the week mark ('c' or 'n') set in the 'Manage Availability' module.
-                dayToArray.splice(0, 1); // Now, we can remove the week mark.
-
-                // Using the backend's response.
-                setAvailability(res.data);
-                const calculatedDays = manageAvailability(res.data);
-                setAvailDays(calculatedDays);
-
-                var finalDayName = "";
-
-                // Rebuilding the day's name by summing the array's items.
-                for (let i = 0; i < dayToArray.length; i++) {
-                    finalDayName += dayToArray[i];
-                };
-
-
-                if (firstCharacter === "c") {
-                    // Searching for the formatted date in the CURRENT week list of days, based on its database ID.
-                    for (let i = 0; i < calculatedDays.currentWeekList.length; i++) {
-                        if (calculatedDays.currentWeekList[i].databaseId === date) {
-                            setFormattedDate(calculatedDays.currentWeekList[i].formattedDate);
-                            setWrittenDate(calculatedDays.currentWeekList[i].writtenDate);
-                        };
-                    };
-
-                    setAvailHours(availability[0][finalDayName]);
-
-                } else if (firstCharacter === "n") {
-                    // Searching for the formatted date in the NEXT week list of days, based on its database ID.
-                    for (let i = 0; i < calculatedDays.nextWeekList.length; i++) {
-                        if (calculatedDays.nextWeekList[i].databaseId === date) {
-                            setFormattedDate(calculatedDays.nextWeekList[i].formattedDate);
-                            setWrittenDate(calculatedDays.nextWeekList[i].writtenDate);
-                        };
-                    };
-
-                    setAvailHours(availability[1][finalDayName]);
-                }
-
-            } catch (error) {
-                console.log("Error fetching availability", error);
-            };
-
-        };
-        fetchAvailability();
-    }, [date]);
 
     // Name validation.
     function shootValidations(e: React.FormEvent) {

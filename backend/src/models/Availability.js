@@ -1,14 +1,6 @@
 import mongoose from "mongoose";
 
 const availabilitySchema = new mongoose.Schema({
-    weekStart: {
-        type: String,
-        required: true
-    },
-    weekFinish: {
-        type: String,
-        required: true
-    },
     lunes: {
         type: [String],
         required: true,

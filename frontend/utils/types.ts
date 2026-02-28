@@ -1,5 +1,5 @@
 interface AppointmentType {
-    _id: number;
+    _id: string;
     status: string;
     patientName: string;
     fatherSurname: string;
@@ -8,6 +8,7 @@ interface AppointmentType {
     date: string;
     hour: string;
     timestamp?: string;
+    cancellationComment?: string;
 };
 
 interface PatientHistory {
@@ -66,7 +67,22 @@ type ModalProps = {
 };
 
 interface ActionModalProps extends ModalProps {
-    updateElementId: number;
+    isVisible: boolean;
+    onClose: () => void;
+    onSave: () => void;
+    updateElementId: string;
+};
+
+interface UpdateStatusModal {
+    isVisible: boolean;
+    onClose: () => void;
+    onSave: () => void;
+}
+
+type DayFormat = {
+    writtenDate: string;
+    databaseDate: string;
+    hours: string[];
 };
 
 export type {
@@ -74,8 +90,10 @@ export type {
     TagType,
     ModalProps,
     ActionModalProps,
+    UpdateStatusModal,
     PatientType,
     TherapistType,
     PatientHistory,
-    CommentType
+    CommentType,
+    DayFormat
 };

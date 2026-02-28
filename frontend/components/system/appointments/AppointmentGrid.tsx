@@ -58,6 +58,7 @@ function AppointmentGrid(props: GridProps) {
                         phoneNumber={item.phoneNumber}
                         date={item.date} // We pass item.date first by AppointmentFormatter().
                         hour={item.hour} // We pass item.date first by AppointmentFormatter().
+                        cancellationComment={item.cancellationComment}
                         timestamp={item.timestamp}
                         page={props.page}
                     />

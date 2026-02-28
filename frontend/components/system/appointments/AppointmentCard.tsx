@@ -8,7 +8,8 @@ import {
     ClockIcon,
     Phone,
     CircleUserRound,
-    Trash
+    Trash,
+    MessageCircleMore
 } from "lucide-react";
 import AppointmentDropdown from "./AppointmentDropdown";
 import { HistoryActionContext } from "@/app/system/history/page";
@@ -23,7 +24,7 @@ import { Button } from "@/components/ui/button";
 import OptionCheckbox from "../OptionCheckbox";
 
 type CardProps = {
-    _id: number;
+    _id: string;
     status: string;
     patientName: string;
     fatherSurname: string;
@@ -32,6 +33,7 @@ type CardProps = {
     date: string;
     hour: string;
     timestamp?: string;
+    cancellationComment?: string;
     page: "history" | "appointments";
 }
 
@@ -43,7 +45,29 @@ function AppointmentCard(props: CardProps) {
             <div className={`absolute w-1 h-full ${props.status === "pending" ? "bg-yellow-500" : (props.status === "finished" ? "bg-green-500" : "bg-rose-500")} left-0`}></div>
 
             <div className="relative w-full flex flex-row justify-between items-center">
-                <AppointmentTag type={props.status === "pending" ? "pending" : (props.status === "finished" ? "finished" : "cancelled")} />
+                <div className="flex flex-row gap-2 w-auto items-center justify-center">
+                    <AppointmentTag type={props.status === "pending" ? "pending" : (props.status === "finished" ? "finished" : "cancelled")} />
+
+                    {props.status === "cancelled" && props.cancellationComment != "placeholder" && (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button className="px-0! py-0!" variant="ghost">
+                                    <div className={`gap-1 flex flex-row cursor-pointer items-center justify-center text-slate-500 px-2.5 py-1 bg-slate-100 border border-slate-300 rounded-full`}>
+                                        <MessageCircleMore size={14} className="shrink" />
+                                        <p className="font-medium text-xs">Comentarios</p>
+                                    </div>
+                                </Button>
+                            </DropdownMenuTrigger>
+
+                            <DropdownMenuContent className="p-4 flex flex-col gap-2 max-w-70">
+                                <p className="text-sm font-medium text-slate-800">Motivos de cancelación:</p>
+                                <div className="comment-content p-2.5 bg-slate-100 border border-slate-200 rounded-sm">
+                                    <p className="text-sm">{props.cancellationComment}</p>
+                                </div>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
+                </div>
 
                 {props.page === "appointments" && (
                     <AppointmentDropdown appointmentStatus={props.status} appointmentId={props._id} />
@@ -102,6 +126,7 @@ function AppointmentCardCalendar(props: CardProps) {
                         hour={props.hour}
                         status={props.status}
                         page={props.page}
+                        cancellationComment={props.cancellationComment}
                         _id={props._id}
 
                     />

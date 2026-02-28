@@ -1,15 +1,16 @@
 "use client";
 
 import MediumModal from "./MediumModal";
+import { updateStatus } from "@/lib/update-appointment-status";
+import { AppointmentType } from "@/utils/types";
 import api from "@/lib/axios";
 import SmallModal from "./SmallModal";
 import { Appointment } from "@/utils/classes";
 import AppointmentForm from "@/components/website/AppointmentForm";
-import { ModalProps, ActionModalProps } from "@/utils/types";
+import { ModalProps, ActionModalProps, UpdateStatusModal } from "@/utils/types";
 import { useState, useEffect } from "react";
 
 function NewAppointmentModal(props: ModalProps) {
-
     async function saveBtnPressed(receiptObject: Appointment, databaseObject: Appointment) {
         await api.post("/appointments", databaseObject);
         props.onSave();
@@ -32,11 +33,8 @@ function NewAppointmentModal(props: ModalProps) {
 };
 
 function ModifyAppointmentModal(props: ActionModalProps) {
-
     async function editAppointment(databaseObject: Appointment) {
-
         await api.put("/appointments/" + props.updateElementId, databaseObject);
-
         props.onSave();
     };
 
@@ -72,13 +70,32 @@ function CompleteAppointment(props: ModalProps) {
     );
 };
 
-function CancelAppointmentModal(props: ModalProps) {
+function CancelAppointmentModal(props: ActionModalProps) {
     const [cancellationMsg, setCancellationMsg] = useState("");
 
-    function onSubmitCancellation(e: React.FormEvent) {
+    async function onSubmitCancellation(e: React.FormEvent) {
         e.preventDefault();
 
-        // Logic here to update the cancellation
+        try {
+            const res = await api.get("/appointments/" + props.updateElementId);
+            const foundAppointment: AppointmentType = res.data;
+
+            if (!cancellationMsg) {
+                foundAppointment.cancellationComment = "placeholder";
+                foundAppointment.status = "cancelled";
+                api.put("/appointments/" + props.updateElementId, foundAppointment);
+                
+            } else if (foundAppointment != undefined) {
+                foundAppointment.cancellationComment = cancellationMsg;
+                foundAppointment.status = "cancelled";
+                api.put("/appointments/" + props.updateElementId, foundAppointment);
+            };
+
+            props.onSave();
+
+        } catch (error) {
+            console.log("An error ocurred:", error)
+        };
     };
 
     return (
@@ -89,7 +106,6 @@ function CancelAppointmentModal(props: ModalProps) {
             btnType="submit"
             btnForm="cancellationForm"
             onClose={props.onClose}
-            onSave={props.onSave}
             confirmationBtnText="Terminar"
         >
 
@@ -118,7 +134,7 @@ function PendingAppointment(props: ActionModalProps) {
     );
 };
 
-function RemoveAppointModal(props: ActionModalProps) {    
+function RemoveAppointModal(props: ActionModalProps) {
     return (
         <SmallModal
             isVisible={props.isVisible}

@@ -19,7 +19,7 @@ import {
 
 type DropdownProps = {
     appointmentStatus: string,
-    appointmentId: number,
+    appointmentId: string,
 }
 
 function AppointmentDropdown(props: DropdownProps) {
