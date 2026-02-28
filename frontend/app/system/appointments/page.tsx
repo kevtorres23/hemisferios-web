@@ -16,13 +16,10 @@ import { useState, createContext, useEffect } from "react";
 import appointmentsEmpty from "../../../public/appointments-empty.png";
 import { AppointmentType } from "@/utils/types";
 import { pageSeparator } from "@/utils/system/page-separator";
-import { formatAvailability } from "@/utils/website/format-availability";
 import api from "@/lib/axios";
 
 export const CardActionContext = createContext<(action: string, id: string) => void>(() => "");
 export const AppointmentPageContext = createContext("");
-
-type AppointmentDataset = AppointmentType[];
 
 function AppointmentDashboard() {
     const [view, setView] = useState("cards");
@@ -35,12 +32,9 @@ function AppointmentDashboard() {
     const [availabilityModal, setAvailabilityModal] = useState(false);
     const [cardAction, setCardAction] = useState("");
     const [appointmentId, setAppointmentId] = useState("");
-    const [success, setSuccess] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        console.log("Cambio detectado");
-
         const getAllAppointments = async () => {
             try {
                 const res = await api.get("/appointments");
@@ -48,20 +42,22 @@ function AppointmentDashboard() {
 
                 const separatedPages = pageSeparator(res.data); // Separate the obtained data from the database in pages.
                 setAppointmentPages(separatedPages);
+
             } catch (error) {
                 console.log("Error while fetching the appointments", error);
             } finally {
                 setIsLoading(false);
-            }
+            };
         };
 
         getAllAppointments();
 
-        if (cardAction === "closed") {
+        if ((cardAction === "closed") || (cardAction === "")){
+            console.log("change");
             getAllAppointments();
         };
 
-    }, [cardAction, success]);
+    }, [cardAction]);
 
     function showSuccessModal(successMsg: string) {
         toast.success(successMsg, { duration: 3500 });

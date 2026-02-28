@@ -28,9 +28,6 @@ type CalendarUIProps = {
     week: number;
 };
 
-const date = new Date();
-const currentYear = date.getFullYear();
-
 function CalendarDay(props: DayProps) {
     return (
         <div className={`min-w-40 w-full items-center justify-center bg-slate-100 border-t border-l border-b border-slate-200 flex flex-row gap-1 px-3 py-2 text-sm ${props.isLast ? "rounded-tr-lg border-r" : (props.isFirst ? "rounded-tl-lg" : "rounded-none")} ${props.isActive ? "text-indigo-500" : "text-slate-600"}`}>
@@ -88,7 +85,7 @@ function CalendarUI(props: CalendarUIProps) {
                             )}
                             isActive={todayNum === id + 1}
                             isFirst={false}
-                            isLast={id === 6}
+                            isLast={id === 5}
                         />
                     );
                 }
@@ -101,7 +98,7 @@ function CalendarUI(props: CalendarUIProps) {
                 return (
                     <div className="calendar-content flex flex-row w-full">
                         <CalendarHour
-                            key={hourId}
+                            key={id}
                             hour={calendarHours[id]}
                             isLast={id === (hours.length - 1)}
                         />
@@ -113,7 +110,7 @@ function CalendarUI(props: CalendarUIProps) {
                                 return (
                                     <>
                                         <CalendarSpace
-                                            key={dayId}
+                                            key={id}
                                             content={
                                                 foundAppointment != "" ? <AppointmentCardCalendar
                                                     _id={foundAppointment._id}
@@ -153,7 +150,7 @@ function CalendarUI(props: CalendarUIProps) {
                                             page={props.page}
                                         />
                                             : ("")}
-                                        isLast={id === 6}
+                                        isLast={id === 5}
                                         key={id}
                                     />
                                 );

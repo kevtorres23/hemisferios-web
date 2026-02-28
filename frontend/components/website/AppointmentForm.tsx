@@ -36,7 +36,6 @@ function AppointmentForm(props: FormProps) {
     const [date, setDate] = useState("");
     const [hour, setHour] = useState("");
     const [formattedDate, setFormattedDate] = useState("");
-    const [writtenDate, setWrittenDate] = useState("");
     const [availability, setAvailability] = useState([]);
     const [availDays, setAvailDays] = useState<DayFormat[][]>();
     const [availHours, setAvailHours] = useState<string[]>();
@@ -67,7 +66,6 @@ function AppointmentForm(props: FormProps) {
                         if (day.databaseDate === date) {
                             setAvailHours(day.hours);
                             setFormattedDate(day.writtenDate);
-                            console.log(day.databaseDate, day.hours)
                         };
                     });
                 });

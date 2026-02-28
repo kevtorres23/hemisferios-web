@@ -13,12 +13,6 @@ import {
 } from '@/components/ui/select';
 import { DayFormat } from "@/utils/types";
 
-type WeekDayObject = {
-    writtenDate: string,
-    formattedDate: string,
-    databaseId: string,
-}
-
 type SelectProps = {
     label: string;
     value: string;

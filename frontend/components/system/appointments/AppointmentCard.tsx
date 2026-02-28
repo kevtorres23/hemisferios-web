@@ -1,6 +1,6 @@
 import { AppointmentType } from "@/utils/types";
 import { dateFormatter, hourFormatter } from "@/utils/system/appointment-formatter";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { CardActionContext } from "@/app/system/appointments/page";
 import AppointmentTag from "./AppointmentTag";
 import {

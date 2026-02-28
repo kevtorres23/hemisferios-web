@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { CardActionContext } from "@/app/system/appointments/page";
 import {
     Ellipsis,

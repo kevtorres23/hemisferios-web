@@ -38,9 +38,9 @@ function SelectHourInput(props: SelectProps) {
                 <SelectContent className="bg-white text-sm z-999" sideOffset={5} position="popper">
                     <SelectGroup className="h-80 overflow-y-scroll">
                         <SelectLabel className="text-sm">Hora de la cita</SelectLabel>
-                        {/* Map the available dates from the database*/}
-                        {props.items?.map((item, id) =>
-                            <SelectItem className="text-sm" key={id} value={item}>{item}</SelectItem>
+                        {/* Map the available hours from the database*/}
+                        {props.items?.map((hour, id) =>
+                            <SelectItem className="text-sm" key={id} value={hour}>{hour}</SelectItem>
                         )}
                     </SelectGroup>
                 </SelectContent>

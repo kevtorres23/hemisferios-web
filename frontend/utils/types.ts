@@ -1,3 +1,5 @@
+import type { Option } from "@/components/ui/multi-select";
+
 interface AppointmentType {
     _id: string;
     status: string;
@@ -85,6 +87,15 @@ type DayFormat = {
     hours: string[];
 };
 
+type Availability = {
+    lunes: (string | number)[],
+    martes: (string | number)[],
+    miercoles: (string | number)[],
+    jueves: (string | number)[],
+    viernes: (string | number)[],
+    sabado:(string | number)[],
+};
+
 export type {
     AppointmentType,
     TagType,
@@ -95,5 +106,6 @@ export type {
     TherapistType,
     PatientHistory,
     CommentType,
-    DayFormat
+    DayFormat,
+    Availability
 };
