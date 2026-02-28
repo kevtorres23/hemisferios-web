@@ -16,7 +16,7 @@ import { useState, createContext, useEffect } from "react";
 import appointmentsEmpty from "../../../public/appointments-empty.png";
 import { AppointmentType } from "@/utils/types";
 import { pageSeparator } from "@/utils/system/page-separator";
-import manageAvailability from "@/utils/website/format-availability";
+import { formatAvailability } from "@/utils/website/format-availability";
 import api from "@/lib/axios";
 
 export const CardActionContext = createContext<(action: string, id: string) => void>(() => "");
