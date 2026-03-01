@@ -20,6 +20,7 @@ import api from "@/lib/axios";
 
 export const CardActionContext = createContext<(action: string, id: string) => void>(() => "");
 export const AppointmentPageContext = createContext("");
+export const ActiveFilterContext = createContext<(filterName: string) => void>(() => "");
 
 function AppointmentDashboard() {
     const [view, setView] = useState("cards");
@@ -30,9 +31,12 @@ function AppointmentDashboard() {
     // Modal variables.
     const [newAppointmentModal, setNewAppointmentModal] = useState(false);
     const [availabilityModal, setAvailabilityModal] = useState(false);
-    const [cardAction, setCardAction] = useState("");
     const [appointmentId, setAppointmentId] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+
+    const [cardAction, setCardAction] = useState("");
+    const [activeFilters, setActiveFilters] = useState<string[]>([]);
+
 
     useEffect(() => {
         const getAllAppointments = async () => {
@@ -52,7 +56,7 @@ function AppointmentDashboard() {
 
         getAllAppointments();
 
-        if ((cardAction === "closed") || (cardAction === "")){
+        if ((cardAction === "closed") || (cardAction === "")) {
             console.log("change");
             getAllAppointments();
         };
@@ -107,6 +111,10 @@ function AppointmentDashboard() {
         setCardAction(action);
         setAppointmentId(id);
     };
+
+    function onFilterSelected(filterName: string) {
+        setActiveFilters([...activeFilters, filterName])
+    }
 
     return (
         <SystemLayout sidebarPage="appointments" isAnyModal={newAppointmentModal || availabilityModal || cardAction === "cancel" || cardAction === "complete" || cardAction === "modify" || cardAction === "remove" || cardAction === "pending"}
@@ -187,7 +195,9 @@ function AppointmentDashboard() {
 
             {appointmentsData.length > 0 && view === "cards" && (
                 <CardActionContext.Provider value={onActionSelected}>
-                    <AppointmentGrid page="appointments" data={appointmentPages} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
+                    <ActiveFilterContext.Provider value={onFilterSelected} >
+                        <AppointmentGrid page="appointments" data={appointmentPages} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
+                    </ActiveFilterContext.Provider>
                 </CardActionContext.Provider>
             )}
 
