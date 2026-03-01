@@ -66,7 +66,7 @@ function FilterDropdown(props: FilterProps) {
 
                 {/* Intervalo */}
                 <DropdownMenuGroup className="flex flex-col gap-4 p-2.5">
-                    <DropdownMenuLabel className="text-slate-600 font-normal p-0">Intervalo:</DropdownMenuLabel>
+                    <DropdownMenuLabel className="text-slate-600 font-medium p-0">Intervalo:</DropdownMenuLabel>
                     <RadioGroup value={props.intervalValue} onValueChange={(val: string) => props.onIntervalChange(val)} defaultValue="comfortable" className="px-2 w-full flex flex-col gap-3">
                         <div className="flex items-center gap-2">
                             <RadioGroupItem value="two-weeks" id="two-weeks" />
@@ -128,7 +128,7 @@ function FilterDropdown(props: FilterProps) {
 
                 <DropdownMenuSeparator className="w-full border border-slate-200" />
 
-                {/* Orden */}
+                {/* Orden
                 <DropdownMenuGroup className="flex flex-col gap-4 p-2.5">
                     <DropdownMenuLabel className="text-slate-600 font-normal p-0">Orden:</DropdownMenuLabel>
 
@@ -141,10 +141,11 @@ function FilterDropdown(props: FilterProps) {
                 </DropdownMenuGroup>
 
                 <DropdownMenuSeparator className="w-full border border-slate-200" />
+                */}
 
                 {/* Estado */}
                 <DropdownMenuGroup className="flex flex-col gap-4 p-2.5">
-                    <DropdownMenuLabel className="text-slate-600 font-normal p-0">Estado(s):</DropdownMenuLabel>
+                    <DropdownMenuLabel className="text-slate-600 font-medium p-0">Estado(s):</DropdownMenuLabel>
                     <div className="option-row flex flex-col gap-2">
                         <OptionCheckbox checked={pendingChecked} onCheckedChange={() => setPendingChecked(!pendingChecked)} item={<AppointmentTag type="pending" />} />
                         <OptionCheckbox checked={finishedChecked} onCheckedChange={() => setFinishedChecked(!finishedChecked)} item={<AppointmentTag type="finished" />} />

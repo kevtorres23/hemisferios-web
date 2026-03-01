@@ -1,1 +1,0 @@
-// Set of functions that are used to filter the appointments.
