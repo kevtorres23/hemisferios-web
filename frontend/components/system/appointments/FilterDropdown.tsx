@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useState, useContext, useEffect } from "react";
-import { ActiveFilterContext } from "@/app/system/appointments/page";
+import { useAppointmentFilters } from "@/utils/system/appointments/filter-store";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -32,26 +32,91 @@ import { Funnel } from "lucide-react";
 type FilterProps = {
     intervalValue: string;
     onIntervalChange: (val: string) => void;
-}
+};
+
+type Status = {
+    pending: boolean,
+    finished: boolean,
+    cancelled: boolean
+};
+
+type FilterStore = {
+    interval: [string, string],
+    statusObject: Status,
+    updateInterval: (newIntervalArray: [string, string]) => void,
+    updateStatus: (statusObject: Status) => void,
+};
+
+const months = ["ene.", "feb.", "mar.", "abr.", "mayo", "jun.", "jul.", "ago.", "sep.", "oct.", "nov.", "dic."];
+const fullDays = [...currentWeekList, ...nextWeekList];
+const year = new Date().getFullYear();
+
+const firstDefault = lessThanTen(fullDays[0].dayNum.number) + "/" + lessThanTen(fullDays[0].dayNum.month) + "/" + year;
+const secondDefault = lessThanTen(fullDays[11].dayNum.number) + "/" + lessThanTen(fullDays[11].dayNum.month) + "/" + year;
 
 function FilterDropdown(props: FilterProps) {
     const [orderFilter, setOrderFilter] = useState(true); // True for most recent - False for least recent.
-    const [finishedChecked, setFinishedChecked] = useState(true);
     const [pendingChecked, setPendingChecked] = useState(true);
+    const [finishedChecked, setFinishedChecked] = useState(true);
     const [cancelledChecked, setCancelledChecked] = useState(true);
-    const [interval, setInterval] = useState<"full" | { firstValue: string, secondValue: string }>("full");
+    const [intervalFirst, setIntervalFirst] = useState(firstDefault);
+    const [intervalSecond, setIntervalSecond] = useState(secondDefault)
     const id = useId();
 
-    const months = ["ene.", "feb.", "mar.", "abr.", "mayo", "jun.", "jul.", "ago.", "sep.", "oct.", "nov.", "dic."];
-    const fullDays = [...currentWeekList, ...nextWeekList];
-    const year = new Date().getFullYear();
+    // Store variables (Zustand).
+    const interval = useAppointmentFilters((state: FilterStore) => state.interval);
+    const checkedStatus = useAppointmentFilters((state: FilterStore) => state.statusObject);
+    const updateInterval = useAppointmentFilters((state: FilterStore) => state.updateInterval);
+    const updateStatus = useAppointmentFilters((state: FilterStore) => state.updateStatus);
 
-    const firstDefault = lessThanTen(fullDays[0].dayNum.number) + "/" + lessThanTen(fullDays[0].dayNum.month) + "/" + year;
-    const secondDefault = lessThanTen(fullDays[11].dayNum.number) + "/" + lessThanTen(fullDays[11].dayNum.month) + "/" + year;
+    console.log("Intervalo:", interval);
+    console.log("Estatus completados:", checkedStatus);
 
-    useEffect(() => {
+    function onFirstIntervalChange(val: string) {
+        setIntervalFirst(val);
+        updateInterval([intervalFirst, intervalSecond]);
+    };
 
-    }, [orderFilter, finishedChecked, pendingChecked, cancelledChecked, interval])
+    function onSecondIntervalChange(val: string) {
+        setIntervalSecond(val);
+        updateInterval([intervalFirst, intervalSecond]);
+    };
+
+    function onPendingChange() {
+        setPendingChecked(!pendingChecked);
+
+        const updatedObject = {
+            pending: pendingChecked,
+            finished: finishedChecked,
+            cancelled: cancelledChecked
+        };
+
+        updateStatus(updatedObject);
+    };
+
+    function onFinishedChange() {
+        setFinishedChecked(!finishedChecked);
+
+        const updatedObject = {
+            pending: pendingChecked,
+            finished: finishedChecked,
+            cancelled: cancelledChecked
+        };
+
+        updateStatus(updatedObject);
+    };
+
+    function onCancelledChange() {
+        setCancelledChecked(!cancelledChecked);
+
+        const updatedObject = {
+            pending: pendingChecked,
+            finished: finishedChecked,
+            cancelled: cancelledChecked
+        };
+
+        updateStatus(updatedObject);
+    };
 
     return (
         <DropdownMenu>
@@ -81,7 +146,7 @@ function FilterDropdown(props: FilterProps) {
                         <div className="date-selector w-full flex flex-col gap-3">
                             <div className='w-full space-y-2'>
                                 <Label className="text-xs text-slate-600" htmlFor={id}>Del:</Label>
-                                <Select defaultValue={firstDefault} disabled={props.intervalValue != "custom"}>
+                                <Select value={intervalFirst} onValueChange={(val: string) => onFirstIntervalChange(val)} defaultValue={firstDefault} disabled={props.intervalValue != "custom"}>
                                     <SelectTrigger id={id} className='w-full'>
                                         <SelectValue placeholder='Select a fruit' />
                                     </SelectTrigger>
@@ -102,7 +167,7 @@ function FilterDropdown(props: FilterProps) {
 
                             <div className='w-full space-y-2'>
                                 <Label className="text-xs text-slate-600" htmlFor={id}>Al:</Label>
-                                <Select defaultValue={secondDefault} disabled={props.intervalValue != "custom"}>
+                                <Select value={intervalSecond} onValueChange={(val: string) => onSecondIntervalChange(val)} defaultValue={secondDefault} disabled={props.intervalValue != "custom"}>
                                     <SelectTrigger id={id} className='w-full'>
                                         <SelectValue placeholder='Select a fruit' />
                                     </SelectTrigger>
@@ -147,9 +212,9 @@ function FilterDropdown(props: FilterProps) {
                 <DropdownMenuGroup className="flex flex-col gap-4 p-2.5">
                     <DropdownMenuLabel className="text-slate-600 font-medium p-0">Estado(s):</DropdownMenuLabel>
                     <div className="option-row flex flex-col gap-2">
-                        <OptionCheckbox checked={pendingChecked} onCheckedChange={() => setPendingChecked(!pendingChecked)} item={<AppointmentTag type="pending" />} />
-                        <OptionCheckbox checked={finishedChecked} onCheckedChange={() => setFinishedChecked(!finishedChecked)} item={<AppointmentTag type="finished" />} />
-                        <OptionCheckbox checked={cancelledChecked} onCheckedChange={() => setCancelledChecked(!cancelledChecked)} item={<AppointmentTag type="cancelled" />} />
+                        <OptionCheckbox checked={pendingChecked} onCheckedChange={onPendingChange} item={<AppointmentTag type="pending" />} />
+                        <OptionCheckbox checked={finishedChecked} onCheckedChange={onFinishedChange} item={<AppointmentTag type="finished" />} />
+                        <OptionCheckbox checked={cancelledChecked} onCheckedChange={onCancelledChange} item={<AppointmentTag type="cancelled" />} />
                     </div>
                 </DropdownMenuGroup>
             </DropdownMenuContent>

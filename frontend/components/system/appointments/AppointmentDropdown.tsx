@@ -39,7 +39,7 @@ function AppointmentDropdown(props: DropdownProps) {
 
                     {props.appointmentStatus === "pending" && (
                         <>
-                            <DropdownMenuItem onClick={() => setAction("complete", props.appointmentId)} className="flex flex-row gap-1.5 items-center">
+                            <DropdownMenuItem onClick={() => setAction("finished", props.appointmentId)} className="flex flex-row gap-1.5 items-center">
                                 <CheckCircle size={16} className="text-slate-800" />
                                 <p className="text-slate-800">Marcar como completa</p>
                             </DropdownMenuItem>
@@ -67,7 +67,7 @@ function AppointmentDropdown(props: DropdownProps) {
 
                     {props.appointmentStatus === "cancelled" && (
                         <>
-                            <DropdownMenuItem onClick={() => setAction("complete", props.appointmentId)} className="flex flex-row gap-1.5 items-center">
+                            <DropdownMenuItem onClick={() => setAction("finished", props.appointmentId)} className="flex flex-row gap-1.5 items-center">
                                 <CheckCircle size={16} className="text-slate-800" />
                                 <p className="text-slate-800">Marcar como completa</p>
                             </DropdownMenuItem>

@@ -79,7 +79,7 @@ function AppointmentDashboard() {
     };
 
     function onUpdateStatus(action: string) {
-        if (action === "complete") {
+        if (action === "finished") {
             updateStatus(appointmentId, "finished");
             showSuccessModal("¡Estatus de la cita actualizado!");
         } else if (action === "pending") {
@@ -117,7 +117,7 @@ function AppointmentDashboard() {
     }
 
     return (
-        <SystemLayout sidebarPage="appointments" isAnyModal={newAppointmentModal || availabilityModal || cardAction === "cancel" || cardAction === "complete" || cardAction === "modify" || cardAction === "remove" || cardAction === "pending"}
+        <SystemLayout sidebarPage="appointments" isAnyModal={newAppointmentModal || availabilityModal || cardAction === "cancel" || cardAction === "finished" || cardAction === "modify" || cardAction === "remove" || cardAction === "pending"}
             modals={
                 <>
                     {newAppointmentModal && (
@@ -132,8 +132,8 @@ function AppointmentDashboard() {
                         <CancelAppointmentModal updateElementId={appointmentId} onSave={onCancelStatus} isVisible={cardAction === "cancel"} onClose={() => setCardAction("")} />
                     )}
 
-                    {cardAction === "complete" && (
-                        <CompleteAppointment onSave={() => onUpdateStatus("complete")} isVisible={cardAction === "complete"} onClose={() => setCardAction("")} />
+                    {cardAction === "finished" && (
+                        <CompleteAppointment onSave={() => onUpdateStatus("finished")} isVisible={cardAction === "finished"} onClose={() => setCardAction("")} />
                     )}
 
                     {cardAction === "pending" && (
