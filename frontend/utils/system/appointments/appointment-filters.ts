@@ -2,6 +2,7 @@
 
 import { AppointmentType } from "@/utils/types";
 import { useAppointmentFilters } from "./filter-store";
+import { stringToDate } from "../calendar/calendar-methods";
 
 type Status = {
     pending: boolean,
@@ -16,45 +17,40 @@ type FilterStore = {
     updateStatus: (statusObject: Status) => void,
 };
 
-const interval = useAppointmentFilters((state: FilterStore) => state.interval);
-const checkedStatus = useAppointmentFilters((state: FilterStore) => state.statusObject);
+function intervalFilter(array: AppointmentType[], point1: string, point2: string) {
+    const point1Values = stringToDate(point1);
+    const point2Values = stringToDate(point2);
 
-const sampleFilter = [
-    {
-        "_id": "69a33065b1496ba4f8408898",
-        "status": "cancelled",
-        "patientName": "Kevin",
-        "fatherSurname": "Torres",
-        "motherSurname": "Urbinax",
-        "phoneNumber": "6181889026",
-        "date": "06/03/2026",
-        "hour": "12:00",
-        "cancellationComment": "El paciente canceló.",
-        "createdAt": "2026-02-28T18:13:57.241Z",
-        "updatedAt": "2026-03-01T02:43:11.203Z",
-        "__v": 0
-    },
-    {
-        "_id": "69a32ff3b1496ba4f840888f",
-        "status": "pending",
-        "patientName": "Arlet",
-        "fatherSurname": "Torres",
-        "motherSurname": "Urbina",
-        "phoneNumber": "6181889026",
-        "date": "04/03/2026",
-        "hour": "12:00",
-        "cancellationComment": "placeholder",
-        "createdAt": "2026-02-28T18:12:03.605Z",
-        "updatedAt": "2026-02-28T20:05:02.510Z",
-        "__v": 0
-    }
-];
+    let filteredData = array.filter((appointment) => {
+        const separatedDate = stringToDate(appointment.date);
 
-/* function intervalFilter(array: AppointmentType[]) {
-    array.filter((appointment) => {
-        appointment.date >= ... // Lógica aquí.
+        // Filter conditions (in boolean).
+        let condition1 = separatedDate.day >= point1Values.day; // If the day number of the appointment is greater or equal than the one in the interval's first point.
+        let condition2 = separatedDate.day <= point2Values.day; // If the day of number the appointment is less or equal than the one in the interval's second point.
+        let condition3 = separatedDate.month <= point2Values.month; // If the month of the appointment is less or equal than the one in the interval's second point.
+        let condition4 = separatedDate.year <= point2Values.year; // If the year of the appointment is less or equal than the one interval's second point.
+
+        return condition1 && condition2 && condition3 && condition4;
     })
-} */
+
+    return filteredData;
+};
+
+function statusFilter(array: AppointmentType[], activeStatuses: Status) {
+    const cancelled = activeStatuses.cancelled;
+    const pending = activeStatuses.pending;
+    const finished = activeStatuses.finished;
+
+    let filteredData = array.filter((appointment) => {
+        return ((pending ? appointment.status === "pending" : false) ||
+                (cancelled ? appointment.status === "cancelled" : false) ||
+                (finished ? appointment.status === "finished" : false));
+    });
+
+    return filteredData;
+};
+
+export { intervalFilter, statusFilter };
 
 // Creo que podríamos aplicar primero una función. Después, al nuevo array, le aplicamos la siguiente función de filtrado.
 // Y así hasta usar todas las funciones de filtrado.

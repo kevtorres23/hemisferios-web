@@ -156,7 +156,7 @@ function weekCreator(todayMonthNum: number, monthNum: number) {
 
 // Finds coincidences between the calendar's and the appointment's hour and days to then display them.
 function calendarContentGenerator(weekList: CreatedWeek[], hourId: number, dayId: number, calendarHours: (string | number)[], data: AppointmentType[]) {
-    
+
     // Get the hour and day values that are currently being mapped in the calendar.
     let calendarHour = calendarHours[hourId];
     let calendarDay = lessThanTen(weekList[dayId].dayNum.number);
@@ -180,4 +180,15 @@ function calendarContentGenerator(weekList: CreatedWeek[], hourId: number, dayId
     return coincidence; // Return the matched appointment object.
 };
 
-export { nextWeekNum, calendarHoursCreator, daysDistance, weekCreator, hourSorter, calendarContentGenerator };
+// This function receives a DD/MM/YY date format and returns its day, month and year values.
+function stringToDate(date: string) {
+    const separatedDate = date.split("/");
+    
+    return {
+        day: Number(separatedDate[0]),
+        month: Number(separatedDate[1]),
+        year: Number(separatedDate[2]),
+    };
+};
+
+export { nextWeekNum, calendarHoursCreator, daysDistance, weekCreator, hourSorter, calendarContentGenerator, stringToDate };

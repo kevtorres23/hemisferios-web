@@ -17,6 +17,8 @@ import appointmentsEmpty from "../../../public/appointments-empty.png";
 import { AppointmentType } from "@/utils/types";
 import { pageSeparator } from "@/utils/system/page-separator";
 import api from "@/lib/axios";
+import { intervalFilter, statusFilter } from "@/utils/system/appointments/appointment-filters";
+import { stringToDate } from "@/utils/system/calendar/calendar-methods";
 
 export const CardActionContext = createContext<(action: string, id: string) => void>(() => "");
 export const AppointmentPageContext = createContext("");
@@ -25,7 +27,7 @@ export const ActiveFilterContext = createContext<(filterName: string) => void>((
 function AppointmentDashboard() {
     const [view, setView] = useState("cards");
     const [searchValue, setSearchValue] = useState("");
-    const [appointmentsData, setAppointmentsData] = useState<any>([]);
+    const [appointmentsData, setAppointmentsData] = useState<AppointmentType[]>([]);
     const [appointmentPages, setAppointmentPages] = useState<any[]>([]);
 
     // Modal variables.
@@ -43,6 +45,8 @@ function AppointmentDashboard() {
             try {
                 const res = await api.get("/appointments");
                 setAppointmentsData(res.data);
+                const filter = intervalFilter(res.data, "04/03/2026", "14/03/2026");
+                console.log(statusFilter(res.data, {pending: true, finished: true, cancelled: true}))
 
                 const separatedPages = pageSeparator(res.data); // Separate the obtained data from the database in pages.
                 setAppointmentPages(separatedPages);

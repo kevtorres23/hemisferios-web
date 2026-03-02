@@ -69,9 +69,6 @@ function FilterDropdown(props: FilterProps) {
     const updateInterval = useAppointmentFilters((state: FilterStore) => state.updateInterval);
     const updateStatus = useAppointmentFilters((state: FilterStore) => state.updateStatus);
 
-    console.log("Intervalo:", interval);
-    console.log("Estatus completados:", checkedStatus);
-
     function onFirstIntervalChange(val: string) {
         setIntervalFirst(val);
         updateInterval([intervalFirst, intervalSecond]);

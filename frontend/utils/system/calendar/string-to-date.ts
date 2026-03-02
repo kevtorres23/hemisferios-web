@@ -1,1 +1,0 @@
-// This function receives a DD/MM/YY date format and gets its day, month and year values.
