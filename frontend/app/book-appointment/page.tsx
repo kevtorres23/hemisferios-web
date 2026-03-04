@@ -9,7 +9,7 @@ import AppointmentForm from "@/components/website/AppointmentForm";
 import ChannelBox from "@/components/website/ChannelBox";
 import { useRef } from "react";
 import { isVisible } from "@/utils/website/visibility-detector";
-import { useAppointmentStore } from "@/utils/website/store-appointments";
+import { useAppointmentStore } from "@/utils/website/receipt-store";
 import { redirect } from "next/navigation";
 
 function BookAppointment() {

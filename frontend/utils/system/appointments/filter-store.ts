@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { currentWeekList, nextWeekList } from "@/utils/system/calendar/calendar-variables-generation";
+import { currentWeekList, nextWeekList } from "@/utils/system/calendar/calendar-variables";
 import { lessThanTen } from "@/utils/website/format-availability";
 
 type Status = {
@@ -28,11 +28,11 @@ export const useAppointmentFilters = create<FilterStore>()((set) => ({
         finished: true,
         cancelled: true
     },
-    updateInterval: (newArray: [string, string]) => set({
+    updateInterval: (newArray: [string, string]) => set(() => ({
         interval: [...newArray]
-    }),
-    updateStatus: (newStatusObject: Status) => set({
+    })),
+    updateStatus: (newStatusObject: Status) => set(() => ({
         statusObject: {...newStatusObject}  
-    })
+    })),
 }
 ));

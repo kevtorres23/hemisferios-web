@@ -1,6 +1,6 @@
 // REUSABLE UI ELEMENTS USED TO BUILD THE APPOINTMENT CALENDAR.
 import { calendarHoursCreator, hourSorter, calendarContentGenerator } from "../../../utils/system/calendar/calendar-methods";
-import { currentWeekList, nextWeekList } from "@/utils/system/calendar/calendar-variables-generation";
+import { currentWeekList, nextWeekList } from "@/utils/system/calendar/calendar-variables";
 import { AppointmentCardCalendar } from "./AppointmentCard";
 import { AppointmentType } from "../../../utils/types";
 

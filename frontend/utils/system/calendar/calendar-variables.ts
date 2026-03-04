@@ -12,7 +12,7 @@ type WeekInterval = {
 };
 
 // An array containing the abbreviated month names.
-const months = ["ene.", "feb.", "mar.", "abr.", "mayo", "jun.", "jul.", "ago.", "sep.", "oct.", "nov.", "dic."];
+const months = ["0", "ene.", "feb.", "mar.", "abr.", "mayo", "jun.", "jul.", "ago.", "sep.", "oct.", "nov.", "dic."];
 
 // Date variables.
 const date = new Date();
@@ -21,8 +21,8 @@ const todayMonthNum = date.getDate();
 const nextWeekNumber = nextWeekNum(todayMonthNum);
 
 // Week lists for the calendar.
-const currentWeekList = weekCreator(todayMonthNum, currentMonthNum);
-const nextWeekList = weekCreator(nextWeekNumber.day, nextWeekNumber.month);
+const currentWeekList = weekCreator(todayMonthNum, currentMonthNum + 1);
+const nextWeekList = weekCreator(nextWeekNumber.day, nextWeekNumber.month + 1);
 
 // Interval values for the calendar.
 const currentInterval: WeekInterval = {

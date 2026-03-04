@@ -1,24 +1,53 @@
 import SearchBar from "../SearchBar";
-import { Dispatch, SetStateAction } from "react";
 import PageNavigator from "../PageNavigator";
 import FilterDropdown from "./FilterDropdown";
 import StatusDropdown from "./StatusDropdown";
 import { AppointmentCard } from "./AppointmentCard";
 import { AppointmentType } from "@/utils/types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import EmptyState from "../EmptyState";
+import appointmentsEmpty from "../../../public/appointments-empty.png";
+import { useAppointmentFilters } from "@/utils/system/appointments/filter-store";
+import { applyFilters } from "@/utils/system/appointments/appointment-filters";
+import { pageSeparator } from "@/utils/system/page-separator";
 
 type GridProps = {
-    data: AppointmentType[][]; // A list of a list of appointment objects.
+    data: AppointmentType[]; // A list of a list of appointment objects.
     onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     page: "history" | "appointments";
-}
+};
+
+type Status = {
+    pending: boolean,
+    finished: boolean,
+    cancelled: boolean
+};
+
+type FilterStore = {
+    interval: [string, string],
+    statusObject: Status,
+    updateInterval: (newIntervalArray: [string, string]) => void, // When "position" is 0, it updates the first parameter of the interval, or the second one, when it is 1.
+    updateStatus: (statusObject: Status) => void,
+};
 
 function AppointmentGrid(props: GridProps) {
-    const [pages, setPages] = useState(props.data?.length);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(props.data.length === 0 ? 0 : 1);
 
-    // Filter variables.
+    // State variables.
     const [intervalValue, setIntervalValue] = useState("two-weeks");
+    const interval = useAppointmentFilters((state: FilterStore) => state.interval)
+    const checkedStatuses = useAppointmentFilters((state: FilterStore) => state.statusObject);
+
+    // Intialization of filter variables.
+    let filteredData = applyFilters(props.data, interval, checkedStatuses);
+    let appointmentPages = pageSeparator(filteredData);
+    let pages = 0;
+
+    useEffect(() => {
+        filteredData = applyFilters(props.data, interval, checkedStatuses);
+        appointmentPages = pageSeparator(filteredData);
+        pages = appointmentPages.length;
+    }, [interval, checkedStatuses])
 
     function onIntervalChange(val: string) {
         setIntervalValue(val);
@@ -31,7 +60,7 @@ function AppointmentGrid(props: GridProps) {
 
                 <div className="filters flex sm:flex-row flex-col gap-5 sm:w-auto w-full">
                     {props.page === "appointments" && (
-                        <FilterDropdown intervalValue={intervalValue} onIntervalChange={onIntervalChange} />
+                        <FilterDropdown view="cards" intervalValue={intervalValue} onIntervalChange={onIntervalChange} />
                     )}
 
                     {props.page === "history" && (
@@ -46,24 +75,34 @@ function AppointmentGrid(props: GridProps) {
                 </div>
             </div>
 
-            <div className="grid w-full xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 grid-cols-1 gap-6">
-                {props.data[currentPage - 1].map((item, id) =>
-                    <AppointmentCard
-                        _id={item._id}
-                        key={id}
-                        status={item.status}
-                        patientName={item.patientName}
-                        fatherSurname={item.fatherSurname}
-                        motherSurname={item.motherSurname}
-                        phoneNumber={item.phoneNumber}
-                        date={item.date} // We pass item.date first by AppointmentFormatter().
-                        hour={item.hour} // We pass item.date first by AppointmentFormatter().
-                        cancellationComment={item.cancellationComment}
-                        timestamp={item.timestamp}
-                        page={props.page}
-                    />
-                )}
-            </div>
+            {appointmentPages.length === 0 && (
+                <EmptyState
+                    header="¡No hay citas que mostrar!"
+                    desc="Intenta activar o desactivar algunos filtros para hacer que la información cambie."
+                    image={appointmentsEmpty}
+                />
+            )}
+
+            {appointmentPages.length > 0 && (
+                <div className="grid w-full xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 grid-cols-1 gap-6">
+                    {appointmentPages[currentPage - 1].map((item, id) =>
+                        <AppointmentCard
+                            _id={item._id}
+                            key={id}
+                            status={item.status}
+                            patientName={item.patientName}
+                            fatherSurname={item.fatherSurname}
+                            motherSurname={item.motherSurname}
+                            phoneNumber={item.phoneNumber}
+                            date={item.date} // We pass item.date first by AppointmentFormatter().
+                            hour={item.hour} // We pass item.date first by AppointmentFormatter().
+                            cancellationComment={item.cancellationComment}
+                            timestamp={item.timestamp}
+                            page={props.page}
+                        />
+                    )}
+                </div>
+            )}
         </div>
     )
 }

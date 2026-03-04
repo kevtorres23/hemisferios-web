@@ -1,12 +1,29 @@
 "use client";
 
 import { hourSorter } from "@/utils/system/calendar/calendar-methods";
-import { currentInterval, nextInterval } from "@/utils/system/calendar/calendar-variables-generation";
+import { currentInterval, nextInterval } from "@/utils/system/calendar/calendar-variables";
 import { useState } from "react";
 import PageNavigator from "../PageNavigator";
 import { AppointmentType } from "@/utils/types";
 import { CalendarUI } from "./CalendarElements";
-import StatusDropdown from "./StatusDropdown";
+import FilterDropdown from "./FilterDropdown";
+import { useAppointmentFilters } from "@/utils/system/appointments/filter-store";
+import { applyFilters } from "@/utils/system/appointments/appointment-filters";
+import EmptyState from "../EmptyState";
+import appointmentsEmpty from "../../../public/appointments-empty.png";
+
+type Status = {
+    pending: boolean,
+    finished: boolean,
+    cancelled: boolean
+};
+
+type FilterStore = {
+    interval: [string, string],
+    statusObject: Status,
+    updateInterval: (newIntervalArray: [string, string]) => void, // When "position" is 0, it updates the first parameter of the interval, or the second one, when it is 1.
+    updateStatus: (statusObject: Status) => void,
+};
 
 type CalendarProps = {
     data: AppointmentType[];
@@ -17,6 +34,11 @@ function AppointmentCalendar(props: CalendarProps) {
     // State variables.
     const [numberOfWeeks, setNumberOfWeeks] = useState(2);
     const [week, setWeek] = useState(1); // 1 for current, 2 for next.
+
+    const interval = useAppointmentFilters((state: FilterStore) => state.interval)
+    const checkedStatuses = useAppointmentFilters((state: FilterStore) => state.statusObject);
+
+    const filteredData = applyFilters(props.data, interval, checkedStatuses);
 
     return (
         <div className="w-full flex h-full border border-slate-200 bg-white rounded-lg p-6 flex-col gap-6">
@@ -59,10 +81,21 @@ function AppointmentCalendar(props: CalendarProps) {
                     </div>
                 </div>
 
-                <StatusDropdown isOnHistory={props.page === "history"} />
+                <FilterDropdown view="calendar" onIntervalChange={() => ""} />
             </div>
 
-            <CalendarUI week={week} data={props.data} page={props.page} />
+            {filteredData.length === 0 && (
+                <EmptyState
+                    header="¡No hay citas que mostrar!"
+                    desc="Intenta activar o desactivar algunos filtros para hacer que la información cambie."
+                    image={appointmentsEmpty}
+                />
+            )}
+
+
+            {filteredData.length > 0 && (
+                <CalendarUI week={week} data={filteredData} page={props.page} />
+            )}
         </div>
     );
 };

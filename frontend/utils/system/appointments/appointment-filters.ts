@@ -31,7 +31,7 @@ function intervalFilter(array: AppointmentType[], point1: string, point2: string
         let condition4 = separatedDate.year <= point2Values.year; // If the year of the appointment is less or equal than the one interval's second point.
 
         return condition1 && condition2 && condition3 && condition4;
-    })
+    });
 
     return filteredData;
 };
@@ -43,14 +43,21 @@ function statusFilter(array: AppointmentType[], activeStatuses: Status) {
 
     let filteredData = array.filter((appointment) => {
         return ((pending ? appointment.status === "pending" : false) ||
-                (cancelled ? appointment.status === "cancelled" : false) ||
-                (finished ? appointment.status === "finished" : false));
+            (cancelled ? appointment.status === "cancelled" : false) ||
+            (finished ? appointment.status === "finished" : false));
     });
 
     return filteredData;
 };
 
-export { intervalFilter, statusFilter };
+function applyFilters(data: AppointmentType[], interval: [string, string], activeStatuses: Status) {
+    let filter1 = intervalFilter(data, interval[0], interval[1]);
+    let filteredData = statusFilter(filter1, activeStatuses);
+
+    return filteredData;
+}
+
+export { intervalFilter, statusFilter, applyFilters };
 
 // Creo que podríamos aplicar primero una función. Después, al nuevo array, le aplicamos la siguiente función de filtrado.
 // Y así hasta usar todas las funciones de filtrado.

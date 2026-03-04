@@ -1,5 +1,5 @@
-import { dateFormatter } from "../system/appointment-formatter";
-import { currentWeekList, nextWeekList } from "../system/calendar/calendar-variables-generation";
+import { dateFormatter } from "../system/appointments/appointment-formatter";
+import { currentWeekList, nextWeekList } from "../system/calendar/calendar-variables";
 import { DayFormat } from "../types";
 
 const date = new Date();
@@ -41,14 +41,14 @@ function formatAvailability(availability: AvailabilityContent[]) {
         let danishDateCurrent;
         let writtenFormatCurrent;
 
-        let danishDateNext = lessThanTen(nextWeekList[i].dayNum.number) + "/" + lessThanTen(nextWeekList[i].dayNum.month + 1) + "/" + year;
+        let danishDateNext = lessThanTen(nextWeekList[i].dayNum.number) + "/" + lessThanTen(nextWeekList[i].dayNum.month) + "/" + year;
         let writtenFormatNext = dateFormatter(danishDateNext);
 
         // For the current week, availability only will be shown from tomorrow on.
         if (i > today) {
             // Create a string with a format that the dateFormatter function can read: DD/MM/YY.
             // + 1 is added to the month to match the JavaScript month format, which sets January to be 0.
-            danishDateCurrent = lessThanTen(currentWeekList[i].dayNum.number) + "/" + lessThanTen(currentWeekList[i].dayNum.month + 1) + "/" + year;
+            danishDateCurrent = lessThanTen(currentWeekList[i].dayNum.number) + "/" + lessThanTen(currentWeekList[i].dayNum.month) + "/" + year;
             writtenFormatCurrent = dateFormatter(danishDateCurrent);
 
             currentAvailability.push(

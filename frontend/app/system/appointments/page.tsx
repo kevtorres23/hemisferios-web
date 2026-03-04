@@ -15,42 +15,31 @@ import { Plus, SquarePen } from "lucide-react";
 import { useState, createContext, useEffect } from "react";
 import appointmentsEmpty from "../../../public/appointments-empty.png";
 import { AppointmentType } from "@/utils/types";
-import { pageSeparator } from "@/utils/system/page-separator";
 import api from "@/lib/axios";
-import { intervalFilter, statusFilter } from "@/utils/system/appointments/appointment-filters";
-import { stringToDate } from "@/utils/system/calendar/calendar-methods";
 
 export const CardActionContext = createContext<(action: string, id: string) => void>(() => "");
-export const AppointmentPageContext = createContext("");
-export const ActiveFilterContext = createContext<(filterName: string) => void>(() => "");
 
 function AppointmentDashboard() {
     const [view, setView] = useState("cards");
     const [searchValue, setSearchValue] = useState("");
     const [appointmentsData, setAppointmentsData] = useState<AppointmentType[]>([]);
-    const [appointmentPages, setAppointmentPages] = useState<any[]>([]);
 
     // Modal variables.
     const [newAppointmentModal, setNewAppointmentModal] = useState(false);
     const [availabilityModal, setAvailabilityModal] = useState(false);
     const [appointmentId, setAppointmentId] = useState("");
     const [isLoading, setIsLoading] = useState(true);
+    const [completedAction, setCompletedAction] = useState(0);
 
     const [cardAction, setCardAction] = useState("");
-    const [activeFilters, setActiveFilters] = useState<string[]>([]);
-
 
     useEffect(() => {
+        console.log(completedAction);
+
         const getAllAppointments = async () => {
             try {
                 const res = await api.get("/appointments");
                 setAppointmentsData(res.data);
-                const filter = intervalFilter(res.data, "04/03/2026", "14/03/2026");
-                console.log(statusFilter(res.data, {pending: true, finished: true, cancelled: true}))
-
-                const separatedPages = pageSeparator(res.data); // Separate the obtained data from the database in pages.
-                setAppointmentPages(separatedPages);
-
             } catch (error) {
                 console.log("Error while fetching the appointments", error);
             } finally {
@@ -59,13 +48,7 @@ function AppointmentDashboard() {
         };
 
         getAllAppointments();
-
-        if ((cardAction === "closed") || (cardAction === "")) {
-            console.log("change");
-            getAllAppointments();
-        };
-
-    }, [cardAction]);
+    }, [completedAction]);
 
     function showSuccessModal(successMsg: string) {
         toast.success(successMsg, { duration: 3500 });
@@ -73,40 +56,47 @@ function AppointmentDashboard() {
 
     function onSaveAppointment() {
         setNewAppointmentModal(false);
-        setCardAction("created");
+        setCardAction("");
+        setCompletedAction((completedAction) => completedAction += 1);
         showSuccessModal("¡Cita creada correctamente!");
     };
 
     function onSaveAvailability() {
         setAvailabilityModal(false);
+        setCompletedAction((completedAction) => completedAction += 1);
         showSuccessModal("¡Disponibilidad actualizada correctamente!");
     };
 
     function onUpdateStatus(action: string) {
         if (action === "finished") {
             updateStatus(appointmentId, "finished");
+            setCardAction("");
             showSuccessModal("¡Estatus de la cita actualizado!");
         } else if (action === "pending") {
             updateStatus(appointmentId, "pending");
+            setCardAction("");
             showSuccessModal("¡Estatus de la cita actualizado!");
         }
 
-        setCardAction("closed");
+        setCardAction("");
+        setCompletedAction((completedAction) => completedAction += 1);
     };
 
     function onCancelStatus() {
-        setCardAction("closed");
+        setCardAction("");
+        setCompletedAction((completedAction) => completedAction += 1);
         showSuccessModal("¡Cita cancelada correctamente!")
-    }
+    };
 
     function onModifyAppointment() {
-        setCardAction("closed"); // Close the action modal.
+        setCardAction(""); // Close the action modal.
+        setCompletedAction((completedAction) => completedAction += 1);
         showSuccessModal("¡Cita actualizada correctamente!");
     };
 
     function onRemoveAppointment() {
         api.delete("/appointments/" + appointmentId);
-        setCardAction("closed"); // Close the action modal.
+        setCardAction(""); // Close the action modal.
         setAppointmentsData((prev: AppointmentType[]) => prev.filter(appointment => appointment._id !== appointmentId));
         showSuccessModal("¡Cita eliminada correctamente!");
     };
@@ -115,10 +105,6 @@ function AppointmentDashboard() {
         setCardAction(action);
         setAppointmentId(id);
     };
-
-    function onFilterSelected(filterName: string) {
-        setActiveFilters([...activeFilters, filterName])
-    }
 
     return (
         <SystemLayout sidebarPage="appointments" isAnyModal={newAppointmentModal || availabilityModal || cardAction === "cancel" || cardAction === "finished" || cardAction === "modify" || cardAction === "remove" || cardAction === "pending"}
@@ -199,9 +185,7 @@ function AppointmentDashboard() {
 
             {appointmentsData.length > 0 && view === "cards" && (
                 <CardActionContext.Provider value={onActionSelected}>
-                    <ActiveFilterContext.Provider value={onFilterSelected} >
-                        <AppointmentGrid page="appointments" data={appointmentPages} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
-                    </ActiveFilterContext.Provider>
+                    <AppointmentGrid page="appointments" data={appointmentsData} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
                 </CardActionContext.Provider>
             )}
 

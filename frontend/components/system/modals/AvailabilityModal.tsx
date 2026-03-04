@@ -1,7 +1,7 @@
 import MediumModal from "./MediumModal";
 import React from "react";
 import type { Option } from '@/components/ui/multi-select';
-import { currentInterval, nextInterval } from "@/utils/system/calendar/calendar-variables-generation";
+import { currentInterval, nextInterval } from "@/utils/system/calendar/calendar-variables";
 import api from "@/lib/axios";
 import { ModalProps } from "@/utils/types";
 import { ArrowRight, ArrowLeft } from "lucide-react";

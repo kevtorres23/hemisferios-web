@@ -17,7 +17,7 @@ function PageNavigator(props: NavigatorProps) {
     const [isNextDisabled, setIsNextDisabled] = useState(false);
 
     useEffect(() => {
-        if (currentPage === 1) {
+        if (currentPage === 1 || currentPage === 0) {
             setIsPreviousDisabled(true); // User can't go back more if they are in the first page.
         } else {
             setIsPreviousDisabled(false);
