@@ -13,7 +13,6 @@ import { pageSeparator } from "@/utils/system/page-separator";
 
 type GridProps = {
     data: AppointmentType[]; // A list of a list of appointment objects.
-    onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     page: "history" | "appointments";
 };
 
@@ -32,6 +31,7 @@ type FilterStore = {
 
 function AppointmentGrid(props: GridProps) {
     const [currentPage, setCurrentPage] = useState(props.data.length === 0 ? 0 : 1);
+    const [search, setSearch] = useState("");
 
     // State variables.
     const [intervalValue, setIntervalValue] = useState("two-weeks");
@@ -41,7 +41,7 @@ function AppointmentGrid(props: GridProps) {
     // Intialization of filter variables.
     let filteredData = applyFilters(props.data, interval, checkedStatuses);
     let appointmentPages = pageSeparator(filteredData);
-    let pages = 0;
+    let pages = 1;
 
     useEffect(() => {
         filteredData = applyFilters(props.data, interval, checkedStatuses);
@@ -53,10 +53,14 @@ function AppointmentGrid(props: GridProps) {
         setIntervalValue(val);
     };
 
+    function onSearchChange(e:React.ChangeEvent<HTMLInputElement>) {
+        setSearch(e.currentTarget.value);
+    };
+
     return (
         <div className="w-full flex h-full border border-slate-200 bg-white rounded-lg p-6 flex-col gap-6">
             <div className="flex lg:flex-row flex-col gap-6 lg:items-center items-start justify-between sm:w-auto w-full">
-                <SearchBar onInputChange={props.onSearchChange} placeholder="Buscar cita por nombre del paciente" />
+                <SearchBar onInputChange={(e) => onSearchChange(e)} placeholder="Buscar cita por nombre del paciente" />
 
                 <div className="filters flex sm:flex-row flex-col gap-5 sm:w-auto w-full">
                     {props.page === "appointments" && (
@@ -85,7 +89,11 @@ function AppointmentGrid(props: GridProps) {
 
             {appointmentPages.length > 0 && (
                 <div className="grid w-full xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 grid-cols-1 gap-6">
-                    {appointmentPages[currentPage - 1].map((item, id) =>
+                    {appointmentPages[currentPage - 1].filter((item: AppointmentType) => {
+                        return search.toLowerCase() === ""
+                        ? item
+                        : item.patientName.toLowerCase().includes(search.toLowerCase());
+                    }).map((item, id) =>
                         <AppointmentCard
                             _id={item._id}
                             key={id}

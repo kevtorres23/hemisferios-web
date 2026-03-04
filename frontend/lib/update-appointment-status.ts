@@ -1,4 +1,5 @@
 import { AppointmentType } from "@/utils/types";
+import { getAllAppointments } from "./get-appointments";
 import api from "./axios";
 
 async function updateStatus(appointmentId: string, newStatus: "pending" | "finished" | "cancelled") {
@@ -7,17 +8,21 @@ async function updateStatus(appointmentId: string, newStatus: "pending" | "finis
         const foundAppointment: AppointmentType = res.data;
 
         const newAppointment: AppointmentType = {
-                _id: foundAppointment._id,
-                patientName: foundAppointment.patientName,
-                fatherSurname: foundAppointment.fatherSurname,
-                motherSurname: foundAppointment.motherSurname,
-                phoneNumber: foundAppointment.phoneNumber,
-                status: newStatus,
-                date: foundAppointment.date,
-                hour: foundAppointment.hour
-            };
+            _id: foundAppointment._id,
+            patientName: foundAppointment.patientName,
+            fatherSurname: foundAppointment.fatherSurname,
+            motherSurname: foundAppointment.motherSurname,
+            phoneNumber: foundAppointment.phoneNumber,
+            status: newStatus,
+            date: foundAppointment.date,
+            hour: foundAppointment.hour
+        };
 
         await api.put("/appointments/" + appointmentId, newAppointment);
+
+        const newResponse = await api.get("/appointments");
+        const updatedAppointments: AppointmentType[] = newResponse.data;
+        return updatedAppointments;
 
     } catch (error) {
         console.log("An error ocurred:", error)

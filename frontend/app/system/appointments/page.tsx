@@ -34,9 +34,7 @@ function AppointmentDashboard() {
     const [cardAction, setCardAction] = useState("");
 
     useEffect(() => {
-        console.log(completedAction);
-
-        const getAllAppointments = async () => {
+        const fetchAllAppointments = async () => {
             try {
                 const res = await api.get("/appointments");
                 setAppointmentsData(res.data);
@@ -47,7 +45,7 @@ function AppointmentDashboard() {
             };
         };
 
-        getAllAppointments();
+        fetchAllAppointments();
     }, [completedAction]);
 
     function showSuccessModal(successMsg: string) {
@@ -67,22 +65,43 @@ function AppointmentDashboard() {
         showSuccessModal("¡Disponibilidad actualizada correctamente!");
     };
 
-    function onUpdateStatus(action: string) {
-        if (action === "finished") {
-            updateStatus(appointmentId, "finished");
-            setCardAction("");
-            showSuccessModal("¡Estatus de la cita actualizado!");
-        } else if (action === "pending") {
-            updateStatus(appointmentId, "pending");
-            setCardAction("");
-            showSuccessModal("¡Estatus de la cita actualizado!");
-        }
+    function onFinishedSelected() {
+        toast.promise(
+            updateStatus(appointmentId, "finished").then((result) => {
+                if (result === undefined) {
+                    return;
+                };
+
+                setAppointmentsData(result);
+
+            }), {
+            loading: "Actualizando estatus...",
+            success: <p>¡Se marcó la cita como <b>terminada</b>!</p>,
+            error: "Hubo un error al actualizar la cita. Inténtalo nuevamente."
+        });
 
         setCardAction("");
-        setCompletedAction((completedAction) => completedAction += 1);
     };
 
-    function onCancelStatus() {
+    function onPendingSelected() {
+        toast.promise(
+            updateStatus(appointmentId, "pending").then((result) => {
+                if (result === undefined) {
+                    return;
+                };
+
+                setAppointmentsData(result);
+
+            }), {
+            loading: "Actualizando estatus...",
+            success: <p>¡Se marcó la cita como <b>pendiente</b>!</p>,
+            error: "Hubo un error al actualizar la cita. Inténtalo nuevamente."
+        });
+
+        setCardAction("");
+    }
+
+    function onCancelSelected() {
         setCardAction("");
         setCompletedAction((completedAction) => completedAction += 1);
         showSuccessModal("¡Cita cancelada correctamente!")
@@ -119,15 +138,15 @@ function AppointmentDashboard() {
                     )}
 
                     {cardAction === "cancel" && (
-                        <CancelAppointmentModal updateElementId={appointmentId} onSave={onCancelStatus} isVisible={cardAction === "cancel"} onClose={() => setCardAction("")} />
+                        <CancelAppointmentModal updateElementId={appointmentId} onSave={onCancelSelected} isVisible={cardAction === "cancel"} onClose={() => setCardAction("")} />
                     )}
 
                     {cardAction === "finished" && (
-                        <CompleteAppointment onSave={() => onUpdateStatus("finished")} isVisible={cardAction === "finished"} onClose={() => setCardAction("")} />
+                        <CompleteAppointment onSave={onFinishedSelected} isVisible={cardAction === "finished"} onClose={() => setCardAction("")} />
                     )}
 
                     {cardAction === "pending" && (
-                        <PendingAppointment updateElementId={appointmentId} onSave={() => onUpdateStatus("pending")} isVisible={cardAction === "pending"} onClose={() => setCardAction("")} />
+                        <PendingAppointment updateElementId={appointmentId} onSave={onPendingSelected} isVisible={cardAction === "pending"} onClose={() => setCardAction("")} />
                     )}
 
                     {cardAction === "modify" && (
@@ -185,7 +204,7 @@ function AppointmentDashboard() {
 
             {appointmentsData.length > 0 && view === "cards" && (
                 <CardActionContext.Provider value={onActionSelected}>
-                    <AppointmentGrid page="appointments" data={appointmentsData} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
+                    <AppointmentGrid page="appointments" data={appointmentsData} />
                 </CardActionContext.Provider>
             )}
 
