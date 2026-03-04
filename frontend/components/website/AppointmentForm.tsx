@@ -29,6 +29,7 @@ type FormProps = {
 function AppointmentForm(props: FormProps) {
     const [modifiableData, setModifiableData] = useState<AppointmentType>();
     // Variables for the form inputs.
+    const [status, setStatus] = useState("");
     const [patientName, setPatientName] = useState("");
     const [motherSurname, setMotherSurname] = useState("");
     const [fatherSurname, setFatherSurname] = useState("");
@@ -84,6 +85,7 @@ function AppointmentForm(props: FormProps) {
             try {
                 const res = await axios.get("http://localhost:5001/api/appointments/" + props.editionId);
                 setModifiableData(res.data);
+                setStatus(res.data.status);
                 setPatientName(res.data.patientName);
                 setFatherSurname(res.data.fatherSurname);
                 setMotherSurname(res.data.motherSurname);
@@ -125,10 +127,10 @@ function AppointmentForm(props: FormProps) {
 
     function shootData() {
         const time = new Date();
-        const status = "pending"; // The default status that appointments have when they are created.
+        const appointmentStatus = props.isOnModify ? status : "pending"; // "Pending" is the default status that appointments have when they are created.
 
-        const receiptAppointmentObj = new Appointment(status, patientName, fatherSurname, motherSurname, phoneNumber, formattedDate, hour, time);
-        const databaseAppointmentObj = new Appointment(status, patientName, fatherSurname, motherSurname, phoneNumber, date, hour, time);
+        const receiptAppointmentObj = new Appointment(appointmentStatus, patientName, fatherSurname, motherSurname, phoneNumber, formattedDate, hour, time);
+        const databaseAppointmentObj = new Appointment(appointmentStatus, patientName, fatherSurname, motherSurname, phoneNumber, date, hour, time);
 
         if (props.formId === "modifyForm") {
             props.modifyData(databaseAppointmentObj);

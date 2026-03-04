@@ -92,7 +92,7 @@ function AppointmentGrid(props: GridProps) {
                     {appointmentPages[currentPage - 1].filter((item: AppointmentType) => {
                         return search.toLowerCase() === ""
                         ? item
-                        : item.patientName.toLowerCase().includes(search.toLowerCase());
+                        : item.patientName.toLowerCase().includes(search.toLowerCase()); // Search filter implementation.
                     }).map((item, id) =>
                         <AppointmentCard
                             _id={item._id}
