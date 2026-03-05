@@ -1,7 +1,7 @@
 "use client";
 import SystemLayout from "@/components/system/SystemLayout";
 import EmptyState from "@/components/system/EmptyState";
-import { updateStatus } from "@/lib/update-appointment-status";
+import { updateStatus } from "@/lib/appointments/update-appointment-status";
 import toast, { Toaster } from 'react-hot-toast';
 import { NewAppointmentModal, CancelAppointmentModal, ModifyAppointmentModal, RemoveAppointModal, CompleteAppointment, PendingAppointment } from "@/components/system/modals/AppointmentActions";
 import AvailabilityModal from "@/components/system/modals/AvailabilityModal";

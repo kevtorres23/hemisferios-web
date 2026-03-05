@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { useEffect, useState } from "react";
 import api from "@/lib/axios";
 import Input from "./Input";
@@ -9,14 +8,6 @@ import SelectHourInput from "./SelectHourInput";
 import { Appointment } from "@/utils/classes";
 import InputWarning from "./InputWarning";
 import { InputChange, SelectChange } from "@/utils/website/input-change-handlers";
-import {formatAvailability} from "../../utils/website/format-availability";
-import { AppointmentType, DayFormat } from "@/utils/types";
-
-type WeekDayObject = {
-    writtenDate: string,
-    databaseId: string,
-    formattedDate: string,
-};
 
 type FormProps = {
     sendData: (receiptObject: Appointment, databaseOject: Appointment) => void;
@@ -27,8 +18,8 @@ type FormProps = {
 };
 
 function AppointmentForm(props: FormProps) {
-    const [modifiableData, setModifiableData] = useState<AppointmentType>();
     // Variables for the form inputs.
+    const [foundAppointment, setFoundAppointment] = useState<any>([]);
     const [status, setStatus] = useState("");
     const [patientName, setPatientName] = useState("");
     const [motherSurname, setMotherSurname] = useState("");
@@ -37,9 +28,6 @@ function AppointmentForm(props: FormProps) {
     const [date, setDate] = useState("");
     const [hour, setHour] = useState("");
     const [formattedDate, setFormattedDate] = useState("");
-    const [availability, setAvailability] = useState([]);
-    const [availDays, setAvailDays] = useState<DayFormat[][]>();
-    const [availHours, setAvailHours] = useState<string[]>();
 
     // Input validations.
     const [validationsShot, setValidationsShot] = useState(false);
@@ -51,47 +39,17 @@ function AppointmentForm(props: FormProps) {
     const [hourValidation, setHourValidation] = useState(false);
 
     useEffect(() => {
-        const fetchAvailability = async () => {
-            try {
-                // Variable definition.
-                const res = await api.get("/availability"); // Getting availability from the backend.
-                setAvailability(res.data);
-
-                // Update day availability.
-                const formattedAvailability = formatAvailability(res.data);
-                setAvailDays(formattedAvailability);
-
-                // Update hour availability based on the selected day.
-                formattedAvailability.forEach((dayList) => {
-                    dayList.forEach((day) => {
-                        if (day.databaseDate === date) {
-                            setAvailHours(day.hours);
-                            setFormattedDate(day.writtenDate);
-                        };
-                    });
-                });
-                
-                formattedAvailability[0]
-            } catch (error) {
-                console.log("Error fetching availability", error);
-            };
-
-        };
-        fetchAvailability();
-    }, [date]);
-
-    useEffect(() => {
         const getEditableAppointment = async () => {
             try {
-                const res = await axios.get("http://localhost:5001/api/appointments/" + props.editionId);
-                setModifiableData(res.data);
+                const res = await api.get("/appointments/" + props.editionId);
+                setFoundAppointment(res.data);
                 setStatus(res.data.status);
                 setPatientName(res.data.patientName);
                 setFatherSurname(res.data.fatherSurname);
                 setMotherSurname(res.data.motherSurname);
                 setPhoneNumber(res.data.phoneNumber);
-                setHour(res.data.hour);
                 setDate(res.data.date);
+                setHour(res.data.hour);
             } catch (error) {
                 console.log("Error detected", error);
             };
@@ -137,7 +95,12 @@ function AppointmentForm(props: FormProps) {
         } else {
             props.sendData(receiptAppointmentObj, databaseAppointmentObj);
         };
+
+        // Incluir aquí la función para actualizar la disponibilidad.
     };
+
+    // For loop que recorre todo el array de citas (que tengan el estatus "pendiente") y que tengan el mismo dia y hora.
+    // Para esto, debe haber un counter que cuando llegue a 2, mande a llamar la funcion de adjust-availability.
 
     return (
         <form id={props.formId} onSubmit={(e) => shootValidations(e)} className="flex flex-col gap-4 w-full">
@@ -166,13 +129,13 @@ function AppointmentForm(props: FormProps) {
 
             <div className="input-row w-full flex md:flex-row flex-col gap-4 items-center justify-center">
                 <div className="date-field flex flex-col gap-2 w-full">
-                    <SelectDateInput selectType="date" label="Fecha de la cita:" value={date} onInputChange={(val) => SelectChange(val, date, setDate, validationsShot, setDateValidation)} activeValidation={dateValidation} items={availDays} />
+                    <SelectDateInput selectType="date" label="Fecha de la cita:" value={date} onInputChange={(val) => SelectChange(val, date, setDate, validationsShot, setDateValidation)} activeValidation={dateValidation} />
                     {dateValidation && <InputWarning message="Por favor, selecciona una fecha." />}
                 </div>
 
                 <div className="hour-field flex flex-col gap-2 w-full">
-                    <SelectHourInput selectType="hour" label="Hora de la cita:" value={hour} onInputChange={(val) => SelectChange(val, hour, setHour, validationsShot, setHourValidation)} activeValidation={hourValidation} items={availHours} />
-                    {hourValidation && <InputWarning message="Por favor, selecciona una fecha." />}
+                    <SelectHourInput label="Hora de la cita:" value={hour} isOnModify={props.isOnModify} date={date} onInputChange={(val) => SelectChange(val, hour, setHour, validationsShot, setHourValidation)} activeValidation={hourValidation} appointmentId={props.editionId} />
+                    {hourValidation && <InputWarning message="Por favor, selecciona una hora." />}
                 </div>
             </div>
         </form>

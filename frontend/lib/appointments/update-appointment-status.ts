@@ -1,6 +1,6 @@
 import { AppointmentType } from "@/utils/types";
 import { getAllAppointments } from "./get-appointments";
-import api from "./axios";
+import api from "../axios";
 
 async function updateStatus(appointmentId: string, newStatus: "pending" | "finished" | "cancelled") {
     try {

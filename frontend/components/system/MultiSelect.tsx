@@ -10,6 +10,8 @@ type MultiSelectProps = {
     isEmpty: boolean;
 };
 
+// Filtrar categories 
+
 const categories: Option[] = [
     {
         value: '10:00',

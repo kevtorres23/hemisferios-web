@@ -1,5 +1,5 @@
 import { AppointmentType } from "@/utils/types";
-import api from "./axios";
+import api from "../axios";
 
 async function getAllAppointments() {
     try {

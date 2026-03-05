@@ -1,5 +1,7 @@
-import { useId } from "react";
+import { useId, useEffect, useState } from "react";
+import api from "@/lib/axios";
 import { Calendar } from "lucide-react";
+import { formatAvailability } from "@/utils/website/format-availability";
 import { Label } from '@/components/ui/label';
 import {
     Select,
@@ -11,19 +13,37 @@ import {
     SelectTrigger,
     SelectValue
 } from '@/components/ui/select';
-import { DayFormat } from "@/utils/types";
+import { Availability, DayFormat } from "@/utils/types";
 
 type SelectProps = {
     label: string;
     value: string;
     onInputChange: (val: string) => void;
-    items: DayFormat[][] | undefined;
     activeValidation: boolean;
     selectType: "date" | "hour";
 }
 
 function SelectDateInput(props: SelectProps) {
     const id = useId();
+    const [availableDays, setAvailableDays] = useState<DayFormat[][]>();
+
+    useEffect(() => {
+        const fetchAvailability = async () => {
+            try {
+                // Variable definition.
+                const availability = await api.get("/availability"); // Getting availability from the backend.
+
+                // Update day availability.
+                const formattedAvailability = formatAvailability(availability.data);
+                setAvailableDays(formattedAvailability);
+            } catch (error) {
+                console.log("Error fetching availability", error);
+            };
+
+        };
+
+        fetchAvailability();
+    }, []);
 
     return (
         <div className='w-full space-y-2'>
@@ -38,7 +58,7 @@ function SelectDateInput(props: SelectProps) {
                     } />
                 </SelectTrigger>
                 <SelectContent className="bg-white z-999" sideOffset={5} position="popper">
-                    {props.items === undefined ? (
+                    {availableDays === undefined ? (
                         <SelectGroup>
                             <SelectLabel>No hay disponibilidad</SelectLabel>
                         </SelectGroup>
@@ -46,14 +66,14 @@ function SelectDateInput(props: SelectProps) {
                         <>
                             <SelectGroup>
                                 <SelectLabel>Esta semana</SelectLabel>
-                                {props.items[0].map((day, id) =>
+                                {availableDays[0].map((day, id) =>
                                     <SelectItem className="text-sm" key={id} value={day.databaseDate}>{day.writtenDate}</SelectItem>
                                 )}
                             </SelectGroup>
                             <SelectSeparator />
                             <SelectGroup>
                                 <SelectLabel>Próxima semana</SelectLabel>
-                                {props.items[1].map((day, id) =>
+                                {availableDays[1].map((day, id) =>
                                     <SelectItem className="text-sm" key={id} value={day.databaseDate}>{day.writtenDate}</SelectItem>
                                 )}
                             </SelectGroup>

@@ -1,18 +1,28 @@
 "use client";
 
 import MediumModal from "./MediumModal";
-import { updateStatus } from "@/lib/update-appointment-status";
+import isAvailabilityFull from "@/lib/availability/availability-limit";
+import adjustAvailability from "@/lib/availability/adjust-availability";
 import { AppointmentType } from "@/utils/types";
 import api from "@/lib/axios";
 import SmallModal from "./SmallModal";
 import { Appointment } from "@/utils/classes";
 import AppointmentForm from "@/components/website/AppointmentForm";
-import { ModalProps, ActionModalProps, UpdateStatusModal } from "@/utils/types";
-import { useState, useEffect } from "react";
+import { ModalProps, ActionModalProps } from "@/utils/types";
+import { useState } from "react";
 
 function NewAppointmentModal(props: ModalProps) {
     async function saveBtnPressed(receiptObject: Appointment, databaseObject: Appointment) {
         await api.post("/appointments", databaseObject);
+
+        isAvailabilityFull(databaseObject.date, databaseObject.hour)
+            .then((result) => {
+                if (result) {
+                    adjustAvailability(databaseObject.date, databaseObject.hour);
+                };
+            })
+            .catch((error) => console.log("An error ocurred while checking the availability:", error));
+
         props.onSave();
     };
 
@@ -35,6 +45,15 @@ function NewAppointmentModal(props: ModalProps) {
 function ModifyAppointmentModal(props: ActionModalProps) {
     async function editAppointment(databaseObject: Appointment) {
         await api.put("/appointments/" + props.updateElementId, databaseObject);
+
+        isAvailabilityFull(databaseObject.date, databaseObject.hour)
+            .then((result) => {
+                if (result) {
+                    adjustAvailability(databaseObject.date, databaseObject.hour);
+                };
+            })
+            .catch((error) => console.log("An error ocurred while checking the availability:", error));
+
         props.onSave();
     };
 
@@ -84,7 +103,7 @@ function CancelAppointmentModal(props: ActionModalProps) {
                 foundAppointment.cancellationComment = "placeholder";
                 foundAppointment.status = "cancelled";
                 api.put("/appointments/" + props.updateElementId, foundAppointment);
-                
+
             } else if (foundAppointment != undefined) {
                 foundAppointment.cancellationComment = cancellationMsg;
                 foundAppointment.status = "cancelled";
