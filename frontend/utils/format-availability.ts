@@ -1,6 +1,6 @@
-import { dateFormatter } from "../system/appointments/appointment-formatter";
-import { currentWeekList, nextWeekList } from "../system/calendar/calendar-variables";
-import { DayFormat } from "../types";
+import { dateFormatter } from "./system/appointments/appointment-formatter";
+import { currentWeekList, nextWeekList } from "./system/calendar/calendar-variables";
+import { DayFormat } from "./types";
 
 const date = new Date();
 const year = date.getFullYear();

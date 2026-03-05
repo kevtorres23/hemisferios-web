@@ -21,7 +21,6 @@ const days = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
 async function getAvailabilityByGropus() {
     const res = await api.get("/availability");
     const availability: AvailabilityContent[] = res.data;
-
     const currentAvailabilityGroup: Option[][] = []; // A list of a list of hours.
     const nextAvailabilityGroup: Option[][] = [];
 
@@ -46,13 +45,10 @@ async function getAvailabilityByGropus() {
                 label: hourFormatter(hour)
             });
         });
-
+        
         currentAvailabilityGroup.push(hourCarrierCurrent);
         nextAvailabilityGroup.push(hourCarrierNext);
     };
-
-    console.log(currentAvailabilityGroup, nextAvailabilityGroup);
-
     const groupList = [...currentAvailabilityGroup, ...nextAvailabilityGroup];
 
     return groupList;

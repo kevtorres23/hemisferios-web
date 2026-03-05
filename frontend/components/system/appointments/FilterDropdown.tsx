@@ -1,5 +1,5 @@
 import IconButton from "../IconButton";
-import { lessThanTen } from "@/utils/website/format-availability";
+import { lessThanTen } from "@/utils/format-availability";
 import { useId } from "react";
 import { Label } from "@/components/ui/label";
 import { CalendarArrowUp, CalendarArrowDown } from "lucide-react";

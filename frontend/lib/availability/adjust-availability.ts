@@ -1,7 +1,7 @@
 // Checks the currently established disponibility and removes an hour from a specific day if there are two appointments at the same hour.
 
 import api from "../axios";
-import { formatAvailability } from "@/utils/website/format-availability";
+import { formatAvailability } from "@/utils/format-availability";
 import { DayFormat } from "@/utils/types";
 
 type AvailabilityContent = {
@@ -28,8 +28,6 @@ async function adjustAvailability(daySelected: string, hourSelected: string, ) {
                     const lowerCaseDay = days[dayId];
                     // Remove the hour from the hour array of the selected day.
                     adjustedAvailability[weekId][lowerCaseDay as keyof AvailabilityContent] = day.hours.filter((hour) => hour != hourSelected);
-                    console.log(adjustedAvailability[weekId][lowerCaseDay as keyof AvailabilityContent]);
-
                     if (weekId === 0) {
                         api.put("/availability/69a23c8f198727d79195f3f9", adjustedAvailability[weekId]);
                     } else {

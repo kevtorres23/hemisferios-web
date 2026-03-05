@@ -1,5 +1,6 @@
 import MediumModal from "./MediumModal";
 import React from "react";
+import { Separator } from "@/components/ui/separator";
 import type { Option } from '@/components/ui/multi-select';
 import { currentInterval, nextInterval, currentWeekList, nextWeekList } from "@/utils/system/calendar/calendar-variables";
 import api from "@/lib/axios";
@@ -12,7 +13,7 @@ import { Availability } from "@/utils/types";
 import { hourSorter } from "@/utils/system/calendar/calendar-methods";
 import toast, { Toaster } from 'react-hot-toast';
 
-function getValues(list: Option[]) {
+function getSortedValues(list: Option[]) {
     const valueList: string[] = [];
 
     list.forEach((hour) => {
@@ -70,30 +71,30 @@ function AvailabilityModal(props: ModalProps) {
         if ((currentMonday.length === 0) || (currentTuesday.length === 0) || (currentWednesday.length === 0) || (currentThursday.length === 0) || (currentFriday.length === 0) || (currentSaturday.length === 0) ||
             (nextMonday.length === 0) || (nextTuesday.length === 0) || (nextWednesday.length === 0) || (nextThursday.length === 0) || (nextFriday.length === 0) || (nextSaturday.length === 0)) {
             setIsEmpty(true);
-            toast.error("Ningún campo de disponibilidad puede quedarse vacío.", { duration: 3500 });
+            toast.error("Ningún campo de disponibilidad puede quedarse vacío.", { duration: 2500 });
         } else {
-            setIsEmpty(false);
-            e.preventDefault();
-
-            const newCurrentAvailability: Availability = {
-                lunes: getValues(currentMonday),
-                martes: getValues(currentTuesday),
-                miercoles: getValues(currentWednesday),
-                jueves: getValues(currentThursday),
-                viernes: getValues(currentFriday),
-                sabado: getValues(currentSaturday)
-            };
-
-            const newNextAvailability: Availability = {
-                lunes: getValues(nextMonday),
-                martes: getValues(nextTuesday),
-                miercoles: getValues(nextWednesday),
-                jueves: getValues(nextThursday),
-                viernes: getValues(nextFriday),
-                sabado: getValues(nextSaturday)
-            };
-
             try {
+                e.preventDefault();
+                setIsEmpty(false);
+
+                const newCurrentAvailability: Availability = {
+                    lunes: getSortedValues(currentMonday),
+                    martes: getSortedValues(currentTuesday),
+                    miercoles: getSortedValues(currentWednesday),
+                    jueves: getSortedValues(currentThursday),
+                    viernes: getSortedValues(currentFriday),
+                    sabado: getSortedValues(currentSaturday)
+                };
+
+                const newNextAvailability: Availability = {
+                    lunes: getSortedValues(nextMonday),
+                    martes: getSortedValues(nextTuesday),
+                    miercoles: getSortedValues(nextWednesday),
+                    jueves: getSortedValues(nextThursday),
+                    viernes: getSortedValues(nextFriday),
+                    sabado: getSortedValues(nextSaturday)
+                };
+
                 await api.put("/availability/69a23c8f198727d79195f3f9", newCurrentAvailability);
                 await api.put("/availability/69a23cb0198727d79195f3fd", newNextAvailability);
 
@@ -101,7 +102,7 @@ function AvailabilityModal(props: ModalProps) {
                 console.log("An error happened while updating the availability:", error)
             } finally {
                 props.onSave();
-            };
+            }
         };
     };
 
@@ -114,8 +115,6 @@ function AvailabilityModal(props: ModalProps) {
             title="Editar disponibilidad de citas"
             confirmationBtnText="Guardar"
         >
-            <Toaster />
-
             <p className="text-base text-slate-500 font-normal w-full">
                 Las horas que selecciones serán las que las personas puedan seleccionar cuando intenten agendar una cita en la página web.
             </p>
@@ -140,7 +139,7 @@ function AvailabilityModal(props: ModalProps) {
 
             <form id="availabilityForm" onSubmit={(e: React.FormEvent) => onSubmitAvailability(e)} className="">
                 {week === "current" && (
-                    <div className="flex flex-col sm:gap-10 gap-6 w-full">
+                    <div className="flex flex-col sm:gap-6 gap-4 w-full">
                         <div className="multiselect-row flex sm:flex-row flex-col sm:gap-4 gap-6 items-start justify-center w-full">
 
                             <MultiSelect value={currentMonday} onChange={setCurrentMonday} label={`Lunes ${currentWeekList[0].dayNum.number}`} isEmpty={(currentMonday.length === 0) && (isEmpty)} />

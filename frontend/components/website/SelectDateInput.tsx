@@ -1,7 +1,7 @@
 import { useId, useEffect, useState } from "react";
 import api from "@/lib/axios";
 import { Calendar } from "lucide-react";
-import { formatAvailability } from "@/utils/website/format-availability";
+import { formatAvailability } from "@/utils/format-availability";
 import { Label } from '@/components/ui/label';
 import {
     Select,

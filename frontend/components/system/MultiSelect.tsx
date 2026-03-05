@@ -60,6 +60,7 @@ const categories: Option[] = [
 ];
 
 function MultiSelect(props: MultiSelectProps) {
+
     return (
         <div className='w-full space-y-2'>
             <Label>{props.label}</Label>
@@ -69,7 +70,7 @@ function MultiSelect(props: MultiSelectProps) {
                 commandProps={{
                     label: "Selecciona horas"
                 }}
-                defaultOptions={categories}
+                options={categories}
                 placeholder="Selecciona horas"
                 emptyIndicator={<p className='text-center text-sm'>Se seleccionaron todas las horas.</p>}
                 className={`w-full ${props.isEmpty ? "border border-red-500" : ""}`}

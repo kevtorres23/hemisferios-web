@@ -21,7 +21,6 @@ export const CardActionContext = createContext<(action: string, id: string) => v
 
 function AppointmentDashboard() {
     const [view, setView] = useState("cards");
-    const [searchValue, setSearchValue] = useState("");
     const [appointmentsData, setAppointmentsData] = useState<AppointmentType[]>([]);
 
     // Modal variables.
@@ -62,7 +61,7 @@ function AppointmentDashboard() {
     function onSaveAvailability() {
         setAvailabilityModal(false);
         setCompletedAction((completedAction) => completedAction += 1);
-        showSuccessModal("¡Disponibilidad actualizada correctamente!");
+        showSuccessModal("¡Disponibilidad actualizada!");
     };
 
     function onFinishedSelected() {
@@ -134,7 +133,7 @@ return (
                 )}
 
                 {availabilityModal && (
-                    <AvailabilityModal onSave={onSaveAvailability} isVisible={availabilityModal} onClose={() => setAvailabilityModal(false)} />
+                    <AvailabilityModal onSave={onSaveAvailability} isVisible={availabilityModal} onClose={() => setAvailabilityModal(false)}/>
                 )}
 
                 {cardAction === "cancel" && (

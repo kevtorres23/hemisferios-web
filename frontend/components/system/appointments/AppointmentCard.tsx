@@ -1,7 +1,7 @@
-import { AppointmentType } from "@/utils/types";
 import { dateFormatter, hourFormatter } from "@/utils/system/appointments/appointment-formatter";
+import { updateStatus } from "@/lib/appointments/update-appointment-status";
+import isExpired from "@/utils/system/appointments/expiracy-check";
 import { useContext, useEffect } from "react";
-import { CardActionContext } from "@/app/system/appointments/page";
 import AppointmentTag from "./AppointmentTag";
 import {
     CalendarFold,
@@ -17,11 +17,9 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuGroup,
-    DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import OptionCheckbox from "../OptionCheckbox";
 
 type CardProps = {
     _id: string;
@@ -39,6 +37,15 @@ type CardProps = {
 
 function AppointmentCard(props: CardProps) {
     const setHistoryAction = useContext(HistoryActionContext);
+
+    useEffect(() => {
+        const expired = isExpired(props.date, props.hour);
+
+        if (expired) {
+            updateStatus(props._id, "finished"); // Updates the status of the appointment if its day and hour have already passed.
+        };
+
+    }, [])
 
     return (
         <div className="relative flex flex-col gap-1.5 overflow-y-visible rounded-md border border-slate-200 p-6 items-start justify-center overflow-x-hidden">
@@ -86,7 +93,7 @@ function AppointmentCard(props: CardProps) {
                     <p className="text-sm">{dateFormatter(props.date)}</p>
                 </div>
 
-                <div className="hour-phone flex flex-row items-center justify-center gap-5">
+                <div className="hour-phone flex flex-row items-center justify-center sm:gap-5 gap-3.5">
                     <div className="date flex flex-row gap-1 items-center justify-center text-slate-500">
                         <ClockIcon size={16} />
                         <p className="text-sm">{hourFormatter(props.hour)}</p>
@@ -106,11 +113,11 @@ function AppointmentCardCalendar(props: CardProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button className="px-0! py-0!" variant="ghost">
+                <Button className="px-0! py-0! w-full" variant="ghost">
                     <div className={`w-full flex flex-row cursor-pointer items-center justify-center px-2 py-1 gap-1.5 rounded-sm text-white ${props.status === "pending" ? "bg-yellow-500" : (props.status === "finished" ? "bg-green-500" : "bg-rose-500")}`}>
                         <CircleUserRound size={18} className="shrink" />
 
-                        <p className="font-medium text-sm truncate">{props.patientName} {props.fatherSurname}</p>
+                        <p className="font-medium text-sm truncate">{props.patientName.split(" ")[0]} {props.fatherSurname}</p>
                     </div>
                 </Button>
             </DropdownMenuTrigger>

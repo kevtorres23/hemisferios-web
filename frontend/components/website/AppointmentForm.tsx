@@ -95,12 +95,7 @@ function AppointmentForm(props: FormProps) {
         } else {
             props.sendData(receiptAppointmentObj, databaseAppointmentObj);
         };
-
-        // Incluir aquí la función para actualizar la disponibilidad.
     };
-
-    // For loop que recorre todo el array de citas (que tengan el estatus "pendiente") y que tengan el mismo dia y hora.
-    // Para esto, debe haber un counter que cuando llegue a 2, mande a llamar la funcion de adjust-availability.
 
     return (
         <form id={props.formId} onSubmit={(e) => shootValidations(e)} className="flex flex-col gap-4 w-full">

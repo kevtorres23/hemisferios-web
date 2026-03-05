@@ -32,28 +32,44 @@ type FilterStore = {
 function AppointmentGrid(props: GridProps) {
     const [currentPage, setCurrentPage] = useState(props.data.length === 0 ? 0 : 1);
     const [search, setSearch] = useState("");
+    const [pages, setPages] = useState(1);
+
+    const show0 = 0;
 
     // State variables.
     const [intervalValue, setIntervalValue] = useState("two-weeks");
     const interval = useAppointmentFilters((state: FilterStore) => state.interval)
     const checkedStatuses = useAppointmentFilters((state: FilterStore) => state.statusObject);
-
-    // Intialization of filter variables.
     let filteredData = applyFilters(props.data, interval, checkedStatuses);
-    let appointmentPages = pageSeparator(filteredData);
-    let pages = 1;
+    const [appointmentPages, setAppointmentPages] = useState<any[][]>(pageSeparator(filteredData));
 
     useEffect(() => {
-        filteredData = applyFilters(props.data, interval, checkedStatuses);
-        appointmentPages = pageSeparator(filteredData);
-        pages = appointmentPages.length;
-    }, [interval, checkedStatuses])
+        console.log(currentPage);
+
+        let filteredData = applyFilters(props.data, interval, checkedStatuses);
+
+        setAppointmentPages(pageSeparator(filteredData));
+        setPages(pageSeparator(filteredData).length);
+
+        if (pageSeparator(filteredData).length === 0) {
+            setCurrentPage(1);
+        };
+
+        if (currentPage === 0 || (pageSeparator(filteredData).length) === 0) {
+            setCurrentPage(1);
+        }
+
+        if (currentPage > pageSeparator(filteredData).length) {
+            setCurrentPage(currentPage - 1);
+        };
+
+    }, [interval, checkedStatuses]);
 
     function onIntervalChange(val: string) {
         setIntervalValue(val);
     };
 
-    function onSearchChange(e:React.ChangeEvent<HTMLInputElement>) {
+    function onSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
         setSearch(e.currentTarget.value);
     };
 
@@ -74,7 +90,7 @@ function AppointmentGrid(props: GridProps) {
                     <div className="flex flex-row gap-3 items-center justify-center">
                         <p className="text-sm font-medium text-slate-500">Página:</p>
 
-                        <PageNavigator labelText={`${currentPage} de ${pages}`} labelStyles="text-sm" onPreviousClick={() => setCurrentPage(currentPage - 1)} onNextClick={() => setCurrentPage(currentPage + 1)} currentPage={currentPage} finalPage={pages} />
+                        <PageNavigator labelText={`${appointmentPages.length === 0 ? 0 : currentPage} de ${appointmentPages.length === 0 ? 0 : pages}`} labelStyles="text-sm" onPreviousClick={() => setCurrentPage(currentPage - 1)} onNextClick={() => setCurrentPage(currentPage + 1)} currentPage={currentPage} finalPage={pages} />
                     </div>
                 </div>
             </div>
@@ -87,12 +103,12 @@ function AppointmentGrid(props: GridProps) {
                 />
             )}
 
-            {appointmentPages.length > 0 && (
+            {appointmentPages.length >= 1 && (
                 <div className="grid w-full xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 grid-cols-1 gap-6">
                     {appointmentPages[currentPage - 1].filter((item: AppointmentType) => {
                         return search.toLowerCase() === ""
-                        ? item
-                        : item.patientName.toLowerCase().includes(search.toLowerCase()); // Search filter implementation.
+                            ? item
+                            : item.patientName.toLowerCase().includes(search.toLowerCase()); // Search filter implementation.
                     }).map((item, id) =>
                         <AppointmentCard
                             _id={item._id}

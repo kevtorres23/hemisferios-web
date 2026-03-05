@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { currentWeekList, nextWeekList } from "@/utils/system/calendar/calendar-variables";
-import { lessThanTen } from "@/utils/website/format-availability";
+import { lessThanTen } from "@/utils/format-availability";
 
 type Status = {
     pending: boolean,

@@ -11,8 +11,9 @@ type NavigatorProps = {
 }
 
 function PageNavigator(props: NavigatorProps) {
-    const [currentPage, setCurrentPage] = useState(props.currentPage);
-    const [finalPage, setFinalPage] = useState(props.finalPage);
+    let currentPage = props.currentPage;
+    let finalPage = props.finalPage;
+
     const [isPreviousDisabled, setIsPreviousDisabled] = useState(false);
     const [isNextDisabled, setIsNextDisabled] = useState(false);
 
@@ -23,25 +24,19 @@ function PageNavigator(props: NavigatorProps) {
             setIsPreviousDisabled(false);
         }
 
-        if (currentPage === finalPage) { 
+        if (currentPage === finalPage) {
             setIsNextDisabled(true); // User can't advance more if they are in the last page.
         } else {
             setIsNextDisabled(false);
-        }
+        };
 
-    }, [currentPage]);
+    }, [currentPage, finalPage]);
 
     function onPreviousClick() {
-        const newCurrentPage = currentPage - 1; // Reduce the current page by 1 if the previous button is clicked.
-        setCurrentPage(newCurrentPage);
-
         props.onPreviousClick();
     };
 
     function onNextClick() {
-        const newCurrentPage = currentPage + 1; // Increment the current page by 1 if the previous button is clicked.
-        setCurrentPage(newCurrentPage);
-
         props.onNextClick();
     };
 

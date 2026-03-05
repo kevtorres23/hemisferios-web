@@ -10,7 +10,7 @@ import {
     SelectTrigger,
     SelectValue
 } from '@/components/ui/select';
-import { formatAvailability } from "@/utils/website/format-availability";
+import { formatAvailability } from "@/utils/format-availability";
 import { DayFormat } from "@/utils/types";
 import api from "@/lib/axios";
 

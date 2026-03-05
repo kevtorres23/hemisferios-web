@@ -1,6 +1,6 @@
 // PURPOSE OF THE MODULE: to perform calculations needed for the calendar and the appointment availability.
 
-import { lessThanTen } from "@/utils/website/format-availability";
+import { lessThanTen } from "@/utils/format-availability";
 
 // Global scope variables.
 const date = new Date();
@@ -161,7 +161,7 @@ function calendarContentGenerator(weekList: CreatedWeek[], hourId: number, dayId
     let calendarHour = calendarHours[hourId];
     let calendarDay = lessThanTen(weekList[dayId].dayNum.number);
 
-    let coincidence: (AppointmentType | "") = ""; // Initializing the coincidence.
+    let coincidence: AppointmentType[] = []; // Initializing the coincidence.
 
     // The "data" parameter is the array of appointment objects brought from the database. We'll iterate over it.
     for (let i = 0; i < data.length; i++) {
@@ -170,10 +170,9 @@ function calendarContentGenerator(weekList: CreatedWeek[], hourId: number, dayId
 
         // If the hour and date of the current calendar's position is equal to the hour and date of the indexed appointment, it's a match.
         if ((dataDay === calendarDay.toString()) && (dataHour === calendarHour)) {
-            coincidence = data[i];
-            break;
+            coincidence.push(data[i]);
         } else {
-            coincidence = "";
+            continue;
         }
     };
 
