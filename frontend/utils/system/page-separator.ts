@@ -1,8 +1,6 @@
 // PURPOSE OF THE MODULE: to receive all the appointments stored in the database and separate them in 'n' pages that contain maximum nine appointments appointments each.
 
-type data = any[];
-
-function pageSeparator(data: data) {
+function pageSeparator(data: any[]) {
     const createdPages = []; // Array where we will store subarrays that contain 9 appointment objects.
     let dataStorer = [] // Array that stores nine appointment objects to later be added to the createdPages array.
 

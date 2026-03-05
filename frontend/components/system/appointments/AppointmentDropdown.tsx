@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { CardActionContext } from "@/app/system/appointments/page";
 import {
     Ellipsis,
@@ -17,8 +17,14 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-function AppointmentDropdown({ appointmentStatus }: { appointmentStatus: string }) {
+type DropdownProps = {
+    appointmentStatus: string,
+    appointmentId: string,
+}
+
+function AppointmentDropdown(props: DropdownProps) {
     const setAction = useContext(CardActionContext);
+    
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -31,54 +37,54 @@ function AppointmentDropdown({ appointmentStatus }: { appointmentStatus: string 
 
                 <DropdownMenuGroup className="">
 
-                    {appointmentStatus === "pending" && (
+                    {props.appointmentStatus === "pending" && (
                         <>
-                            <DropdownMenuItem onClick={() => setAction("complete")} className="flex flex-row gap-1.5 items-center">
+                            <DropdownMenuItem onClick={() => setAction("finished", props.appointmentId)} className="flex flex-row gap-1.5 items-center">
                                 <CheckCircle size={16} className="text-slate-800" />
                                 <p className="text-slate-800">Marcar como completa</p>
                             </DropdownMenuItem>
 
-                            <DropdownMenuItem onClick={() => setAction("cancel")} className="flex flex-row gap-1.5 items-center">
+                            <DropdownMenuItem onClick={() => setAction("cancel", props.appointmentId)} className="flex flex-row gap-1.5 items-center">
                                 <CircleX size={16} className="text-slate-800" />
                                 <p className="text-slate-800">Cancelar cita</p>
                             </DropdownMenuItem>
                         </>
                     )}
 
-                    {appointmentStatus === "finished" && (
+                    {props.appointmentStatus === "finished" && (
                         <>
-                            <DropdownMenuItem onClick={() => setAction("pending")} className="flex flex-row gap-1.5 items-center">
+                            <DropdownMenuItem onClick={() => setAction("pending", props.appointmentId)} className="flex flex-row gap-1.5 items-center">
                                 <CircleDotDashed size={16} className="text-slate-800" />
                                 <p className="text-slate-800">Marcar como pendiente</p>
                             </DropdownMenuItem>
 
-                            <DropdownMenuItem onClick={() => setAction("cancel")} className="flex flex-row gap-1.5 items-center">
+                            <DropdownMenuItem onClick={() => setAction("cancel", props.appointmentId)} className="flex flex-row gap-1.5 items-center">
                                 <CircleX size={16} className="text-slate-800" />
                                 <p className="text-slate-800">Cancelar cita</p>
                             </DropdownMenuItem>
                         </>
                     )}
 
-                    {appointmentStatus === "cancelled" && (
+                    {props.appointmentStatus === "cancelled" && (
                         <>
-                            <DropdownMenuItem onClick={() => setAction("complete")} className="flex flex-row gap-1.5 items-center">
+                            <DropdownMenuItem onClick={() => setAction("finished", props.appointmentId)} className="flex flex-row gap-1.5 items-center">
                                 <CheckCircle size={16} className="text-slate-800" />
                                 <p className="text-slate-800">Marcar como completa</p>
                             </DropdownMenuItem>
 
-                            <DropdownMenuItem onClick={() => setAction("pending")} className="flex flex-row gap-1.5 items-center">
+                            <DropdownMenuItem onClick={() => setAction("pending", props.appointmentId)} className="flex flex-row gap-1.5 items-center">
                                 <CircleDotDashed size={16} className="text-slate-800" />
                                 <p className="text-slate-800">Marcar como pendiente</p>
                             </DropdownMenuItem>
                         </>
                     )}
 
-                    <DropdownMenuItem onClick={() => setAction("modify")} className="flex flex-row gap-1.5 items-center">
+                    <DropdownMenuItem onClick={() => setAction("modify", props.appointmentId)} className="flex flex-row gap-1.5 items-center">
                         <SquarePen size={16} className="text-slate-800" />
                         <p className="text-slate-800">Modificar datos</p>
                     </DropdownMenuItem>
 
-                    <DropdownMenuItem onClick={() => setAction("remove")} className="flex flex-row gap-1.5 items-center">
+                    <DropdownMenuItem onClick={() => setAction("remove", props.appointmentId)} className="flex flex-row gap-1.5 items-center">
                         <Trash size={16} className="text-slate-800" />
                         <p className="text-slate-800">Eliminar cita</p>
                     </DropdownMenuItem>

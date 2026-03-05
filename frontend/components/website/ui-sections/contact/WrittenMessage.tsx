@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import SectionBadge from "@/components/website/SectionBadge";
-import notebook from "../../../public/notebook.png";
+import notebook from "../../../../public/notebook.png";
 import ContactForm from "@/components/website/ContactForm";
 import NormalButton from "@/components/website/NormalButton";
 import { useState } from "react";

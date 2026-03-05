@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import NormalButton from "@/components/website/NormalButton";
-import patient from "../../../public/patient.png";
+import patient from "../../../../public/patient.png";
 import SectionBadge from "@/components/website/SectionBadge";
 import { isVisible } from "@/utils/website/visibility-detector";
 

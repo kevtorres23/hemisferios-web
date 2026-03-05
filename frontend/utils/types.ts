@@ -1,4 +1,7 @@
-type AppointmentType = {
+import type { Option } from "@/components/ui/multi-select";
+
+interface AppointmentType {
+    _id: string;
     status: string;
     patientName: string;
     fatherSurname: string;
@@ -6,15 +9,16 @@ type AppointmentType = {
     phoneNumber: string;
     date: string;
     hour: string;
-    timestamp: string;
+    timestamp?: string;
+    cancellationComment?: string;
 };
 
-type PatientHistory = {
+interface PatientHistory {
     date: string;
     hour: string;
 }
 
-type PatientType = {
+interface PatientType {
     name: string;
     fatherSurname: string;
     motherSurname: string;
@@ -26,13 +30,13 @@ type PatientType = {
     appointmentHistory: PatientHistory[];
 };
 
-type TherapistSchedule = {
+interface TherapistSchedule {
     patient: string;
     hour: string;
     day: string;
 };
 
-type TherapistType = {
+interface TherapistType {
     name: string;
     lastName: string;
     startingDate: string;
@@ -64,11 +68,44 @@ type ModalProps = {
     onSave: () => void;
 };
 
+interface ActionModalProps extends ModalProps {
+    isVisible: boolean;
+    onClose: () => void;
+    onSave: () => void;
+    updateElementId: string;
+};
+
+interface UpdateStatusModal {
+    isVisible: boolean;
+    onClose: () => void;
+    onSave: () => void;
+}
+
+type DayFormat = {
+    writtenDate: string;
+    databaseDate: string;
+    hours: string[];
+};
+
+type Availability = {
+    lunes: (string | number)[],
+    martes: (string | number)[],
+    miercoles: (string | number)[],
+    jueves: (string | number)[],
+    viernes: (string | number)[],
+    sabado:(string | number)[],
+};
+
 export type {
     AppointmentType,
-    TagType, ModalProps,
+    TagType,
+    ModalProps,
+    ActionModalProps,
+    UpdateStatusModal,
     PatientType,
     TherapistType,
     PatientHistory,
-    CommentType
+    CommentType,
+    DayFormat,
+    Availability
 };

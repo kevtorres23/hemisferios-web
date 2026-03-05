@@ -22,7 +22,7 @@ function FilterBar(props: BarProps) {
     }
 
     return (
-        <div className="w-full bg-white border border-slate-200 px-4 py-3 rounded-lg items-center flex lg:flex-row flex-col justify-between gap-4">
+        <div className="w-full bg-white border border-slate-200 px-4 py-3 rounded-lg lg:items-center sm:items-start items-center flex lg:flex-row flex-col justify-between gap-4">
             {props.firstElement}
 
             <div className="flex sm:flex-row flex-col gap-3 sm:items-center sm:justify-center sm:w-auto w-full">

@@ -4,8 +4,8 @@ import { useRef } from "react";
 import SectionBadge from "@/components/website/SectionBadge";
 import { isVisible } from "@/utils/website/visibility-detector";
 import Image from "next/image";
-import kidsHighFive from "../../../public/kids-high-five.png";
-import blob from "../../../public/blob.png";
+import kidsHighFive from "../../../../public/kids-high-five.png";
+import blob from "../../../../public/blob.png";
 
 function InitialSection() {
     const ref1 = useRef(null);

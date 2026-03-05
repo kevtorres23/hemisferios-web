@@ -10,7 +10,6 @@ type LoginState = {
     updatePassword: (newPassword: string) => void,
 }
 
-
 export const useLoginStore = create<LoginState>()(
     persist((set) => ({
         adminEmail: "arlet28torres@gmail.com",

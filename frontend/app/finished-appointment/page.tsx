@@ -2,7 +2,7 @@
 
 import Navbar from "@/components/website/Navbar"
 import Footer from "@/components/website/Footer";
-import { useAppointmentStore } from "@/utils/website/store-appointments";
+import { useAppointmentStore } from "@/utils/website/receipt-store";
 import Image from "next/image";
 import music from "../../public/music.png";
 import Receipt from "@/components/website/Receipt";
