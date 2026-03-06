@@ -1,7 +1,13 @@
-// Function that checks if there are no more than two appointments with the same day and hour.
-
 import api from "../axios";
 import { AppointmentType } from "@/utils/types";
+
+/**
+ * Checks if there are no more than two appointments with the same day and hour,
+ * since two is the maximum number of appointments the center can currently handle on the same day, at the same hour.
+ * @param day 
+ * @param hour 
+ * @returns A `boolean` that indicates if there are already two appointments with the same day and hour in the database. 
+ */
 
 async function isAvailabilityFull(day: string, hour: string) {
     try {
@@ -15,14 +21,14 @@ async function isAvailabilityFull(day: string, hour: string) {
 
         pendingAppointments.forEach((appointment) => {
             if ((appointment.date === day) && (appointment.hour === hour)) {
-                counter += 1;
+                counter += 1; // We increment the counter by one if it finds a match with the given day and hour passed as arguments.
             };
         });
 
-        return counter === 2; // If it is true, no longer availability can be created with this date and hour (it is full).
+        return counter === 2; // If it is true, no more appointments can be created with this date and hour (it is full).
 
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 };
 
