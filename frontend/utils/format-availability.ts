@@ -17,7 +17,14 @@ type AvailabilityContent = {
     saturday: string[];
 };
 
-// Small function that adds a 0 to the left of the number if it is less than 10.
+/**
+ * Adds a '0' to the left of a number if it is less than 10, converting it into a string in the process.
+ * 
+ * E.g. 8 -> 08
+ * @param num 
+ * @returns A string representing the transformed passed number.
+ */
+
 function lessThanTen(num: number) {
     if (num < 10) {
         return "0" + num;
@@ -25,6 +32,12 @@ function lessThanTen(num: number) {
         return num;
     }
 };
+
+/**
+ * Obtains the prose-written date, database-format date, and list of hours of each item in an array of availability.
+ * @param availability 
+ * @returns Two arrays, where each store the objects for the current and next weeks' availability, from Monday to Saturday (length 6).
+ */
 
 function formatAvailability(availability: AvailabilityContent[]) {
     // Initialization of lists where we'll save the formatted availability.
@@ -41,13 +54,13 @@ function formatAvailability(availability: AvailabilityContent[]) {
         let danishDateCurrent;
         let writtenFormatCurrent;
 
+        // Build a 'DD/MM/YYYY' date.
         let danishDateNext = lessThanTen(nextWeekList[i].dayNum.number) + "/" + lessThanTen(nextWeekList[i].dayNum.month) + "/" + year;
+        // Build a prose-written date, like '10 de febrero de 2026'.
         let writtenFormatNext = dateFormatter(danishDateNext);
 
-        // For the current week, availability only will be shown from tomorrow on.
+        // For the current week, availability only will be shown from tomorrow on (we skip today).
         if (i > today) {
-            // Create a string with a format that the dateFormatter function can read: DD/MM/YY.
-            // + 1 is added to the month to match the JavaScript month format, which sets January to be 0.
             danishDateCurrent = lessThanTen(currentWeekList[i].dayNum.number) + "/" + lessThanTen(currentWeekList[i].dayNum.month) + "/" + year;
             writtenFormatCurrent = dateFormatter(danishDateCurrent);
 
@@ -60,6 +73,7 @@ function formatAvailability(availability: AvailabilityContent[]) {
             );
         };
 
+        // For the next week, there are no day skips.
         nextAvailability.push(
             {
                 writtenDate: writtenFormatNext,

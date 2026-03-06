@@ -21,6 +21,14 @@ const fullDays = [...currentWeekList, ...nextWeekList];
 const firstDefault = lessThanTen(fullDays[0].dayNum.number) + "/" + lessThanTen(fullDays[0].dayNum.month) + "/" + year;
 const secondDefault = lessThanTen(fullDays[11].dayNum.number) + "/" + lessThanTen(fullDays[11].dayNum.month) + "/" + year;
 
+/**
+ * Globally stores the appointments' filters, which are described as it follows:
+ * - **interval:** A two-value array representing the interval's upper and lower date limits.
+ * - **statusObject:** An object that saves the booleans of the pending, finished, and cancelled statuses.
+ * 
+ * It also allows to update these variables with the *updateInterval* and *updateStatus* functions, respectively.
+ */
+
 export const useAppointmentFilters = create<FilterStore>()((set) => ({
     interval: [firstDefault, secondDefault],
     statusObject: {

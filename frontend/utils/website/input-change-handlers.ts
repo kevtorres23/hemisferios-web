@@ -1,6 +1,13 @@
 import { Dispatch, SetStateAction } from "react";
 
-// The following two functions manipulate an input's value and validation state.
+/**
+ * Handles an text input's value and validation states.
+ * @param e 
+ * @param input 
+ * @param setInput 
+ * @param areValidationsShot 
+ * @param setInputValid 
+ */
 
 function InputChange(
     e: React.ChangeEvent<HTMLInputElement>,
@@ -18,7 +25,14 @@ function InputChange(
     };
 }
 
-// This function manipulates a select's value and validation state.
+/**
+ * Handles an select input's value and validation states.
+ * @param e 
+ * @param input 
+ * @param setInput 
+ * @param areValidationsShot 
+ * @param setInputValid 
+ */
 
 function SelectChange(
     value: string,

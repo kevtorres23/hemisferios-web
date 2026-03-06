@@ -1,13 +1,14 @@
 // PURPOSE OF THE MODULE: to perform calculations needed for the calendar and the appointment availability.
 
 import { lessThanTen } from "@/utils/format-availability";
+import { AppointmentType } from "@/utils/types";
 
 // Global scope variables.
 const date = new Date();
 const days = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 const currentMonth = date.getMonth();
 
-type CreatedWeek = {
+type weekDayObject = {
     dayName: string,
     dayNum: {
         number: number,
@@ -15,19 +16,26 @@ type CreatedWeek = {
     },
 };
 
-// Global scope arrow functions.
 const getDaysInMonth = (year: number, month: number) => new Date(year, month, 0).getDate(); // Calculate the number of days in a given month.
 
-// Calculates the day-of-the-month of today's day from the next week. Ex. Today: 25 (Wednesday, Feb), Next week: 4 (Wednesday, March).
+/**
+ * Calculates the day-of-the-month of today's day from the next week.
+ * 
+ * e.g. Today is 25 (Wednesday, Feb). **Calculation**: 4 (Wednesday, March).
+ * @param todayMonthNum 
+ * @returns An object containing the day-of-the-month and month number of seven days from today.
+ */
+
 function nextWeekNum(todayMonthNum: number) {
     const daysInCurrentMonth = getDaysInMonth(2026, currentMonth + 1);
-    const nextWeekNum = todayMonthNum + 7;
+    const nextWeekNum = todayMonthNum + 7; // Seven days from today.
     let nextMondayObj;
 
+    // Checks if the next week's day is from the next month.
     if (nextWeekNum > daysInCurrentMonth) {
         nextMondayObj = {
-            day: nextWeekNum - daysInCurrentMonth, // The difference of days, example: 30 - 28 = 2
-            month: currentMonth + 1,
+            day: nextWeekNum - daysInCurrentMonth, // The difference of days between the exceeded day and the last day of the month, e.g. 30 - 28 = 2
+            month: currentMonth + 1, // Increase the month number.
         };
     } else {
         nextMondayObj = {
@@ -39,9 +47,12 @@ function nextWeekNum(todayMonthNum: number) {
     return nextMondayObj;
 };
 
-import { AppointmentType } from "@/utils/types";
+/**
+ * Obtains all the different hours that the appointments of an array have.
+ * @param appointments 
+ * @returns An array containing all the obtained hours, e.g. `['10:00', '11:00', '12:00', ...]`
+ */
 
-// This function returns the hours in which the appointments will take place during the week.
 function calendarHoursCreator(appointments: AppointmentType[]) {
     const calendarHours: string[] = []; // Array where we'll store the hours that the appointments have.
 
@@ -56,15 +67,21 @@ function calendarHoursCreator(appointments: AppointmentType[]) {
     return calendarHours;
 };
 
-// Sorts the hours of the calendar in ascending order.
+/**
+ * Sorts a list of hours in ascending order.
+ * @param hoursArray 
+ * @returns An array with the passed hours in ascending order.
+ */
+
 function hourSorter(hoursArray: string[]) {
     const hours = hoursArray;
     const sortedArray = [];
 
     function compareNums(a: number, b: number) {
-        return a - b;
+        return a - b; // False if the operation's result is negative, true if it is positive.
     };
 
+    // Get the first two digits of an hour and convert them into a number, e.g. 10 from '10:00'.
     const getFirstTwo = (index: number) => Number(hours[index][0] + hours[index][1]);
 
     for (let i = 0; i < hours.length; i++) {
@@ -73,6 +90,7 @@ function hourSorter(hoursArray: string[]) {
 
     sortedArray.sort(compareNums);
 
+    // Finally, convert each number in the sorted array into an hour string, e.g. 10 -> 10:00, 11 -> 11:00.
     for (let i = 0; i < hours.length; i++) {
         sortedArray[i] = sortedArray[i] + ":00";
     };
@@ -80,16 +98,26 @@ function hourSorter(hoursArray: string[]) {
     return sortedArray;
 };
 
-// This function returns the difference of days between today and another day, positive por past days, negative for future ones.
+/**
+ * Calculates the difference of days between today and another day, **positive** por past days, **negative** for future ones.
+ * @returns A positive or negative number indicating the difference between the two numbers passed as arguments.
+ *  */
+
 function daysDistance(todaysNum: number, comparativeDayNum: number) {
     const days = [1, 2, 3, 4, 5, 6]; // Represents the days with their corresponding number, where Monday is 1.
 
-    return (days.indexOf(todaysNum) - days.indexOf(comparativeDayNum)); // Returns the difference of days between today and another day (second argument).
+    return (days.indexOf(todaysNum) - days.indexOf(comparativeDayNum));
 };
 
-// Pairs the week's day names with their corresponding month number based on today's day-of-the-month and the current month number.
+/**
+ * Creates an object for each day of the week with its corresponding name, day-of-the-month and month number, based on today's day-of-the month and month number.
+ * @param todayMonthNum 
+ * @param monthNum 
+ * @returns An array containing the created objects.
+ */
+
 function weekCreator(todayMonthNum: number, monthNum: number) {
-    const createdWeek: CreatedWeek[] = []; // Array to save the pairs of the current week's day names and month numbers.
+    const createdWeek: weekDayObject[] = []; // Array to save the objects that contain the day's name, day-of-the-month and month number.
     const todayWeekNum = date.getDay(); // This is equal to today's day in number, for example, 4 (for Jueves).
     const daysInCurrentMonth = getDaysInMonth(2026, monthNum + 1);
     const daysInPreviousMonth = getDaysInMonth(2026, monthNum);
@@ -98,16 +126,18 @@ function weekCreator(todayMonthNum: number, monthNum: number) {
     // Loop variables.
     let day;
     let num;
-    let newMonthCounter = 1;
+    let newMonthCounter = 1; // For when the calculated day starts a new month.
     let previousMonthCounter = daysInPreviousMonth;
     let distance;
+
+    const days = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 
     for (let i = 1; i < days.length; i++) {
         distance = daysDistance(todayWeekNum, i);
         day = days[i];
         num = todayMonthNum - distance;
 
-        // A normal case, the week is within the month's lower and upper limits.
+        // A normal case, where the week is within the month's lower and upper limits.
         if ((num <= daysInCurrentMonth) && (num >= 1)) {
             createdWeek.push(
                 {
@@ -154,8 +184,17 @@ function weekCreator(todayMonthNum: number, monthNum: number) {
     return (createdWeek);
 };
 
-// Finds coincidences between the calendar's and the appointment's hour and days to then display them.
-function calendarContentGenerator(weekList: CreatedWeek[], hourId: number, dayId: number, calendarHours: (string | number)[], data: AppointmentType[]) {
+/**
+ * Finds coincidences between the calendar's and the appointment's date and hour to display them in the calendar layout.
+ * @param weekList 
+ * @param hourId 
+ * @param dayId 
+ * @param calendarHours 
+ * @param data 
+ * @returns An appointment object that matched the date and hour coincidence.
+ */
+
+function calendarContentGenerator(weekList: weekDayObject[], hourId: number, dayId: number, calendarHours: (string | number)[], data: AppointmentType[]) {
 
     // Get the hour and day values that are currently being mapped in the calendar.
     let calendarHour = calendarHours[hourId];
@@ -179,10 +218,15 @@ function calendarContentGenerator(weekList: CreatedWeek[], hourId: number, dayId
     return coincidence; // Return the matched appointment object.
 };
 
-// This function receives a DD/MM/YY date format and returns its day, month and year values.
+/**
+ * Obtains the day, month, and year values from a DD/MM/YYY-written date.
+ * @param date 
+ * @returns An object containing the day, month, and year values from the passed date.
+ */
+
 function stringToDate(date: string) {
     const separatedDate = date.split("/");
-    
+
     return {
         day: Number(separatedDate[0]),
         month: Number(separatedDate[1]),

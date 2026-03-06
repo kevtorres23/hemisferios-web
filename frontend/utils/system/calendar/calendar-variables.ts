@@ -1,4 +1,6 @@
+// PURPOSE OF THE MODULE:
 // By using the functions created in the "calendar-methods.ts" module, variables that will be used in the UI are generated here.
+
 import { weekCreator, nextWeekNum } from "@/utils/system/calendar/calendar-methods";
 
 type IntervalValue = {
@@ -11,7 +13,7 @@ type WeekInterval = {
     secondValue: IntervalValue,
 };
 
-// An array containing the abbreviated month names.
+// An array that contains the abbreviated month names.
 const months = ["0", "ene.", "feb.", "mar.", "abr.", "mayo", "jun.", "jul.", "ago.", "sep.", "oct.", "nov.", "dic."];
 
 // Date variables.
@@ -24,7 +26,9 @@ const nextWeekNumber = nextWeekNum(todayMonthNum);
 const currentWeekList = weekCreator(todayMonthNum, currentMonthNum + 1);
 const nextWeekList = weekCreator(nextWeekNumber.day, nextWeekNumber.month + 1);
 
-// Interval values for the calendar.
+/**
+ * An object containing two sub-objects that respectively save the day and month values of the current week's lower and upper limits (Monday and Saturday).
+ */
 const currentInterval: WeekInterval = {
     firstValue: {
         day: currentWeekList[0].dayNum.number, // This key is equal to the day-of-the-month of the week's monday (start of the interval).
@@ -35,6 +39,10 @@ const currentInterval: WeekInterval = {
         month: months[currentWeekList[5].dayNum.month],
     }
 };
+
+/**
+ * An object containing two sub-objects that respectively save the day and month values of the next week's lower and upper limits (Monday and Saturday).
+ */
 
 const nextInterval: WeekInterval = {
     firstValue: {

@@ -8,6 +8,12 @@ type MonthNames = "enero" | "febrero" | "marzo" | "abril" | "mayo" | "junio" | "
 type MilitarFormat = "08:00" | "09:00" | "10:00" | "11:00" | "12:00" | "13:00" | "14:00" | "15:00" | "16:00" | "17:00" | "18:00" | "19:00" | "20:00";
 type TwelveFormat = "08:00 a.m." | "09:00 a.m." | "10:00 a.m." | "11:00 a.m." | "12:00 p.m." | "01:00 p.m." | "02:00 p.m." | "03:00 p.m." | "04:00 p.m." | "05:00 p.m." | "06:00 p.m." | "07:00 p.m." | "08:00 p.m.";
 
+/**
+ * Transforms a *DD/MM/YYYY-format* date into a normally written one.
+ * @param date 
+ * @returns A prose-written date (e.g. *14 de febrero de 2026*).
+ */
+
 function dateFormatter(date: string) {
     let day = "";
     let month = "";
@@ -37,8 +43,14 @@ function dateFormatter(date: string) {
     formattedMonth = months[month as keyof Record<MonthNumbers, MonthNames>]; // Accessing the 'months' object's key that has the value of the 'month' variable.
     year = date[6] + date[7] + date[8] + date[9];
 
-    return day + " de " + formattedMonth + " de " + year;
+    return day + " de " + formattedMonth + " de " + year; // Build and return a prose-written date.
 };
+
+/**
+ * Transforms an hour written in the militar format into a twelve-hour one.
+ * @param hour 
+ * @returns An hour written in the twelve-hour format (e.g. *08:00 a.m.*).
+ */
 
 function hourFormatter(hour: string) {
     const hours: Record<MilitarFormat, TwelveFormat> = {

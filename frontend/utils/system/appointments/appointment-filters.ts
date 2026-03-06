@@ -10,14 +10,17 @@ type Status = {
     cancelled: boolean
 };
 
-type FilterStore = {
-    interval: [string, string],
-    statusObject: Status,
-    updateInterval: (newIntervalArray: [string, string]) => void, // When "position" is 0, it updates the first parameter of the interval, or the second one, when it is 1.
-    updateStatus: (statusObject: Status) => void,
-};
+/**
+ * A function that filters an array of appointments based on two date points:
+ * one for the upper limit's date, and other for the lower limit's one.
+ * @param array 
+ * @param point1 
+ * @param point2 
+ * @returns An array of appointments filtered with the interval points passed as arguments.
+ */
 
 function intervalFilter(array: AppointmentType[], point1: string, point2: string) {
+    // Obtain the date values of the passed interval's points.
     const point1Values = stringToDate(point1);
     const point2Values = stringToDate(point2);
 
@@ -36,12 +39,20 @@ function intervalFilter(array: AppointmentType[], point1: string, point2: string
     return filteredData;
 };
 
+/**
+ * A function that filters an array of appointments based on their status.
+ * @param array
+ * @param activeStatuses
+ * @returns An array of filtered appointments with the passed active status(es).
+ */
+
 function statusFilter(array: AppointmentType[], activeStatuses: Status) {
     const cancelled = activeStatuses.cancelled;
     const pending = activeStatuses.pending;
     const finished = activeStatuses.finished;
 
     let filteredData = array.filter((appointment) => {
+        // Filter all the appointments whose status is true in the activeStatuses object.
         return ((pending ? appointment.status === "pending" : false) ||
             (cancelled ? appointment.status === "cancelled" : false) ||
             (finished ? appointment.status === "finished" : false));
@@ -49,6 +60,14 @@ function statusFilter(array: AppointmentType[], activeStatuses: Status) {
 
     return filteredData;
 };
+
+/**
+ * Joins the interval and status filter into a single one to make them work in the Appointments page.
+ * @param data 
+ * @param interval 
+ * @param activeStatuses 
+ * @returns An array of filtered appointments with both the interval and status filters.
+ */
 
 function applyFilters(data: AppointmentType[], interval: [string, string], activeStatuses: Status) {
     let filter1 = intervalFilter(data, interval[0], interval[1]);
@@ -58,7 +77,4 @@ function applyFilters(data: AppointmentType[], interval: [string, string], activ
 }
 
 export { intervalFilter, statusFilter, applyFilters };
-
-// Creo que podríamos aplicar primero una función. Después, al nuevo array, le aplicamos la siguiente función de filtrado.
-// Y así hasta usar todas las funciones de filtrado.
 

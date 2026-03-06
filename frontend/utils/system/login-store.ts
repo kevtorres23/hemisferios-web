@@ -8,7 +8,13 @@ type LoginState = {
     changeSessionStatus: (newStatus: boolean) => void,
     updateEmail: (newEmail: string) => void,
     updatePassword: (newPassword: string) => void,
-}
+};
+
+/**
+ * Globally stores the login credentials, which consist of an email and a password, and the session status (true when the user is logged in).
+ * 
+ * It also allows to update these variables with the *changeSessionStatus*, *updateEmail* and *updatePassword* functions.
+ */
 
 export const useLoginStore = create<LoginState>()(
     persist((set) => ({
