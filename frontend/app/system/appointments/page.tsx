@@ -232,7 +232,7 @@ function AppointmentDashboard() {
 
             {appointmentsData.length > 0 && view === "calendar" && (
                 <CardActionContext.Provider value={onActionSelected}>
-                    <AppointmentCalendar page="appointments" data={appointmentsData} />
+                    <AppointmentCalendar page="appointments" data={appointmentsData} month="" year="" />
                 </CardActionContext.Provider>
             )}
         </ SystemLayout>

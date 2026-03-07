@@ -1,6 +1,6 @@
 "use client";
 
-import { hourSorter } from "@/utils/system/calendar/calendar-methods";
+import { hourSorter, intervalCreator } from "@/utils/system/calendar/calendar-methods";
 import { currentInterval, nextInterval } from "@/utils/system/calendar/calendar-variables";
 import { useState } from "react";
 import PageNavigator from "../PageNavigator";
@@ -14,6 +14,8 @@ import appointmentsEmpty from "../../../public/appointments-empty.png";
 import HistoryFilterDropdown from "./HistoryFilterDropdown";
 import { useHistoryFilters } from "@/utils/system/history/filter-store";
 import historyEmpty from "../../../public/history-empty.png";
+import { historyCalendarWeeks } from "@/utils/system/calendar/history-calendar-weeks";
+import HistoryCalendarUI from "./HistoryCalendarUI";
 
 type Status = {
     pending: boolean,
@@ -43,13 +45,26 @@ type HistoryFilterStore = {
 type CalendarProps = {
     data: AppointmentType[];
     page: "history" | "appointments";
+    month?: string;
+    year?: string;
 };
+
+type weekDayObject = {
+    dayName: string,
+    dayNum: {
+        number: number,
+        month: number,
+    },
+};
+
+const monthNames = ["0", "enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
 
 function AppointmentCalendar(props: CalendarProps) {
     // State variables.
     const [week, setWeek] = useState(1); // 1 for current, 2 for next.
     const [historyWeek, setHistoryWeek] = useState(1);
 
+    // Appointments Page filter variables.
     const interval = useAppointmentFilters((state: FilterStore) => state.interval)
     const checkedStatuses = useAppointmentFilters((state: FilterStore) => state.statusObject);
 
@@ -57,8 +72,20 @@ function AppointmentCalendar(props: CalendarProps) {
     const historyInterval = useHistoryFilters((state: HistoryFilterStore) => state.interval);
     const historyCheckedStatuses = useHistoryFilters((state: HistoryFilterStore) => state.statusObject);
 
+    // Filter the data according to the page of the calendar (Appointments or History).
     const filteredData = applyFilters(props.data, interval, checkedStatuses);
-    const historyFilteredData = applyFilters(props.data, historyInterval, { pending: false, finished: historyCheckedStatuses.finished, cancelled: historyCheckedStatuses.cancelled })
+    const historyFilteredData = applyFilters(props.data, historyInterval, { pending: false, finished: historyCheckedStatuses.finished, cancelled: historyCheckedStatuses.cancelled });
+
+    const fiveWeeks: weekDayObject[][] = historyCalendarWeeks(Number(props.month), Number(props.year));
+    const week1Interval = intervalCreator(fiveWeeks[0][0].dayNum.number, fiveWeeks[0][0].dayNum.month, fiveWeeks[0][5].dayNum.number, fiveWeeks[0][5].dayNum.month);
+    const week2Interval = intervalCreator(fiveWeeks[1][0].dayNum.number, fiveWeeks[1][0].dayNum.month, fiveWeeks[1][5].dayNum.number, fiveWeeks[1][5].dayNum.month);
+    const week3Interval = intervalCreator(fiveWeeks[2][0].dayNum.number, fiveWeeks[2][0].dayNum.month, fiveWeeks[2][5].dayNum.number, fiveWeeks[2][5].dayNum.month);
+    const week4Interval = intervalCreator(fiveWeeks[3][0].dayNum.number, fiveWeeks[3][0].dayNum.month, fiveWeeks[3][5].dayNum.number, fiveWeeks[3][5].dayNum.month);
+    const week5Interval = intervalCreator(fiveWeeks[4][0].dayNum.number, fiveWeeks[4][0].dayNum.month, fiveWeeks[4][5].dayNum.number, fiveWeeks[4][5].dayNum.month);
+
+    const historyWeekIntervals = [week1Interval, week2Interval, week3Interval, week4Interval, week5Interval];
+
+    console.log(fiveWeeks);
 
     return (
         <div className="w-full flex h-full border border-slate-200 bg-white rounded-lg p-6 flex-col gap-6">
@@ -79,9 +106,9 @@ function AppointmentCalendar(props: CalendarProps) {
                         <PageNavigator
                             onPreviousClick={() => setHistoryWeek(historyWeek - 1)}
                             onNextClick={() => setHistoryWeek(historyWeek + 1)}
-                            labelText={`Semana ${historyWeek} de marzo`}
+                            labelText={`Semana ${historyWeek} de ${monthNames[Number(props.month)]}`}
                             currentPage={historyWeek}
-                            finalPage={4}
+                            finalPage={5}
                             labelStyles="text-2xl font-medium text-slate-900 tracking-tight text-center"
                         />
                     )}
@@ -89,15 +116,7 @@ function AppointmentCalendar(props: CalendarProps) {
                     {props.page === "appointments" && (
                         <div className="week-indicator px-2.5 py-1 border border-indigo-400 bg-indigo-50 rounded-sm">
                             <p className="text-sm text-indigo-500 font-medium">
-                                {week === 1 ? (
-                                    // Build the current or next week interval, like: "23 de feb. - 28 de feb."
-                                    currentInterval.firstValue.day + " de " + currentInterval.firstValue.month + " - " +
-                                    currentInterval.secondValue.day + " de " + currentInterval.secondValue.month
-                                ) : (
-                                    nextInterval.firstValue.day + " de " + nextInterval.firstValue.month + " - " +
-                                    nextInterval.secondValue.day + " de " + nextInterval.secondValue.month
-                                )
-                                }
+                                {week === 1 ? (currentInterval[0] + " - " + currentInterval[1]) : (nextInterval[0] + " - " + nextInterval[1])}
                             </p>
                         </div>
                     )}
@@ -108,15 +127,7 @@ function AppointmentCalendar(props: CalendarProps) {
                     {props.page === "history" && (
                         <div className="week-indicator px-2.5 py-1 border border-indigo-400 bg-indigo-50 rounded-sm">
                             <p className="text-sm text-indigo-500 font-medium">
-                                {week === 1 ? (
-                                    // Build the current or next week interval, like: "23 de feb. - 28 de feb."
-                                    currentInterval.firstValue.day + " de " + currentInterval.firstValue.month + " - " +
-                                    currentInterval.secondValue.day + " de " + currentInterval.secondValue.month
-                                ) : (
-                                    nextInterval.firstValue.day + " de " + nextInterval.firstValue.month + " - " +
-                                    nextInterval.secondValue.day + " de " + nextInterval.secondValue.month
-                                )
-                                }
+                                {historyWeekIntervals[historyWeek - 1][0]} - {historyWeekIntervals[historyWeek - 1][1]}
                             </p>
                         </div>
                     )}
@@ -152,7 +163,7 @@ function AppointmentCalendar(props: CalendarProps) {
             )}
 
             {props.page === "history" && historyFilteredData.length > 0 && (
-                <CalendarUI week={historyWeek} data={historyFilteredData} page={props.page} />
+                <HistoryCalendarUI week={historyWeek} fiveWeeks={fiveWeeks} data={historyFilteredData} page={props.page} />
             )}
         </div>
     );

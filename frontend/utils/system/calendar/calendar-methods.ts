@@ -119,8 +119,9 @@ function daysDistance(todaysNum: number, comparativeDayNum: number) {
 function weekCreator(todayMonthNum: number, monthNum: number) {
     const createdWeek: weekDayObject[] = []; // Array to save the objects that contain the day's name, day-of-the-month and month number.
     const todayWeekNum = date.getDay(); // This is equal to today's day in number, for example, 4 (for Jueves).
-    const daysInCurrentMonth = getDaysInMonth(2026, monthNum + 1);
-    const daysInPreviousMonth = getDaysInMonth(2026, monthNum);
+    const daysInCurrentMonth = getDaysInMonth(2026, monthNum);
+    const daysInPreviousMonth = getDaysInMonth(2026, monthNum - 1);
+
     const month = monthNum;
 
     // Loop variables.
@@ -158,7 +159,7 @@ function weekCreator(todayMonthNum: number, monthNum: number) {
                 {
                     dayName: day,
                     dayNum: {
-                        number: previousMonthCounter - (distance - 1),
+                        number: previousMonthCounter + (num),
                         month: month - 1,
                     },
                 },
@@ -234,4 +235,23 @@ function stringToDate(date: string) {
     };
 };
 
-export { nextWeekNum, calendarHoursCreator, daysDistance, weekCreator, hourSorter, calendarContentGenerator, stringToDate };
+function intervalCreator(firstPointDay: number, firstPointMonth: number, secondPointDay: number, secondPointMonth: number) {
+    // Month abbreviations. '0' is added to match the actual number of each month.
+    const months = ["0", "ene.", "feb.", "mar.", "abr.", "mayo", "jun.", "jul.", "ago.", "sep.", "oct.", "nov.", "dic."];
+
+    console.log("Month 1:", firstPointMonth);
+
+    return [[firstPointDay + " de " + months[firstPointMonth]], [secondPointDay + " de " + months[secondPointMonth]]];
+};
+
+export { 
+    nextWeekNum,
+    calendarHoursCreator, 
+    daysDistance, 
+    weekCreator, 
+    hourSorter, 
+    calendarContentGenerator, 
+    stringToDate, 
+    getDaysInMonth, 
+    intervalCreator
+};

@@ -55,8 +55,6 @@ const date = new Date();
 const currentMonthNum = lessThanTen(date.getMonth() + 1).toString();
 const currentYear = date.getFullYear().toString();
 
-console.log(currentMonthNum);
-
 function AppointmentHistory() {
     const id = useId();
     const [appointmentsData, setAppointmentsData] = useState<AppointmentType[]>([]);
@@ -218,7 +216,7 @@ function AppointmentHistory() {
 
             {appointmentsData.length > 0 && view === "calendar" && (
                 <HistoryActionContext.Provider value={onActionSelected}>
-                    <AppointmentCalendar page="history" data={appointmentsData} />
+                    <AppointmentCalendar page="history" data={appointmentsData} month={displayedMonth} year={displayedYear} />
                 </HistoryActionContext.Provider>
             )}
         </ SystemLayout>
