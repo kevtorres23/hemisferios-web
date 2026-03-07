@@ -22,10 +22,6 @@ const currentMonthLimits = monthLimits(year, date.getMonth() + 1);
 const firstDefault = currentMonthLimits.first + "/" + lessThanTen(date.getMonth() + 1) + "/" + year;
 const secondDefault = currentMonthLimits.last + "/" + lessThanTen(date.getMonth() + 1) + "/" + year;
 
-function littleEnesian(day: string, month: string, year: string) {
-    
-}
-
 /**
  * Globally stores the history page's filters, which are described as it follows:
  * - **interval:** A two-value array representing the interval's upper and lower date limits.

@@ -123,7 +123,7 @@ function AvailabilityModal(props: ModalProps) {
                 {week === "current" ? (
                     <>
                         <p className="text-sm text-indigo-500 font-medium">Semana actual
-                            ({currentInterval.firstValue.day} de {currentInterval.firstValue.month} al {currentInterval.secondValue.day} de {currentInterval.secondValue.month})
+                            ({currentInterval[0]} al {currentInterval[1]})
                         </p>
                         <ArrowRight size={16} strokeWidth={2.5} className="cursor-pointer text-indigo-500" onClick={() => setWeek("next")} />
                     </>
@@ -131,7 +131,7 @@ function AvailabilityModal(props: ModalProps) {
                     <>
                         <ArrowLeft size={16} strokeWidth={2.5} className="cursor-pointer text-indigo-500" onClick={() => setWeek("current")} />
                         <p className="text-sm text-indigo-500 font-medium">Semana próxima
-                            ({nextInterval.firstValue.day} de {nextInterval.firstValue.month} al {nextInterval.secondValue.day} de {nextInterval.secondValue.month})
+                            ({nextInterval[0]} al {nextInterval[1]})
                         </p>
                     </>
                 )}
