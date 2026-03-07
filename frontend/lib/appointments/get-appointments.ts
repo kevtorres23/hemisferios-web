@@ -9,7 +9,7 @@ import api from "../axios";
 async function getAllAppointments() {
     try {
         const res = await api.get("/appointments");
-        const foundAppointments: AppointmentType = res.data;
+        const foundAppointments: AppointmentType[] = res.data;
         return foundAppointments;
 
     } catch (error) {

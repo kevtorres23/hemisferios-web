@@ -1,7 +1,6 @@
 import SearchBar from "../SearchBar";
 import PageNavigator from "../PageNavigator";
 import FilterDropdown from "./FilterDropdown";
-import StatusDropdown from "./StatusDropdown";
 import { AppointmentCard } from "./AppointmentCard";
 import { AppointmentType } from "@/utils/types";
 import { useState, useEffect } from "react";
@@ -10,6 +9,8 @@ import appointmentsEmpty from "../../../public/appointments-empty.png";
 import { useAppointmentFilters } from "@/utils/system/appointments/filter-store";
 import { applyFilters } from "@/utils/system/appointments/appointment-filters";
 import { pageSeparator } from "@/utils/system/page-separator";
+import { useHistoryFilters } from "@/utils/system/history/filter-store";
+import HistoryFilterDropdown from "./HistoryFilterDropdown";
 
 type GridProps = {
     data: AppointmentType[]; // A list of a list of appointment objects.
@@ -22,9 +23,21 @@ type Status = {
     cancelled: boolean
 };
 
+type HistoryStatus = {
+    finished: boolean,
+    cancelled: boolean
+};
+
 type FilterStore = {
     interval: [string, string],
     statusObject: Status,
+    updateInterval: (newIntervalArray: [string, string]) => void, // When "position" is 0, it updates the first parameter of the interval, or the second one, when it is 1.
+    updateStatus: (statusObject: Status) => void,
+};
+
+type HistoryFilterStore = {
+    interval: [string, string],
+    statusObject: HistoryStatus,
     updateInterval: (newIntervalArray: [string, string]) => void, // When "position" is 0, it updates the first parameter of the interval, or the second one, when it is 1.
     updateStatus: (statusObject: Status) => void,
 };
@@ -34,22 +47,36 @@ function AppointmentGrid(props: GridProps) {
     const [search, setSearch] = useState("");
     const [pages, setPages] = useState(1);
 
-    const show0 = 0;
-
-    // State variables.
+    // Appointment Page filter variables.
     const [intervalValue, setIntervalValue] = useState("two-weeks");
     const interval = useAppointmentFilters((state: FilterStore) => state.interval)
     const checkedStatuses = useAppointmentFilters((state: FilterStore) => state.statusObject);
-    let filteredData = applyFilters(props.data, interval, checkedStatuses);
+
+    // History Page filter variables.
+    const historyInterval = useHistoryFilters((state: HistoryFilterStore) => state.interval);
+    const historyCheckedStatuses = useHistoryFilters((state: HistoryFilterStore) => state.statusObject);
+
+    // Filter initialization.
+    let filteredData;
+
+    if (props.page === "appointments") {
+        filteredData = applyFilters(props.data, interval, checkedStatuses);
+    } else {
+        filteredData = applyFilters(props.data, historyInterval, { pending: false, finished: historyCheckedStatuses.finished, cancelled: historyCheckedStatuses.cancelled });
+    };
+
     const [appointmentPages, setAppointmentPages] = useState<any[][]>(pageSeparator(filteredData));
 
-    useEffect(() => {
-        console.log(currentPage);
-
-        let filteredData = applyFilters(props.data, interval, checkedStatuses);
-
-        setAppointmentPages(pageSeparator(filteredData));
-        setPages(pageSeparator(filteredData).length);
+    useEffect(() => {        
+        if (props.page === "appointments") {
+            let filteredData = applyFilters(props.data, interval, checkedStatuses);
+            setAppointmentPages(pageSeparator(filteredData));
+            setPages(pageSeparator(filteredData).length);
+        } else {
+            let filteredData = applyFilters(props.data, historyInterval, { pending: false, finished: historyCheckedStatuses.finished, cancelled: historyCheckedStatuses.cancelled });
+            setAppointmentPages(pageSeparator(filteredData));
+            setPages(pageSeparator(filteredData).length);
+        };
 
         if (pageSeparator(filteredData).length === 0) {
             setCurrentPage(1);
@@ -63,7 +90,7 @@ function AppointmentGrid(props: GridProps) {
             setCurrentPage(currentPage - 1);
         };
 
-    }, [interval, checkedStatuses]);
+    }, [interval, historyInterval, checkedStatuses, historyCheckedStatuses, props.data]);
 
     function onIntervalChange(val: string) {
         setIntervalValue(val);
@@ -84,7 +111,7 @@ function AppointmentGrid(props: GridProps) {
                     )}
 
                     {props.page === "history" && (
-                        <StatusDropdown isOnHistory={true} />
+                        <HistoryFilterDropdown />
                     )}
 
                     <div className="flex flex-row gap-3 items-center justify-center">

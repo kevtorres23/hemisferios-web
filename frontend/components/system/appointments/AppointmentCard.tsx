@@ -1,6 +1,6 @@
 import { dateFormatter, hourFormatter } from "@/utils/system/appointments/appointment-formatter";
 import { updateStatus } from "@/lib/appointments/update-appointment-status";
-import isExpired from "@/utils/system/appointments/expiracy-check";
+import isExpired from "@/utils/system/appointments/check-expiracy";
 import { useContext, useEffect } from "react";
 import AppointmentTag from "./AppointmentTag";
 import {
@@ -41,7 +41,7 @@ function AppointmentCard(props: CardProps) {
     useEffect(() => {
         const expired = isExpired(props.date, props.hour);
 
-        if (expired) {
+        if (expired && (props.status === "pending")) {
             updateStatus(props._id, "finished"); // Updates the status of the appointment if its day and hour have already passed.
         };
 
@@ -52,7 +52,7 @@ function AppointmentCard(props: CardProps) {
             <div className={`absolute w-1 h-full ${props.status === "pending" ? "bg-yellow-500" : (props.status === "finished" ? "bg-green-500" : "bg-rose-500")} left-0`}></div>
 
             <div className="relative w-full flex flex-row justify-between items-center">
-                <div className="flex flex-row gap-2 w-auto items-center justify-center">
+                <div className={`flex flex-row gap-2 w-auto items-center justify-center ${props.page === "history" ? "mb-2" : "mb-0"}`}>
                     <AppointmentTag type={props.status === "pending" ? "pending" : (props.status === "finished" ? "finished" : "cancelled")} />
 
                     {props.status === "cancelled" && props.cancellationComment != "placeholder" && (
@@ -81,7 +81,7 @@ function AppointmentCard(props: CardProps) {
                 )}
 
                 {props.page === "history" && (
-                    <Trash onClick={() => setHistoryAction("remove")} size={16} className="text-slate-600 cursor-pointer" />
+                    <Trash onClick={() => setHistoryAction("remove", props._id)} size={16} className="text-slate-600 cursor-pointer" />
                 )}
             </div>
 

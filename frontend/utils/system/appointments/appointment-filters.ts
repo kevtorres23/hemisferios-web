@@ -29,9 +29,10 @@ function intervalFilter(array: AppointmentType[], point1: string, point2: string
 
         // Filter conditions (in boolean).
         let condition1 = separatedDate.day >= point1Values.day; // If the day number of the appointment is greater or equal than the one in the interval's first point.
-        let condition2 = separatedDate.day <= point2Values.day; // If the day of number the appointment is less or equal than the one in the interval's second point.
-        let condition3 = separatedDate.month <= point2Values.month; // If the month of the appointment is less or equal than the one in the interval's second point.
-        let condition4 = separatedDate.year <= point2Values.year; // If the year of the appointment is less or equal than the one interval's second point.
+        let condition2 = separatedDate.day <= point2Values.day; // If the day number of the appointment is less or equal than the one in the interval's second point.
+        let condition3 = separatedDate.month === point1Values.month; 
+        let condition4 = separatedDate.month <= point2Values.month; // If the month of the appointment is less or equal than the one in the interval's second point.
+        let condition5 = separatedDate.year <= point2Values.year; // If the year of the appointment is less or equal than the one interval's second point.
 
         return condition1 && condition2 && condition3 && condition4;
     });
@@ -74,7 +75,9 @@ function applyFilters(data: AppointmentType[], interval: [string, string], activ
     let filteredData = statusFilter(filter1, activeStatuses);
 
     return filteredData;
-}
+};
+
+
 
 export { intervalFilter, statusFilter, applyFilters };
 

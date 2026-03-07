@@ -112,8 +112,9 @@ function CalendarUI(props: CalendarUIProps) {
                                         <CalendarSpace
                                             key={id}
                                             content={
-                                                foundAppointments.length > 0 ? foundAppointments.map((appointment) =>
+                                                foundAppointments.length > 0 ? foundAppointments.map((appointment, id) =>
                                                     <AppointmentCardCalendar
+                                                        key={id}
                                                         _id={appointment._id}
                                                         cancellationComment={appointment.cancellationComment}
                                                         patientName={appointment.patientName}

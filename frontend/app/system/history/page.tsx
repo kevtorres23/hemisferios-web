@@ -1,18 +1,20 @@
 "use client";
 
 import SystemLayout from "@/components/system/SystemLayout";
+import toast, { Toaster } from 'react-hot-toast';
 import EmptyState from "@/components/system/EmptyState";
-import { NewAppointmentModal, CancelAppointmentModal, ModifyAppointmentModal, RemoveAppointModal, CompleteAppointment, PendingAppointment } from "@/components/system/modals/AppointmentActions";
-import SuccessModal from "@/components/system/modals/SuccessModal";
+import { historyAvailability } from "@/utils/system/history/history-registry";
+import { useHistoryFilters } from "@/utils/system/history/filter-store";
+import api from "@/lib/axios";
+import { RemoveAppointModal } from "@/components/system/modals/AppointmentActions";
 import { useId } from "react";
 import PageTitle from "@/components/system/PageTitle";
 import AppointmentGrid from "@/components/system/appointments/AppointmentGrid";
 import AppointmentCalendar from "@/components/system/appointments/AppointmentCalendar";
 import FilterBar from "@/components/system/FilterBar";
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 import historyEmpty from "../../../public/history-empty.png";
 import { AppointmentType } from "@/utils/types";
-import { pageSeparator } from "@/utils/system/page-separator";
 import {
     Select,
     SelectContent,
@@ -22,64 +24,136 @@ import {
     SelectTrigger,
     SelectValue
 } from '@/components/ui/select';
+import { lessThanTen } from "@/utils/format-availability";
+import monthLimits from "@/utils/system/history/month-limits";
 
+type MonthRegistry = {
+    monthNum: string;
+    monthName: string;
+}
 
-export const HistoryActionContext = createContext<(action: string) => void>(() => "");
+type HistoryRegistry = {
+    months: MonthRegistry[],
+    years: string[],
+};
 
+type Status = {
+    finished: boolean,
+    cancelled: boolean
+};
 
-type AppointmentDataset = AppointmentType[];
+type FilterStore = {
+    interval: [string, string],
+    statusObject: Status,
+    updateInterval: (newIntervalArray: [string, string]) => void,
+    updateStatus: (statusObject: Status) => void,
+};
+
+export const HistoryActionContext = createContext<(action: string, id: string) => void>(() => "");
+
+const date = new Date();
+const currentMonthNum = lessThanTen(date.getMonth() + 1).toString();
+const currentYear = date.getFullYear().toString();
+
+console.log(currentMonthNum);
 
 function AppointmentHistory() {
     const id = useId();
+    const [appointmentsData, setAppointmentsData] = useState<AppointmentType[]>([]);
     const [view, setView] = useState("cards");
-    const [searchValue, setSearchValue] = useState("");
     const [cardAction, setCardAction] = useState("");
-    const [success, setSuccess] = useState(false);
-    const [successfulAction, setSuccessfulAction] = useState("");
-    const [displayedMonth, setDisplayedMonth] = useState("Febrero");
-    const [displayedYear, setDisplayedYear] = useState("2026");
+    const [isLoading, setIsLoading] = useState(true);
+    const [displayedMonth, setDisplayedMonth] = useState(currentMonthNum);
+    const [displayedYear, setDisplayedYear] = useState(currentYear);
+    const [appointmentId, setAppointmentId] = useState("");
+    const [registry, setRegistry] = useState<HistoryRegistry>();
 
-    const data: AppointmentDataset = [
-    ];
+    const updateHistoryInterval = useHistoryFilters((state: FilterStore) => state.updateInterval);
 
-    let appointmentPages = pageSeparator(data);
+    useEffect(() => {
+        const fetchAllAppointments = async () => {
+            try {
+                const res = await api.get("/appointments");
+                setAppointmentsData(res.data);
+            } catch (error) {
+                console.log("Error while fetching the appointments", error);
+            } finally {
+                setIsLoading(false);
+            };
+        };
+
+        const getHistoryRegistry = async () => {
+            try {
+                const historyRegistry = await historyAvailability();
+                if (historyRegistry) {
+                    setRegistry(historyRegistry);
+                }
+            } catch (error) {
+                console.log("An error ocurred:", error)
+            };
+        };
+
+        fetchAllAppointments();
+        getHistoryRegistry();
+    }, []);
 
     function showSuccessModal(successMsg: string) {
-        setSuccess(true);
-        setSuccessfulAction(successMsg)
-        setTimeout(() => setSuccess(false), 3000);
+        toast.success(<p className="font-medium">{successMsg}</p>, { duration: 2000 });
     };
 
-
     function onRemoveAppointment() {
+        api.delete("/appointments/" + appointmentId);
         setCardAction(""); // Close the action modal.
-        // Include the DELETE controller to remove the appointment.
-        showSuccessModal("Cita eliminada correctamente.");
+        setAppointmentsData((prev: AppointmentType[]) => prev.filter(appointment => appointment._id !== appointmentId));
+        showSuccessModal("¡Cita eliminada correctamente!");
     };
 
     function onViewChange(selectedView: string) {
         setView(selectedView);
     };
 
-    function onActionSelected(action: string) {
+    function onActionSelected(action: string, id: string) {
         setCardAction(action);
+        setAppointmentId(id);
     };
 
-    const recordMonths = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-    const recordYears = ["2026", "2025"];
+    function onMonthChange(val: string) {
+        setDisplayedMonth(val);
+
+        let newMonthLimits = monthLimits(Number(displayedYear), Number(val));
+
+        const newIntervalFirst = newMonthLimits.first + "/" + val + "/" + displayedYear;
+        const newIntervalSecond = newMonthLimits.last + "/" + val + "/" + displayedYear;
+
+        updateHistoryInterval([newIntervalFirst, newIntervalSecond]);
+    };
+
+    function onYearChange(val: string) {
+        setDisplayedYear(val);
+
+        let newMonthLimits = monthLimits(Number(displayedYear), Number(val));
+
+        const newIntervalFirst = newMonthLimits.first + "/" + lessThanTen(Number(displayedMonth)) + "/" + displayedYear;
+        const newIntervalSecond = newMonthLimits.last + "/" + lessThanTen(Number(displayedMonth)) + "/" + displayedYear;
+
+        updateHistoryInterval([newIntervalFirst, newIntervalSecond]);
+    };
 
     return (
-        <SystemLayout sidebarPage="history" isAnyModal={cardAction === "cancel" || cardAction === "complete" || cardAction === "modify" || cardAction === "remove" || cardAction === "pending"}
+        <SystemLayout sidebarPage="history" isAnyModal={cardAction === "remove"}
             modals={
                 <>
-                    <RemoveAppointModal onSave={onRemoveAppointment} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />
+                    {cardAction === "remove" && (
+                        <RemoveAppointModal updateElementId={appointmentId} onSave={onRemoveAppointment} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />
+                    )}
+
                 </>
             }>
 
-            <SuccessModal isVisible={success} text={successfulAction} />
+            <Toaster />
 
             <div className="header flex sm:flex-row flex-col justify-between items-start sm:gap-10 gap-6 w-full">
-                <PageTitle title="Historial de Citas" desc="Consulta las citas que han tenido lugar en Hemisferios." />
+                <PageTitle title="Historial de Citas" desc="Consulta y administra las citas agendadas por los usuarios en el sitio." />
             </div>
 
             <FilterBar onViewChange={onViewChange} firstElement={
@@ -87,7 +161,7 @@ function AppointmentHistory() {
                     <p className="text-lg text-nowrap font-medium text-slate-800">Registro de</p>
 
                     <div className="flex flex-row gap-2 items-center justify-center">
-                        <Select defaultValue="01" value={displayedMonth} onValueChange={(val) => setDisplayedMonth(val)}>
+                        <Select defaultValue={currentMonthNum.toString()} value={displayedMonth} onValueChange={onMonthChange}>
                             <SelectTrigger id={id} className={`w-full bg-white sm:text-sm text-base cursor-pointer py-5 px-3`}>
                                 <SelectValue />
                             </SelectTrigger>
@@ -95,14 +169,15 @@ function AppointmentHistory() {
                                 <SelectGroup className="h-80 overflow-y-scroll">
                                     <SelectLabel className="text-sm">Mes del registro:</SelectLabel>
                                     {/* Map the available record months */}
-                                    {recordMonths.map((item, id) =>
-                                        <SelectItem className="text-sm" key={id} value={item}>{item}</SelectItem>
-                                    )}
+                                    {registry?.months.map((item, id) => {
+                                        return <SelectItem className="text-sm" key={id} value={item.monthNum}>{item.monthName}</SelectItem>
+                                    })}
+                                    <SelectItem className="text-sm" key={id} value={"04"}>{"Abril"}</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
 
-                        <Select defaultValue="01" value={displayedYear} onValueChange={(val) => setDisplayedYear(val)}>
+                        <Select defaultValue="01" value={displayedYear} onValueChange={onYearChange}>
                             <SelectTrigger id={id} className={`w-full bg-white sm:text-sm text-base cursor-pointer py-2 px-3`}>
                                 <SelectValue />
                             </SelectTrigger>
@@ -110,7 +185,7 @@ function AppointmentHistory() {
                                 <SelectGroup className="h-80 overflow-y-scroll">
                                     <SelectLabel className="text-sm">Año del registro:</SelectLabel>
                                     {/* Map the available record months */}
-                                    {recordYears.map((item, id) =>
+                                    {registry?.years.map((item, id) =>
                                         <SelectItem className="text-sm" key={id} value={item}>{item}</SelectItem>
                                     )}
                                 </SelectGroup>
@@ -121,20 +196,31 @@ function AppointmentHistory() {
             }
             />
 
-            {(data.length === 0) ? (
+            {isLoading && (
+                <div className="w-full h-full flex items-center justify-center">
+                    <p className="text-xl font-semibold text-slate-800">Cargando citas...</p>
+                </div>
+            )}
+
+            {!isLoading && appointmentsData.length === 0 && (
                 <EmptyState
-                    header="¡No hay nada en el historial aún!"
-                    desc="Las citas aparecerán aquí cuando su fecha y hora establecidas hayan pasado."
+                    header="¡No hay citas en el historial aún!"
+                    desc="Las citas aparecerán aquí automáticamente cuando hayan sido completadas o canceladas."
                     image={historyEmpty}
                 />
-            ) : (view === "cards") ? (
+            )}
+
+            {appointmentsData.length > 0 && view === "cards" && (
                 <HistoryActionContext.Provider value={onActionSelected}>
-                    <AppointmentGrid page="history" onActionSelected={onActionSelected} data={appointmentPages} onSearchChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.currentTarget.value)} />
+                    <AppointmentGrid page="history" data={appointmentsData} />
                 </HistoryActionContext.Provider>
-            ) : (view === "calendar") ? (
-                <AppointmentCalendar page="history" data={data} />
-            ) : <></>
-            }
+            )}
+
+            {appointmentsData.length > 0 && view === "calendar" && (
+                <HistoryActionContext.Provider value={onActionSelected}>
+                    <AppointmentCalendar page="history" data={appointmentsData} />
+                </HistoryActionContext.Provider>
+            )}
         </ SystemLayout>
     );
 };

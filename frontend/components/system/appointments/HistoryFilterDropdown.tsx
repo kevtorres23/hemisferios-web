@@ -12,15 +12,48 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import OptionCheckbox from "../OptionCheckbox";
+import { useHistoryFilters } from "@/utils/system/history/filter-store";
 
-type DropdownProps = {
-    isOnHistory: boolean;
+type Status = {
+    finished: boolean,
+    cancelled: boolean
 };
 
-function StatusDropdown(props: DropdownProps) {
+type FilterStore = {
+    interval: [string, string],
+    statusObject: Status,
+    updateInterval: (newIntervalArray: [string, string]) => void,
+    updateStatus: (statusObject: Status) => void,
+};
+
+function HistoryFilterDropdown() {
     const [finishedChecked, setFinishedChecked] = useState(true);
-    const [pendingChecked, setPendingChecked] = useState(true);
     const [cancelledChecked, setCancelledChecked] = useState(true);
+
+    // Store variables (Zustand).
+    const updateStatus = useHistoryFilters((state: FilterStore) => state.updateStatus);
+
+    function onFinishedChange() {
+        setFinishedChecked(!finishedChecked);
+
+        const updatedObject = {
+            finished: !finishedChecked,
+            cancelled: cancelledChecked
+        };
+
+        updateStatus(updatedObject);
+    };
+
+    function onCancelledChange() {
+        setCancelledChecked(!cancelledChecked);
+
+        const updatedObject = {
+            finished: finishedChecked,
+            cancelled: !cancelledChecked
+        };
+
+        updateStatus(updatedObject);
+    };
 
     return (
         <DropdownMenu>
@@ -38,21 +71,14 @@ function StatusDropdown(props: DropdownProps) {
                         Estado(s):
                     </DropdownMenuLabel>
                     <div className="option-row flex flex-col gap-2">
-                        {props.isOnHistory === false && (
-                            <OptionCheckbox
-                                checked={pendingChecked}
-                                onCheckedChange={() => setPendingChecked(!pendingChecked)}
-                                item={<AppointmentTag type="pending" />}
-                            />
-                        )}
                         <OptionCheckbox
                             checked={finishedChecked}
-                            onCheckedChange={() => setFinishedChecked(!finishedChecked)}
+                            onCheckedChange={onFinishedChange}
                             item={<AppointmentTag type="finished" />}
                         />
                         <OptionCheckbox
                             checked={cancelledChecked}
-                            onCheckedChange={() => setCancelledChecked(!cancelledChecked)}
+                            onCheckedChange={onCancelledChange}
                             item={<AppointmentTag type="cancelled" />}
                         />
                     </div>
@@ -62,4 +88,4 @@ function StatusDropdown(props: DropdownProps) {
     );
 };
 
-export default StatusDropdown;
+export default HistoryFilterDropdown;

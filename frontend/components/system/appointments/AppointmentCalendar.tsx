@@ -11,6 +11,9 @@ import { useAppointmentFilters } from "@/utils/system/appointments/filter-store"
 import { applyFilters } from "@/utils/system/appointments/appointment-filters";
 import EmptyState from "../EmptyState";
 import appointmentsEmpty from "../../../public/appointments-empty.png";
+import HistoryFilterDropdown from "./HistoryFilterDropdown";
+import { useHistoryFilters } from "@/utils/system/history/filter-store";
+import historyEmpty from "../../../public/history-empty.png";
 
 type Status = {
     pending: boolean,
@@ -18,9 +21,21 @@ type Status = {
     cancelled: boolean
 };
 
+type HistoryStatus = {
+    finished: boolean,
+    cancelled: boolean
+};
+
 type FilterStore = {
     interval: [string, string],
     statusObject: Status,
+    updateInterval: (newIntervalArray: [string, string]) => void, // When "position" is 0, it updates the first parameter of the interval, or the second one, when it is 1.
+    updateStatus: (statusObject: Status) => void,
+};
+
+type HistoryFilterStore = {
+    interval: [string, string],
+    statusObject: HistoryStatus,
     updateInterval: (newIntervalArray: [string, string]) => void, // When "position" is 0, it updates the first parameter of the interval, or the second one, when it is 1.
     updateStatus: (statusObject: Status) => void,
 };
@@ -38,7 +53,12 @@ function AppointmentCalendar(props: CalendarProps) {
     const interval = useAppointmentFilters((state: FilterStore) => state.interval)
     const checkedStatuses = useAppointmentFilters((state: FilterStore) => state.statusObject);
 
+    // History Page filter variables.
+    const historyInterval = useHistoryFilters((state: HistoryFilterStore) => state.interval);
+    const historyCheckedStatuses = useHistoryFilters((state: HistoryFilterStore) => state.statusObject);
+
     const filteredData = applyFilters(props.data, interval, checkedStatuses);
+    const historyFilteredData = applyFilters(props.data, historyInterval, { pending: false, finished: historyCheckedStatuses.finished, cancelled: historyCheckedStatuses.cancelled })
 
     return (
         <div className="w-full flex h-full border border-slate-200 bg-white rounded-lg p-6 flex-col gap-6">
@@ -81,10 +101,16 @@ function AppointmentCalendar(props: CalendarProps) {
                     </div>
                 </div>
 
-                <FilterDropdown view="calendar" onIntervalChange={() => ""} />
+                {props.page === "appointments" && (
+                    <FilterDropdown view="calendar" onIntervalChange={() => ""} />
+                )}
+
+                {props.page === "history" && (
+                    <HistoryFilterDropdown />
+                )}
             </div>
 
-            {filteredData.length === 0 && (
+            {props.page === "appointments" && filteredData.length === 0 && (
                 <EmptyState
                     header="¡No hay citas que mostrar!"
                     desc="Intenta activar o desactivar algunos filtros para hacer que la información cambie."
@@ -92,9 +118,20 @@ function AppointmentCalendar(props: CalendarProps) {
                 />
             )}
 
+            {props.page === "history" && historyFilteredData.length === 0 && (
+                <EmptyState
+                    header="¡No hay citas que mostrar!"
+                    desc="Intenta activar o desactivar algunos filtros para hacer que la información cambie."
+                    image={historyEmpty}
+                />
+            )}
 
-            {filteredData.length > 0 && (
+            {props.page === "appointments" && filteredData.length > 0 && (
                 <CalendarUI week={week} data={filteredData} page={props.page} />
+            )}
+
+            {props.page === "history" && historyFilteredData.length > 0 && (
+                <CalendarUI week={week} data={historyFilteredData} page={props.page} />
             )}
         </div>
     );
