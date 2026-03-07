@@ -47,8 +47,8 @@ type CalendarProps = {
 
 function AppointmentCalendar(props: CalendarProps) {
     // State variables.
-    const [numberOfWeeks, setNumberOfWeeks] = useState(2);
     const [week, setWeek] = useState(1); // 1 for current, 2 for next.
+    const [historyWeek, setHistoryWeek] = useState(1);
 
     const interval = useAppointmentFilters((state: FilterStore) => state.interval)
     const checkedStatuses = useAppointmentFilters((state: FilterStore) => state.statusObject);
@@ -70,35 +70,56 @@ function AppointmentCalendar(props: CalendarProps) {
                             onNextClick={() => setWeek(2)}
                             labelText={week === 1 ? "Semana actual" : "Semana siguiente"}
                             currentPage={week}
-                            finalPage={numberOfWeeks}
+                            finalPage={2}
                             labelStyles="text-2xl font-medium text-slate-900 tracking-tight text-center"
                         />
                     )}
 
                     {props.page === "history" && (
                         <PageNavigator
-                            onPreviousClick={() => setWeek(1)}
-                            onNextClick={() => setWeek(2)}
-                            labelText="Semana 2 de febrero"
-                            currentPage={week}
-                            finalPage={numberOfWeeks}
+                            onPreviousClick={() => setHistoryWeek(historyWeek - 1)}
+                            onNextClick={() => setHistoryWeek(historyWeek + 1)}
+                            labelText={`Semana ${historyWeek} de marzo`}
+                            currentPage={historyWeek}
+                            finalPage={4}
                             labelStyles="text-2xl font-medium text-slate-900 tracking-tight text-center"
                         />
                     )}
 
-                    <div className="week-indicator px-2.5 py-1 border border-indigo-400 bg-indigo-50 rounded-sm">
-                        <p className="text-sm text-indigo-500 font-medium">
-                            {week === 1 ? (
-                                // Build the current or next week interval, like: "23 de feb. - 28 de feb."
-                                currentInterval.firstValue.day + " de " + currentInterval.firstValue.month + " - " +
-                                currentInterval.secondValue.day + " de " + currentInterval.secondValue.month
-                            ) : (
-                                nextInterval.firstValue.day + " de " + nextInterval.firstValue.month + " - " +
-                                nextInterval.secondValue.day + " de " + nextInterval.secondValue.month
-                            )
-                            }
-                        </p>
-                    </div>
+                    {props.page === "appointments" && (
+                        <div className="week-indicator px-2.5 py-1 border border-indigo-400 bg-indigo-50 rounded-sm">
+                            <p className="text-sm text-indigo-500 font-medium">
+                                {week === 1 ? (
+                                    // Build the current or next week interval, like: "23 de feb. - 28 de feb."
+                                    currentInterval.firstValue.day + " de " + currentInterval.firstValue.month + " - " +
+                                    currentInterval.secondValue.day + " de " + currentInterval.secondValue.month
+                                ) : (
+                                    nextInterval.firstValue.day + " de " + nextInterval.firstValue.month + " - " +
+                                    nextInterval.secondValue.day + " de " + nextInterval.secondValue.month
+                                )
+                                }
+                            </p>
+                        </div>
+                    )}
+
+                    {/* Crear funciones que reciban el valor actual del mes del intervalo del historial (Zustand)
+                        y que calculen las 4 semanas de ese mes en dicho año con weekCreator y los intervalos de cada semana (una nueva funcion para esto).
+                    */}
+                    {props.page === "history" && (
+                        <div className="week-indicator px-2.5 py-1 border border-indigo-400 bg-indigo-50 rounded-sm">
+                            <p className="text-sm text-indigo-500 font-medium">
+                                {week === 1 ? (
+                                    // Build the current or next week interval, like: "23 de feb. - 28 de feb."
+                                    currentInterval.firstValue.day + " de " + currentInterval.firstValue.month + " - " +
+                                    currentInterval.secondValue.day + " de " + currentInterval.secondValue.month
+                                ) : (
+                                    nextInterval.firstValue.day + " de " + nextInterval.firstValue.month + " - " +
+                                    nextInterval.secondValue.day + " de " + nextInterval.secondValue.month
+                                )
+                                }
+                            </p>
+                        </div>
+                    )}
                 </div>
 
                 {props.page === "appointments" && (
@@ -131,7 +152,7 @@ function AppointmentCalendar(props: CalendarProps) {
             )}
 
             {props.page === "history" && historyFilteredData.length > 0 && (
-                <CalendarUI week={week} data={historyFilteredData} page={props.page} />
+                <CalendarUI week={historyWeek} data={historyFilteredData} page={props.page} />
             )}
         </div>
     );

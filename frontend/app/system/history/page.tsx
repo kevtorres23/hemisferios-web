@@ -162,7 +162,7 @@ function AppointmentHistory() {
 
                     <div className="flex flex-row gap-2 items-center justify-center">
                         <Select defaultValue={currentMonthNum.toString()} value={displayedMonth} onValueChange={onMonthChange}>
-                            <SelectTrigger id={id} className={`w-full bg-white sm:text-sm text-base cursor-pointer py-5 px-3`}>
+                            <SelectTrigger id={id} className={`w-full bg-white sm:text-sm text-base cursor-pointer py-2 px-3`}>
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent className="bg-white text-sm z-999" sideOffset={5} position="popper">

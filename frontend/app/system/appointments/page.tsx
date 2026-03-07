@@ -195,6 +195,12 @@ function AppointmentDashboard() {
                         </p>
                     )}
 
+                    {pendingCounter === 0 && (
+                        <p className="text-lg font-medium text-slate-800">
+                            ¡No hay citas pendientes!
+                        </p>
+                    )}
+
                     {pendingCounter > 1 && (
                         <p className="text-lg font-medium text-slate-800">
                             Hay <span className="font-semibold text-indigo-500">{pendingCounter}</span> citas pendientes
