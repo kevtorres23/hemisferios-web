@@ -2,8 +2,8 @@ import { lessThanTen } from "@/utils/format-availability";
 
 /**
  * Checks if an appointment has passed its established date and hour based on a live clock.
- * @param date 
- * @param hour 
+ * @param date String representing the appointment's date in a DD/MM/YYY format.
+ * @param hour String representing the appointment's hour in a 24-hour format.
  * @returns A boolean indicating whether the appointment has expired or not.
  */
 

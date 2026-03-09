@@ -235,6 +235,15 @@ function stringToDate(date: string) {
     };
 };
 
+/**
+ * Builds a string-based interval of two points in a time period.
+ * @param firstPointDay The day-of-the-month of the interval's first point.
+ * @param firstPointMonth The month's number of the interval's first point (Where January is 1).
+ * @param secondPointDay The day-of-the-month of the interval's second point.
+ * @param secondPointMonth The month's number of the interval's second point (Where January is 1).
+ * @returns An array containing two sub-arrays, one representing the interval's first point and another representing the second point.
+ */
+
 function intervalCreator(firstPointDay: number, firstPointMonth: number, secondPointDay: number, secondPointMonth: number) {
     // Month abbreviations. '0' is added to match the actual number of each month.
     const months = ["0", "ene.", "feb.", "mar.", "abr.", "mayo", "jun.", "jul.", "ago.", "sep.", "oct.", "nov.", "dic."];

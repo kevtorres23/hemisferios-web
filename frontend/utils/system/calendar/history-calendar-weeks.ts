@@ -2,7 +2,7 @@ import { weekCreator } from "./calendar-methods";
 import { daysDistance } from "./calendar-methods";
 
 /**
- * Obtains the days of a specific month in a particular year, separated in four weeks.
+ * Obtains the days of a specific month in a particular year, contained and separated in four weeks.
  * @param monthNum The month that we want to obtain all its weeks from.
  * @param year The month's year.
  */
