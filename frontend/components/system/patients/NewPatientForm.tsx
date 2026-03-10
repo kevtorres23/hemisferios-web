@@ -4,12 +4,20 @@ import InputWarning from "@/components/website/InputWarning";
 import { InputChange, SelectChange } from "@/utils/website/input-change-handlers";
 import { SelectFrequency, SelectModality } from "./PaymentSelects";
 import { SelectStartingDate } from "../SelectStartingDate";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Patient } from "@/utils/classes";
+import { lessThanTen } from "@/utils/format-availability";
+import api from "@/lib/axios";
 
 type FormProps = {
-    sendData: (patientObject: PatientType) => void;
+    sendData: (patientObject: Patient) => void;
     isOnModify?: boolean;
+    formId: string;
+    modifyData: (patientObject: Patient) => void;
+    editionId: string;
 };
+
+const todayDate = new Date();
 
 function NewPatientForm(props: FormProps) {
     // Variables for the input values.
@@ -18,7 +26,7 @@ function NewPatientForm(props: FormProps) {
     const [fatherSurname, setFatherSurname] = useState("");
     const [adultName, setAdultName] = useState("");
     const [contactNumber, setContactNumber] = useState("");
-    const [startingDate, setStartingDate] = useState("");
+    const [startingDate, setStartingDate] = useState<Date>(todayDate);
     const [paymentFrequency, setPaymentFrequency] = useState("");
     const [paymentModality, setPaymentModality] = useState("");
 
@@ -33,16 +41,80 @@ function NewPatientForm(props: FormProps) {
     const [frequencyValidation, setFrequencyValidation] = useState(false);
     const [modalityValidation, setModalityValidation] = useState(false);
 
-    function shootValidations(e: React.FormEvent) {
+    useEffect(() => {
+        const getEditablePatient = async () => {
+            console.log(props.editionId);
+
+            try {
+                const res = await api.get("/patients/" + props.editionId);
+                setPatientName(res.data.patientName);
+                setMotherSurname(res.data.motherSurname);
+                setFatherSurname(res.data.fatherSurname);
+                setAdultName(res.data.adultName);
+                setContactNumber(res.data.contactNumber);
+                setStartingDate(res.data.startingDate);
+                setPaymentFrequency(res.data.paymentFrequency);
+                setPaymentModality(res.data.paymentModality);
+
+            } catch (error) {
+                console.log("Error while fetching the patient's info:", error);
+            };
+        };
+
+        if (props.isOnModify) {
+            getEditablePatient();
+        };
+
+    }, []);
+
+    function shootValidations(e: React.SubmitEvent) {
+        setValidationsShot(true);
         e.preventDefault();
+
+        if (!patientName) { setNameValidation(true); };
+        if (!motherSurname) { setMotherSurnameValid(true); };
+        if (!fatherSurname) { setFatherSurnameValid(true); };
+        if (!adultName) { setAdultValidation(true); };
+        if (!contactNumber) { setNumberValidation(true); };
+        if (!startingDate) { setStartingDateValidation(true); };
+        if (!paymentFrequency) { setFrequencyValidation(true); };
+        if (!paymentModality) { setModalityValidation(true); };
+
+        if (contactNumber.length < 10) {
+            setNumberValidation(true);
+        } else if (patientName && motherSurname && fatherSurname && adultName && contactNumber && startingDate && paymentFrequency && paymentModality) {
+            shootData();
+        };
+
+        setValidationsShot(false);
+    };
+
+    function shootData() {
+        const formattedStartingDate = lessThanTen(startingDate.getDate()) + "/" + lessThanTen(startingDate.getMonth() + 1) + "/" + startingDate.getFullYear();
+
+        const newPatientObject = new Patient
+        (
+            patientName,
+            fatherSurname,
+            motherSurname,
+            adultName,
+            contactNumber,
+            formattedStartingDate,
+            paymentFrequency,
+            paymentModality
+        );
+
+        if (props.formId === "patientForm") {
+            props.sendData(newPatientObject);
+        } else {
+            props.modifyData(newPatientObject);
+        };
     };
 
     return (
-        <form id="patientForm" action="" onSubmit={(e) => shootValidations(e)} className="flex flex-col gap-4 w-full">
+        <form id={props.formId} onSubmit={(e) => shootValidations(e)} className="flex flex-col gap-4 w-full">
             <Input type="text" textValue={patientName} label="Nombre(s) del paciente" onInputChange={(e) => InputChange(e, patientName, setPatientName, validationsShot, setNameValidation)} activeValidation={nameValidation} />
-            {nameValidation && (
-                <InputWarning message="Por favor, escribe el nombre o los nombres del paciente." />
-            )}
+            {nameValidation && <InputWarning message="Por favor, escribe el nombre o los nombres del paciente." />}
 
             <div className="flex md:flex-row flex-col gap-4 items-center justify-center">
                 <div className="father-surname-field flex flex-col gap-2 w-full">
@@ -73,7 +145,7 @@ function NewPatientForm(props: FormProps) {
                     </p>
                 </div>
 
-                <SelectStartingDate />
+                <SelectStartingDate onSelectDate={(date: Date) => setStartingDate(date)} />
                 {startingDateValidation && (
                     <InputWarning message="Por favor, selecciona una fecha." />
                 )}
@@ -86,7 +158,7 @@ function NewPatientForm(props: FormProps) {
                 </div>
 
                 <div className="mother-surname-field flex flex-col gap-2 w-full">
-                    <SelectModality label="Tipo de pago:" value={paymentFrequency} onInputChange={(val) => SelectChange(val, paymentModality, setPaymentModality, validationsShot, setModalityValidation)} activeValidation={modalityValidation} />
+                    <SelectModality label="Tipo de pago:" value={paymentModality} onInputChange={(val) => SelectChange(val, paymentModality, setPaymentModality, validationsShot, setModalityValidation)} activeValidation={modalityValidation} />
                     {modalityValidation && <InputWarning message="Por favor, selecciona un tipo." />}
                 </div>
             </div>

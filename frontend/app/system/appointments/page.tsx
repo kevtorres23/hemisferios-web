@@ -49,7 +49,7 @@ function AppointmentDashboard() {
     }, [completedAction]);
 
     useEffect(() => {
-        function lookPendings() {
+        function lookPendings() { 
             let counter = 0;
 
             appointmentsData.forEach((appointment: AppointmentType) => {
