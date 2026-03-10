@@ -34,7 +34,6 @@ export async function createPatient(req, res) {
             startingDate,
             paymentFrequency,
             paymentModality,
-            appointmentHistory
 
         } = req.body;
 
@@ -47,7 +46,6 @@ export async function createPatient(req, res) {
             startingDate,
             paymentFrequency,
             paymentModality,
-            appointmentHistory
         });
 
         const savedPatient = await newPatient.save();
@@ -70,8 +68,7 @@ export async function updatePatient(req, res) {
             contactNumber,
             startingDate,
             paymentFrequency,
-            paymentModality,
-            appointmentHistory
+            paymentModality
         } = req.body;
 
         const updatedPatient = await Patient.findByIdAndUpdate(req.params.id, {
@@ -82,8 +79,7 @@ export async function updatePatient(req, res) {
             contactNumber,
             startingDate,
             paymentFrequency,
-            paymentModality,
-            appointmentHistory
+            paymentModality
         }, { new: true });
 
         if (!updatedPatient) return res.status(404).json({ message: "Patient not found" }); // Handling possible issues with the passed ID.
