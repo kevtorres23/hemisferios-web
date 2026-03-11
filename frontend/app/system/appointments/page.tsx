@@ -11,6 +11,7 @@ import AppointmentGrid from "@/components/system/appointments/AppointmentGrid";
 import AppointmentCalendar from "@/components/system/appointments/AppointmentCalendar";
 import WhiteIconButton from "@/components/system/WhiteIconButton";
 import FilterBar from "@/components/system/FilterBar";
+import LoadingState from "@/components/system/LoadingState";
 import { Plus, SquarePen } from "lucide-react";
 import { useState, createContext, useEffect } from "react";
 import appointmentsEmpty from "../../../public/appointments-empty.png";
@@ -49,7 +50,7 @@ function AppointmentDashboard() {
     }, [completedAction]);
 
     useEffect(() => {
-        function lookPendings() { 
+        function lookPendings() {
             let counter = 0;
 
             appointmentsData.forEach((appointment: AppointmentType) => {
@@ -210,11 +211,7 @@ function AppointmentDashboard() {
             }
             />
 
-            {isLoading && (
-                <div className="w-full h-full flex items-center justify-center">
-                    <p className="text-xl font-semibold text-slate-800">Cargando citas...</p>
-                </div>
-            )}
+            {isLoading && <LoadingState message="Cargando citas..." />}
 
             {!isLoading && appointmentsData.length === 0 && (
                 <EmptyState

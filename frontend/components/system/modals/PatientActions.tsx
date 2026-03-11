@@ -4,7 +4,6 @@ import { Patient } from "@/utils/classes";
 import { ActionModalProps, ModalProps, PatientType } from "@/utils/types";
 import NewPatientForm from "../patients/PatientForm";
 import api from "@/lib/axios";
-import { useState } from "react";
 
 function NewPatientModal(props: ModalProps) {
     async function saveBtnPressed(patientObject: Patient) {

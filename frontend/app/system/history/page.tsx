@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/select';
 import { lessThanTen } from "@/utils/format-availability";
 import monthLimits from "@/utils/system/history/month-limits";
+import LoadingState from "@/components/system/LoadingState";
 
 type MonthRegistry = {
     monthNum: string;
@@ -194,11 +195,7 @@ function AppointmentHistory() {
             }
             />
 
-            {isLoading && (
-                <div className="w-full h-full flex items-center justify-center">
-                    <p className="text-xl font-semibold text-slate-800">Cargando citas...</p>
-                </div>
-            )}
+            {isLoading && <LoadingState message="Cargando historial..." />}
 
             {!isLoading && appointmentsData.length === 0 && (
                 <EmptyState

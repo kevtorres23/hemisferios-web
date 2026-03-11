@@ -1,5 +1,4 @@
 import Availability from "../models/Availability.js";
-import colors from "colors";
 
 export async function getAvailability(_, res) {
     try {
