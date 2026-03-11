@@ -32,13 +32,6 @@ const patientSchema = new mongoose.Schema({
     paymentModality: {
         type: String,
         required: true
-    },
-    appointmentHistory: {
-        type: [{
-            date: String,
-            hour: String,
-        }],
-        required: true
     }
 },
     { timestamps: true }

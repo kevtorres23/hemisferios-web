@@ -1,24 +1,38 @@
 import { PatientType } from "@/utils/types";
+import { format } from "date-fns"
+import { es } from "date-fns/locale";
 import Input from "@/components/website/Input";
 import InputWarning from "@/components/website/InputWarning";
 import { InputChange, SelectChange } from "@/utils/website/input-change-handlers";
 import { SelectFrequency, SelectModality } from "./PaymentSelects";
-import { SelectStartingDate } from "../SelectStartingDate";
-import { useState } from "react";
+import { DayPicker } from "../DayPicker";
+import { useEffect, useState } from "react";
+import { Patient } from "@/utils/classes";
+import { lessThanTen } from "@/utils/format-availability";
+import api from "@/lib/axios";
+import { dateFormatter } from "@/utils/system/appointments/appointment-formatter";
 
 type FormProps = {
-    sendData: (patientObject: PatientType) => void;
+    sendData: (patientObject: Patient) => void;
     isOnModify?: boolean;
+    formId: string;
+    modifyData: (patientObject: Patient) => void;
+    editionId: string;
 };
 
+const todayDate = new Date();
+
 function NewPatientForm(props: FormProps) {
+    console.log("formulario:", props.formId);
+
     // Variables for the input values.
     const [patientName, setPatientName] = useState("");
     const [motherSurname, setMotherSurname] = useState("");
     const [fatherSurname, setFatherSurname] = useState("");
     const [adultName, setAdultName] = useState("");
     const [contactNumber, setContactNumber] = useState("");
-    const [startingDate, setStartingDate] = useState("");
+    const [startingDate, setStartingDate] = useState<Date>(todayDate);
+    const [formattedStartingDate, setFormattedStartingDate] = useState("");
     const [paymentFrequency, setPaymentFrequency] = useState("");
     const [paymentModality, setPaymentModality] = useState("");
 
@@ -33,16 +47,84 @@ function NewPatientForm(props: FormProps) {
     const [frequencyValidation, setFrequencyValidation] = useState(false);
     const [modalityValidation, setModalityValidation] = useState(false);
 
-    function shootValidations(e: React.FormEvent) {
+    useEffect(() => {
+        const getEditablePatient = async () => {
+
+            try {
+                const res = await api.get("/patients/" + props.editionId);
+                setPatientName(res.data.name);
+                setMotherSurname(res.data.motherSurname);
+                setFatherSurname(res.data.fatherSurname);
+                setAdultName(res.data.adultName);
+                setContactNumber(res.data.contactNumber);
+                setFormattedStartingDate(dateFormatter(res.data.startingDate));
+                setPaymentFrequency(res.data.paymentFrequency);
+                setPaymentModality(res.data.paymentModality);
+
+            } catch (error) {
+                console.log("Error while fetching the patient's info:", error);
+            };
+        };
+
+        if (props.isOnModify) {
+            getEditablePatient();
+        };
+
+    }, []);
+
+    function onStartingDateChange(date: Date) {
+        setStartingDate(date);
+        setFormattedStartingDate(format(date, "PPP", { locale: es }));
+    }
+
+    function shootValidations(e: React.SubmitEvent) {
+        setValidationsShot(true);
         e.preventDefault();
+
+        if (!patientName) { setNameValidation(true); };
+        if (!motherSurname) { setMotherSurnameValid(true); };
+        if (!fatherSurname) { setFatherSurnameValid(true); };
+        if (!adultName) { setAdultValidation(true); };
+        if (!contactNumber) { setNumberValidation(true); };
+        if (!startingDate) { setStartingDateValidation(true); };
+        if (!paymentFrequency) { setFrequencyValidation(true); };
+        if (!paymentModality) { setModalityValidation(true); };
+
+        if (contactNumber.length < 10) {
+            setNumberValidation(true);
+        } else if (patientName && motherSurname && fatherSurname && adultName && contactNumber && startingDate && paymentFrequency && paymentModality) {
+            shootData();
+        };
+
+        setValidationsShot(false);
+    };
+
+    function shootData() {
+        const formattedStartingDate = lessThanTen(startingDate.getDate()) + "/" + lessThanTen(startingDate.getMonth() + 1) + "/" + startingDate.getFullYear();
+
+        const newPatientObject = new Patient
+            (
+                patientName,
+                fatherSurname,
+                motherSurname,
+                adultName,
+                contactNumber,
+                formattedStartingDate,
+                paymentFrequency,
+                paymentModality
+            );
+
+        if (props.formId === "patientForm") {
+            props.sendData(newPatientObject);
+        } else {
+            props.modifyData(newPatientObject);
+        };
     };
 
     return (
-        <form id="patientForm" action="" onSubmit={(e) => shootValidations(e)} className="flex flex-col gap-4 w-full">
+        <form id={props.formId} onSubmit={(e) => shootValidations(e)} className="flex flex-col gap-4 w-full">
             <Input type="text" textValue={patientName} label="Nombre(s) del paciente" onInputChange={(e) => InputChange(e, patientName, setPatientName, validationsShot, setNameValidation)} activeValidation={nameValidation} />
-            {nameValidation && (
-                <InputWarning message="Por favor, escribe el nombre o los nombres del paciente." />
-            )}
+            {nameValidation && <InputWarning message="Por favor, escribe el nombre o los nombres del paciente." />}
 
             <div className="flex md:flex-row flex-col gap-4 items-center justify-center">
                 <div className="father-surname-field flex flex-col gap-2 w-full">
@@ -66,18 +148,15 @@ function NewPatientForm(props: FormProps) {
                 <InputWarning message="Por favor, ingresa un número de teléfono válido." />
             )}
 
-            <label className="label gap-3 flex flex-col w-full">
-                <div className="flex flex-row gap-2">
-                    <p className="text-slate-500 sm:text-sm text-base m-0 p-0">
-                        Fecha de inicio: <span className="text-red-500 text-lg font-semibold">*</span>
-                    </p>
-                </div>
+            <div className="label gap-3 flex flex-row w-full items-end justify-center">
 
-                <SelectStartingDate />
+                <Input type="text" placeholder="Escoge una fecha en el calendario" textValue={formattedStartingDate} label="Fecha de inicio" onInputChange={onStartingDateChange} activeValidation={startingDateValidation} />
                 {startingDateValidation && (
                     <InputWarning message="Por favor, selecciona una fecha." />
                 )}
-            </label>
+
+                <DayPicker onSelectDate={(date: Date) => onStartingDateChange(date)}/>
+            </div>
 
             <div className="flex md:flex-row flex-col gap-4 items-center justify-center">
                 <div className="father-surname-field flex flex-col gap-2 w-full">
@@ -86,7 +165,7 @@ function NewPatientForm(props: FormProps) {
                 </div>
 
                 <div className="mother-surname-field flex flex-col gap-2 w-full">
-                    <SelectModality label="Tipo de pago:" value={paymentFrequency} onInputChange={(val) => SelectChange(val, paymentModality, setPaymentModality, validationsShot, setModalityValidation)} activeValidation={modalityValidation} />
+                    <SelectModality label="Tipo de pago:" value={paymentModality} onInputChange={(val) => SelectChange(val, paymentModality, setPaymentModality, validationsShot, setModalityValidation)} activeValidation={modalityValidation} />
                     {modalityValidation && <InputWarning message="Por favor, selecciona un tipo." />}
                 </div>
             </div>

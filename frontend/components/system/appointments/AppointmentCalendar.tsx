@@ -85,8 +85,6 @@ function AppointmentCalendar(props: CalendarProps) {
 
     const historyWeekIntervals = [week1Interval, week2Interval, week3Interval, week4Interval, week5Interval];
 
-    console.log(fiveWeeks);
-
     return (
         <div className="w-full flex h-full border border-slate-200 bg-white rounded-lg p-6 flex-col gap-6">
             <div className="flex lg:flex-row flex-col gap-6 lg:items-center sm:items-start items-center sm:justify-between justify-center sm:w-auto w-full">

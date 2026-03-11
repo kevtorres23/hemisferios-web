@@ -19,6 +19,7 @@ interface PatientHistory {
 }
 
 interface PatientType {
+    _id: string;
     name: string;
     fatherSurname: string;
     motherSurname: string;
@@ -27,7 +28,6 @@ interface PatientType {
     startingDate: string;
     paymentFrequency: string;
     paymentModality: string;
-    appointmentHistory: PatientHistory[];
 };
 
 interface TherapistSchedule {

@@ -42,7 +42,6 @@ function AppointmentForm(props: FormProps) {
         const getEditableAppointment = async () => {
             try {
                 const res = await api.get("/appointments/" + props.editionId);
-                setFoundAppointment(res.data);
                 setStatus(res.data.status);
                 setPatientName(res.data.patientName);
                 setFatherSurname(res.data.fatherSurname);
@@ -62,7 +61,7 @@ function AppointmentForm(props: FormProps) {
     }, []);
 
     // Name validation.
-    function shootValidations(e: React.FormEvent) {
+    function shootValidations(e: React.SubmitEvent) {
         setValidationsShot(true);
         e.preventDefault();
 

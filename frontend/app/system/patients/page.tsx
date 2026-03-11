@@ -1,86 +1,87 @@
 "use client";
 import SystemLayout from "@/components/system/SystemLayout";
 import { NewPatientModal, ModifyPatientModal, RemovePatientModal } from "@/components/system/modals/PatientActions";
+import toast, { Toaster } from 'react-hot-toast';
 import EmptyState from "@/components/system/EmptyState";
 import patientsEmpty from "../../../public/patients-empty.png";
-import PatientHistoryModal from "@/components/system/patients/PatientHistory";
-import { pageSeparator } from "@/utils/system/page-separator";
 import IconButton from "@/components/system/IconButton";
-import SuccessModal from "@/components/system/modals/SuccessModal";
-import { Plus, SquarePen } from "lucide-react";
+import { Plus } from "lucide-react";
 import PageTitle from "@/components/system/PageTitle";
 import { PatientType } from "@/utils/types";
 import PatientGrid from "@/components/system/patients/PatientGrid";
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
+import api from "@/lib/axios";
 
-export const CardActionContext = createContext<(action: string) => void>(() => "");
-
-type PatientDataset = PatientType[];
+export const CardActionContext = createContext<(action: string, id: string) => void>(() => "");
 
 function Patients() {
-    const [successfulAction, setSuccessfulAction] = useState("");
-
     // Modal variables.
     const [newPatientModal, setNewPatientModal] = useState(false);
     const [cardAction, setCardAction] = useState("");
-    const [success, setSuccess] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [patientData, setPatientData] = useState<PatientType[]>([]);
+    const [completedAction, setCompletedAction] = useState(0);
+    const [patientId, setPatientId] = useState("");
 
-    const data: PatientDataset = [
-        {
-            "name": "Kevin",
-            "fatherSurname": "Torres",
-            "motherSurname": "Urbina",
-            "adultName": "María Urbina",
-            "contactNumber": "61818899026",
-            "startingDate": "10-10-2026",
-            "paymentFrequency": "mensual",
-            "paymentModality": "tarjeta",
-            "appointmentHistory": [
-                {
-                    "date": "10-10-2025",
-                    "hour": "09:00",
-                }
-            ],
-        },
-    ];
+    useEffect(() => {
+        const fetchAllPatients = async () => {
+            try {
+                const res = await api.get("/patients");
+                setPatientData(res.data);
+            } catch (error) {
+                console.log("Error while fetching the patients:", error);
+            } finally {
+                setIsLoading(false);
+            };
+        };
 
-    function onActionSelected(action: string) {
+        fetchAllPatients();
+    }, [completedAction]);
+
+    function onActionSelected(action: string, id: string) {
         setCardAction(action);
+        setPatientId(id);
     };
-
-    let patientPages = pageSeparator(data);
 
     function showSuccessModal(successMsg: string) {
-        setSuccess(true);
-        setSuccessfulAction(successMsg)
-        setTimeout(() => setSuccess(false), 3000);
+        toast.success(<p className="font-medium">{successMsg}</p>, { duration: 2000 });
     };
-
 
     function savePatient() {
         setNewPatientModal(false);
+        setCardAction("");
+        setCompletedAction((completedAction) => completedAction += 1);
         showSuccessModal("¡Paciente registrado correctamente!");
     };
 
     function modifyPatient() {
         setCardAction("");
+        setCompletedAction((completedAction) => completedAction += 1);
         showSuccessModal("¡Paciente actualizado correctamente!");
     }
 
     function removePatient() {
-        // DELETE axios controller.
+        api.delete("/patients/" + patientId);
         setCardAction("");
+        setPatientData((prev: PatientType[]) => prev.filter((patient) => patient._id != patientId));
         showSuccessModal("Paciente eliminado correctamente.");
     };
 
     return (
-        <SystemLayout sidebarPage="patients" isAnyModal={newPatientModal || cardAction === "cancel" || cardAction === "modify" || cardAction === "history"}
+        <SystemLayout sidebarPage="patients" isAnyModal={newPatientModal || cardAction === "cancel" || cardAction === "modify" || cardAction === "remove"}
             modals={
                 <>
-                    <NewPatientModal onSave={savePatient} isVisible={newPatientModal} onClose={() => setNewPatientModal(false)} />
-                    <RemovePatientModal onSave={removePatient} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />
-                    <ModifyPatientModal onSave={modifyPatient} isVisible={cardAction === "modify"} onClose={() => setCardAction("")} />
-                    <PatientHistoryModal historyData={data[0].appointmentHistory} isVisible={cardAction === "history"} onClose={() => setCardAction("")} />
+                    {newPatientModal && (
+                        <NewPatientModal onSave={savePatient} isVisible={newPatientModal} onClose={() => setNewPatientModal(false)} />
+                    )}
+
+                    {cardAction === "remove" && (
+                        <RemovePatientModal onSave={removePatient} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />
+                    )}
+
+                    {cardAction === "modify" && (
+                        <ModifyPatientModal updateElementId={patientId} onSave={modifyPatient} isVisible={cardAction === "modify"} onClose={() => setCardAction("")} />
+                    )}
                 </>
             }
         >
@@ -93,18 +94,25 @@ function Patients() {
                 </div>
             </div>
 
-            <SuccessModal isVisible={success} text={successfulAction} />
+            <Toaster />
 
+            {isLoading && (
+                <div className="w-full h-full flex items-center justify-center">
+                    <p className="text-xl font-semibold text-slate-800">Cargando citas...</p>
+                </div>
+            )}
 
-            {(data.length === 0) ? (
+            {!isLoading && patientData.length === 0 && (
                 <EmptyState
                     header="¡No hay pacientes registrados aún!"
                     desc="Empieza registrando un paciente para empezar a ver la lista."
                     image={patientsEmpty}
                 />
-            ) : (
-                < CardActionContext.Provider value={onActionSelected}>
-                    <PatientGrid data={patientPages} onSearchChange={() => ""} onActionSelected={() => ""} />
+            )}
+
+            {patientData.length > 0 && (
+                <CardActionContext.Provider value={onActionSelected}>
+                    <PatientGrid data={patientData} onSearchChange={() => ""} onActionSelected={() => ""} />
                 </CardActionContext.Provider>
             )}
 

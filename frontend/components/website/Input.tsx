@@ -3,6 +3,7 @@ type InputProps = {
     type: "text" | "tel" | "email" | "comment";
     textValue?: string;
     activeValidation: boolean;
+    placeholder?: string;
     grayBg?: boolean;
     onInputChange: (e: any) => void;
 }
@@ -20,7 +21,7 @@ function Input(props: InputProps) {
                         </p>
                     </div>
 
-                    <input type={props.type} value={props.textValue} onChange={props.onInputChange} className={`w-full py-2 px-3 ${props.activeValidation ? "border-red-400" : "border-slate-200"} ${props.grayBg ? "bg-slate-50" : "bg-white"} border rounded-md sm:text-sm text-base font-normal slate-800`} />
+                    <input placeholder={props.placeholder} type={props.type} value={props.textValue} onChange={props.onInputChange} className={`w-full py-2 px-3 ${props.activeValidation ? "border-red-400" : "border-slate-200"} ${props.grayBg ? "bg-slate-50" : "bg-white"} border rounded-md sm:text-sm text-base font-normal slate-800`} />
                 </label>
             );
 

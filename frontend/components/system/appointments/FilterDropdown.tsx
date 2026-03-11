@@ -1,8 +1,6 @@
-import IconButton from "../IconButton";
 import { lessThanTen } from "@/utils/format-availability";
 import { useId } from "react";
 import { Label } from "@/components/ui/label";
-import { CalendarArrowUp, CalendarArrowDown } from "lucide-react";
 import { currentWeekList, nextWeekList } from "@/utils/system/calendar/calendar-variables";
 import AppointmentTag from "./AppointmentTag";
 import OptionCheckbox from "../OptionCheckbox";
@@ -17,7 +15,7 @@ import {
 } from '@/components/ui/select';
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useState, useContext, useEffect } from "react";
+import { useState } from "react";
 import { useAppointmentFilters } from "@/utils/system/appointments/filter-store";
 import {
     DropdownMenu,
@@ -194,21 +192,6 @@ function FilterDropdown(props: FilterProps) {
                 {props.view === "cards" && (
                     <DropdownMenuSeparator className="w-full border border-slate-200" />
                 )}
-
-                {/* Orden
-                <DropdownMenuGroup className="flex flex-col gap-4 p-2.5">
-                    <DropdownMenuLabel className="text-slate-600 font-normal p-0">Orden:</DropdownMenuLabel>
-
-                    <IconButton
-                        onClick={() => setOrderFilter(!orderFilter)}
-                        icon={orderFilter === true ? <CalendarArrowUp size={16} /> : <CalendarArrowDown size={16} />}
-                        text={orderFilter === true ? "Más recientes" : "Más lejanas"}
-                        isActive={false}
-                    />
-                </DropdownMenuGroup>
-
-                <DropdownMenuSeparator className="w-full border border-slate-200" />
-                */}
 
                 {/* Estado */}
                 <DropdownMenuGroup className="flex flex-col gap-4 p-2.5">

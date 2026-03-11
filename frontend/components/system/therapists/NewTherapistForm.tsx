@@ -3,7 +3,7 @@ import Input from "@/components/website/Input";
 import InputWarning from "@/components/website/InputWarning";
 import { InputChange, SelectChange } from "@/utils/website/input-change-handlers";
 import { useState } from "react";
-import { SelectStartingDate } from "../SelectStartingDate";
+import { DayPicker } from "../DayPicker";
 
 type FormProps = {
     sendData: (therapistObject: TherapistType) => void;
@@ -45,18 +45,18 @@ function NewTherapistForm(props: FormProps) {
                 <InputWarning message="Por favor, ingresa un número de teléfono válido." />
             )}
 
-            <label className="label gap-3 flex flex-col w-full">
-                <div className="flex flex-row gap-2">
-                    <p className="text-slate-500 sm:text-sm text-base m-0 p-0">
-                        Fecha de inicio: <span className="text-red-500 text-lg font-semibold">*</span>
-                    </p>
-                </div>
+            <div className="label gap-3 flex flex-row w-full">
 
-                <SelectStartingDate />
+                <Input type="text" textValue={startingDate} label="Fecha de inicio" onInputChange={(e) => InputChange(e, startingDate, setStartingDate, validationsShot, setStartingDateValidation)} activeValidation={startingDateValidation} />
                 {startingDateValidation && (
                     <InputWarning message="Por favor, selecciona una fecha." />
                 )}
-            </label>
+
+                <DayPicker />
+                {startingDateValidation && (
+                    <InputWarning message="Por favor, selecciona una fecha." />
+                )}
+            </div>
         </form>
     );
 };

@@ -34,7 +34,7 @@ function intervalFilter(array: AppointmentType[], point1: string, point2: string
         let condition4 = separatedDate.month <= point2Values.month; // If the month of the appointment is less or equal than the one in the interval's second point.
         let condition5 = separatedDate.year <= point2Values.year; // If the year of the appointment is less or equal than the one interval's second point.
 
-        return condition1 && condition2 && condition3 && condition4;
+        return condition1 && condition2 && condition3 && condition4 && condition5;
     });
 
     return filteredData;
