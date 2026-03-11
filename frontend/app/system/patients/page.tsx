@@ -47,7 +47,6 @@ function Patients() {
         toast.success(<p className="font-medium">{successMsg}</p>, { duration: 2000 });
     };
 
-
     function savePatient() {
         setNewPatientModal(false);
         setCardAction("");
@@ -57,22 +56,32 @@ function Patients() {
 
     function modifyPatient() {
         setCardAction("");
+        setCompletedAction((completedAction) => completedAction += 1);
         showSuccessModal("¡Paciente actualizado correctamente!");
     }
 
     function removePatient() {
-        // DELETE axios controller.
+        api.delete("/patients/" + patientId);
         setCardAction("");
+        setPatientData((prev: PatientType[]) => prev.filter((patient) => patient._id != patientId));
         showSuccessModal("Paciente eliminado correctamente.");
     };
 
     return (
-        <SystemLayout sidebarPage="patients" isAnyModal={newPatientModal || cardAction === "cancel" || cardAction === "modify" || cardAction === "history"}
+        <SystemLayout sidebarPage="patients" isAnyModal={newPatientModal || cardAction === "cancel" || cardAction === "modify" || cardAction === "remove"}
             modals={
                 <>
-                    <NewPatientModal onSave={savePatient} isVisible={newPatientModal} onClose={() => setNewPatientModal(false)} />
-                    <RemovePatientModal onSave={removePatient} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />
-                    <ModifyPatientModal updateElementId={patientId} onSave={modifyPatient} isVisible={cardAction === "modify"} onClose={() => setCardAction("")} />
+                    {newPatientModal && (
+                        <NewPatientModal onSave={savePatient} isVisible={newPatientModal} onClose={() => setNewPatientModal(false)} />
+                    )}
+
+                    {cardAction === "remove" && (
+                        <RemovePatientModal onSave={removePatient} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />
+                    )}
+
+                    {cardAction === "modify" && (
+                        <ModifyPatientModal updateElementId={patientId} onSave={modifyPatient} isVisible={cardAction === "modify"} onClose={() => setCardAction("")} />
+                    )}
                 </>
             }
         >

@@ -248,8 +248,6 @@ function intervalCreator(firstPointDay: number, firstPointMonth: number, secondP
     // Month abbreviations. '0' is added to match the actual number of each month.
     const months = ["0", "ene.", "feb.", "mar.", "abr.", "mayo", "jun.", "jul.", "ago.", "sep.", "oct.", "nov.", "dic."];
 
-    console.log("Month 1:", firstPointMonth);
-
     return [[firstPointDay + " de " + months[firstPointMonth]], [secondPointDay + " de " + months[secondPointMonth]]];
 };
 

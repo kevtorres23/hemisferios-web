@@ -9,15 +9,15 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { format } from "date-fns"
-import { ChevronDownIcon } from "lucide-react"
+import { ChevronDownIcon, CalendarIcon } from "lucide-react"
 import { es } from "date-fns/locale";
 
 type CalendarProps = {
     onSelectDate: (date: Date) => void;
 };
 
-export function SelectStartingDate(props: CalendarProps) {
-    const [date, setDate] = React.useState<Date>()
+export function DayPicker(props: CalendarProps) {
+    const [date, setDate] = React.useState<Date | undefined>();
 
     const handleDateSelect = (date: Date) => {
         setDate(date);
@@ -29,12 +29,12 @@ export function SelectStartingDate(props: CalendarProps) {
         <Popover>
             <PopoverTrigger asChild>
                 <Button
-                    variant="outline"
+                    variant="default"
                     data-empty={!date}
-                    className="w-full py-5! justify-between cursor-pointer text-left font-normal data-[empty=true]:text-muted-foreground"
+                    className="p-4 gap-1.5! text-white! rounded-50 justify-between items-center cursor-pointer data-[empty=true]:text-muted-foreground"
                 >
-                    {date ? format(date, "PPP", { locale: es }) : <span>Selecciona una fecha</span>}
-                    <ChevronDownIcon />
+                    <CalendarIcon size={18} strokeWidth={2.5} />
+                    Calendario
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0 z-999" align="start">

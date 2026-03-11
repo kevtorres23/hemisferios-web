@@ -2,7 +2,7 @@ import MediumModal from "./MediumModal";
 import SmallModal from "./SmallModal";
 import { Patient } from "@/utils/classes";
 import { ActionModalProps, ModalProps, PatientType } from "@/utils/types";
-import NewPatientForm from "../patients/NewPatientForm";
+import NewPatientForm from "../patients/PatientForm";
 import api from "@/lib/axios";
 import { useState } from "react";
 
@@ -48,11 +48,10 @@ function ModifyPatientModal(props: ActionModalProps) {
         <MediumModal
             isVisible={props.isVisible}
             btnType="submit"
-            btnForm="modifyPatientForm" // It should be "editPatientForm", find out how to change this dynamically.
+            btnForm="modifyPatientForm"
             onClose={props.onClose}
             title="Modificar datos del paciente"
             confirmationBtnText="Guardar datos"
-            onSave={props.onSave}
         >
 
             <NewPatientForm formId="modifyPatientForm" modifyData={editPatient} isOnModify={true} editionId={props.updateElementId} sendData={() => ""} />

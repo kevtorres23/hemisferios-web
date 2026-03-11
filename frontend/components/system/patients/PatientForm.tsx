@@ -1,13 +1,16 @@
 import { PatientType } from "@/utils/types";
+import { format } from "date-fns"
+import { es } from "date-fns/locale";
 import Input from "@/components/website/Input";
 import InputWarning from "@/components/website/InputWarning";
 import { InputChange, SelectChange } from "@/utils/website/input-change-handlers";
 import { SelectFrequency, SelectModality } from "./PaymentSelects";
-import { SelectStartingDate } from "../SelectStartingDate";
+import { DayPicker } from "../DayPicker";
 import { useEffect, useState } from "react";
 import { Patient } from "@/utils/classes";
 import { lessThanTen } from "@/utils/format-availability";
 import api from "@/lib/axios";
+import { dateFormatter } from "@/utils/system/appointments/appointment-formatter";
 
 type FormProps = {
     sendData: (patientObject: Patient) => void;
@@ -20,6 +23,8 @@ type FormProps = {
 const todayDate = new Date();
 
 function NewPatientForm(props: FormProps) {
+    console.log("formulario:", props.formId);
+
     // Variables for the input values.
     const [patientName, setPatientName] = useState("");
     const [motherSurname, setMotherSurname] = useState("");
@@ -27,6 +32,7 @@ function NewPatientForm(props: FormProps) {
     const [adultName, setAdultName] = useState("");
     const [contactNumber, setContactNumber] = useState("");
     const [startingDate, setStartingDate] = useState<Date>(todayDate);
+    const [formattedStartingDate, setFormattedStartingDate] = useState("");
     const [paymentFrequency, setPaymentFrequency] = useState("");
     const [paymentModality, setPaymentModality] = useState("");
 
@@ -43,16 +49,15 @@ function NewPatientForm(props: FormProps) {
 
     useEffect(() => {
         const getEditablePatient = async () => {
-            console.log(props.editionId);
 
             try {
                 const res = await api.get("/patients/" + props.editionId);
-                setPatientName(res.data.patientName);
+                setPatientName(res.data.name);
                 setMotherSurname(res.data.motherSurname);
                 setFatherSurname(res.data.fatherSurname);
                 setAdultName(res.data.adultName);
                 setContactNumber(res.data.contactNumber);
-                setStartingDate(res.data.startingDate);
+                setFormattedStartingDate(dateFormatter(res.data.startingDate));
                 setPaymentFrequency(res.data.paymentFrequency);
                 setPaymentModality(res.data.paymentModality);
 
@@ -66,6 +71,11 @@ function NewPatientForm(props: FormProps) {
         };
 
     }, []);
+
+    function onStartingDateChange(date: Date) {
+        setStartingDate(date);
+        setFormattedStartingDate(format(date, "PPP", { locale: es }));
+    }
 
     function shootValidations(e: React.SubmitEvent) {
         setValidationsShot(true);
@@ -93,16 +103,16 @@ function NewPatientForm(props: FormProps) {
         const formattedStartingDate = lessThanTen(startingDate.getDate()) + "/" + lessThanTen(startingDate.getMonth() + 1) + "/" + startingDate.getFullYear();
 
         const newPatientObject = new Patient
-        (
-            patientName,
-            fatherSurname,
-            motherSurname,
-            adultName,
-            contactNumber,
-            formattedStartingDate,
-            paymentFrequency,
-            paymentModality
-        );
+            (
+                patientName,
+                fatherSurname,
+                motherSurname,
+                adultName,
+                contactNumber,
+                formattedStartingDate,
+                paymentFrequency,
+                paymentModality
+            );
 
         if (props.formId === "patientForm") {
             props.sendData(newPatientObject);
@@ -138,18 +148,15 @@ function NewPatientForm(props: FormProps) {
                 <InputWarning message="Por favor, ingresa un número de teléfono válido." />
             )}
 
-            <label className="label gap-3 flex flex-col w-full">
-                <div className="flex flex-row gap-2">
-                    <p className="text-slate-500 sm:text-sm text-base m-0 p-0">
-                        Fecha de inicio: <span className="text-red-500 text-lg font-semibold">*</span>
-                    </p>
-                </div>
+            <div className="label gap-3 flex flex-row w-full items-end justify-center">
 
-                <SelectStartingDate onSelectDate={(date: Date) => setStartingDate(date)} />
+                <Input type="text" placeholder="Escoge una fecha en el calendario" textValue={formattedStartingDate} label="Fecha de inicio" onInputChange={onStartingDateChange} activeValidation={startingDateValidation} />
                 {startingDateValidation && (
                     <InputWarning message="Por favor, selecciona una fecha." />
                 )}
-            </label>
+
+                <DayPicker onSelectDate={(date: Date) => onStartingDateChange(date)}/>
+            </div>
 
             <div className="flex md:flex-row flex-col gap-4 items-center justify-center">
                 <div className="father-surname-field flex flex-col gap-2 w-full">

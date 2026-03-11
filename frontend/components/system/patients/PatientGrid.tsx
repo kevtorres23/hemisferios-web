@@ -1,12 +1,9 @@
 import SearchBar from "../SearchBar";
 import { useEffect, useState } from "react";
-import { PatientModality, PatientFrequency } from "@/utils/subtypes";
 import PatientCard from "./PatientCard";
 import FilterDropdown from "./FilterDropdown";
-import patientFilters from "@/utils/system/patients/payment-filter";
 import PageNavigator from "../PageNavigator";
 import { PatientType } from "@/utils/types";
-import { useId } from "react";
 import EmptyState from "../EmptyState";
 import { pageSeparator } from "@/utils/system/page-separator";
 import patientsEmpty from "../../../public/patients-empty.png";
@@ -19,7 +16,6 @@ type GridProps = {
 };
 
 function PatientGrid(props: GridProps) {
-    const id = useId();
     const [pages, setPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(props.data.length === 0 ? 0 : 1);
     const [search, setSearch] = useState("");
@@ -55,7 +51,7 @@ function PatientGrid(props: GridProps) {
     return (
         <div className="w-full flex h-full border border-slate-200 bg-white rounded-lg p-6 flex-col gap-6">
             <div className="flex lg:flex-row flex-col gap-6 lg:items-center items-start justify-between sm:w-auto w-full">
-                <SearchBar onInputChange={props.onSearchChange} placeholder="Buscar cita por nombre del paciente" />
+                <SearchBar onInputChange={(e) => setSearch(e.target.value)} placeholder="Buscar cita por nombre del paciente" />
                 <div className="filters flex sm:flex-row flex-col gap-2.5 sm:w-auto w-full items-center">
                     <p className="text-sm font-medium text-slate-500">Filtrar por pago:</p>
 
@@ -83,27 +79,31 @@ function PatientGrid(props: GridProps) {
             )}
 
             {patientPages.length >= 1 && (
-                <div className="grid w-full xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 grid-cols-1 gap-6">
-                    {patientPages[currentPage - 1].filter((item: PatientType) => {
-                        return search.toLowerCase() === ""
-                            ? item
-                            : item.name.toLowerCase().includes(search.toLowerCase());
-                    }).map((item, id) =>
-                        <PatientCard
-                            _id={item._id}
-                            key={id}
-                            name={item.name}
-                            fatherSurname={item.fatherSurname}
-                            motherSurname={item.motherSurname}
-                            adultName={item.adultName}
-                            contactNumber={item.contactNumber}
-                            startingDate={item.startingDate}
-                            paymentFrequency={item.paymentFrequency}
-                            paymentModality={item.paymentModality}
-                            appointmentHistory={item.appointmentHistory}
-                        />
-                    )}
-                </div>
+                <>
+                    <p className="text-slate-800 font-medium text-xl">Hay <span className="font-semibold text-indigo-500">{props.data.length}</span> pacientes registrados</p>
+
+                    <div className="grid w-full xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 grid-cols-1 gap-6">
+                        {patientPages[currentPage - 1].filter((item: PatientType) => {
+                            return search.toLowerCase() === ""
+                                ? item
+                                : item.name.toLowerCase().includes(search.toLowerCase());
+                        }).map((item, id) =>
+                            <PatientCard
+                                _id={item._id}
+                                key={id}
+                                name={item.name}
+                                fatherSurname={item.fatherSurname}
+                                motherSurname={item.motherSurname}
+                                adultName={item.adultName}
+                                contactNumber={item.contactNumber}
+                                startingDate={item.startingDate}
+                                paymentFrequency={item.paymentFrequency}
+                                paymentModality={item.paymentModality}
+                                appointmentHistory={item.appointmentHistory}
+                            />
+                        )}
+                    </div>
+                </>
             )}
         </div>
     );

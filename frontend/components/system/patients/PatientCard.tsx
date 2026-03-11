@@ -1,8 +1,9 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { PatientHistory } from "@/utils/types";
 import { CardActionContext } from "@/app/system/patients/page";
 import { ModalityTag } from "./PaymentTag";
 import { Button } from "@/components/ui/button";
+import calculateNextPayment from "@/utils/system/patients/next-payments";
 import { Ellipsis, SquarePen, Trash, UserRound, Phone, CircleUserRound, HandCoins, CalendarClock, HouseHeart } from "lucide-react";
 import {
     DropdownMenu,
@@ -27,6 +28,9 @@ type PatientProps = {
 
 function PatientCard(props: PatientProps) {
     const setAction = useContext(CardActionContext);
+    const initialDate = props.startingDate;
+
+    const [paymentDate, setPaymentDate] = useState(initialDate); 
     
     return (
         <div className="relative flex flex-col gap-2 overflow-y-visible rounded-md border border-slate-200 p-6 items-start justify-center overflow-x-hidden">
@@ -92,7 +96,7 @@ function PatientCard(props: PatientProps) {
                     <div className="date flex flex-row gap-1 items-center justify-center">
                         <HandCoins size={18} className="text-slate-400" />
                         <p className="text-sm text-slate-950">
-                            <span className="text-slate-400 font-normal">Próximo pago:</span> {props.startingDate}
+                            <span className="text-slate-400 font-normal">Próximo pago:</span> {paymentDate}
                         </p>
                     </div>
                 </DropdownMenuContent>
