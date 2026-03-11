@@ -1,6 +1,13 @@
 import { lessThanTen } from "@/utils/format-availability";
 import { getDaysInMonth } from "../calendar/calendar-methods";
 
+/**
+ * Calculates the next payment's date for a patient right after its starting date in the center.
+ * @param frequency Represents the frequency type of the patient. It can be **weekly** or **monthly**.
+ * @param startingDate Represents the date that the patient started attending the center, written in a **DD/MM/YYYY** format.
+ * @returns A *DD/MM/YYY* string representing the patient's next date.
+ */
+
 function calculateNextPayment(frequency: string, startingDate: string) {
     const day = startingDate[0] + startingDate[1];
     const month = startingDate[3] + startingDate[4];
@@ -10,6 +17,7 @@ function calculateNextPayment(frequency: string, startingDate: string) {
     let nextPaymentDate;
 
     if (frequency === "weekly") {
+        // Date variables for the 'weekly' frequency type.
         let newDay = Number(day) + 7;
         let newMonth = Number(month);
         let newYear = Number(year);
@@ -28,6 +36,7 @@ function calculateNextPayment(frequency: string, startingDate: string) {
         nextPaymentDate = lessThanTen(newDay) + "/" + lessThanTen(newMonth) + "/" + lessThanTen(newYear);
 
     } else {
+        // Date variables for the 'monthly' frequency type.
         let newMonth = Number(month);
         let newYear = Number(year);
 
@@ -45,30 +54,40 @@ function calculateNextPayment(frequency: string, startingDate: string) {
     return nextPaymentDate;
 };
 
-function establishPaymentDate(frequency: string, startingDate: string) {
-    const date = new Date();
-    const currentDay = date.getDate();
-    const currentMonth = date.getMonth();
+/**
+ * Calculates the next payment date of a patient based on the current date.
+ * @param frequency Represents the frequency type of the patient. It can be **weekly** or **monthly**.
+ * @param date Represents the date from which the next payment calculations will be done, written in a **DD/MM/YYYY** format.
+ * @returns A string representing the next payment date, written in a *DD/MM/YYYY* format.
+ */
 
-    let nextPaymentDate = calculateNextPayment(frequency, startingDate);
+function establishPaymentDate(frequency: string, date: string) {
+    const currentDate = new Date();
+    const currentDay = currentDate.getDate();
+    const currentMonth = currentDate.getMonth();
 
-    let paymentDay = nextPaymentDate[0] + nextPaymentDate[1];
-    let paymentMonth = nextPaymentDate[3] + nextPaymentDate[4];
+    // Calcuate the nearest payment date from the date parameter.
+    let nextPaymentDate = calculateNextPayment(frequency, date);
 
-    console.log(nextPaymentDate, ":", (Number(paymentDay) <= currentDay));
+    let paymentDay = nextPaymentDate[0] + nextPaymentDate[1]; // Get the first two characters from the 'DD/MM/YYYY' string (day).
+    let paymentMonth = nextPaymentDate[3] + nextPaymentDate[4]; // Get the third and fourth characters from the 'DD/MM/YYYY' string (month).
 
     switch (frequency) {
         case "weekly":
+            // Condition 1: The next payment day must be smaller or equal than today.
+            // Condition 2: The next payment month must be greater or equal than the current month.
             if ((Number(paymentDay) <= currentDay) && (Number(paymentMonth) >= currentMonth)) {
                 return nextPaymentDate;
             } else {
-                establishPaymentDate(frequency, nextPaymentDate);
+                establishPaymentDate(frequency, nextPaymentDate); // If the condition is not met, we recall the function with the newly calculated date, until the conditions are met.
             };
         case "monthly":
-            if ((Number(paymentDay) === Number(startingDate[0] + startingDate[1])) && (Number(paymentMonth) > currentMonth)) {
+            // Condition 1: The next payment day must be  equal than the day of the date passed as argument.
+            // Condition 2: The next payment month must be greater than the current month.
+            if ((Number(paymentDay) === Number(date[0] + date[1])) && (Number(paymentMonth) > currentMonth)) {
                 return nextPaymentDate;
             } else {
-                establishPaymentDate(frequency, nextPaymentDate);
+                establishPaymentDate(frequency, nextPaymentDate); // If the condition is not met, we recall the function with the newly calculated date, until the conditions are met.
             };
     };
 };
