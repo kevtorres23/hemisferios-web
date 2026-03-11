@@ -9,19 +9,19 @@ import { addDays, addMonths, compareAsc } from "date-fns";
  */
 
 function calculateNextPayment(frequency: string, startingDate: string) {
+    // Separating the 'DD/MM/YYYY' string into its day, month, and year values.
     const day = startingDate[0] + startingDate[1];
     const month = startingDate[3] + startingDate[4];
     const year = startingDate[6] + startingDate[7] + startingDate[8] + startingDate[9];
 
-    const builtDate = new Date(Number(year), Number(month), Number(day));
-    let newDate;
-    let nextPaymentDate;
+    const builtDate = new Date(Number(year), Number(month), Number(day)); // Building a new date with the previously separated values.
+    let newDate; // Stores the new date values.
+    let nextPaymentDate; // Stores a new DD/MM/YYY string.
 
     if (frequency === "weekly") {
-        // Date variables for the 'weekly' frequency type.
-        newDate = addDays(builtDate, 7);
+        newDate = addDays(builtDate, 7); // We add seven days to the built date to get the next payment date when it is weekly.
     } else {
-        newDate = addMonths(builtDate, 1);
+        newDate = addMonths(builtDate, 1); // We add 1 month to the built date to get the next payment date when it is monthly.
     };
 
     nextPaymentDate = lessThanTen(newDate.getDate()) + "/" + lessThanTen(newDate.getMonth()) + "/" + lessThanTen(newDate.getFullYear());
@@ -36,11 +36,12 @@ function calculateNextPayment(frequency: string, startingDate: string) {
  */
 
 function establishPaymentDate(frequency: string, date: string) {
-    const currentDate = new Date();
+    const currentDate = new Date(); // We create a new current date.
 
     // Calcuate the nearest payment date from the date parameter.
     let nextPaymentDate = calculateNextPayment(frequency, date);
 
+    // The result '1' of this submodule means the first date is before the second one - meaning the next payment date should be further than today.
     if (compareAsc(currentDate, date) != 1) {
         return nextPaymentDate;
     } else {
