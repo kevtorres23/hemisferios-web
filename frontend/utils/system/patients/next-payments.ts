@@ -25,7 +25,7 @@ function calculateNextPayment(frequency: string, startingDate: string) {
             newYear += 1;
         };
 
-        nextPaymentDate = lessThanTen(newDay) + "/" + lessThanTen(newMonth) + lessThanTen(newYear);
+        nextPaymentDate = lessThanTen(newDay) + "/" + lessThanTen(newMonth) + "/" + lessThanTen(newYear);
 
     } else {
         let newMonth = Number(month);
@@ -39,10 +39,38 @@ function calculateNextPayment(frequency: string, startingDate: string) {
             newYear += 1;
         };
 
-        nextPaymentDate = lessThanTen(Number(day)) + "/" + lessThanTen(newMonth) + lessThanTen(newYear);
+        nextPaymentDate = lessThanTen(Number(day)) + "/" + lessThanTen(newMonth) + "/" + lessThanTen(newYear);
     };
 
     return nextPaymentDate;
 };
 
-export default calculateNextPayment;
+function establishPaymentDate(frequency: string, startingDate: string) {
+    const date = new Date();
+    const currentDay = date.getDate();
+    const currentMonth = date.getMonth();
+
+    let nextPaymentDate = calculateNextPayment(frequency, startingDate);
+
+    let paymentDay = nextPaymentDate[0] + nextPaymentDate[1];
+    let paymentMonth = nextPaymentDate[3] + nextPaymentDate[4];
+
+    console.log(nextPaymentDate, ":", (Number(paymentDay) <= currentDay));
+
+    switch (frequency) {
+        case "weekly":
+            if ((Number(paymentDay) <= currentDay) && (Number(paymentMonth) >= currentMonth)) {
+                return nextPaymentDate;
+            } else {
+                establishPaymentDate(frequency, nextPaymentDate);
+            };
+        case "monthly":
+            if ((Number(paymentDay) === Number(startingDate[0] + startingDate[1])) && (Number(paymentMonth) > currentMonth)) {
+                return nextPaymentDate;
+            } else {
+                establishPaymentDate(frequency, nextPaymentDate);
+            };
+    };
+};
+
+export { calculateNextPayment, establishPaymentDate };
