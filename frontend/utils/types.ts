@@ -45,13 +45,14 @@ interface TherapistType {
 };
 
 type CommentType = {
+    _id: string;
     name: string;
     lastName: string;
     phoneNumber: string;
     email: string;
     message: string;
     status: string; // It can be seen or unseen.
-    date: string;
+    createdAt: string;
 };
 
 type TagType = {

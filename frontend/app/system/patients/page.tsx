@@ -11,6 +11,7 @@ import { PatientType } from "@/utils/types";
 import PatientGrid from "@/components/system/patients/PatientGrid";
 import { useState, createContext, useEffect } from "react";
 import api from "@/lib/axios";
+import LoadingState from "@/components/system/LoadingState";
 
 export const CardActionContext = createContext<(action: string, id: string) => void>(() => "");
 
@@ -96,11 +97,7 @@ function Patients() {
 
             <Toaster />
 
-            {isLoading && (
-                <div className="w-full h-full flex items-center justify-center">
-                    <p className="text-xl font-semibold text-slate-800">Cargando citas...</p>
-                </div>
-            )}
+            {isLoading && <LoadingState message="Cargando pacientes..." />}
 
             {!isLoading && patientData.length === 0 && (
                 <EmptyState

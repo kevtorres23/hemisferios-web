@@ -1,5 +1,6 @@
 import { lessThanTen } from "@/utils/format-availability";
 import { getDaysInMonth } from "../calendar/calendar-methods";
+import { compareAsc } from "date-fns";
 
 /**
  * Calculates the next payment's date for a patient right after its starting date in the center.
@@ -63,20 +64,15 @@ function calculateNextPayment(frequency: string, startingDate: string) {
 
 function establishPaymentDate(frequency: string, date: string) {
     const currentDate = new Date();
-    const currentDay = currentDate.getDate();
-    const currentMonth = currentDate.getMonth();
 
     // Calcuate the nearest payment date from the date parameter.
     let nextPaymentDate = calculateNextPayment(frequency, date);
 
-    let paymentDay = nextPaymentDate[0] + nextPaymentDate[1]; // Get the first two characters from the 'DD/MM/YYYY' string (day).
-    let paymentMonth = nextPaymentDate[3] + nextPaymentDate[4]; // Get the third and fourth characters from the 'DD/MM/YYYY' string (month).
-
     switch (frequency) {
         case "weekly":
-            // Condition 1: The next payment day must be smaller or equal than today.
+            // Condition 1: The next payment day must be greater or equal than today.
             // Condition 2: The next payment month must be greater or equal than the current month.
-            if ((Number(paymentDay) <= currentDay) && (Number(paymentMonth) >= currentMonth)) {
+            if (compareAsc(currentDate, date) != 1) {
                 return nextPaymentDate;
             } else {
                 establishPaymentDate(frequency, nextPaymentDate); // If the condition is not met, we recall the function with the newly calculated date, until the conditions are met.
@@ -84,7 +80,7 @@ function establishPaymentDate(frequency: string, date: string) {
         case "monthly":
             // Condition 1: The next payment day must be  equal than the day of the date passed as argument.
             // Condition 2: The next payment month must be greater than the current month.
-            if ((Number(paymentDay) === Number(date[0] + date[1])) && (Number(paymentMonth) > currentMonth)) {
+            if (compareAsc(currentDate, date) != 1) {
                 return nextPaymentDate;
             } else {
                 establishPaymentDate(frequency, nextPaymentDate); // If the condition is not met, we recall the function with the newly calculated date, until the conditions are met.
