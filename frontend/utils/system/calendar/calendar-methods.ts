@@ -5,8 +5,9 @@ import { AppointmentType } from "@/utils/types";
 
 // Global scope variables.
 const date = new Date();
-const days = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 const currentMonth = date.getMonth();
+
+const getDaysInMonth = (year: number, month: number) => new Date(year, month, 0).getDate(); // Calculate the number of days in a given month.
 
 type weekDayObject = {
     dayName: string,
@@ -15,8 +16,6 @@ type weekDayObject = {
         month: number,
     },
 };
-
-const getDaysInMonth = (year: number, month: number) => new Date(year, month, 0).getDate(); // Calculate the number of days in a given month.
 
 /**
  * Calculates the day-of-the-month of today's day from the next week.
@@ -27,6 +26,10 @@ const getDaysInMonth = (year: number, month: number) => new Date(year, month, 0)
  */
 
 function nextWeekNum(todayMonthNum: number) {
+    const date = new Date();
+    const currentMonth = date.getMonth();
+    const getDaysInMonth = (year: number, month: number) => new Date(year, month, 0).getDate(); // Calculate the number of days in a given month.
+
     const daysInCurrentMonth = getDaysInMonth(2026, currentMonth + 1);
     const nextWeekNum = todayMonthNum + 7; // Seven days from today.
     let nextMondayObj;
@@ -117,6 +120,9 @@ function daysDistance(todaysNum: number, comparativeDayNum: number) {
  */
 
 function weekCreator(todayMonthNum: number, monthNum: number) {
+    const date = new Date();
+    const getDaysInMonth = (year: number, month: number) => new Date(year, month, 0).getDate(); // Calculate the number of days in a given month.
+
     const createdWeek: weekDayObject[] = []; // Array to save the objects that contain the day's name, day-of-the-month and month number.
     const todayWeekNum = date.getDay(); // This is equal to today's day in number, for example, 4 (for Jueves).
     const daysInCurrentMonth = getDaysInMonth(2026, monthNum);
@@ -226,7 +232,13 @@ function calendarContentGenerator(weekList: weekDayObject[], hourId: number, day
  */
 
 function stringToDate(date: string) {
-    const separatedDate = date.split("/");
+    let separatedDate = [""];
+
+    if (date[2] === "/") {
+        separatedDate = date.split("/");
+    } else {
+        separatedDate = date.split("-");
+    }
 
     return {
         day: Number(separatedDate[0]),
@@ -251,14 +263,14 @@ function intervalCreator(firstPointDay: number, firstPointMonth: number, secondP
     return [[firstPointDay + " de " + months[firstPointMonth]], [secondPointDay + " de " + months[secondPointMonth]]];
 };
 
-export { 
+export {
     nextWeekNum,
-    calendarHoursCreator, 
-    daysDistance, 
-    weekCreator, 
-    hourSorter, 
-    calendarContentGenerator, 
-    stringToDate, 
-    getDaysInMonth, 
+    calendarHoursCreator,
+    daysDistance,
+    weekCreator,
+    hourSorter,
+    calendarContentGenerator,
+    stringToDate,
+    getDaysInMonth,
     intervalCreator
 };

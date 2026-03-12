@@ -1,84 +1,85 @@
 "use client";
 
+import toast, { Toaster } from 'react-hot-toast';
 import SystemLayout from "@/components/system/SystemLayout";
 import { NewTherapistModal, ModifyTherapistModal, RemoveTherapistModal } from "@/components/system/modals/TherapistActions";
 import EmptyState from "@/components/system/EmptyState";
 import TherapistSchedule from "@/components/system/therapists/TherapistSchedule";
 import therapistEmpty from "../../../public/therapists-empty.png";
-import { pageSeparator } from "@/utils/system/page-separator";
 import IconButton from "@/components/system/IconButton";
-import SuccessModal from "@/components/system/modals/SuccessModal";
-import { Plus, SquarePen } from "lucide-react";
+import { Plus } from "lucide-react";
 import PageTitle from "@/components/system/PageTitle";
 import { TherapistType } from "@/utils/types";
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 import TherapistGrid from "@/components/system/therapists/TherapistGrid";
+import api from '@/lib/axios';
+import LoadingState from '@/components/system/LoadingState';
 
-export const CardActionContext = createContext<(action: string) => void>(() => "");
-
-type TherapistDataset = TherapistType[];
+export const CardActionContext = createContext<(action: string, id: string) => void>(() => "");
 
 function Therapists() {
-    const [successfulAction, setSuccessfulAction] = useState("");
 
     // Modal variables.
     const [newTherapistModal, setNewTherapistModal] = useState(false);
     const [cardAction, setCardAction] = useState("");
-    const [success, setSuccess] = useState(false);
+    const [therapistData, setTherapistData] = useState<TherapistType[]>([]);
+    const [therapistId, setTherapistId] = useState("");
+    const [completedAction, setCompletedAction] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const data: TherapistDataset = [
-        {
-            "name": "Arlet",
-            "lastName": "Torres",
-            "startingDate": "February, 2024",
-            "contactNumber": "618-206-8767",
-            "schedule": [
-                {
-                    "patient": "Kevin Torres",
-                    "hour": "11:00",
-                    "day": "Tuesday",
-                },
-            ],
-        },
-    ];
+    useEffect(() => {
+        const fetchAllTherapists = async () => {
+            try {
+                const res = await api.get("/therapists");
+                setTherapistData(res.data);
+            } catch (error) {
+                console.log("Error while fetching the therapists:", error);
+            } finally {
+                setIsLoading(false);
+            };
+        };
 
-    let therapistPages = pageSeparator(data);
+        fetchAllTherapists();
+    }, [completedAction])
 
-
-    function onActionSelected(action: string) {
+    function onActionSelected(action: string, id: string) {
         setCardAction(action);
+        setTherapistId(id);
     };
 
     function showSuccessModal(successMsg: string) {
-        setSuccess(true);
-        setSuccessfulAction(successMsg)
-        setTimeout(() => setSuccess(false), 3000);
+        toast.success(<p className="font-medium">{successMsg}</p>, { duration: 2000 });
     };
-
 
     function saveTherapist() {
         setNewTherapistModal(false);
-        showSuccessModal("¡Terapeuta registrado correctamente!");
+        setCardAction("");
+        showSuccessModal("¡Terapeuta registrado!");
+        setCompletedAction((completedAction) => completedAction += 1);
     };
 
     function modifyTherapist() {
         setCardAction("");
-        showSuccessModal("¡Terapeuta actualizado correctamente!");
+        setCompletedAction((completedAction) => completedAction += 1);
+        showSuccessModal("¡Terapeuta actualizado!");
     }
 
     function removeTherapist() {
-        // DELETE axios controller.
+        api.delete("/therapists/" + therapistId);
         setCardAction("");
-        showSuccessModal("Terapeuta eliminado correctamente.");
+        setTherapistData((prev: TherapistType[]) => prev.filter((therapist) => therapist._id != therapistId))
+        showSuccessModal("Terapeuta eliminado.");
     };
 
     return (
-        <SystemLayout sidebarPage="therapists" isAnyModal={newTherapistModal || cardAction === "cancel" || cardAction === "modify" || cardAction === "history" || cardAction === "remove"}
+        <SystemLayout sidebarPage="therapists" isAnyModal={newTherapistModal || cardAction === "modify" || cardAction === "remove"}
             modals={
                 <>
-                    <NewTherapistModal onSave={saveTherapist} isVisible={newTherapistModal} onClose={() => setNewTherapistModal(false)} />
-                    <RemoveTherapistModal onSave={removeTherapist} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />
-                    <ModifyTherapistModal onSave={modifyTherapist} isVisible={cardAction === "modify"} onClose={() => setCardAction("")} />
+                    {newTherapistModal && (<NewTherapistModal onSave={saveTherapist} isVisible={newTherapistModal} onClose={() => setNewTherapistModal(false)} />)}
+
+                    {cardAction === "remove" && (<RemoveTherapistModal onSave={removeTherapist} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />)}
+
+                    {cardAction === "modify" && (<ModifyTherapistModal onSave={modifyTherapist} updateElementId={therapistId} isVisible={cardAction === "modify"} onClose={() => setCardAction("")} />)}
                 </>
             }
         >
@@ -91,21 +92,27 @@ function Therapists() {
                 </div>
             </div>
 
-            <SuccessModal isVisible={success} text={successfulAction} />
+            <Toaster />
 
-            {(data.length === 0) ? (
+            {isLoading && <LoadingState message="Cargando terapeutas..." />}
+
+            {!isLoading && therapistData.length === 0 && (
                 <EmptyState
                     header="¡No hay terapeutas registrados aún!"
                     desc="Empieza registrando un terapeuta para empezar a ver la lista."
                     image={therapistEmpty}
                 />
-            ) : (cardAction === "schedule") ? (
+            )}
+
+            {!isLoading && cardAction === "" && (
                 <CardActionContext.Provider value={onActionSelected}>
-                    <TherapistSchedule data={data} mode="view" />
+                    <TherapistGrid data={therapistData} onSearchChange={() => ""} />
                 </CardActionContext.Provider>
-            ) : (
+            )}
+
+            {!isLoading && cardAction === "schedule" && (
                 <CardActionContext.Provider value={onActionSelected}>
-                    <TherapistGrid data={therapistPages} onSearchChange={() => ""} />
+                    <TherapistSchedule data={therapistData} mode="view" />
                 </CardActionContext.Provider>
             )}
         </ SystemLayout>

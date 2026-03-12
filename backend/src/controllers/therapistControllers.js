@@ -30,7 +30,6 @@ export async function createTherapist(req, res) {
             lastName,
             startingDate,
             contactNumber,
-            schedule
         } = req.body;
 
         const newTherapist = new Therapist({
@@ -38,7 +37,6 @@ export async function createTherapist(req, res) {
             lastName,
             startingDate,
             contactNumber,
-            schedule
         });
 
         const savedTherapist = await newTherapist.save();

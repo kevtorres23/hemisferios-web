@@ -76,4 +76,26 @@ class Patient {
     };
 };
 
-export { ContactMessage, Appointment, AppointmentInput, Patient };
+interface ScheduleItem {
+    patient: string;
+    hour: string;
+    day: string;
+};
+
+class Therapist {
+    name: string;
+    lastName: string;
+    startingDate: string;
+    contactNumber: string;
+    schedule: ScheduleItem[] | undefined;
+
+    constructor(name: string, lastName: string, startingDate: string, contactNumber: string, schedule?: ScheduleItem[]) {
+        this.name = name;
+        this.lastName = lastName;
+        this.startingDate = startingDate;
+        this.contactNumber = contactNumber;
+        this.schedule = schedule;
+    }
+}
+
+export { ContactMessage, Appointment, AppointmentInput, Patient, Therapist };

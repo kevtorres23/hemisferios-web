@@ -37,6 +37,7 @@ interface TherapistSchedule {
 };
 
 interface TherapistType {
+    _id: string;
     name: string;
     lastName: string;
     startingDate: string;

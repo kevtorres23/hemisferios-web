@@ -1,12 +1,20 @@
 import MediumModal from "./MediumModal";
 import SmallModal from "./SmallModal";
 import NewTherapistForm from "../therapists/NewTherapistForm";
-import { TherapistType } from "@/utils/types";
+import { ActionModalProps, TherapistType } from "@/utils/types";
 import { ModalProps } from "@/utils/types";
+import { Therapist } from "@/utils/classes";
+import api from "@/lib/axios";
 
 function NewTherapistModal(props: ModalProps) {
-    function saveBtnPressed() {
-        // axios POST controller.
+    async function saveBtnPressed(therapistObject: Therapist) {
+        try {
+            await api.post("/therapists", therapistObject);
+        } catch (error) {
+            console.log("An error ocurred while registering the therapist:", error);
+        };
+        
+        props.onSave();
     };
 
     return (
@@ -17,31 +25,35 @@ function NewTherapistModal(props: ModalProps) {
             onClose={props.onClose}
             title="Registrar un terapeuta"
             confirmationBtnText="Registrar"
-            onSave={props.onSave}
         >
-            <NewTherapistForm sendData={saveBtnPressed} />
+            <NewTherapistForm sendData={saveBtnPressed} formId="therapistForm" isOnModify={false} modifyData={() => ""} editionId="" />
 
         </MediumModal>
     );
 };
 
-function ModifyTherapistModal(props: ModalProps) {
-    function saveBtnPressed(patientObject: TherapistType) {
-        // PUT axios controller to update the therapist.
+function ModifyTherapistModal(props: ActionModalProps) {
+    async function editTherapist(therapistObject: Therapist) {
+        try {
+            await api.put("/therapists/" + props.updateElementId, therapistObject);
+        } catch (error) {
+            console.log("There was an error while updating the therapist:", error);
+        } finally {
+            props.onSave();
+        }
     };
 
     return (
         <MediumModal
             isVisible={props.isVisible}
             btnType="submit"
-            btnForm="therapisttForm" // It should be "editTherapistForm", find out how to change this dynamically.
+            btnForm="editTherapistForm"
             onClose={props.onClose}
             title="Modificar datos del terapeuta"
             confirmationBtnText="Guardar datos"
-            onSave={props.onSave}
         >
 
-            <NewTherapistForm isOnModify={true} sendData={saveBtnPressed} />
+            <NewTherapistForm formId="editTherapistForm" modifyData={editTherapist} isOnModify={true} editionId={props.updateElementId} sendData={() => ""} />
 
         </MediumModal>
     );

@@ -23,7 +23,7 @@ const therapistSchema = new mongoose.Schema({
             hour: String,
             day: String,
         }],
-        required: true
+        required: false
     }
 },
     { timestamps: true }
