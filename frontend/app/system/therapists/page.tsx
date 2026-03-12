@@ -104,7 +104,7 @@ function Therapists() {
                 />
             )}
 
-            {!isLoading && cardAction === "" && (
+            {!isLoading && cardAction != "schedule" && (
                 <CardActionContext.Provider value={onActionSelected}>
                     <TherapistGrid data={therapistData} onSearchChange={() => ""} />
                 </CardActionContext.Provider>
@@ -112,7 +112,7 @@ function Therapists() {
 
             {!isLoading && cardAction === "schedule" && (
                 <CardActionContext.Provider value={onActionSelected}>
-                    <TherapistSchedule data={therapistData} mode="view" />
+                    <TherapistSchedule therapistId={therapistId} mode="view" />
                 </CardActionContext.Provider>
             )}
         </ SystemLayout>

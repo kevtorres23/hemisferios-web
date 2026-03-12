@@ -19,11 +19,13 @@ const therapistSchema = new mongoose.Schema({
     },
     schedule: {
         type: [{
-            patient: String,
+            patientName: String,
+            patientLastName: String,
             hour: String,
             day: String,
         }],
-        required: false
+        required: false,
+        default: [],
     }
 },
     { timestamps: true }

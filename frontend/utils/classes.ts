@@ -96,6 +96,20 @@ class Therapist {
         this.contactNumber = contactNumber;
         this.schedule = schedule;
     }
-}
+};
 
-export { ContactMessage, Appointment, AppointmentInput, Patient, Therapist };
+class ScheduleItemClass {
+    patientName: string;
+    patientLastName: string;
+    hour: string;
+    day: string;
+
+    constructor(patientName: string, patientLastName: string, hour: string, day: string) {
+        this.patientName = patientName;
+        this.patientLastName = patientLastName;
+        this.hour = hour;
+        this.day = day;
+    };
+};
+
+export { ContactMessage, Appointment, AppointmentInput, Patient, Therapist, ScheduleItemClass };

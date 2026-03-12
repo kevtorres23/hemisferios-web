@@ -1,7 +1,8 @@
 // REUSABLE UI ELEMENTS USED TO BUILD THE THERAPISTS' SCHEDULE.
 
 import { calendarHoursCreator, daysDistance } from "../../../utils/system/calendar/calendar-methods";
-import { PatientType, TherapistType } from "../../../utils/types";
+import { PatientType, TherapistType, ScheduleItem } from "../../../utils/types";
+import SchedulePatient from "./SchedulePatient";
 
 type DayProps = {
     dayName?: string,
@@ -23,7 +24,7 @@ type SpaceProps = {
 };
 
 type ScheduleUIProps = {
-    data: TherapistType[],
+    data: ScheduleItem[],
     mode: "view" | "edit";
 };
 
@@ -51,8 +52,39 @@ function ScheduleSpace(props: SpaceProps) {
     );
 };
 
+function scheduleContentGenerator(hourList: string[], dayList: string[], hourId: number, dayId: number, data: ScheduleItem[]) {
+    let scheduleHour = hourList[hourId];
+    let scheduleDay = dayId;
+
+    let coincidence: ScheduleItem = {
+        patientName: "",
+        patientLastName: "",
+        hour: "",
+        day: "",
+        _id: "",
+    };
+
+    for (let i = 0; i < data.length; i++) {
+        if ((data[i].hour === scheduleHour) && (Number(data[i].day) === scheduleDay)) {
+            coincidence = {
+                patientName: data[i].patientName,
+                patientLastName: data[i].patientLastName,
+                hour: data[i].hour,
+                day: data[i].day,
+                _id: data[i]._id
+            };
+        } else {
+            continue;
+        };
+    };
+
+    return coincidence;
+};
+
 function ScheduleUI(props: ScheduleUIProps) {
     // Date variables.
+    console.log(props.data);
+
     const scheduleHours = ["10:00", "11:00", "12:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00"]; // An array containing hours that the appointments have and that will be displayed in the schedule.
     const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 
@@ -78,6 +110,7 @@ function ScheduleUI(props: ScheduleUIProps) {
 
             {scheduleHours.map((_, id) => {
                 var hours = scheduleHours;
+                var hourId = id;
 
                 return (
                     <div className="flex flex-row w-full">
@@ -88,9 +121,20 @@ function ScheduleUI(props: ScheduleUIProps) {
                         />
 
                         {dayNames.map((_, id) => {
+                            var dayId = id;
+
+                            var foundPatient = scheduleContentGenerator(scheduleHours, dayNames, hourId, dayId, props.data);
+
                             return (id === 0 ? null :
                                 <ScheduleSpace
-                                    content={""}
+                                    content={ foundPatient.patientName === "" ? "" :
+                                        <SchedulePatient
+                                            patientName={foundPatient.patientName}
+                                            patientLastName={foundPatient.patientLastName}
+                                            scheduleMode={props.mode}
+                                            id={foundPatient._id}
+                                        />
+                                    }
                                     isLast={id === 6}
                                     mode={props.mode}
                                 />

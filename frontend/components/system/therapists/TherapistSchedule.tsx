@@ -1,32 +1,53 @@
 "use client";
 
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { CardActionContext } from "@/app/system/therapists/page";
 import { ArrowLeft, X, Check } from "lucide-react";
 import IconButton from "../IconButton";
 import CancelButton from "../CancelButton";
-import PageNavigator from "../PageNavigator";
-import { PatientType, TherapistType } from "@/utils/types";
+import { TherapistType } from "@/utils/types";
 import { ScheduleUI } from "./ScheduleElements";
 import { SquarePen } from "lucide-react";
+import LoadingState from "../LoadingState";
+import { ScheduleItem } from "@/utils/types";
+import api from "@/lib/axios";
 
 type ScheduleProps = {
-    data: TherapistType[];
+    therapistId: string;
     mode: "view" | "edit";
 };
 
 function TherapistSchedule(props: ScheduleProps) {
+    const [isLoading, setIsLoading] = useState(true);
+    const [schedule, setSchedule] = useState<ScheduleItem[]>([]);
+
     // State variables.
-    const [numberOfWeeks, setNumberOfWeeks] = useState(2);
-    const [therapistName, setTherapistName] = useState("Arlet Torres");
+    const [therapistName, setTherapistName] = useState("");
     const [scheduleMode, setScheduleMode] = useState<"view" | "edit">("view");
     const setAction = useContext(CardActionContext);
+
+    useEffect(() => {
+        const getTherapistById = async () => {
+            try {
+                const res = await api.get("/therapists/" + props.therapistId);
+                const therapistInfo: TherapistType = res.data;
+                setTherapistName(therapistInfo.name + " " + therapistInfo.lastName);
+                setSchedule(therapistInfo.schedule);
+            } catch (error) {
+                console.log("An error ocurred while getting the therapist info:", error);
+            } finally {
+                setIsLoading(false);
+            };
+        };
+
+        getTherapistById();
+    }, []);
 
     return (
         <div className="w-full flex h-full border border-slate-200 bg-white rounded-lg p-6 flex-col gap-6">
             <div className="flex lg:flex-row flex-col gap-6 lg:items-center sm:items-start items-center sm:justify-between justify-center sm:w-auto w-full">
                 <div className="flex sm:flex-row sm:w-auto w-full flex-col gap-3 items-center justify-center">
-                    <ArrowLeft onClick={() => setAction("")} size={24} className="text-slate-500 hover:text-indigo-500 cursor-pointer" />
+                    <ArrowLeft onClick={() => setAction("", props.therapistId)} size={24} className="text-slate-500 hover:text-indigo-500 cursor-pointer" />
 
                     <p className="text-2xl font-medium text-slate-900 tracking-tight text-center">
                         Horario de {therapistName}
@@ -47,7 +68,9 @@ function TherapistSchedule(props: ScheduleProps) {
                 </div>
             </div>
 
-            <ScheduleUI data={props.data} mode={scheduleMode} />
+            {isLoading && <LoadingState message="Cargando horario..." />}
+
+            {!isLoading && <ScheduleUI data={schedule} mode={scheduleMode} />}
         </div>
     );
 };
