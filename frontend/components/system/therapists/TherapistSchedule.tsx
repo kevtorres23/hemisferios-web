@@ -70,7 +70,7 @@ function TherapistSchedule(props: ScheduleProps) {
 
             {isLoading && <LoadingState message="Cargando horario..." />}
 
-            {!isLoading && <ScheduleUI data={schedule} mode={scheduleMode} />}
+            {!isLoading && <ScheduleUI therapistId={props.therapistId} data={schedule} mode={scheduleMode} />}
         </div>
     );
 };

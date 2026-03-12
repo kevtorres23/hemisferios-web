@@ -32,16 +32,16 @@ function SchedulePatient(props: CardProps) {
             </DropdownMenuTrigger>
 
             {props.scheduleMode === "edit" && (
-                <DropdownMenuContent className="p-0!">
+                <DropdownMenuContent className="p-1.5">
                     <DropdownMenuGroup className="w-auto">
                         <DropdownMenuItem onClick={() => setAction("editScheduleItem", props.id)} className="flex flex-row gap-1.5 items-center">
                             <SquarePen size={16} className="text-slate-800" />
-                            <p className="text-slate-800">Marcar como completa</p>
+                            <p className="text-slate-800">Modificar paciente</p>
                         </DropdownMenuItem>
 
                         <DropdownMenuItem onClick={() => setAction("removeScheduleItem", props.id)} className="flex flex-row gap-1.5 items-center">
                             <Trash size={16} className="text-slate-800" />
-                            <p className="text-slate-800">Cancelar cita</p>
+                            <p className="text-slate-800">Eliminar paciente</p>
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                 </DropdownMenuContent>

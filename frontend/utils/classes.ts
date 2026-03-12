@@ -77,7 +77,8 @@ class Patient {
 };
 
 interface ScheduleItem {
-    patient: string;
+    patientName: string;
+    patientLastName: string;
     hour: string;
     day: string;
 };

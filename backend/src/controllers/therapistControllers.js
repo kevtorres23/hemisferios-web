@@ -77,7 +77,6 @@ export async function updateTherapist(req, res) {
     }
 };
 
-
 export async function deleteTherapist(req, res) {
     try {
         const deletedTherapist = await Therapist.findByIdAndDelete(req.params.id);
