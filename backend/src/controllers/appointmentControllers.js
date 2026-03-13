@@ -12,6 +12,26 @@ export async function getAllAppointments(_, res) {
     }
 };
 
+export async function getAppointmentsByStatus(req, res) {
+    try {
+        const filteredAppointments = await Appointment.find({ status: req.params.status });
+        res.status(200).json(filteredAppointments);
+    } catch (error) {
+        console.error(`Error in the getAppointmentsByStatus controller`.red, error);
+        res.status(500).json({ message: "Internal server error." });
+    }
+};
+
+export async function getAppointmentsByDate(req, res) {
+    try {
+        const filteredAppointments = await Appointment.find({ status: req.params.status });
+        res.status(200).json(filteredAppointments);
+    } catch (error) {
+        console.error(`Error in the getAppointmentsByStatus controller`.red, error);
+        res.status(500).json({ message: "Internal server error." });
+    }
+}
+
 export async function getAppointmentById(req, res) {
     try {
         const targetAppointment = await Appointment.findById(req.params.id); // "await" means: before continuing, wait until you receive this, and send it back to me.
@@ -102,4 +122,4 @@ export async function deleteAppointment(req, res) {
         console.error("Error in the deleteAppointments controller", error)
         res.status(500).json({ message: "Internal server error." })
     }
-}
+};

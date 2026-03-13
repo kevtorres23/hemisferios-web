@@ -24,8 +24,6 @@ function calculateNextPayment(frequency: string, startingDate: string) {
         newDate = addMonths(builtDate, 1); // We add 1 month to the built date to get the next payment date when it is monthly.
     };
 
-    console.log(newDate);
-
     nextPaymentDate = lessThanTen(newDate.getDate()) + "/" + lessThanTen(newDate.getMonth()) + "/" + lessThanTen(newDate.getFullYear());
     return nextPaymentDate;
 };

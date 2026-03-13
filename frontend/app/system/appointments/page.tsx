@@ -20,7 +20,7 @@ import api from "@/lib/axios";
 
 export const CardActionContext = createContext<(action: string, id: string) => void>(() => "");
 
-function AppointmentDashboard() {
+function AppointmentDashboard() {    
     const [view, setView] = useState("cards");
     const [appointmentsData, setAppointmentsData] = useState<AppointmentType[]>([]);
 

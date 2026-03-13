@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllAppointments, getAppointmentById, createAppointment, updateAppointment, deleteAppointment } from "../controllers/appointmentControllers.js";
+import { getAllAppointments, getAppointmentById, createAppointment, updateAppointment, deleteAppointment, getAppointmentsByStatus } from "../controllers/appointmentControllers.js";
 
 const router = express.Router();
 
@@ -8,6 +8,8 @@ const router = express.Router();
 router.get("/", getAllAppointments);
 
 router.get("/:id", getAppointmentById);
+
+router.get("/byStatus/:status", getAppointmentsByStatus);
 
 router.post("/", createAppointment);
 
