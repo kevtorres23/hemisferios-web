@@ -2,6 +2,7 @@ import Input from "@/components/website/Input";
 import InputWarning from "@/components/website/InputWarning";
 import { InputChange } from "@/utils/website/input-change-handlers";
 import { dateFormatter } from "@/utils/system/appointments/appointment-formatter";
+import { ScheduleItem } from "@/utils/types";
 import { useEffect, useState } from "react";
 import { DayPicker } from "../DayPicker";
 import { format } from "date-fns"
@@ -17,12 +18,6 @@ type FormProps = {
     editionId: string;
 };
 
-interface TherapistSchedule {
-    patient: string;
-    hour: string;
-    day: string;
-};
-
 function NewTherapistForm(props: FormProps) {
     const todayDate = new Date();
 
@@ -32,7 +27,7 @@ function NewTherapistForm(props: FormProps) {
     const [contactNumber, setContactNumber] = useState("");
     const [startingDate, setStartingDate] = useState<Date>(todayDate);
     const [formattedStartingDate, setFormattedStartingDate] = useState("");
-    const [schedule, setSchedule] = useState<TherapistSchedule[]>([]);
+    const [schedule, setSchedule] = useState<ScheduleItem[]>([]);
 
     // Input validations.
     const [validationsShot, setValidationsShot] = useState(false);
@@ -48,8 +43,9 @@ function NewTherapistForm(props: FormProps) {
                 setTherapistName(res.data.name);
                 setLastName(res.data.lastName);
                 setContactNumber(res.data.contactNumber);
+                setSchedule(res.data.schedule);
                 setFormattedStartingDate(dateFormatter(res.data.startingDate));
-                
+
             } catch (error) {
                 console.log("Error while fetching the therapist's info:", error);
             };
@@ -71,18 +67,54 @@ function NewTherapistForm(props: FormProps) {
 
         if (contactNumber.length < 10) {
             setNumberValidation(true);
-        } else if (therapistName && lastName && contactNumber && startingDate) {
+        } else if (therapistName && lastName && contactNumber && formattedStartingDate) {
             shootData();
         };
     };
 
+    type Months = "enero" | "febrero" | "marzo" | "abril" | "mayo" | "junio" | "julio" | "agosto" | "septiembre" | "octubre" | "noviembre" | "diciembre";
+
+    function proseToDate(date: string) {
+        const months: Record<Months, string> = {
+            "enero": "01",
+            "febrero": "02",
+            "marzo": "03",
+            "abril": "04",
+            "mayo": "05",
+            "junio": "06",
+            "julio": "07",
+            "agosto": "08",
+            "septiembre": "09",
+            "octubre": "10",
+            "noviembre": "11",
+            "diciembre": "12"
+        }
+
+        const separatedDate = date.split(" de ");
+
+        return {
+            day: Number(separatedDate[0]),
+            month: Number(months[separatedDate[1] as keyof Record<Months, string>]),
+            year: Number(separatedDate[2])
+        };
+    };
+
     function shootData() {
-        const formattedStartingDate = format(startingDate, "dd-MM-yyyy");
+        let startDate;
+
+        if (props.isOnModify) {
+            let conversion = proseToDate(formattedStartingDate);
+            let convertedDate = new Date(conversion.year, conversion.month - 1, conversion.day)
+            startDate = format(convertedDate, "dd-MM-yyyy")
+        } else {
+            startDate = format(startingDate, "dd-MM-yyyy");
+        }
+
         if (props.formId === "editTherapistForm") {
-            const newTherapistObject = new Therapist(therapistName, lastName, formattedStartingDate, contactNumber, schedule);
+            const newTherapistObject = new Therapist(therapistName, lastName, startDate, contactNumber, schedule);
             props.modifyData(newTherapistObject);
         } else {
-            const newTherapistObject = new Therapist(therapistName, lastName, formattedStartingDate, contactNumber);
+            const newTherapistObject = new Therapist(therapistName, lastName, startDate, contactNumber);
             props.sendData(newTherapistObject);
         };
     };

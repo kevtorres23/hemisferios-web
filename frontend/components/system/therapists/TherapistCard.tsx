@@ -30,9 +30,9 @@ type TherapistProps = {
 
 function TherapistCard(props: TherapistProps) {
     const setAction = useContext(CardActionContext);
-
+    console.log(props.startingDate);
     const dateConversion = stringToDate(props.startingDate);
-    const startingDate = new Date(dateConversion.year, dateConversion.month, dateConversion.day);
+    const startingDate = new Date(dateConversion.year, dateConversion.month - 1, dateConversion.day);
     const formattedDate = format(startingDate, "PP", { locale: es });
 
     return (

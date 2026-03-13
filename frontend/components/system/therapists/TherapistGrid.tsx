@@ -22,7 +22,7 @@ function TherapistGrid(props: GridProps) {
     return (
         <div className="w-full flex h-full border border-slate-200 bg-white rounded-lg p-6 flex-col gap-6">
             <div className="flex lg:flex-row flex-col gap-6 lg:items-center items-start justify-between sm:w-auto w-full">
-                <SearchBar onInputChange={props.onSearchChange} placeholder="Buscar cita por nombre del paciente" />
+                <SearchBar onInputChange={(e) => setSearch(e.target.value)} placeholder="Buscar cita por nombre del paciente" />
 
                 <div className="filters flex sm:flex-row flex-col gap-2.5 sm:w-auto w-full items-center">
                     <div className="flex flex-row gap-2.5 items-center justify-center">
@@ -34,7 +34,11 @@ function TherapistGrid(props: GridProps) {
             </div>
 
             <div className="grid w-full xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 grid-cols-1 gap-6">
-                {therapistPages[currentPage - 1].map((item, id) =>
+                {therapistPages[currentPage - 1].filter((item) => {
+                    return search.toLowerCase() === ""
+                    ? item
+                    : item.name.toLowerCase().includes(search.toLowerCase());
+                }).map((item, id) =>
                     <TherapistCard
                         _id={item._id}
                         key={id}

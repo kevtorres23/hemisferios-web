@@ -111,21 +111,19 @@ function UpdatePatientScheduleModal(props: UpdateScheduleModalProps) {
 
             foundTherapist.schedule.forEach((patient) => {
                 if (patient._id === props.schedulePatientId) {
-                    patient = {
+                    const updatedSpace = {
                         patientName: patientName,
                         patientLastName: patientLastName,
                         hour: props.hour,
                         day: props.day,
-                        _id: props.schedulePatientId
                     };
+
+                    therapistSchedule.push(updatedSpace);
+                } else {
+                    therapistSchedule.push(patient);
                 };
 
-                therapistSchedule.push(patient);
-
             });
-
-            const newSchedulePatient = new ScheduleItemClass(patientName, patientLastName, props.hour, props.day);
-            therapistSchedule.push(newSchedulePatient);
 
             const updatedTherapist = new Therapist(foundTherapist.name, foundTherapist.lastName, foundTherapist.startingDate, foundTherapist.contactNumber, therapistSchedule);
             await api.put("/therapists/" + props.therapistId, updatedTherapist);

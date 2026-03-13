@@ -23,10 +23,11 @@ type CardProps = {
 
 function SchedulePatient(props: CardProps) {
     const setAction = useContext(ScheduleActionContext);
+    console.log("id recibido:", props.therapistId);
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button className="px-0! py-0! w-full" variant="ghost">
+                <Button className="px-0! py-0! w-full" variant={null}>
                     <div className={`w-full flex flex-row ${props.scheduleMode === "view" ? "" : "cursor-pointer"} items-center justify-center px-2 py-1 gap-1.5 bg-white border-2 border-indigo-500 rounded-sm`}>
                         <CircleUserRound size={18} className="shrink" />
                         <p className="font-medium text-sm truncate text-slate-900">{props.patientName} {props.patientLastName}</p>

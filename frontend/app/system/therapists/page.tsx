@@ -51,7 +51,7 @@ function Therapists() {
                 const res = await api.get("/therapists");
                 const data: TherapistType[] = res.data;
                 setTherapistData(data);
-                
+
                 data.forEach((therapist) => {
                     if (therapist._id === therapistId) {
                         setTherapistName(therapist.name + " " + therapist.lastName);
@@ -70,11 +70,13 @@ function Therapists() {
     }, [completedAction, cardAction])
 
     function onActionSelected(action: string, id: string) {
+        console.log("none");
         setCardAction(action);
         setTherapistId(id);
     };
 
     function onScheduleActionSelected(action: string, therapistId: string, hour: string, day: string, patientId: string, patientName: string, patientLastName: string) {
+        console.log("id:", therapistId);
         setCardAction(action);
         setTherapistId(therapistId);
         setScheduleHour(hour);
@@ -202,9 +204,11 @@ function Therapists() {
             )}
 
             {!isLoading && (cardAction === "schedule" || cardAction === "add-to-schedule" || cardAction === "edit-schedule-item" || cardAction === "remove-schedule-item") && (
-                <ScheduleActionContext.Provider value={onScheduleActionSelected}>
-                    <TherapistSchedule therapistName={therapistName} therapistId={therapistId} schedule={therapistSchedule} mode="view" />
-                </ScheduleActionContext.Provider>
+                <CardActionContext.Provider value={onActionSelected}>
+                    <ScheduleActionContext.Provider value={onScheduleActionSelected}>
+                        <TherapistSchedule therapistName={therapistName} therapistId={therapistId} schedule={therapistSchedule} mode="view" />
+                    </ScheduleActionContext.Provider>
+                </CardActionContext.Provider>
             )}
         </ SystemLayout>
     );

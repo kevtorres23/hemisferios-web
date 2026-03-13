@@ -3,7 +3,7 @@
 import { ScheduleItem } from "../../../utils/types";
 import { useContext } from "react";
 import { ScheduleActionContext } from "@/app/system/therapists/page";
-import SchedulePatient from "./SchedulePatient";
+import SchedulePatient from "./SchedulePatientCard";
 
 type DayProps = {
     dayName?: string,
