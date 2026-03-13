@@ -1,84 +1,178 @@
 "use client";
 
+import toast, { Toaster } from 'react-hot-toast';
 import SystemLayout from "@/components/system/SystemLayout";
-import { NewTherapistModal, ModifyTherapistModal, RemoveTherapistModal } from "@/components/system/modals/TherapistActions";
+import { NewTherapistModal, ModifyTherapistModal, RemoveTherapistModal, RemoveSchedulePatientModal } from "@/components/system/modals/TherapistActions";
+import { AddPatientScheduleModal, UpdatePatientScheduleModal } from '@/components/system/modals/ScheduleActions';
 import EmptyState from "@/components/system/EmptyState";
 import TherapistSchedule from "@/components/system/therapists/TherapistSchedule";
 import therapistEmpty from "../../../public/therapists-empty.png";
-import { pageSeparator } from "@/utils/system/page-separator";
 import IconButton from "@/components/system/IconButton";
-import SuccessModal from "@/components/system/modals/SuccessModal";
-import { Plus, SquarePen } from "lucide-react";
+import { Plus } from "lucide-react";
 import PageTitle from "@/components/system/PageTitle";
-import { TherapistType } from "@/utils/types";
-import { useState, createContext } from "react";
+import { TherapistType, ScheduleItem } from "@/utils/types";
+import { useState, createContext, useEffect } from "react";
 import TherapistGrid from "@/components/system/therapists/TherapistGrid";
+import api from '@/lib/axios';
+import LoadingState from '@/components/system/LoadingState';
+import { ScheduleItemClass, Therapist } from '@/utils/classes';
 
-export const CardActionContext = createContext<(action: string) => void>(() => "");
-
-type TherapistDataset = TherapistType[];
+export const CardActionContext = createContext<(action: string, id: string) => void>(() => "");
+export const ScheduleActionContext = createContext<(
+    action: string,
+    therapistId: string,
+    hour: string,
+    day: string,
+    patientId: string,
+    patientName: string,
+    patientLastName: string) => void>(() => "");
 
 function Therapists() {
-    const [successfulAction, setSuccessfulAction] = useState("");
 
     // Modal variables.
     const [newTherapistModal, setNewTherapistModal] = useState(false);
     const [cardAction, setCardAction] = useState("");
-    const [success, setSuccess] = useState(false);
+    const [therapistName, setTherapistName] = useState("");
+    const [therapistData, setTherapistData] = useState<TherapistType[]>([]);
+    const [therapistSchedule, setTherapistSchedule] = useState<ScheduleItem[]>([]);
 
-    const data: TherapistDataset = [
-        {
-            "name": "Arlet",
-            "lastName": "Torres",
-            "startingDate": "February, 2024",
-            "contactNumber": "618-206-8767",
-            "schedule": [
-                {
-                    "patient": "Kevin Torres",
-                    "hour": "11:00",
-                    "day": "Tuesday",
-                },
-            ],
-        },
-    ];
+    const [scheduleHour, setScheduleHour] = useState("");
+    const [scheduleDay, setScheduleDay] = useState("");
+    const [schedulePatientName, setSchedulePatientName] = useState("");
+    const [schedulePatientLastName, setSchedulePatientLastName] = useState("");
+    const [schedulePatientId, setSchedulePatientId] = useState("");
+    const [therapistId, setTherapistId] = useState("");
+    const [completedAction, setCompletedAction] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
 
-    let therapistPages = pageSeparator(data);
+    useEffect(() => {
+        const fetchAllTherapists = async () => {
+            try {
+                const res = await api.get("/therapists");
+                const data: TherapistType[] = res.data;
+                setTherapistData(data);
 
+                data.forEach((therapist) => {
+                    if (therapist._id === therapistId) {
+                        setTherapistName(therapist.name + " " + therapist.lastName);
+                        setTherapistSchedule(therapist.schedule);
+                    }
+                });
 
-    function onActionSelected(action: string) {
+            } catch (error) {
+                console.log("Error while fetching the therapists:", error);
+            } finally {
+                setIsLoading(false);
+            };
+        };
+
+        fetchAllTherapists();
+    }, [completedAction, cardAction])
+
+    function onActionSelected(action: string, id: string) {
+        console.log("none");
         setCardAction(action);
+        setTherapistId(id);
+    };
+
+    function onScheduleActionSelected(action: string, therapistId: string, hour: string, day: string, patientId: string, patientName: string, patientLastName: string) {
+        console.log("id:", therapistId);
+        setCardAction(action);
+        setTherapistId(therapistId);
+        setScheduleHour(hour);
+        setScheduleDay(day);
+        setSchedulePatientId(patientId);
+        setSchedulePatientName(patientName);
+        setSchedulePatientLastName(patientLastName);
     };
 
     function showSuccessModal(successMsg: string) {
-        setSuccess(true);
-        setSuccessfulAction(successMsg)
-        setTimeout(() => setSuccess(false), 3000);
+        toast.success(<p className="font-medium">{successMsg}</p>, { duration: 2000 });
     };
-
 
     function saveTherapist() {
         setNewTherapistModal(false);
-        showSuccessModal("¡Terapeuta registrado correctamente!");
+        setCardAction("");
+        showSuccessModal("¡Terapeuta registrado!");
+        setCompletedAction((completedAction) => completedAction += 1);
     };
 
     function modifyTherapist() {
         setCardAction("");
-        showSuccessModal("¡Terapeuta actualizado correctamente!");
+        showSuccessModal("¡Terapeuta actualizado!");
+        setCompletedAction((completedAction) => completedAction += 1);
     }
 
     function removeTherapist() {
-        // DELETE axios controller.
+        api.delete("/therapists/" + therapistId);
         setCardAction("");
-        showSuccessModal("Terapeuta eliminado correctamente.");
+        setTherapistData((prev: TherapistType[]) => prev.filter((therapist) => therapist._id != therapistId))
+        showSuccessModal("Terapeuta eliminado.");
     };
 
+    function saveSchedulePatient() {
+        setCardAction("schedule");
+        showSuccessModal("Paciente agregado al horario.");
+        setCompletedAction((completedAction) => completedAction += 1);
+    };
+
+    function updateSchedulePatient() {
+        setCardAction("schedule");
+        showSuccessModal("Paciente actualizado.");
+        setCompletedAction((completedAction) => completedAction += 1);
+    };
+
+    async function onRemoveSchedulePatient() {
+        try {
+            const res = await api.get("/therapists/" + therapistId);
+            const foundTherapist: TherapistType = res.data;
+            const therapistSchedule: ScheduleItemClass[] = [];
+
+            foundTherapist.schedule.forEach((patient) => {
+                if (patient._id === schedulePatientId) {
+                    true;
+                } else {
+                    therapistSchedule.push(patient);
+                };
+            });
+
+            const updatedTherapist = new Therapist(foundTherapist.name, foundTherapist.lastName, foundTherapist.startingDate, foundTherapist.contactNumber, therapistSchedule);
+            await api.put("/therapists/" + therapistId, updatedTherapist);
+
+        } catch (error) {
+            console.log("An error ocurred while updating the therapist's schedule:", error);
+        } finally {
+            setCardAction("schedule");
+            showSuccessModal("Paciente eliminado del horario.");
+            setCompletedAction((completedAction) => completedAction += 1);
+        };
+    }
+
     return (
-        <SystemLayout sidebarPage="therapists" isAnyModal={newTherapistModal || cardAction === "cancel" || cardAction === "modify" || cardAction === "history" || cardAction === "remove"}
+        <SystemLayout sidebarPage="therapists" isAnyModal={newTherapistModal || cardAction === "modify" || cardAction === "remove" || cardAction === "add-to-schedule" || cardAction === "edit-schedule-item" || cardAction === "remove-schedule-item"}
             modals={
                 <>
-                    <NewTherapistModal onSave={saveTherapist} isVisible={newTherapistModal} onClose={() => setNewTherapistModal(false)} />
-                    <RemoveTherapistModal onSave={removeTherapist} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />
-                    <ModifyTherapistModal onSave={modifyTherapist} isVisible={cardAction === "modify"} onClose={() => setCardAction("")} />
+                    {newTherapistModal && (<NewTherapistModal onSave={saveTherapist} isVisible={newTherapistModal} onClose={() => setNewTherapistModal(false)} />)}
+
+                    {cardAction === "remove" && (<RemoveTherapistModal onSave={removeTherapist} isVisible={cardAction === "remove"} onClose={() => setCardAction("")} />)}
+
+                    {cardAction === "modify" && (<ModifyTherapistModal onSave={modifyTherapist} updateElementId={therapistId} isVisible={cardAction === "modify"} onClose={() => setCardAction("")} />)}
+
+                    {cardAction === "add-to-schedule" && (<AddPatientScheduleModal onSave={saveSchedulePatient} isVisible={cardAction === "add-to-schedule"} therapistId={therapistId} hour={scheduleHour} day={scheduleDay} onClose={() => setCardAction("schedule")} />)}
+
+                    {cardAction === "edit-schedule-item" && (<UpdatePatientScheduleModal
+                        onSave={updateSchedulePatient}
+                        isVisible={cardAction === "edit-schedule-item"}
+                        therapistId={therapistId}
+                        patientName={schedulePatientName}
+                        patientLastName={schedulePatientLastName}
+                        schedulePatientId={schedulePatientId}
+                        hour={scheduleHour}
+                        day={scheduleDay}
+                        onClose={() => setCardAction("schedule")}
+                    />)}
+
+                    {cardAction === "remove-schedule-item" && (<RemoveSchedulePatientModal isVisible={cardAction === "remove-schedule-item"} onSave={onRemoveSchedulePatient} onClose={() => setCardAction("schedule")} />)}
                 </>
             }
         >
@@ -91,21 +185,29 @@ function Therapists() {
                 </div>
             </div>
 
-            <SuccessModal isVisible={success} text={successfulAction} />
+            <Toaster />
 
-            {(data.length === 0) ? (
+            {isLoading && <LoadingState message="Cargando terapeutas..." />}
+
+            {!isLoading && therapistData.length === 0 && (
                 <EmptyState
                     header="¡No hay terapeutas registrados aún!"
                     desc="Empieza registrando un terapeuta para empezar a ver la lista."
                     image={therapistEmpty}
                 />
-            ) : (cardAction === "schedule") ? (
+            )}
+
+            {!isLoading && cardAction != "schedule" && cardAction != "add-to-schedule" && cardAction != "edit-schedule-item" && cardAction != "remove-schedule-item" && (
                 <CardActionContext.Provider value={onActionSelected}>
-                    <TherapistSchedule data={data} mode="view" />
+                    <TherapistGrid data={therapistData} onSearchChange={() => ""} />
                 </CardActionContext.Provider>
-            ) : (
+            )}
+
+            {!isLoading && (cardAction === "schedule" || cardAction === "add-to-schedule" || cardAction === "edit-schedule-item" || cardAction === "remove-schedule-item") && (
                 <CardActionContext.Provider value={onActionSelected}>
-                    <TherapistGrid data={therapistPages} onSearchChange={() => ""} />
+                    <ScheduleActionContext.Provider value={onScheduleActionSelected}>
+                        <TherapistSchedule therapistName={therapistName} therapistId={therapistId} schedule={therapistSchedule} mode="view" />
+                    </ScheduleActionContext.Provider>
                 </CardActionContext.Provider>
             )}
         </ SystemLayout>

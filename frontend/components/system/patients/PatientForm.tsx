@@ -23,8 +23,6 @@ type FormProps = {
 const todayDate = new Date();
 
 function NewPatientForm(props: FormProps) {
-    console.log("formulario:", props.formId);
-
     // Variables for the input values.
     const [patientName, setPatientName] = useState("");
     const [motherSurname, setMotherSurname] = useState("");

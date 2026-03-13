@@ -1,21 +1,33 @@
-import { TherapistType } from "@/utils/types";
 import Input from "@/components/website/Input";
 import InputWarning from "@/components/website/InputWarning";
-import { InputChange, SelectChange } from "@/utils/website/input-change-handlers";
-import { useState } from "react";
+import { InputChange } from "@/utils/website/input-change-handlers";
+import { dateFormatter } from "@/utils/system/appointments/appointment-formatter";
+import { ScheduleItem } from "@/utils/types";
+import { useEffect, useState } from "react";
 import { DayPicker } from "../DayPicker";
+import { format } from "date-fns"
+import { es } from "date-fns/locale";
+import { Therapist } from "@/utils/classes";
+import api from "@/lib/axios";
 
 type FormProps = {
-    sendData: (therapistObject: TherapistType) => void;
+    sendData: (therapistObject: Therapist) => void;
+    modifyData: (therapistObject: Therapist) => void;
     isOnModify?: boolean;
+    formId: string;
+    editionId: string;
 };
 
 function NewTherapistForm(props: FormProps) {
+    const todayDate = new Date();
+
     // Variables for the input values.
     const [therapistName, setTherapistName] = useState("");
     const [lastName, setLastName] = useState("");
     const [contactNumber, setContactNumber] = useState("");
-    const [startingDate, setStartingDate] = useState("");
+    const [startingDate, setStartingDate] = useState<Date>(todayDate);
+    const [formattedStartingDate, setFormattedStartingDate] = useState("");
+    const [schedule, setSchedule] = useState<ScheduleItem[]>([]);
 
     // Input validations.
     const [validationsShot, setValidationsShot] = useState(false);
@@ -24,12 +36,96 @@ function NewTherapistForm(props: FormProps) {
     const [numberValidation, setNumberValidation] = useState(false);
     const [startingDateValidation, setStartingDateValidation] = useState(false);
 
-    function shootValidations(e: React.FormEvent) {
+    useEffect(() => {
+        const getEditableTherapist = async () => {
+            try {
+                const res = await api.get("/therapists/" + props.editionId);
+                setTherapistName(res.data.name);
+                setLastName(res.data.lastName);
+                setContactNumber(res.data.contactNumber);
+                setSchedule(res.data.schedule);
+                setFormattedStartingDate(dateFormatter(res.data.startingDate));
+
+            } catch (error) {
+                console.log("Error while fetching the therapist's info:", error);
+            };
+        };
+
+        if (props.isOnModify) {
+            getEditableTherapist();
+        };
+    }, []);
+
+    function shootValidations(e: React.SubmitEvent) {
+        setValidationsShot(true);
         e.preventDefault();
+
+        if (!therapistName) { setNameValidation(true); };
+        if (!lastName) { setLastNameValidation(true); };
+        if (!contactNumber) { setNumberValidation(true); };
+        if (!startingDate) { setStartingDateValidation(true); };
+
+        if (contactNumber.length < 10) {
+            setNumberValidation(true);
+        } else if (therapistName && lastName && contactNumber && formattedStartingDate) {
+            shootData();
+        };
+    };
+
+    type Months = "enero" | "febrero" | "marzo" | "abril" | "mayo" | "junio" | "julio" | "agosto" | "septiembre" | "octubre" | "noviembre" | "diciembre";
+
+    function proseToDate(date: string) {
+        const months: Record<Months, string> = {
+            "enero": "01",
+            "febrero": "02",
+            "marzo": "03",
+            "abril": "04",
+            "mayo": "05",
+            "junio": "06",
+            "julio": "07",
+            "agosto": "08",
+            "septiembre": "09",
+            "octubre": "10",
+            "noviembre": "11",
+            "diciembre": "12"
+        }
+
+        const separatedDate = date.split(" de ");
+
+        return {
+            day: Number(separatedDate[0]),
+            month: Number(months[separatedDate[1] as keyof Record<Months, string>]),
+            year: Number(separatedDate[2])
+        };
+    };
+
+    function shootData() {
+        let startDate;
+
+        if (props.isOnModify) {
+            let conversion = proseToDate(formattedStartingDate);
+            let convertedDate = new Date(conversion.year, conversion.month - 1, conversion.day)
+            startDate = format(convertedDate, "dd-MM-yyyy")
+        } else {
+            startDate = format(startingDate, "dd-MM-yyyy");
+        }
+
+        if (props.formId === "editTherapistForm") {
+            const newTherapistObject = new Therapist(therapistName, lastName, startDate, contactNumber, schedule);
+            props.modifyData(newTherapistObject);
+        } else {
+            const newTherapistObject = new Therapist(therapistName, lastName, startDate, contactNumber);
+            props.sendData(newTherapistObject);
+        };
+    };
+
+    function onStartingDateChange(date: Date) {
+        setStartingDate(date);
+        setFormattedStartingDate(format(date, "PPP", { locale: es }));
     };
 
     return (
-        <form id="therapistForm" action="" onSubmit={(e) => shootValidations(e)} className="flex flex-col gap-4 w-full">
+        <form id={props.formId} onSubmit={(e) => shootValidations(e)} className="flex flex-col gap-4 w-full">
             <Input type="text" textValue={therapistName} label="Nombre de el/de la terapeuta" onInputChange={(e) => InputChange(e, therapistName, setTherapistName, validationsShot, setNameValidation)} activeValidation={nameValidation} />
             {nameValidation && (
                 <InputWarning message="Por favor, escribe el nombre del terapeuta." />
@@ -45,17 +141,14 @@ function NewTherapistForm(props: FormProps) {
                 <InputWarning message="Por favor, ingresa un número de teléfono válido." />
             )}
 
-            <div className="label gap-3 flex flex-row w-full">
+            <div className="label gap-3 flex flex-row w-full items-end justify-center">
 
-                <Input type="text" textValue={startingDate} label="Fecha de inicio" onInputChange={(e) => InputChange(e, startingDate, setStartingDate, validationsShot, setStartingDateValidation)} activeValidation={startingDateValidation} />
+                <Input type="text" placeholder="Escoge una fecha en el calendario" textValue={formattedStartingDate} label="Fecha de inicio" onInputChange={onStartingDateChange} activeValidation={startingDateValidation} />
                 {startingDateValidation && (
                     <InputWarning message="Por favor, selecciona una fecha." />
                 )}
 
-                <DayPicker />
-                {startingDateValidation && (
-                    <InputWarning message="Por favor, selecciona una fecha." />
-                )}
+                <DayPicker onSelectDate={(date: Date) => onStartingDateChange(date)} />
             </div>
         </form>
     );

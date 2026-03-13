@@ -3,7 +3,7 @@ import { PatientHistory } from "@/utils/types";
 import { CardActionContext } from "@/app/system/patients/page";
 import { ModalityTag } from "./PaymentTag";
 import { Button } from "@/components/ui/button";
-import { calculateNextPayment, establishPaymentDate } from "@/utils/system/patients/next-payments";
+import { establishPaymentDate } from "@/utils/system/patients/next-payments";
 import { Ellipsis, SquarePen, Trash, UserRound, Phone, CircleUserRound, HandCoins, CalendarClock, HouseHeart } from "lucide-react";
 import {
     DropdownMenu,
@@ -12,6 +12,9 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { stringToDate } from "@/utils/system/calendar/calendar-methods";
+import { es } from "date-fns/locale";
+import { format } from "date-fns";
 
 type PatientProps = {
     _id: string;
@@ -28,8 +31,15 @@ type PatientProps = {
 
 function PatientCard(props: PatientProps) {
     const setAction = useContext(CardActionContext);
+    
+    const dateConversion = stringToDate(props.startingDate);
+    const startingDate = new Date(dateConversion.year, dateConversion.month, dateConversion.day);
+    const formattedDate = format(startingDate, "PP", { locale: es });
 
     let paymentDate = establishPaymentDate(props.paymentFrequency, props.startingDate);
+    const paymentDateConversion = stringToDate(paymentDate ? paymentDate : "");
+    const newPaymentDate = new Date(paymentDateConversion.year, paymentDateConversion.month, paymentDateConversion.day);
+    const formattedPayment = format(newPaymentDate, "PP", { locale: es });
 
     return (
         <div className="relative flex flex-col gap-2 overflow-y-visible rounded-md border border-slate-200 p-6 items-start justify-center overflow-x-hidden">
@@ -88,14 +98,14 @@ function PatientCard(props: PatientProps) {
                     <div className="date flex flex-row gap-1 items-center justify-center">
                         <HouseHeart size={18} className="text-slate-400" />
                         <p className="text-sm text-slate-950">
-                            <span className="text-slate-400 font-normal">Fecha de inicio:</span> {props.startingDate}
+                            <span className="text-slate-400 font-normal">Fecha de inicio:</span> {formattedDate}
                         </p>
                     </div>
 
                     <div className="date flex flex-row gap-1 items-center justify-center">
                         <HandCoins size={18} className="text-slate-400" />
                         <p className="text-sm text-slate-950">
-                            <span className="text-slate-400 font-normal">Próximo pago:</span> {paymentDate}
+                            <span className="text-slate-400 font-normal">Próximo pago:</span> {formattedPayment}
                         </p>
                     </div>
                 </DropdownMenuContent>

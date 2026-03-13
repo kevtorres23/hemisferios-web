@@ -9,6 +9,9 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { stringToDate } from "@/utils/system/calendar/calendar-methods";
+import { es } from "date-fns/locale";
+import { format } from "date-fns";
 
 type TherapistSchedule = {
     patient: string;
@@ -17,6 +20,7 @@ type TherapistSchedule = {
 };
 
 type TherapistProps = {
+    _id: string;
     name: string;
     lastName: string;
     startingDate: string;
@@ -26,7 +30,10 @@ type TherapistProps = {
 
 function TherapistCard(props: TherapistProps) {
     const setAction = useContext(CardActionContext);
-    const [patientNum, setPatientNum] = useState(0);
+    console.log(props.startingDate);
+    const dateConversion = stringToDate(props.startingDate);
+    const startingDate = new Date(dateConversion.year, dateConversion.month - 1, dateConversion.day);
+    const formattedDate = format(startingDate, "PP", { locale: es });
 
     return (
         <div className="relative flex flex-col gap-2.5 overflow-y-visible rounded-md border border-slate-200 p-6 items-start justify-center overflow-x-hidden">
@@ -46,17 +53,17 @@ function TherapistCard(props: TherapistProps) {
                     <DropdownMenuContent className="w-auto" align="start">
 
                         <DropdownMenuGroup className="">
-                            <DropdownMenuItem onClick={() => setAction("schedule")} className="flex flex-row gap-1.5 items-center">
+                            <DropdownMenuItem onClick={() => setAction("schedule", props._id)} className="flex flex-row gap-1.5 items-center">
                                 <History size={16} className="text-slate-800" />
                                 <p className="text-slate-800">Ver horario de la semana</p>
                             </DropdownMenuItem>
 
-                            <DropdownMenuItem onClick={() => setAction("modify")} className="flex flex-row gap-1.5 items-center">
+                            <DropdownMenuItem onClick={() => setAction("modify", props._id)} className="flex flex-row gap-1.5 items-center">
                                 <SquarePen size={16} className="text-slate-800" />
                                 <p className="text-slate-800">Modificar datos</p>
                             </DropdownMenuItem>
 
-                            <DropdownMenuItem onClick={() => setAction("remove")} className="flex flex-row gap-1.5 items-center">
+                            <DropdownMenuItem onClick={() => setAction("remove", props._id)} className="flex flex-row gap-1.5 items-center">
                                 <Trash size={16} className="text-slate-800" />
                                 <p className="text-slate-800">Eliminar terapeuta</p>
                             </DropdownMenuItem>
@@ -72,7 +79,7 @@ function TherapistCard(props: TherapistProps) {
             <div className="date flex flex-row gap-1 items-center justify-center">
                 <Calendar size={16} className="text-slate-400" />
                 <p className="text-sm text-slate-900">
-                    <span className="text-slate-400 font-medium">Inicio:</span> {props.startingDate}
+                    <span className="text-slate-400 font-medium">Inicio:</span> {formattedDate}
                 </p>
             </div>
 
@@ -83,7 +90,7 @@ function TherapistCard(props: TherapistProps) {
                 </p>
             </div>
 
-            <p className="text-sm font-medium text-indigo-500">{patientNum} pacientes esta semana</p>
+            <p className="text-sm font-medium text-indigo-500">{props.schedule.length} pacientes esta semana</p>
         </div>
     );
 };

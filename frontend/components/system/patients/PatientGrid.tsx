@@ -46,7 +46,7 @@ function PatientGrid(props: GridProps) {
             setCurrentPage(currentPage - 1);
         };
 
-    }, [cashChecked, cardChecked, monthlyChecked, weeklyChecked, props.data])
+    }, [cashChecked, cardChecked, monthlyChecked, weeklyChecked, props.data]);
 
     return (
         <div className="w-full flex h-full border border-slate-200 bg-white rounded-lg p-6 flex-col gap-6">

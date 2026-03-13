@@ -30,7 +30,6 @@ export async function createTherapist(req, res) {
             lastName,
             startingDate,
             contactNumber,
-            schedule
         } = req.body;
 
         const newTherapist = new Therapist({
@@ -38,7 +37,6 @@ export async function createTherapist(req, res) {
             lastName,
             startingDate,
             contactNumber,
-            schedule
         });
 
         const savedTherapist = await newTherapist.save();
@@ -78,7 +76,6 @@ export async function updateTherapist(req, res) {
         res.status(500).json({ message: "Internal server error." })
     }
 };
-
 
 export async function deleteTherapist(req, res) {
     try {

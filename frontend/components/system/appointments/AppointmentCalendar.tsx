@@ -119,9 +119,6 @@ function AppointmentCalendar(props: CalendarProps) {
                         </div>
                     )}
 
-                    {/* Crear funciones que reciban el valor actual del mes del intervalo del historial (Zustand)
-                        y que calculen las 4 semanas de ese mes en dicho año con weekCreator y los intervalos de cada semana (una nueva funcion para esto).
-                    */}
                     {props.page === "history" && (
                         <div className="week-indicator px-2.5 py-1 border border-indigo-400 bg-indigo-50 rounded-sm">
                             <p className="text-sm text-indigo-500 font-medium">

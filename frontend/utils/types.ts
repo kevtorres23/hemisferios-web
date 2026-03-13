@@ -30,18 +30,21 @@ interface PatientType {
     paymentModality: string;
 };
 
-interface TherapistSchedule {
-    patient: string;
+interface ScheduleItem {
+    patientName: string;
+    patientLastName: string;
     hour: string;
     day: string;
+    _id: string;
 };
 
 interface TherapistType {
+    _id: string;
     name: string;
     lastName: string;
     startingDate: string;
     contactNumber: string;
-    schedule: TherapistSchedule[];
+    schedule: ScheduleItem[];
 };
 
 type CommentType = {
@@ -105,6 +108,7 @@ export type {
     UpdateStatusModal,
     PatientType,
     TherapistType,
+    ScheduleItem,
     PatientHistory,
     CommentType,
     DayFormat,
