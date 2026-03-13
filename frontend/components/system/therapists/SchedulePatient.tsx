@@ -9,17 +9,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useContext } from "react";
-import { CardActionContext } from "@/app/system/therapists/page";
+import { ScheduleActionContext } from "@/app/system/therapists/page";
 
 type CardProps = {
     patientName: string;
     patientLastName: string;
     scheduleMode: string;
-    id: string;
+    hour: string;
+    day: string;
+    therapistId: string;
+    patientId: string;
 }
 
 function SchedulePatient(props: CardProps) {
-    const setAction = useContext(CardActionContext);
+    const setAction = useContext(ScheduleActionContext);
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -34,14 +37,14 @@ function SchedulePatient(props: CardProps) {
             {props.scheduleMode === "edit" && (
                 <DropdownMenuContent className="p-1.5">
                     <DropdownMenuGroup className="w-auto">
-                        <DropdownMenuItem onClick={() => setAction("editScheduleItem", props.id)} className="flex flex-row gap-1.5 items-center">
+                        <DropdownMenuItem onClick={() => setAction("edit-schedule-item", props.therapistId, props.hour, props.day, props.patientId, props.patientName, props.patientLastName)} className="flex flex-row gap-1.5 items-center">
                             <SquarePen size={16} className="text-slate-800" />
-                            <p className="text-slate-800">Modificar paciente</p>
+                            <p className="text-slate-800">Modificar nombre</p>
                         </DropdownMenuItem>
 
-                        <DropdownMenuItem onClick={() => setAction("removeScheduleItem", props.id)} className="flex flex-row gap-1.5 items-center">
+                        <DropdownMenuItem onClick={() => setAction("remove-schedule-item", props.therapistId, props.hour, props.day, props.patientId, props.patientName, props.patientLastName)} className="flex flex-row gap-1.5 items-center">
                             <Trash size={16} className="text-slate-800" />
-                            <p className="text-slate-800">Eliminar paciente</p>
+                            <p className="text-slate-800">Eliminar del horario</p>
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                 </DropdownMenuContent>

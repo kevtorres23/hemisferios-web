@@ -1,47 +1,25 @@
 "use client";
 
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import { CardActionContext } from "@/app/system/therapists/page";
 import { ArrowLeft, X, Check } from "lucide-react";
 import IconButton from "../IconButton";
 import CancelButton from "../CancelButton";
-import { TherapistType } from "@/utils/types";
 import { ScheduleUI } from "./ScheduleElements";
 import { SquarePen } from "lucide-react";
-import LoadingState from "../LoadingState";
 import { ScheduleItem } from "@/utils/types";
-import api from "@/lib/axios";
 
 type ScheduleProps = {
     therapistId: string;
+    therapistName: string;
+    schedule: ScheduleItem[];
     mode: "view" | "edit";
 };
 
 function TherapistSchedule(props: ScheduleProps) {
-    const [isLoading, setIsLoading] = useState(true);
-    const [schedule, setSchedule] = useState<ScheduleItem[]>([]);
-
     // State variables.
-    const [therapistName, setTherapistName] = useState("");
     const [scheduleMode, setScheduleMode] = useState<"view" | "edit">("view");
     const setAction = useContext(CardActionContext);
-
-    useEffect(() => {
-        const getTherapistById = async () => {
-            try {
-                const res = await api.get("/therapists/" + props.therapistId);
-                const therapistInfo: TherapistType = res.data;
-                setTherapistName(therapistInfo.name + " " + therapistInfo.lastName);
-                setSchedule(therapistInfo.schedule);
-            } catch (error) {
-                console.log("An error ocurred while getting the therapist info:", error);
-            } finally {
-                setIsLoading(false);
-            };
-        };
-
-        getTherapistById();
-    }, []);
 
     return (
         <div className="w-full flex h-full border border-slate-200 bg-white rounded-lg p-6 flex-col gap-6">
@@ -50,7 +28,7 @@ function TherapistSchedule(props: ScheduleProps) {
                     <ArrowLeft onClick={() => setAction("", props.therapistId)} size={24} className="text-slate-500 hover:text-indigo-500 cursor-pointer" />
 
                     <p className="text-2xl font-medium text-slate-900 tracking-tight text-center">
-                        Horario de {therapistName}
+                        Horario de {props.therapistName}
                     </p>
                 </div>
 
@@ -68,9 +46,7 @@ function TherapistSchedule(props: ScheduleProps) {
                 </div>
             </div>
 
-            {isLoading && <LoadingState message="Cargando horario..." />}
-
-            {!isLoading && <ScheduleUI therapistId={props.therapistId} data={schedule} mode={scheduleMode} />}
+            <ScheduleUI therapistId={props.therapistName} data={props.schedule} mode={scheduleMode} />
         </div>
     );
 };

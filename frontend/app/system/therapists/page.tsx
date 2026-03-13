@@ -2,19 +2,20 @@
 
 import toast, { Toaster } from 'react-hot-toast';
 import SystemLayout from "@/components/system/SystemLayout";
-import { NewTherapistModal, ModifyTherapistModal, RemoveTherapistModal } from "@/components/system/modals/TherapistActions";
-import { AddPatientScheduleModal } from '@/components/system/modals/ScheduleActions';
+import { NewTherapistModal, ModifyTherapistModal, RemoveTherapistModal, RemoveSchedulePatientModal } from "@/components/system/modals/TherapistActions";
+import { AddPatientScheduleModal, UpdatePatientScheduleModal } from '@/components/system/modals/ScheduleActions';
 import EmptyState from "@/components/system/EmptyState";
 import TherapistSchedule from "@/components/system/therapists/TherapistSchedule";
 import therapistEmpty from "../../../public/therapists-empty.png";
 import IconButton from "@/components/system/IconButton";
 import { Plus } from "lucide-react";
 import PageTitle from "@/components/system/PageTitle";
-import { TherapistType } from "@/utils/types";
+import { TherapistType, ScheduleItem } from "@/utils/types";
 import { useState, createContext, useEffect } from "react";
 import TherapistGrid from "@/components/system/therapists/TherapistGrid";
 import api from '@/lib/axios';
 import LoadingState from '@/components/system/LoadingState';
+import { ScheduleItemClass, Therapist } from '@/utils/classes';
 
 export const CardActionContext = createContext<(action: string, id: string) => void>(() => "");
 export const ScheduleActionContext = createContext<(
@@ -31,7 +32,10 @@ function Therapists() {
     // Modal variables.
     const [newTherapistModal, setNewTherapistModal] = useState(false);
     const [cardAction, setCardAction] = useState("");
+    const [therapistName, setTherapistName] = useState("");
     const [therapistData, setTherapistData] = useState<TherapistType[]>([]);
+    const [therapistSchedule, setTherapistSchedule] = useState<ScheduleItem[]>([]);
+
     const [scheduleHour, setScheduleHour] = useState("");
     const [scheduleDay, setScheduleDay] = useState("");
     const [schedulePatientName, setSchedulePatientName] = useState("");
@@ -45,7 +49,16 @@ function Therapists() {
         const fetchAllTherapists = async () => {
             try {
                 const res = await api.get("/therapists");
-                setTherapistData(res.data);
+                const data: TherapistType[] = res.data;
+                setTherapistData(data);
+                
+                data.forEach((therapist) => {
+                    if (therapist._id === therapistId) {
+                        setTherapistName(therapist.name + " " + therapist.lastName);
+                        setTherapistSchedule(therapist.schedule);
+                    }
+                });
+
             } catch (error) {
                 console.log("Error while fetching the therapists:", error);
             } finally {
@@ -54,7 +67,7 @@ function Therapists() {
         };
 
         fetchAllTherapists();
-    }, [completedAction])
+    }, [completedAction, cardAction])
 
     function onActionSelected(action: string, id: string) {
         setCardAction(action);
@@ -97,12 +110,44 @@ function Therapists() {
 
     function saveSchedulePatient() {
         setCardAction("schedule");
-        showSuccessModal("¡Se agregó el paciente!");
+        showSuccessModal("Paciente agregado al horario.");
         setCompletedAction((completedAction) => completedAction += 1);
     };
 
+    function updateSchedulePatient() {
+        setCardAction("schedule");
+        showSuccessModal("Paciente actualizado.");
+        setCompletedAction((completedAction) => completedAction += 1);
+    };
+
+    async function onRemoveSchedulePatient() {
+        try {
+            const res = await api.get("/therapists/" + therapistId);
+            const foundTherapist: TherapistType = res.data;
+            const therapistSchedule: ScheduleItemClass[] = [];
+
+            foundTherapist.schedule.forEach((patient) => {
+                if (patient._id === schedulePatientId) {
+                    true;
+                } else {
+                    therapistSchedule.push(patient);
+                };
+            });
+
+            const updatedTherapist = new Therapist(foundTherapist.name, foundTherapist.lastName, foundTherapist.startingDate, foundTherapist.contactNumber, therapistSchedule);
+            await api.put("/therapists/" + therapistId, updatedTherapist);
+
+        } catch (error) {
+            console.log("An error ocurred while updating the therapist's schedule:", error);
+        } finally {
+            setCardAction("schedule");
+            showSuccessModal("Paciente eliminado del horario.");
+            setCompletedAction((completedAction) => completedAction += 1);
+        };
+    }
+
     return (
-        <SystemLayout sidebarPage="therapists" isAnyModal={newTherapistModal || cardAction === "modify" || cardAction === "remove" || cardAction === "add-to-schedule"}
+        <SystemLayout sidebarPage="therapists" isAnyModal={newTherapistModal || cardAction === "modify" || cardAction === "remove" || cardAction === "add-to-schedule" || cardAction === "edit-schedule-item" || cardAction === "remove-schedule-item"}
             modals={
                 <>
                     {newTherapistModal && (<NewTherapistModal onSave={saveTherapist} isVisible={newTherapistModal} onClose={() => setNewTherapistModal(false)} />)}
@@ -112,6 +157,20 @@ function Therapists() {
                     {cardAction === "modify" && (<ModifyTherapistModal onSave={modifyTherapist} updateElementId={therapistId} isVisible={cardAction === "modify"} onClose={() => setCardAction("")} />)}
 
                     {cardAction === "add-to-schedule" && (<AddPatientScheduleModal onSave={saveSchedulePatient} isVisible={cardAction === "add-to-schedule"} therapistId={therapistId} hour={scheduleHour} day={scheduleDay} onClose={() => setCardAction("schedule")} />)}
+
+                    {cardAction === "edit-schedule-item" && (<UpdatePatientScheduleModal
+                        onSave={updateSchedulePatient}
+                        isVisible={cardAction === "edit-schedule-item"}
+                        therapistId={therapistId}
+                        patientName={schedulePatientName}
+                        patientLastName={schedulePatientLastName}
+                        schedulePatientId={schedulePatientId}
+                        hour={scheduleHour}
+                        day={scheduleDay}
+                        onClose={() => setCardAction("schedule")}
+                    />)}
+
+                    {cardAction === "remove-schedule-item" && (<RemoveSchedulePatientModal isVisible={cardAction === "remove-schedule-item"} onSave={onRemoveSchedulePatient} onClose={() => setCardAction("schedule")} />)}
                 </>
             }
         >
@@ -136,15 +195,15 @@ function Therapists() {
                 />
             )}
 
-            {!isLoading && cardAction != "schedule" && cardAction != "add-to-schedule" && (
+            {!isLoading && cardAction != "schedule" && cardAction != "add-to-schedule" && cardAction != "edit-schedule-item" && cardAction != "remove-schedule-item" && (
                 <CardActionContext.Provider value={onActionSelected}>
                     <TherapistGrid data={therapistData} onSearchChange={() => ""} />
                 </CardActionContext.Provider>
             )}
 
-            {!isLoading && (cardAction === "schedule" || cardAction === "add-to-schedule") && (
+            {!isLoading && (cardAction === "schedule" || cardAction === "add-to-schedule" || cardAction === "edit-schedule-item" || cardAction === "remove-schedule-item") && (
                 <ScheduleActionContext.Provider value={onScheduleActionSelected}>
-                    <TherapistSchedule therapistId={therapistId} mode="view" />
+                    <TherapistSchedule therapistName={therapistName} therapistId={therapistId} schedule={therapistSchedule} mode="view" />
                 </ScheduleActionContext.Provider>
             )}
         </ SystemLayout>

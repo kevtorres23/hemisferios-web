@@ -75,7 +75,7 @@ function RemoveTherapistModal(props: ModalProps) {
     );
 };
 
-function RemoveSchedulePatientModal(props: ActionModalProps) {
+function RemoveSchedulePatientModal(props: ModalProps) {
     return (
         <SmallModal
             isVisible={props.isVisible}

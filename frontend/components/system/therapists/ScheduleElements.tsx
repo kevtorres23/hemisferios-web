@@ -48,7 +48,7 @@ function ScheduleHour(props: HourProps) {
 
 function ScheduleSpace(props: SpaceProps) {
     return (
-        <div className={`min-w-40 w-full items-center justify-center ${props.mode === "view" ? "bg-white" : "bg-slate-100"} border-b border-l border-slate-200 flex flex-row gap-1.5 px-3 py-2 ${props.isLast ? "border-r" : ""}`}>
+        <div className={`min-w-40 w-full items-center justify-center ${props.mode === "view" ? "bg-white" : "bg-slate-100 hover:bg-slate-200"} border-b border-l border-slate-200 flex flex-row gap-1.5 px-3 py-2 ${props.isLast ? "border-r" : ""}`}>
             {props.content}
         </div>
     );
@@ -132,12 +132,15 @@ function ScheduleUI(props: ScheduleUIProps) {
                                 <ScheduleSpace
                                     key={id}
                                     content={ foundPatient.patientName === "" ?
-                                    <div key={id} className="w-full h-full cursor-pointer" onClick={props.mode === "edit" ? () => setAction("add-to-schedule", props.therapistId, scheduleHours[hourId], dayId.toString(), "", "", "") : undefined}></div> :
+                                    <div key={id} className={`w-full h-full ${props.mode === "edit" ? "cursor-pointer" : ""}`} onClick={props.mode === "edit" ? () => setAction("add-to-schedule", props.therapistId, scheduleHours[hourId], dayId.toString(), "", "", "") : undefined}></div> :
                                         <SchedulePatient
                                             patientName={foundPatient.patientName}
                                             patientLastName={foundPatient.patientLastName}
                                             scheduleMode={props.mode}
-                                            id={foundPatient._id}
+                                            patientId={foundPatient._id}
+                                            therapistId={props.therapistId}
+                                            hour={hours[hourId]}
+                                            day={dayId.toString()}
                                         />
                                     }
                                     isLast={id === 6}
