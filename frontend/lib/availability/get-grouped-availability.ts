@@ -3,7 +3,7 @@
 
 import api from "../axios";
 import type { Option } from '@/components/ui/multi-select';
-import { hourFormatter } from "@/utils/system/appointments/appointment-formatter";
+import { hourFormatter } from "@/utils/hour-methods";
 
 type AvailabilityContent = {
     monday: string[];

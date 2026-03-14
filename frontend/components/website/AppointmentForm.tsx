@@ -8,7 +8,9 @@ import SelectHourInput from "./SelectHourInput";
 import { Appointment } from "@/utils/classes";
 import InputWarning from "./InputWarning";
 import { InputChange, SelectChange } from "@/utils/website/input-change-handlers";
-import { dateFormatter } from "@/utils/system/appointments/appointment-formatter";
+import { format } from "date-fns";
+import { stringToDate } from "@/utils/date-methods";
+import { es } from "date-fns/locale";
 
 type FormProps = {
     sendData: (receiptObject: Appointment, databaseOject: Appointment) => void;
@@ -85,7 +87,7 @@ function AppointmentForm(props: FormProps) {
     function shootData() {
         const time = new Date();
         const appointmentStatus = props.isOnModify ? status : "pending"; // "Pending" is the default status that appointments have when they are created.
-        const formattedDate = dateFormatter(date);
+        const formattedDate = format(stringToDate(date), "PPP", { locale: es })
 
         const receiptAppointmentObj = new Appointment(appointmentStatus, patientName, fatherSurname, motherSurname, phoneNumber, formattedDate, hour, time);
         const databaseAppointmentObj = new Appointment(appointmentStatus, patientName, fatherSurname, motherSurname, phoneNumber, date, hour, time);

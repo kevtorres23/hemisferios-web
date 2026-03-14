@@ -3,10 +3,6 @@
 import { lessThanTen } from "@/utils/format-availability";
 import { AppointmentType } from "@/utils/types";
 
-// Global scope variables.
-const date = new Date();
-const currentMonth = date.getMonth();
-
 const getDaysInMonth = (year: number, month: number) => new Date(year, month, 0).getDate(); // Calculate the number of days in a given month.
 
 type weekDayObject = {
@@ -211,7 +207,7 @@ function calendarContentGenerator(weekList: weekDayObject[], hourId: number, day
 
     // The "data" parameter is the array of appointment objects brought from the database. We'll iterate over it.
     for (let i = 0; i < data.length; i++) {
-        let dataDay = data[i].date[0] + data[i].date[1];
+        let dataDay = data[i].date[8] + data[i].date[9]; //8th and 9th characters represent the day in a 'yyyy-MM-dd' format.
         let dataHour = data[i].hour;
 
         // If the hour and date of the current calendar's position is equal to the hour and date of the indexed appointment, it's a match.
@@ -241,9 +237,9 @@ function stringToDate(date: string) {
     }
 
     return {
-        day: Number(separatedDate[0]),
+        year: Number(separatedDate[0]),
         month: Number(separatedDate[1]),
-        year: Number(separatedDate[2]),
+        day: Number(separatedDate[2]),
     };
 };
 

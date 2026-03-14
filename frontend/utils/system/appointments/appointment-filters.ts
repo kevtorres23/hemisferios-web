@@ -1,7 +1,6 @@
 // Set of functions that are used to filter the appointments.
 
 import { AppointmentType } from "@/utils/types";
-import { useAppointmentFilters } from "./filter-store";
 import { stringToDate } from "../calendar/calendar-methods";
 
 type Status = {

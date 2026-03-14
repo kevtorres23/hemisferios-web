@@ -4,19 +4,19 @@ import { addDays, addMonths, compareAsc } from "date-fns";
 /**
  * Calculates the next payment's date for a patient right after its starting date in the center.
  * @param frequency Represents the frequency type of the patient. It can be **weekly** or **monthly**.
- * @param startingDate Represents the date that the patient started attending the center, written in a **DD/MM/YYYY** format.
- * @returns A *DD/MM/YYY* string representing the patient's next date.
+ * @param startingDate Represents the date that the patient started attending the center, written in a **yyyy-MM-dd** format.
+ * @returns A *yyyy-MM-dd* string representing the patient's next date.
  */
 
 function calculateNextPayment(frequency: string, startingDate: string) {
-    // Separating the 'DD/MM/YYYY' string into its day, month, and year values.
-    const day = startingDate[0] + startingDate[1];
-    const month = startingDate[3] + startingDate[4];
-    const year = startingDate[6] + startingDate[7] + startingDate[8] + startingDate[9];
+    // Separating the 'yyyy-MM-dd' string into its day, month, and year values.
+    const day = startingDate[8] + startingDate[9];
+    const month = startingDate[5] + startingDate[6];
+    const year = startingDate[0] + startingDate[1] + startingDate[2] + startingDate[3];
 
     const builtDate = new Date(Number(year), Number(month), Number(day)); // Building a new date with the previously separated values.
     let newDate; // Stores the new date values.
-    let nextPaymentDate; // Stores a new DD/MM/YYY string.
+    let nextPaymentDate; // Stores a new yyyy-MM-dd string.
 
     if (frequency === "weekly") {
         newDate = addDays(builtDate, 7); // We add seven days to the built date to get the next payment date when it is weekly.
@@ -24,15 +24,15 @@ function calculateNextPayment(frequency: string, startingDate: string) {
         newDate = addMonths(builtDate, 1); // We add 1 month to the built date to get the next payment date when it is monthly.
     };
 
-    nextPaymentDate = lessThanTen(newDate.getDate()) + "/" + lessThanTen(newDate.getMonth()) + "/" + lessThanTen(newDate.getFullYear());
+    nextPaymentDate =  newDate.getFullYear() + "-" + lessThanTen(newDate.getMonth()) + "-" + lessThanTen(newDate.getDate());
     return nextPaymentDate;
 };
 
 /**
  * Calculates the next payment date of a patient based on the current date.
  * @param frequency Represents the frequency type of the patient. It can be **weekly** or **monthly**.
- * @param date Represents the date from which the next payment calculations will be done, written in a **DD/MM/YYYY** format.
- * @returns A string representing the next payment date, written in a *DD/MM/YYYY* format.
+ * @param date Represents the date from which the next payment calculations will be done, written in a **yyyy-MM-dd** format.
+ * @returns A string representing the next payment date, written in a *yyyy-MM-dd* format.
  */
 
 function establishPaymentDate(frequency: string, date: string) {

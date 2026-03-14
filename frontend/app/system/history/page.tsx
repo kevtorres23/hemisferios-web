@@ -1,6 +1,7 @@
 "use client";
 
 import SystemLayout from "@/components/system/SystemLayout";
+import { format } from "date-fns";
 import toast, { Toaster } from 'react-hot-toast';
 import EmptyState from "@/components/system/EmptyState";
 import { historyAvailability } from "@/utils/system/history/history-registry";
@@ -121,8 +122,8 @@ function AppointmentHistory() {
 
         let newMonthLimits = monthLimits(Number(displayedYear), Number(val));
 
-        const newIntervalFirst = newMonthLimits.first + "/" + val + "/" + displayedYear;
-        const newIntervalSecond = newMonthLimits.last + "/" + val + "/" + displayedYear;
+        const newIntervalFirst = format(new Date(Number(displayedYear), Number(val), Number(newMonthLimits.first)), "yyyy-MM-dd");
+        const newIntervalSecond = format(new Date(Number(displayedYear), Number(val), Number(newMonthLimits.last)), "yyyy-MM-dd");
 
         updateHistoryInterval([newIntervalFirst, newIntervalSecond]);
     };
@@ -132,8 +133,8 @@ function AppointmentHistory() {
 
         let newMonthLimits = monthLimits(Number(displayedYear), Number(val));
 
-        const newIntervalFirst = newMonthLimits.first + "/" + lessThanTen(Number(displayedMonth)) + "/" + displayedYear;
-        const newIntervalSecond = newMonthLimits.last + "/" + lessThanTen(Number(displayedMonth)) + "/" + displayedYear;
+        const newIntervalFirst = format(new Date(Number(displayedYear), Number(val), Number(newMonthLimits.first)), "yyyy-MM-dd");
+        const newIntervalSecond = format(new Date(Number(displayedYear), Number(val), Number(newMonthLimits.last)), "yyyy-MM-dd");
 
         updateHistoryInterval([newIntervalFirst, newIntervalSecond]);
     };

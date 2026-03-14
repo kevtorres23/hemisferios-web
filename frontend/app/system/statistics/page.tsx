@@ -9,6 +9,7 @@ import CircleChartCard from "@/components/system/statistics/CircleChartCard";
 import RelevantNumbersCard from "@/components/system/statistics/RelevantNumbers";
 import MostFrequentPatients from "@/components/system/statistics/MostFrequentPatients";
 import BarChartCard from "@/components/system/statistics/BarChartCard";
+import { getstatusCount } from "@/lib/statistics/get-appointments-status";
 import {
     Select,
     SelectContent,
@@ -22,6 +23,11 @@ import {
 function Statistics() {
     const id = useId();
     const [displayedMonth, setDisplayedMonth] = useState("Febrero");
+    const [pendingCount, setPendingCount] = useState(0);
+    const [finishedCount, setFinishedCount] = useState(0);
+    const [cancelledCount, setCancelledCount] = useState(0);
+
+    // Implementar los filtros aquí.
 
     const recordMonths = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 

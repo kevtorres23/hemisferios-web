@@ -12,7 +12,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { stringToDate } from "@/utils/system/calendar/calendar-methods";
+import { stringToDate } from "@/utils/date-methods";
 import { es } from "date-fns/locale";
 import { format } from "date-fns";
 
@@ -33,12 +33,12 @@ function PatientCard(props: PatientProps) {
     const setAction = useContext(CardActionContext);
     
     const dateConversion = stringToDate(props.startingDate);
-    const startingDate = new Date(dateConversion.year, dateConversion.month, dateConversion.day);
+    const startingDate = new Date(dateConversion.getFullYear(), dateConversion.getMonth() - 1, dateConversion.getDate());
     const formattedDate = format(startingDate, "PP", { locale: es });
 
     let paymentDate = establishPaymentDate(props.paymentFrequency, props.startingDate);
     const paymentDateConversion = stringToDate(paymentDate ? paymentDate : "");
-    const newPaymentDate = new Date(paymentDateConversion.year, paymentDateConversion.month, paymentDateConversion.day);
+    const newPaymentDate = new Date(paymentDateConversion.getFullYear(), paymentDateConversion.getMonth() - 1, paymentDateConversion.getDate());
     const formattedPayment = format(newPaymentDate, "PP", { locale: es });
 
     return (

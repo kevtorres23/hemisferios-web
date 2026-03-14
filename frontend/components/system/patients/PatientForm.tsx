@@ -9,8 +9,8 @@ import { DayPicker } from "../DayPicker";
 import { useEffect, useState } from "react";
 import { Patient } from "@/utils/classes";
 import { lessThanTen } from "@/utils/format-availability";
+import { formattedToWrittenDate, stringToDate } from "@/utils/date-methods";
 import api from "@/lib/axios";
-import { dateFormatter } from "@/utils/system/appointments/appointment-formatter";
 
 type FormProps = {
     sendData: (patientObject: Patient) => void;
@@ -55,7 +55,7 @@ function NewPatientForm(props: FormProps) {
                 setFatherSurname(res.data.fatherSurname);
                 setAdultName(res.data.adultName);
                 setContactNumber(res.data.contactNumber);
-                setFormattedStartingDate(dateFormatter(res.data.startingDate));
+                setFormattedStartingDate(formattedToWrittenDate(res.data.startingDate));
                 setPaymentFrequency(res.data.paymentFrequency);
                 setPaymentModality(res.data.paymentModality);
 
@@ -98,7 +98,7 @@ function NewPatientForm(props: FormProps) {
     };
 
     function shootData() {
-        const formattedStartingDate = lessThanTen(startingDate.getDate()) + "/" + lessThanTen(startingDate.getMonth() + 1) + "/" + startingDate.getFullYear();
+        const formattedStartingDate = lessThanTen(startingDate.getFullYear()) + "-" + lessThanTen(startingDate.getMonth() + 1) + "-" + startingDate.getDate();
 
         const newPatientObject = new Patient
             (
@@ -153,7 +153,7 @@ function NewPatientForm(props: FormProps) {
                     <InputWarning message="Por favor, selecciona una fecha." />
                 )}
 
-                <DayPicker onSelectDate={(date: Date) => onStartingDateChange(date)}/>
+                <DayPicker onSelectDate={(date: Date) => onStartingDateChange(date)} />
             </div>
 
             <div className="flex md:flex-row flex-col gap-4 items-center justify-center">

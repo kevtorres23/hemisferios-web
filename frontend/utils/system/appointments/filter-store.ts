@@ -1,6 +1,9 @@
 import { create } from "zustand";
 import { currentWeekList, nextWeekList } from "@/utils/system/calendar/calendar-variables";
+import { format } from "date-fns";
 import { lessThanTen } from "@/utils/format-availability";
+import { stringToDate } from "@/utils/date-methods";
+import { es } from "date-fns/locale";
 
 type Status = {
     pending: boolean,
@@ -18,8 +21,13 @@ type FilterStore = {
 const year = new Date().getFullYear();
 const fullDays = [...currentWeekList, ...nextWeekList];
 
-const firstDefault = lessThanTen(fullDays[0].dayNum.number) + "/" + lessThanTen(fullDays[0].dayNum.month) + "/" + year;
-const secondDefault = lessThanTen(fullDays[11].dayNum.number) + "/" + lessThanTen(fullDays[11].dayNum.month) + "/" + year;
+console.log(currentWeekList);
+
+const firstDefault = format(new Date(year, fullDays[0].dayNum.month - 1, fullDays[0].dayNum.number), "yyyy-MM-dd");
+const secondDefault = format(new Date(year, fullDays[11].dayNum.month - 1, fullDays[11].dayNum.number), "yyyy-MM-dd");
+
+console.log(firstDefault);
+console.log(secondDefault);
 
 /**
  * Globally stores the appointments' filters, which are described as it follows:
@@ -40,7 +48,7 @@ export const useAppointmentFilters = create<FilterStore>()((set) => ({
         interval: [...newArray]
     })),
     updateStatus: (newStatusObject: Status) => set(() => ({
-        statusObject: {...newStatusObject}  
+        statusObject: { ...newStatusObject }
     })),
 }
 ));
