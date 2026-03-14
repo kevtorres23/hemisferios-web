@@ -8,7 +8,6 @@ import { es } from "date-fns/locale";
  */
 
 function stringToDate(date: string) {
-    console.log("fecha recibida:", date)
     const year = date[0] + date[1] + date[2] + date[3]; // The first four characters of the 'yyyy-MM-dd' date correspond to the year.
     const month = date[5] + date[6]; // Fifth and sixth characters of the 'yyyy-MM-dd' date correspond to the month.
     const day = date[8] + date[9]; // Finally, eight and ninth characters of the 'yyyy-MM-dd' date correspond to the day.

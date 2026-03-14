@@ -122,8 +122,8 @@ function AppointmentHistory() {
 
         let newMonthLimits = monthLimits(Number(displayedYear), Number(val));
 
-        const newIntervalFirst = format(new Date(Number(displayedYear), Number(val), Number(newMonthLimits.first)), "yyyy-MM-dd");
-        const newIntervalSecond = format(new Date(Number(displayedYear), Number(val), Number(newMonthLimits.last)), "yyyy-MM-dd");
+        const newIntervalFirst = format(new Date(Number(displayedYear), Number(val) - 1, Number(newMonthLimits.first)), "yyyy-MM-dd");
+        const newIntervalSecond = format(new Date(Number(displayedYear), Number(val) - 1, Number(newMonthLimits.last)), "yyyy-MM-dd");
 
         updateHistoryInterval([newIntervalFirst, newIntervalSecond]);
     };
@@ -133,8 +133,8 @@ function AppointmentHistory() {
 
         let newMonthLimits = monthLimits(Number(displayedYear), Number(val));
 
-        const newIntervalFirst = format(new Date(Number(displayedYear), Number(val), Number(newMonthLimits.first)), "yyyy-MM-dd");
-        const newIntervalSecond = format(new Date(Number(displayedYear), Number(val), Number(newMonthLimits.last)), "yyyy-MM-dd");
+        const newIntervalFirst = format(new Date(Number(displayedYear), Number(val) - 1, Number(newMonthLimits.first)), "yyyy-MM-dd");
+        const newIntervalSecond = format(new Date(Number(displayedYear), Number(val) - 1, Number(newMonthLimits.last)), "yyyy-MM-dd");
 
         updateHistoryInterval([newIntervalFirst, newIntervalSecond]);
     };

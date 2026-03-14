@@ -51,8 +51,6 @@ const fullDays = [...currentWeekList, ...nextWeekList];
 const year = new Date().getFullYear();
 
 const firstDefault = format(new Date(year, fullDays[0].dayNum.month - 1, fullDays[0].dayNum.number), "yyyy-MM-dd");
-console.log("firstDefault:", firstDefault);
-
 const secondDefault = format(new Date(year, fullDays[11].dayNum.month - 1, fullDays[11].dayNum.number), "yyyy-MM-dd");
 
 function FilterDropdown(props: FilterProps) {
