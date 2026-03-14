@@ -22,12 +22,17 @@ export async function getAppointmentsByStatus(req, res) {
     }
 };
 
-export async function getAppointmentsByDate(req, res) {
+export async function getAppointmentsByDates(req, res) {
     try {
-        const filteredAppointments = await Appointment.find({ status: req.params.status });
+        const filteredAppointments = await Appointment.find({
+            date: { 
+                $gte: new Date(req.params.date1),
+                $lte: new Date(req.params.date2) 
+            }
+        });
         res.status(200).json(filteredAppointments);
     } catch (error) {
-        console.error(`Error in the getAppointmentsByStatus controller`.red, error);
+        console.error(`Error in the getAppointmentsByDates controller`.red, error);
         res.status(500).json({ message: "Internal server error." });
     }
 }

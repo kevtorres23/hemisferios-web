@@ -3,6 +3,7 @@ import SystemLayout from "@/components/system/SystemLayout";
 import EmptyState from "@/components/system/EmptyState";
 import { updateStatus } from "@/lib/appointments/update-appointment-status";
 import toast, { Toaster } from 'react-hot-toast';
+import { FilterStore } from "@/utils/subtypes";
 import { NewAppointmentModal, CancelAppointmentModal, ModifyAppointmentModal, RemoveAppointModal, CompleteAppointment, PendingAppointment } from "@/components/system/modals/AppointmentActions";
 import AvailabilityModal from "@/components/system/modals/AvailabilityModal";
 import PageTitle from "@/components/system/PageTitle";
@@ -10,6 +11,7 @@ import IconButton from "@/components/system/IconButton";
 import AppointmentGrid from "@/components/system/appointments/AppointmentGrid";
 import AppointmentCalendar from "@/components/system/appointments/AppointmentCalendar";
 import WhiteIconButton from "@/components/system/WhiteIconButton";
+import { useAppointmentFilters } from "@/utils/system/appointments/filter-store";
 import FilterBar from "@/components/system/FilterBar";
 import LoadingState from "@/components/system/LoadingState";
 import { Plus, SquarePen } from "lucide-react";
@@ -20,7 +22,8 @@ import api from "@/lib/axios";
 
 export const CardActionContext = createContext<(action: string, id: string) => void>(() => "");
 
-function AppointmentDashboard() {    
+function AppointmentDashboard() {
+    const interval = useAppointmentFilters((state: FilterStore) => state.interval)
     const [view, setView] = useState("cards");
     const [appointmentsData, setAppointmentsData] = useState<AppointmentType[]>([]);
 
@@ -31,14 +34,23 @@ function AppointmentDashboard() {
     const [appointmentId, setAppointmentId] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [completedAction, setCompletedAction] = useState(0);
+    const [isAnyAppointment, setIsAnyAppointment] = useState(false);
 
     const [cardAction, setCardAction] = useState("");
 
     useEffect(() => {
-        const fetchAllAppointments = async () => {
+        const fetchAppointments = async () => {
+            setIsLoading(true);
             try {
-                const res = await api.get("/appointments");
+                console.log(interval[0], interval[1])
+                const res = await api.get("/appointments/dateRange/" + interval[0] + "/" + interval[1]);
                 setAppointmentsData(res.data);
+
+                const anyAppointment = await api.get("/appointments");
+                if (anyAppointment.data.length > 0) {
+                    setIsAnyAppointment(true);
+                };
+
             } catch (error) {
                 console.log("Error while fetching the appointments", error);
             } finally {
@@ -46,8 +58,8 @@ function AppointmentDashboard() {
             };
         };
 
-        fetchAllAppointments();
-    }, [completedAction]);
+        fetchAppointments();
+    }, [completedAction, interval]);
 
     useEffect(() => {
         function lookPendings() {
@@ -211,23 +223,21 @@ function AppointmentDashboard() {
             }
             />
 
-            {isLoading && <LoadingState message="Cargando citas..." />}
-
-            {!isLoading && appointmentsData.length === 0 && (
+            {!isLoading && !isAnyAppointment && (
                 <EmptyState
-                    header="¡No hay citas registradas aún!"
-                    desc="Nuevas citas aparecerán aquí cuando sean creadas por una persona en la página, o por ti, manualmente."
+                    header="¡No hay citas que mostrar!"
+                    desc="Intenta activar o desactivar algunos filtros para hacer que la información cambie."
                     image={appointmentsEmpty}
                 />
             )}
 
-            {appointmentsData.length > 0 && view === "cards" && (
+            {view === "cards" && (
                 <CardActionContext.Provider value={onActionSelected}>
-                    <AppointmentGrid page="appointments" data={appointmentsData} />
+                    <AppointmentGrid page="appointments" data={appointmentsData} isLoading={isLoading} />
                 </CardActionContext.Provider>
             )}
 
-            {appointmentsData.length > 0 && view === "calendar" && (
+            {view === "calendar" && (
                 <CardActionContext.Provider value={onActionSelected}>
                     <AppointmentCalendar page="appointments" data={appointmentsData} month="" year="" />
                 </CardActionContext.Provider>

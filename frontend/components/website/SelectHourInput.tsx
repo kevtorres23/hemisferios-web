@@ -1,6 +1,7 @@
 import { useId, useEffect, useState } from "react";
 import { Clock4 } from "lucide-react";
 import { Label } from '@/components/ui/label';
+import { databaseToFormat } from "@/utils/date-methods";
 import {
     Select,
     SelectContent,
@@ -33,7 +34,7 @@ function SelectHourInput(props: SelectProps) {
             try {
                 // Variable definition.
                 const appointmentInfo = await api.get("/appointments/" + props.appointmentId);
-                const appointmentDate = props.isOnModify ? appointmentInfo.data.date : props.date;
+                const appointmentDate = props.isOnModify ? databaseToFormat(appointmentInfo.data.date) : props.date;
                 const availability = await api.get("/availability"); // Getting availability from the backend.
                 const formattedAvailability = formatAvailability(availability.data);
 

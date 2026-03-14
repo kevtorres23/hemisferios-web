@@ -6,6 +6,7 @@ import Input from "./Input";
 import SelectDateInput from "./SelectDateInput";
 import SelectHourInput from "./SelectHourInput";
 import { Appointment } from "@/utils/classes";
+import { databaseToFormat } from "@/utils/date-methods";
 import InputWarning from "./InputWarning";
 import { InputChange, SelectChange } from "@/utils/website/input-change-handlers";
 import { format } from "date-fns";
@@ -49,7 +50,7 @@ function AppointmentForm(props: FormProps) {
                 setFatherSurname(res.data.fatherSurname);
                 setMotherSurname(res.data.motherSurname);
                 setPhoneNumber(res.data.phoneNumber);
-                setDate(res.data.date);
+                setDate(databaseToFormat(res.data.date));
                 setHour(res.data.hour);
             } catch (error) {
                 console.log("Error detected", error);
