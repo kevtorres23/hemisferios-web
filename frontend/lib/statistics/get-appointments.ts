@@ -1,34 +1,36 @@
 import api from "../axios";
-import { format } from "date-fns";
+import { differenceInMonths } from "date-fns";
 import { getDaysInMonth } from "@/utils/system/calendar/calendar-methods";
 import { lessThanTen } from "@/utils/format-availability";
 import { AppointmentType } from "@/utils/types";
 
-async function getStatusCount(status: "pending" | "finished" | "cancelled") {
-    try {
-        const res = await api.get("/appointments/byStatus/" + status);
-        const appointments = res.data;
-        return appointments.length;
-    } catch (error) {
-        console.log("An error ocurred while fetching the appointments:", error);
-    };
-};
+/**
+ * Gets the appointments whose date is within the limits of the month passed as argument.
+ * @param month 
+ * @returns An array containing all the arrays found to be within the limits of the month.
+ */
 
-async function getAppointmentsOfMonth(month: number) {
+async function getAppointmentsByRange(month1: number, month2: number) {
     try {
         const currentDate = new Date;
-        const lastDay = getDaysInMonth(currentDate.getFullYear(), month);
+        const lastDay = getDaysInMonth(currentDate.getFullYear(), month2);
 
-        const rangeDate1 = currentDate.getFullYear() + "-" + lessThanTen(month) + "-01";
-        const rangeDate2 = currentDate.getFullYear() + "-" + lessThanTen(month) + "-" + lastDay;
+        const rangeDate1 = currentDate.getFullYear() + "-" + lessThanTen(month1) + "-01";
+        const rangeDate2 = currentDate.getFullYear() + "-" + lessThanTen(month2) + "-" + lastDay;
 
         const res = await api.get("/appointments/dateRange/" + rangeDate1 + "/" + rangeDate2);
         const appointmentsOfMonth: AppointmentType[] = res.data;
         return appointmentsOfMonth;
-        
+
     } catch (error) {
         console.log("An error ocurred while fetching the appointments:", error);
     };
 };
 
-export { getStatusCount, getAppointmentsOfMonth };
+/**
+ * Gets all the appointments for a specific range of months.
+ * E.g. From January first to April 31st.
+ * 
+ */
+
+export { getAppointmentsByRange };

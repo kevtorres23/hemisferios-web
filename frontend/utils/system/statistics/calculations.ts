@@ -7,4 +7,24 @@
 
 const statusPercentage = (total: number, amount: number) => ((amount * 100) / total).toFixed(1);
 
-export { statusPercentage };
+function isYearFirstHalf() {
+    const date = new Date();
+
+    return (date.getMonth() + 1) <= 6;
+};
+
+const comparativePercentages = (prevNums: number, currentNums: number) => {
+    let result;
+
+    if (prevNums > 0) {
+        result = ((currentNums - prevNums) / currentNums) * 100;
+    } else {
+        result = 100;
+    };
+
+    console.log(result);
+
+    return result.toFixed(1);
+};
+
+export { statusPercentage, isYearFirstHalf, comparativePercentages };

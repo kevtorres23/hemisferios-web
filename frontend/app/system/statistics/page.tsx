@@ -1,15 +1,18 @@
 "use client";
 
 import { useState, useId, useEffect } from "react";
+import EmptyState from "@/components/system/EmptyState";
 import { Calendar } from "lucide-react";
 import SystemLayout from "@/components/system/SystemLayout";
 import PageTitle from "@/components/system/PageTitle";
+import StatusNumbers from "@/components/system/statistics/StatusNumbers";
 import StatisticCard from "@/components/system/statistics/StatisticCard";
 import CircleChartCard from "@/components/system/statistics/CircleChartCard";
 import RelevantNumbersCard from "@/components/system/statistics/RelevantNumbers";
 import MostFrequentPatients from "@/components/system/statistics/MostFrequentPatients";
 import BarChartCard from "@/components/system/statistics/BarChartCard";
-import { getAppointmentsOfMonth } from "@/lib/statistics/get-appointments";
+import emptyStatistics from "../../../public/statistics-empty.png";
+import { getAppointmentsByRange } from "@/lib/statistics/get-appointments";
 import LoadingState from "@/components/system/LoadingState";
 import {
     Select,
@@ -27,7 +30,7 @@ function Statistics() {
 
     const id = useId();
     const [displayedMonth, setDisplayedMonth] = useState((date.getMonth() + 1).toString());
-    const [monthNumber, setMonthNumber] = useState(date.getMonth() + 1);
+    const [sixMonthData, setSixMonthData] = useState<AppointmentType[][]>([[]]);
     const [pendingCount, setPendingCount] = useState(0);
     const [finishedCount, setFinishedCount] = useState(0);
     const [cancelledCount, setCancelledCount] = useState(0);
@@ -35,8 +38,7 @@ function Statistics() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-
-        getAppointmentsOfMonth(monthNumber).then((result) => {
+        getAppointmentsByRange(Number(displayedMonth), Number(displayedMonth)).then((result) => {
             let pendings = 0;
             let finished = 0;
             let cancelled = 0;
@@ -65,7 +67,7 @@ function Statistics() {
             console.log("An error ocurred while fetching the appointments", error);
         }).finally(() => setIsLoading(false));
 
-    }, []);
+    }, [displayedMonth]);
 
     const recordMonths = [" ", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
@@ -90,7 +92,7 @@ function Statistics() {
                                         <p className="font-semibold text-slate-800 -ml-1">{id === date.getMonth() + 1 ? "(mes actual)" : ""}</p>
                                     </SelectItem>
                                 );
-                            })};
+                            })}
                         </SelectGroup>
                     </SelectContent>
                 </Select>
@@ -98,18 +100,17 @@ function Statistics() {
 
             {isLoading && <LoadingState message="Cargando estadísticas..." />}
 
-            {!isLoading && (
-                <>
-                    <div className="w-full bg-white rounded-lg border border-slate-200 flex flex-col gap-4 p-6">
-                        <p className="font-semibold text-slate-800 text-lg">Estadísticas de citas</p>
+            {!isLoading && totalCount === 0 && (
+                <EmptyState
+                    header="No hay información disponible"
+                    desc="¡Lo sentimos! No hay información disponible para las estadísticas en el mes que seleccionaste."
+                    image={emptyStatistics}
+                />
+            )}
 
-                        <div className="w-full grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-4">
-                            <StatisticCard type="totals" number={totalCount} percentage={12.5} />
-                            <StatisticCard type="completed" number={finishedCount} percentage={25} />
-                            <StatisticCard type="pending" number={pendingCount} percentage={16} />
-                            <StatisticCard type="cancelled" number={cancelledCount} percentage={-3.5} />
-                        </div>
-                    </div>
+            {!isLoading && totalCount > 0 && (
+                <>
+                    <StatusNumbers displayedMonth={Number(displayedMonth)} totalCount={totalCount} finishedCount={finishedCount} pendingCount={pendingCount} cancelledCount={cancelledCount}/>
 
                     <div className="second-card-row gap-6 w-full flex lg:flex-row flex-col">
                         <CircleChartCard total={totalCount} pending={pendingCount} finished={finishedCount} cancelled={cancelledCount} />
