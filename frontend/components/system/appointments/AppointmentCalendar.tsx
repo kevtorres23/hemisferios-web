@@ -73,8 +73,8 @@ function AppointmentCalendar(props: CalendarProps) {
     const historyCheckedStatuses = useHistoryFilters((state: HistoryFilterStore) => state.statusObject);
 
     // Filter the data according to the page of the calendar (Appointments or History).
-    const filteredData = applyFilters(props.data, interval, checkedStatuses);
-    const historyFilteredData = applyFilters(props.data, historyInterval, { pending: false, finished: historyCheckedStatuses.finished, cancelled: historyCheckedStatuses.cancelled });
+    const filteredData = applyFilters(props.data, checkedStatuses);
+    const historyFilteredData = applyFilters(props.data, { pending: false, finished: historyCheckedStatuses.finished, cancelled: historyCheckedStatuses.cancelled });
 
     const fiveWeeks: weekDayObject[][] = historyCalendarWeeks(Number(props.month), Number(props.year));
     const week1Interval = intervalCreator(fiveWeeks[0][0].dayNum.number, fiveWeeks[0][0].dayNum.month, fiveWeeks[0][5].dayNum.number, fiveWeeks[0][5].dayNum.month);

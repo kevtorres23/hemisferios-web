@@ -1,10 +1,9 @@
-import { ArrowUpRight, ArrowDownRight } from "lucide-react";
-import { ClipboardClock, CircleCheck, CircleDotDashed, CircleSlash } from "lucide-react";
+import { ClipboardClock, CircleCheck, CircleDotDashed, CircleSlash, ArrowUpRight, ArrowDownRight, CircleEqual } from "lucide-react";
 
 interface CardProps {
     type: "totals" | "completed" | "pending" | "cancelled";
     number: number;
-    percentage: number;
+    percentage: string;
 };
 
 type StatisticCardElems = {
@@ -65,7 +64,7 @@ function StatisticCard(props: CardProps) {
             <p className="text-4xl font-medium text-slate-900">{props.number}</p>
 
             <div className="w-full text-wrap flex flex-row items-center justify-start gap-1 text-indigo-500">
-                {(props.percentage > 0) && (
+                {(Number(props.percentage) > 0) && (
                     <>
                         <ArrowUpRight size={16} />
                         <p className="text-sm font-medium">
@@ -75,7 +74,16 @@ function StatisticCard(props: CardProps) {
                     </>
                 )}
 
-                {(props.percentage < 0) && (
+                {(Number(props.percentage) === 0) && (
+                    <>
+                        <CircleEqual size={16} className="text-slate-500" />
+                        <p className="text-sm font-medium">
+                            <span className="text-slate-500 font-medium">Igual que el mes pasado </span>
+                        </p>
+                    </>
+                )}
+
+                {(Number(props.percentage) < 0) && (
                     <>
                         <ArrowDownRight size={16} />
                         <p className="text-sm font-medium">

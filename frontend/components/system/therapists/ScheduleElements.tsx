@@ -115,7 +115,7 @@ function ScheduleUI(props: ScheduleUIProps) {
                 var hourId = id;
 
                 return (
-                    <div className="flex flex-row w-full">
+                    <div className="flex flex-row w-full" key={id}>
                         <ScheduleHour
                             key={id}
                             hour={hours[id]}

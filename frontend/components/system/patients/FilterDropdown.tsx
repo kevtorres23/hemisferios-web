@@ -18,6 +18,7 @@ type FilterProps = {
     onCardChange: (value: boolean) => void;
     onWeeklyChange: (value: boolean) => void;
     onMonthlyChange: (value: boolean) => void;
+    onSessionChange: (value: boolean) => void;
 };
 
 function FilterDropdown(props: FilterProps) {
@@ -25,7 +26,7 @@ function FilterDropdown(props: FilterProps) {
     const [cardChecked, setCardChecked] = useState(true);
     const [monthlyChecked, setMonthlyChecked] = useState(true);
     const [weeklyChecked, setWeeklyChecked] = useState(true);
-    const id = useId();
+    const [sessionChecked, setSessionChecked] = useState(true);
 
     function onCashChecked() {
         setCashChecked(!cashChecked);
@@ -45,6 +46,11 @@ function FilterDropdown(props: FilterProps) {
     function onMonthlyChecked() {
         setMonthlyChecked(!monthlyChecked);
         props.onMonthlyChange(!monthlyChecked);
+    };
+
+    function onSessionChecked() {
+        setSessionChecked(!sessionChecked);
+        props.onSessionChange(!sessionChecked);
     };
 
     return (
@@ -84,6 +90,7 @@ function FilterDropdown(props: FilterProps) {
                         <div className="option-row flex flex-col gap-4 w-full">
                             <OptionCheckbox checked={weeklyChecked} onCheckedChange={onWeeklyChecked} item={<p className="font-normal text-slate-800 text-nowrap">Semanal</p>} />
                             <OptionCheckbox checked={monthlyChecked} onCheckedChange={onMonthlyChecked} item={<p className="font-normal text-slate-800 text-nowrap">Mensual</p>} />
+                            <OptionCheckbox checked={sessionChecked} onCheckedChange={onSessionChecked} item={<p className="font-normal text-slate-800 text-nowrap">Por sesión</p>} />
                         </div>
                     </DropdownMenuGroup>
 

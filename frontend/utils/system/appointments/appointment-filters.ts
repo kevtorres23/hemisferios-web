@@ -1,7 +1,6 @@
 // Set of functions that are used to filter the appointments.
 
 import { AppointmentType } from "@/utils/types";
-import { useAppointmentFilters } from "./filter-store";
 import { stringToDate } from "../calendar/calendar-methods";
 
 type Status = {
@@ -18,27 +17,6 @@ type Status = {
  * @param point2 
  * @returns An array of appointments filtered with the interval points passed as arguments.
  */
-
-function intervalFilter(array: AppointmentType[], point1: string, point2: string) {
-    // Obtain the date values of the passed interval's points.
-    const point1Values = stringToDate(point1);
-    const point2Values = stringToDate(point2);
-
-    let filteredData = array.filter((appointment) => {
-        const separatedDate = stringToDate(appointment.date);
-
-        // Filter conditions (in boolean).
-        let condition1 = separatedDate.day >= point1Values.day; // If the day number of the appointment is greater or equal than the one in the interval's first point.
-        let condition2 = separatedDate.day <= point2Values.day; // If the day number of the appointment is less or equal than the one in the interval's second point.
-        let condition3 = separatedDate.month === point1Values.month; 
-        let condition4 = separatedDate.month <= point2Values.month; // If the month of the appointment is less or equal than the one in the interval's second point.
-        let condition5 = separatedDate.year <= point2Values.year; // If the year of the appointment is less or equal than the one interval's second point.
-
-        return condition1 && condition2 && condition3 && condition4 && condition5;
-    });
-
-    return filteredData;
-};
 
 /**
  * A function that filters an array of appointments based on their status.
@@ -70,14 +48,11 @@ function statusFilter(array: AppointmentType[], activeStatuses: Status) {
  * @returns An array of filtered appointments with both the interval and status filters.
  */
 
-function applyFilters(data: AppointmentType[], interval: [string, string], activeStatuses: Status) {
-    let filter1 = intervalFilter(data, interval[0], interval[1]);
-    let filteredData = statusFilter(filter1, activeStatuses);
+function applyFilters(data: AppointmentType[], activeStatuses: Status) {
+    let filteredData = statusFilter(data, activeStatuses);
 
     return filteredData;
 };
 
-
-
-export { intervalFilter, statusFilter, applyFilters };
+export { statusFilter, applyFilters };
 

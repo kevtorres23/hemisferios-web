@@ -1,4 +1,5 @@
-import { dateFormatter, hourFormatter } from "@/utils/system/appointments/appointment-formatter";
+import { format } from "date-fns";
+import { hourFormatter } from "@/utils/hour-methods";
 import { updateStatus } from "@/lib/appointments/update-appointment-status";
 import isExpired from "@/utils/system/appointments/check-expiracy";
 import { useContext, useEffect } from "react";
@@ -20,6 +21,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { es } from "date-fns/locale";
+import { formattedToWrittenDate } from "@/utils/date-methods";
 
 type CardProps = {
     _id: string;
@@ -45,7 +48,9 @@ function AppointmentCard(props: CardProps) {
             updateStatus(props._id, "finished"); // Updates the status of the appointment if its day and hour have already passed.
         };
 
-    }, [])
+    }, []);
+
+    const formattedDate = formattedToWrittenDate(props.date);
 
     return (
         <div className="relative flex flex-col gap-1.5 overflow-y-visible rounded-md border border-slate-200 p-6 items-start justify-center overflow-x-hidden">
@@ -90,7 +95,7 @@ function AppointmentCard(props: CardProps) {
             <div className="details flex flex-col gap-3 items-start mt-2">
                 <div className="date flex flex-row gap-1 items-center justify-center text-slate-500">
                     <CalendarFold size={16} />
-                    <p className="text-sm">{dateFormatter(props.date)}</p>
+                    <p className="text-sm">{formattedDate}</p>
                 </div>
 
                 <div className="hour-phone flex flex-row items-center justify-center sm:gap-5 gap-3.5">

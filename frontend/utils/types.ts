@@ -13,9 +13,10 @@ interface AppointmentType {
     cancellationComment?: string;
 };
 
-interface PatientHistory {
+interface PatientRegistry {
     date: string;
     hour: string;
+    _id: string;
 }
 
 interface PatientType {
@@ -28,6 +29,9 @@ interface PatientType {
     startingDate: string;
     paymentFrequency: string;
     paymentModality: string;
+    paymentAmount: number;
+    visitRegistry: PatientRegistry[];
+    createdAt: string;
 };
 
 interface ScheduleItem {
@@ -109,7 +113,7 @@ export type {
     PatientType,
     TherapistType,
     ScheduleItem,
-    PatientHistory,
+    PatientRegistry,
     CommentType,
     DayFormat,
     Availability

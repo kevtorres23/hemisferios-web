@@ -32,10 +32,10 @@ async function historyAvailability() {
 
         foundAppointments?.forEach((appointment) => {
             // Build the numeric and written value for the iterated appointment's month.
-            const monthName = months[Number(appointment.date[3] + appointment.date[4]) - 1];
-            const monthValue = appointment.date[3] + appointment.date[4]
+            const monthName = months[Number(appointment.date[5] + appointment.date[6]) - 1];
+            const monthValue = appointment.date[5] + appointment.date[6]
             // Build the string value for the iterated appointment's year.
-            const yearValue = appointment.date[6] + appointment.date[7] + appointment.date[8] + appointment.date[9];
+            const yearValue = appointment.date[0] + appointment.date[1] + appointment.date[2] + appointment.date[3];
 
             // Add the month to its corresponding array if it is not included already on it.
             if (addedMonths.includes(monthValue)) {

@@ -96,7 +96,7 @@ function CalendarUI(props: CalendarUIProps) {
                 var hourId = id;
 
                 return (
-                    <div className="calendar-content flex flex-row w-full">
+                    <div className="calendar-content flex flex-row w-full" key={id}>
                         <CalendarHour
                             key={id}
                             hour={calendarHours[id]}
@@ -141,6 +141,7 @@ function CalendarUI(props: CalendarUIProps) {
                                         content={
                                             foundAppointments.length > 0 ? foundAppointments.map((appointment) =>
                                                 <AppointmentCardCalendar
+                                                    key={id}
                                                     _id={appointment._id}
                                                     cancellationComment={appointment.cancellationComment}
                                                     patientName={appointment.patientName}
@@ -152,7 +153,7 @@ function CalendarUI(props: CalendarUIProps) {
                                                     status={appointment.status}
                                                     page={props.page}
                                                 />
-                                            ) : ("")}
+                                            ) : ""}
                                         isLast={id === 5}
                                         key={id}
                                     />

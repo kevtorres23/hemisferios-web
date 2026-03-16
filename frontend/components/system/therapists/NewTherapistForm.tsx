@@ -1,7 +1,7 @@
 import Input from "@/components/website/Input";
 import InputWarning from "@/components/website/InputWarning";
 import { InputChange } from "@/utils/website/input-change-handlers";
-import { dateFormatter } from "@/utils/system/appointments/appointment-formatter";
+import { formattedToWrittenDate } from "@/utils/date-methods";
 import { ScheduleItem } from "@/utils/types";
 import { useEffect, useState } from "react";
 import { DayPicker } from "../DayPicker";
@@ -44,7 +44,7 @@ function NewTherapistForm(props: FormProps) {
                 setLastName(res.data.lastName);
                 setContactNumber(res.data.contactNumber);
                 setSchedule(res.data.schedule);
-                setFormattedStartingDate(dateFormatter(res.data.startingDate));
+                setFormattedStartingDate(formattedToWrittenDate(res.data.startingDate));
 
             } catch (error) {
                 console.log("Error while fetching the therapist's info:", error);
@@ -105,9 +105,9 @@ function NewTherapistForm(props: FormProps) {
         if (props.isOnModify) {
             let conversion = proseToDate(formattedStartingDate);
             let convertedDate = new Date(conversion.year, conversion.month - 1, conversion.day)
-            startDate = format(convertedDate, "dd-MM-yyyy")
+            startDate = format(convertedDate, "yyyy-MM-dd")
         } else {
-            startDate = format(startingDate, "dd-MM-yyyy");
+            startDate = format(startingDate, "yyyy-MM-dd");
         }
 
         if (props.formId === "editTherapistForm") {

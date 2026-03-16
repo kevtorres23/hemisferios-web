@@ -63,8 +63,9 @@ class Patient {
     startingDate: string;
     paymentFrequency: string;
     paymentModality: string;
+    paymentAmount: number;
 
-    constructor(name: string, fatherSurname: string, motherSurname: string, adultName: string, contactNumber: string, startingDate: string, paymentFrequency: string, paymentModality: string) {
+    constructor(name: string, fatherSurname: string, motherSurname: string, adultName: string, contactNumber: string, startingDate: string, paymentFrequency: string, paymentModality: string, paymentAmount: number) {
         this.name = name;
         this.fatherSurname = fatherSurname;
         this.motherSurname = motherSurname;
@@ -73,6 +74,7 @@ class Patient {
         this.startingDate = startingDate;
         this.paymentFrequency = paymentFrequency;
         this.paymentModality = paymentModality;
+        this.paymentAmount = paymentAmount;
     };
 };
 

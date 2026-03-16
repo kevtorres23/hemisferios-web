@@ -1,12 +1,15 @@
 "use client";
 
 import SystemLayout from "@/components/system/SystemLayout";
+import { format } from "date-fns";
 import toast, { Toaster } from 'react-hot-toast';
 import EmptyState from "@/components/system/EmptyState";
 import { historyAvailability } from "@/utils/system/history/history-registry";
 import { useHistoryFilters } from "@/utils/system/history/filter-store";
+import { FilterStore, HistoryFilterStore, HistoryRegistry } from "@/utils/subtypes";
 import api from "@/lib/axios";
 import { RemoveAppointModal } from "@/components/system/modals/AppointmentActions";
+import { useAppointmentFilters } from "@/utils/system/appointments/filter-store";
 import { useId } from "react";
 import PageTitle from "@/components/system/PageTitle";
 import AppointmentGrid from "@/components/system/appointments/AppointmentGrid";
@@ -28,28 +31,6 @@ import { lessThanTen } from "@/utils/format-availability";
 import monthLimits from "@/utils/system/history/month-limits";
 import LoadingState from "@/components/system/LoadingState";
 
-type MonthRegistry = {
-    monthNum: string;
-    monthName: string;
-}
-
-type HistoryRegistry = {
-    months: MonthRegistry[],
-    years: string[],
-};
-
-type Status = {
-    finished: boolean,
-    cancelled: boolean
-};
-
-type FilterStore = {
-    interval: [string, string],
-    statusObject: Status,
-    updateInterval: (newIntervalArray: [string, string]) => void,
-    updateStatus: (statusObject: Status) => void,
-};
-
 export const HistoryActionContext = createContext<(action: string, id: string) => void>(() => "");
 
 const date = new Date();
@@ -67,12 +48,14 @@ function AppointmentHistory() {
     const [appointmentId, setAppointmentId] = useState("");
     const [registry, setRegistry] = useState<HistoryRegistry>();
 
-    const updateHistoryInterval = useHistoryFilters((state: FilterStore) => state.updateInterval);
+    const interval = useAppointmentFilters((state: FilterStore) => state.interval)
+    const historyInterval = useHistoryFilters((state: HistoryFilterStore) => state.interval);
+    const updateHistoryInterval = useHistoryFilters((state: HistoryFilterStore) => state.updateInterval);
 
     useEffect(() => {
         const fetchAllAppointments = async () => {
             try {
-                const res = await api.get("/appointments");
+                const res = await api.get("/appointments/dateRange/" + historyInterval[0] + "/" + historyInterval[1]);
                 setAppointmentsData(res.data);
             } catch (error) {
                 console.log("Error while fetching the appointments", error);
@@ -94,7 +77,7 @@ function AppointmentHistory() {
 
         fetchAllAppointments();
         getHistoryRegistry();
-    }, []);
+    }, [historyInterval]);
 
     function showSuccessModal(successMsg: string) {
         toast.success(<p className="font-medium">{successMsg}</p>, { duration: 2000 });
@@ -121,8 +104,8 @@ function AppointmentHistory() {
 
         let newMonthLimits = monthLimits(Number(displayedYear), Number(val));
 
-        const newIntervalFirst = newMonthLimits.first + "/" + val + "/" + displayedYear;
-        const newIntervalSecond = newMonthLimits.last + "/" + val + "/" + displayedYear;
+        const newIntervalFirst = format(new Date(Number(displayedYear), Number(val) - 1, Number(newMonthLimits.first)), "yyyy-MM-dd");
+        const newIntervalSecond = format(new Date(Number(displayedYear), Number(val) - 1, Number(newMonthLimits.last)), "yyyy-MM-dd");
 
         updateHistoryInterval([newIntervalFirst, newIntervalSecond]);
     };
@@ -132,8 +115,8 @@ function AppointmentHistory() {
 
         let newMonthLimits = monthLimits(Number(displayedYear), Number(val));
 
-        const newIntervalFirst = newMonthLimits.first + "/" + lessThanTen(Number(displayedMonth)) + "/" + displayedYear;
-        const newIntervalSecond = newMonthLimits.last + "/" + lessThanTen(Number(displayedMonth)) + "/" + displayedYear;
+        const newIntervalFirst = format(new Date(Number(displayedYear), Number(val) - 1, Number(newMonthLimits.first)), "yyyy-MM-dd");
+        const newIntervalSecond = format(new Date(Number(displayedYear), Number(val) - 1, Number(newMonthLimits.last)), "yyyy-MM-dd");
 
         updateHistoryInterval([newIntervalFirst, newIntervalSecond]);
     };
@@ -207,7 +190,7 @@ function AppointmentHistory() {
 
             {appointmentsData.length > 0 && view === "cards" && (
                 <HistoryActionContext.Provider value={onActionSelected}>
-                    <AppointmentGrid page="history" data={appointmentsData} />
+                    <AppointmentGrid page="history" data={appointmentsData} isLoading={isLoading} />
                 </HistoryActionContext.Provider>
             )}
 

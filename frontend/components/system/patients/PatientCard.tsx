@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
-import { PatientHistory } from "@/utils/types";
+import { PatientRegistry } from "@/utils/types";
 import { CardActionContext } from "@/app/system/patients/page";
 import { ModalityTag } from "./PaymentTag";
 import { Button } from "@/components/ui/button";
 import { establishPaymentDate } from "@/utils/system/patients/next-payments";
-import { Ellipsis, SquarePen, Trash, UserRound, Phone, CircleUserRound, HandCoins, CalendarClock, HouseHeart } from "lucide-react";
+import { Ellipsis, SquarePen, Trash, UserRound, Phone, CircleUserRound, HandCoins, CalendarClock, HouseHeart, CircleDollarSign, History } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -12,7 +12,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { stringToDate } from "@/utils/system/calendar/calendar-methods";
+import { stringToDate } from "@/utils/date-methods";
 import { es } from "date-fns/locale";
 import { format } from "date-fns";
 
@@ -26,20 +26,26 @@ type PatientProps = {
     startingDate: string;
     paymentFrequency: string;
     paymentModality: string;
-    appointmentHistory: PatientHistory[];
+    paymentAmount: number;
+    appointmentHistory: PatientRegistry[];
 };
 
 function PatientCard(props: PatientProps) {
     const setAction = useContext(CardActionContext);
-    
+
     const dateConversion = stringToDate(props.startingDate);
-    const startingDate = new Date(dateConversion.year, dateConversion.month, dateConversion.day);
+    const startingDate = new Date(dateConversion.getFullYear(), dateConversion.getMonth(), dateConversion.getDate());
     const formattedDate = format(startingDate, "PP", { locale: es });
 
-    let paymentDate = establishPaymentDate(props.paymentFrequency, props.startingDate);
-    const paymentDateConversion = stringToDate(paymentDate ? paymentDate : "");
-    const newPaymentDate = new Date(paymentDateConversion.year, paymentDateConversion.month, paymentDateConversion.day);
-    const formattedPayment = format(newPaymentDate, "PP", { locale: es });
+    let paymentDate;
+    let formattedPayment;
+
+    if (props.paymentFrequency != "session") {
+        paymentDate = establishPaymentDate(props.paymentFrequency, props.startingDate);
+        const paymentDateConversion = stringToDate(paymentDate ? paymentDate : "");
+        const newPaymentDate = new Date(paymentDateConversion.getFullYear(), paymentDateConversion.getMonth() - 1, paymentDateConversion.getDate());
+        formattedPayment = format(newPaymentDate, "PP", { locale: es });
+    };
 
     return (
         <div className="relative flex flex-col gap-2 overflow-y-visible rounded-md border border-slate-200 p-6 items-start justify-center overflow-x-hidden">
@@ -69,6 +75,11 @@ function PatientCard(props: PatientProps) {
                                 <p className="text-slate-800">Eliminar paciente</p>
                             </DropdownMenuItem>
 
+                            <DropdownMenuItem onClick={() => setAction("registry", props._id)} className="flex flex-row gap-1.5 items-center">
+                                <History size={16} className="text-slate-800" />
+                                <p className="text-slate-800">Registro de asistencias</p>
+                            </DropdownMenuItem>
+
                         </DropdownMenuGroup>
 
                     </DropdownMenuContent>
@@ -85,13 +96,21 @@ function PatientCard(props: PatientProps) {
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent className="p-4 flex flex-col gap-3 items-start w-auto">
-                    <p className="text-base font-medium text-slate-900">Datos de pago</p>
+                    <p className="text-base font-medium text-slate-900">Datos del pago</p>
 
                     <div className="date flex flex-row gap-1 items-center justify-center">
                         <CalendarClock size={18} className="text-slate-400" />
                         <p className="text-sm text-slate-950">
-                            <span className="text-slate-400 font-normal">Frecuencia: </span>
-                            {props.paymentFrequency === "weekly" ? "Semanal" : "Mensual"}
+                            <span className="text-slate-400 font-normal">Frecuencia de pago: </span>
+                            {props.paymentFrequency === "weekly" ? "Semanal" : (props.paymentFrequency === "monthly" ? "Mensual" : "Semanal")}
+                        </p>
+                    </div>
+
+                    <div className="date flex flex-row gap-1 items-center justify-center">
+                        <CircleDollarSign size={18} className="text-slate-400" />
+                        <p className="text-sm text-slate-950">
+                            <span className="text-slate-400 font-normal">Cantidad: </span>
+                            ${props.paymentAmount}
                         </p>
                     </div>
 
@@ -105,7 +124,7 @@ function PatientCard(props: PatientProps) {
                     <div className="date flex flex-row gap-1 items-center justify-center">
                         <HandCoins size={18} className="text-slate-400" />
                         <p className="text-sm text-slate-950">
-                            <span className="text-slate-400 font-normal">Próximo pago:</span> {formattedPayment}
+                            <span className="text-slate-400 font-normal">Próximo pago:</span> {props.paymentFrequency != "session" ? formattedPayment : "Próxima visita."}
                         </p>
                     </div>
                 </DropdownMenuContent>

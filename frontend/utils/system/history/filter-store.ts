@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import monthLimits from "./month-limits";
 import { lessThanTen } from "@/utils/format-availability";
+import { format } from "date-fns";
 
 type Status = {
     finished: boolean,
@@ -19,8 +20,8 @@ const year = date.getFullYear();
 
 const currentMonthLimits = monthLimits(year, date.getMonth() + 1);
 
-const firstDefault = currentMonthLimits.first + "/" + lessThanTen(date.getMonth() + 1) + "/" + year;
-const secondDefault = currentMonthLimits.last + "/" + lessThanTen(date.getMonth() + 1) + "/" + year;
+const firstDefault = format(new Date(Number(year), date.getMonth(), Number(currentMonthLimits.first)), "yyyy-MM-dd");
+const secondDefault = format(new Date(Number(year), date.getMonth(), Number(currentMonthLimits.last)), "yyyy-MM-dd");
 
 /**
  * Globally stores the history page's filters, which are described as it follows:

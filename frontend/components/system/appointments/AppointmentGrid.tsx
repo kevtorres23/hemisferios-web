@@ -11,10 +11,12 @@ import { applyFilters } from "@/utils/system/appointments/appointment-filters";
 import { pageSeparator } from "@/utils/system/page-separator";
 import { useHistoryFilters } from "@/utils/system/history/filter-store";
 import HistoryFilterDropdown from "./HistoryFilterDropdown";
+import LoadingState from "../LoadingState";
 
 type GridProps = {
     data: AppointmentType[]; // A list of a list of appointment objects.
     page: "history" | "appointments";
+    isLoading: boolean,
 };
 
 type Status = {
@@ -60,20 +62,20 @@ function AppointmentGrid(props: GridProps) {
     let filteredData;
 
     if (props.page === "appointments") {
-        filteredData = applyFilters(props.data, interval, checkedStatuses);
+        filteredData = applyFilters(props.data, checkedStatuses);
     } else {
-        filteredData = applyFilters(props.data, historyInterval, { pending: false, finished: historyCheckedStatuses.finished, cancelled: historyCheckedStatuses.cancelled });
+        filteredData = applyFilters(props.data, { pending: false, finished: historyCheckedStatuses.finished, cancelled: historyCheckedStatuses.cancelled });
     };
 
     const [appointmentPages, setAppointmentPages] = useState<any[][]>(pageSeparator(filteredData));
 
-    useEffect(() => {        
+    useEffect(() => {
         if (props.page === "appointments") {
-            let filteredData = applyFilters(props.data, interval, checkedStatuses);
+            let filteredData = applyFilters(props.data, checkedStatuses);
             setAppointmentPages(pageSeparator(filteredData));
             setPages(pageSeparator(filteredData).length);
         } else {
-            let filteredData = applyFilters(props.data, historyInterval, { pending: false, finished: historyCheckedStatuses.finished, cancelled: historyCheckedStatuses.cancelled });
+            let filteredData = applyFilters(props.data, { pending: false, finished: historyCheckedStatuses.finished, cancelled: historyCheckedStatuses.cancelled });
             setAppointmentPages(pageSeparator(filteredData));
             setPages(pageSeparator(filteredData).length);
         };
@@ -122,7 +124,9 @@ function AppointmentGrid(props: GridProps) {
                 </div>
             </div>
 
-            {appointmentPages.length === 0 && (
+            {props.isLoading && <LoadingState message="Cargando citas..." />}
+
+            {!props.isLoading && appointmentPages.length === 0 && (
                 <EmptyState
                     header="¡No hay citas que mostrar!"
                     desc="Intenta activar o desactivar algunos filtros para hacer que la información cambie."

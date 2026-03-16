@@ -1,37 +1,10 @@
 import dynamic from "next/dynamic";
+import { statusPercentage } from "@/utils/system/statistics/calculations";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
-
-const chartConfig = {
-    type: "pie",
-    width: 150,
-    height: 150,
-    series: [24, 120, 7], // Completed, pending, and cancelled, respectively.
-    options: {
-        chart: {
-            toolbar: {
-                show: false,
-            },
-        },
-        labels: ["Completadas", "Pendientes", "Canceladas"],
-        dataLabels: {
-            enabled: false,
-        },
-        colors: ["#22C55E", "#EAB308", "#F43F5E"],
-        legend: {
-            show: false,
-        },
-    },
-};
-
-function obtainPercentage(val: number) {
-    const totalSum = chartConfig.series[0] + chartConfig.series[1] + chartConfig.series[2]; // The sum of all the values within the series array.
-    const percentage = (val * 100) / totalSum
-    return Math.ceil(percentage);
-};
 
 interface LabelProps {
     name: string;
-    percentage: number;
+    percentage: string;
     dotColor: string;
 };
 
@@ -48,7 +21,37 @@ function PercentageLabel(props: LabelProps) {
     )
 };
 
-export default function CircleChartCard() {
+type ChartPercentages = {
+    total: number,
+    pending: number,
+    finished: number,
+    cancelled: number,
+};
+
+export default function CircleChartCard(props: ChartPercentages) {
+
+    const chartConfig = {
+        type: "pie",
+        width: 150,
+        height: 150,
+        series: [props.finished, props.pending, props.cancelled], // Completed, pending, and cancelled, respectively.
+        options: {
+            chart: {
+                toolbar: {
+                    show: false,
+                },
+            },
+            labels: ["Completadas", "Pendientes", "Canceladas"],
+            dataLabels: {
+                enabled: false,
+            },
+            colors: ["#22C55E", "#EAB308", "#F43F5E"],
+            legend: {
+                show: false,
+            },
+        },
+    };
+
     return (
         <div className="w-full bg-white rounded-lg border border-slate-200 flex flex-col gap-6 p-6">
             <p className="font-semibold text-slate-800 text-lg">Porcentajes por estatus</p>
@@ -58,12 +61,12 @@ export default function CircleChartCard() {
 
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-row gap-8">
-                        <PercentageLabel name="Completadas" percentage={obtainPercentage(chartConfig.series[0])} dotColor="bg-green-500" />
+                        <PercentageLabel name="Completadas" percentage={statusPercentage(props.total, props.finished)} dotColor="bg-green-500" />
 
-                        <PercentageLabel name="Pendientes" percentage={obtainPercentage(chartConfig.series[1])} dotColor="bg-yellow-500" />
+                        <PercentageLabel name="Pendientes" percentage={statusPercentage(props.total, props.pending)} dotColor="bg-yellow-500" />
                     </div>
 
-                    <PercentageLabel name="Canceladas" percentage={obtainPercentage(chartConfig.series[2])} dotColor="bg-red-500" />
+                    <PercentageLabel name="Canceladas" percentage={statusPercentage(props.total, props.cancelled)} dotColor="bg-red-500" />
                 </div>
             </div>
         </div>

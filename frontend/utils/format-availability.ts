@@ -1,6 +1,7 @@
-import { dateFormatter } from "./system/appointments/appointment-formatter";
 import { currentWeekList, nextWeekList } from "./system/calendar/calendar-variables";
+import { format } from "date-fns";
 import { DayFormat } from "./types";
+import { es } from "date-fns/locale";
 
 const date = new Date();
 const year = date.getFullYear();
@@ -44,6 +45,8 @@ function formatAvailability(availability: AvailabilityContent[]) {
     const currentAvailability: DayFormat[] = [];
     const nextAvailability: DayFormat[] = [];
 
+    console.log(currentWeekList);
+
     const currentIterator = availability[0]; // The index 0 of availability always represents the current week availability.
     const nextIterator = availability[1]; // On the other hand, the index 1 always represents the next week availability.
 
@@ -51,18 +54,16 @@ function formatAvailability(availability: AvailabilityContent[]) {
 
     for (let i = 0; i < days.length; i++) {
 
+        // CURRENT WEEK'S AVAILABILITY ITEM. 
         let danishDateCurrent;
         let writtenFormatCurrent;
-
-        // Build a 'DD/MM/YYYY' date.
-        let danishDateNext = lessThanTen(nextWeekList[i].dayNum.number) + "/" + lessThanTen(nextWeekList[i].dayNum.month) + "/" + year;
-        // Build a prose-written date, like '10 de febrero de 2026'.
-        let writtenFormatNext = dateFormatter(danishDateNext);
+        let iterationDateCurrent = new Date(year, currentWeekList[i].dayNum.month - 1, currentWeekList[i].dayNum.number);
+        console.log("iteracion del item current:", iterationDateCurrent);
 
         // For the current week, availability only will be shown from tomorrow on (we skip today).
         if (i > today) {
-            danishDateCurrent = lessThanTen(currentWeekList[i].dayNum.number) + "/" + lessThanTen(currentWeekList[i].dayNum.month) + "/" + year;
-            writtenFormatCurrent = dateFormatter(danishDateCurrent);
+            danishDateCurrent = format(iterationDateCurrent, "yyyy-MM-dd");
+            writtenFormatCurrent = format(iterationDateCurrent, "PPP", { locale: es });
 
             currentAvailability.push(
                 {
@@ -72,6 +73,13 @@ function formatAvailability(availability: AvailabilityContent[]) {
                 }
             );
         };
+
+        // NEXT WEEK'S AVAILABILITY ITEM. 
+        let iterationDateNext = new Date(year, nextWeekList[i].dayNum.month - 1, nextWeekList[i].dayNum.number);
+        // Build a 'yyyy-MM-dd' date.
+        let danishDateNext = format(iterationDateNext, "yyyy-MM-dd");
+        // Build a prose-written date, like '10 de febrero de 2026'.
+        let writtenFormatNext = format(iterationDateNext, "PPP", { locale: es });
 
         // For the next week, there are no day skips.
         nextAvailability.push(
@@ -88,4 +96,4 @@ function formatAvailability(availability: AvailabilityContent[]) {
     return formattedAvailability;
 };
 
-export {formatAvailability, lessThanTen};
+export { formatAvailability, lessThanTen };

@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllAppointments, getAppointmentById, createAppointment, updateAppointment, deleteAppointment, getAppointmentsByStatus } from "../controllers/appointmentControllers.js";
+import { getAllAppointments, getAppointmentById, createAppointment, updateAppointment, deleteAppointment, getAppointmentsByStatus, getAppointmentsByDates } from "../controllers/appointmentControllers.js";
 
 const router = express.Router();
 
@@ -10,6 +10,8 @@ router.get("/", getAllAppointments);
 router.get("/:id", getAppointmentById);
 
 router.get("/byStatus/:status", getAppointmentsByStatus);
+
+router.get("/dateRange/:date1/:date2", getAppointmentsByDates);
 
 router.post("/", createAppointment);
 

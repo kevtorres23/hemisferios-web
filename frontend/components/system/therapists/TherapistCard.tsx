@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { CardActionContext } from "@/app/system/therapists/page";
 import { Button } from "@/components/ui/button";
 import { Ellipsis, SquarePen, Trash, Calendar, Phone, Heart, History } from "lucide-react";
@@ -30,7 +30,6 @@ type TherapistProps = {
 
 function TherapistCard(props: TherapistProps) {
     const setAction = useContext(CardActionContext);
-    console.log(props.startingDate);
     const dateConversion = stringToDate(props.startingDate);
     const startingDate = new Date(dateConversion.year, dateConversion.month - 1, dateConversion.day);
     const formattedDate = format(startingDate, "PP", { locale: es });

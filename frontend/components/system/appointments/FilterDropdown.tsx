@@ -1,7 +1,7 @@
-import { lessThanTen } from "@/utils/format-availability";
 import { useId } from "react";
 import { Label } from "@/components/ui/label";
 import { currentWeekList, nextWeekList } from "@/utils/system/calendar/calendar-variables";
+import { format } from "date-fns";
 import AppointmentTag from "./AppointmentTag";
 import OptionCheckbox from "../OptionCheckbox";
 import {
@@ -26,6 +26,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Funnel } from "lucide-react";
+import { es } from "date-fns/locale";
 
 type FilterProps = {
     view: "cards" | "calendar";
@@ -46,15 +47,13 @@ type FilterStore = {
     updateStatus: (statusObject: Status) => void,
 };
 
-const months = ["0", "ene.", "feb.", "mar.", "abr.", "mayo", "jun.", "jul.", "ago.", "sep.", "oct.", "nov.", "dic."];
 const fullDays = [...currentWeekList, ...nextWeekList];
 const year = new Date().getFullYear();
 
-const firstDefault = lessThanTen(fullDays[0].dayNum.number) + "/" + lessThanTen(fullDays[0].dayNum.month) + "/" + year;
-const secondDefault = lessThanTen(fullDays[11].dayNum.number) + "/" + lessThanTen(fullDays[11].dayNum.month) + "/" + year;
+const firstDefault = format(new Date(year, fullDays[0].dayNum.month - 1, fullDays[0].dayNum.number), "yyyy-MM-dd");
+const secondDefault = format(new Date(year, fullDays[11].dayNum.month - 1, fullDays[11].dayNum.number), "yyyy-MM-dd");
 
 function FilterDropdown(props: FilterProps) {
-    const [orderFilter, setOrderFilter] = useState(true); // True for most recent - False for least recent.
     const [pendingChecked, setPendingChecked] = useState(true);
     const [finishedChecked, setFinishedChecked] = useState(true);
     const [cancelledChecked, setCancelledChecked] = useState(true);
@@ -150,8 +149,9 @@ function FilterDropdown(props: FilterProps) {
                                                 <SelectGroup className="max-h-60 overflow-y-scroll">
                                                     <SelectLabel>Del:</SelectLabel>
                                                     {fullDays.map((day) => {
-                                                        let formattedDay = lessThanTen(day.dayNum.number) + " de " + months[day.dayNum.month];
-                                                        let databaseDate = lessThanTen(day.dayNum.number) + "/" + lessThanTen(day.dayNum.month) + "/" + year;
+                                                        let date = new Date(year, day.dayNum.month - 1, day.dayNum.number);
+                                                        let formattedDay = format(date, "PP", { locale: es });
+                                                        let databaseDate = format(date, "yyyy-MM-dd");
                                                         return (
                                                             <SelectItem value={databaseDate}>{formattedDay}</SelectItem>
                                                         )
@@ -170,13 +170,13 @@ function FilterDropdown(props: FilterProps) {
                                             <SelectContent position="popper">
                                                 <SelectGroup className="max-h-45 overflow-y-scroll no-scrollbar">
                                                     <SelectLabel>Al:</SelectLabel>
-                                                    {fullDays.map((day) => {
-                                                        let formattedDay = lessThanTen(day.dayNum.number) + " de " + months[day.dayNum.month];
-                                                        let firstDay = lessThanTen(fullDays[0].dayNum.number) + "/" + lessThanTen(fullDays[0].dayNum.month) + "/" + year;
-                                                        let databaseDate = lessThanTen(day.dayNum.number) + "/" + lessThanTen(day.dayNum.month) + "/" + year;
+                                                    {fullDays.map((day, id) => {
+                                                        let date = new Date(year, day.dayNum.month - 1, day.dayNum.number);
+                                                        let formattedDay = format(date, "PP", { locale: es });
+                                                        let databaseDate = format(date, "yyyy-MM-dd");
                                                         return (
                                                             // For the second parameter of the interval, we'll skip the first day of the two-week range.
-                                                            databaseDate === firstDay ? "" : <SelectItem value={databaseDate}>{formattedDay}</SelectItem>
+                                                            id === 0 ? "" : <SelectItem value={databaseDate}>{formattedDay}</SelectItem>
                                                         )
                                                     })}
                                                 </SelectGroup>
