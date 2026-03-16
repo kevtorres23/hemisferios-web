@@ -40,7 +40,7 @@ const patientSchema = new mongoose.Schema({
     },
     visitRegistry: {
         type: [{
-            date: String,
+            date: Date,
             hour: String,
         }],
         required: true,

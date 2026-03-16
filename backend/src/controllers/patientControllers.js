@@ -71,7 +71,8 @@ export async function updatePatient(req, res) {
             startingDate,
             paymentFrequency,
             paymentModality,
-            paymentAmount
+            paymentAmount,
+            visitRegistry,
         } = req.body;
 
         const updatedPatient = await Patient.findByIdAndUpdate(req.params.id, {
@@ -83,7 +84,8 @@ export async function updatePatient(req, res) {
             startingDate,
             paymentFrequency,
             paymentModality,
-            paymentAmount
+            paymentAmount,
+            visitRegistry,
         }, { new: true });
 
         if (!updatedPatient) return res.status(404).json({ message: "Patient not found" }); // Handling possible issues with the passed ID.

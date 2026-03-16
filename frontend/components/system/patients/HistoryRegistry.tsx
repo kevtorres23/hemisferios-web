@@ -1,7 +1,7 @@
-import { PatientHistory } from "@/utils/types";
+import { PatientRegistry } from "@/utils/types";
 import { Clock } from "lucide-react";
 
-function HistoryRegistry(props: PatientHistory) {
+function HistoryRegistry(props: PatientRegistry) {
     return (
         <div className="w-full bg-white border border-slate-200 rounded-md flex flex-col p-4 gap-1.5">
             <div className="flex flex-row gap-1.5 items-center justify-start">

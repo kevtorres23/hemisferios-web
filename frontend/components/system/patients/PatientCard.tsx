@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
-import { PatientHistory } from "@/utils/types";
+import { PatientRegistry } from "@/utils/types";
 import { CardActionContext } from "@/app/system/patients/page";
 import { ModalityTag } from "./PaymentTag";
 import { Button } from "@/components/ui/button";
 import { establishPaymentDate } from "@/utils/system/patients/next-payments";
-import { Ellipsis, SquarePen, Trash, UserRound, Phone, CircleUserRound, HandCoins, CalendarClock, HouseHeart, CircleDollarSign } from "lucide-react";
+import { Ellipsis, SquarePen, Trash, UserRound, Phone, CircleUserRound, HandCoins, CalendarClock, HouseHeart, CircleDollarSign, History } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -27,7 +27,7 @@ type PatientProps = {
     paymentFrequency: string;
     paymentModality: string;
     paymentAmount: number;
-    appointmentHistory: PatientHistory[];
+    appointmentHistory: PatientRegistry[];
 };
 
 function PatientCard(props: PatientProps) {
@@ -75,6 +75,11 @@ function PatientCard(props: PatientProps) {
                                 <p className="text-slate-800">Eliminar paciente</p>
                             </DropdownMenuItem>
 
+                            <DropdownMenuItem onClick={() => setAction("registry", props._id)} className="flex flex-row gap-1.5 items-center">
+                                <History size={16} className="text-slate-800" />
+                                <p className="text-slate-800">Registro de asistencias</p>
+                            </DropdownMenuItem>
+
                         </DropdownMenuGroup>
 
                     </DropdownMenuContent>
@@ -97,7 +102,7 @@ function PatientCard(props: PatientProps) {
                         <CalendarClock size={18} className="text-slate-400" />
                         <p className="text-sm text-slate-950">
                             <span className="text-slate-400 font-normal">Frecuencia de pago: </span>
-                            {props.paymentFrequency === "weekly" ? "Semanal" : "Mensual"}
+                            {props.paymentFrequency === "weekly" ? "Semanal" : (props.paymentFrequency === "monthly" ? "Mensual" : "Semanal")}
                         </p>
                     </div>
 

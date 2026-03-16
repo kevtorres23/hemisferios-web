@@ -4,6 +4,7 @@ import { NewPatientModal, ModifyPatientModal, RemovePatientModal } from "@/compo
 import toast, { Toaster } from 'react-hot-toast';
 import EmptyState from "@/components/system/EmptyState";
 import patientsEmpty from "../../../public/patients-empty.png";
+import PatientRegistryModal from "@/components/system/patients/PatientRegistry";
 import IconButton from "@/components/system/IconButton";
 import { Plus } from "lucide-react";
 import PageTitle from "@/components/system/PageTitle";
@@ -82,6 +83,10 @@ function Patients() {
 
                     {cardAction === "modify" && (
                         <ModifyPatientModal updateElementId={patientId} onSave={modifyPatient} isVisible={cardAction === "modify"} onClose={() => setCardAction("")} />
+                    )}
+
+                    {cardAction === "registry" && (
+                        <PatientRegistryModal patientId={patientId} isVisible={cardAction === "registry"} onClose={() => setCardAction("")} />
                     )}
                 </>
             }
