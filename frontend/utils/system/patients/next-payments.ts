@@ -14,7 +14,7 @@ function calculateNextPayment(frequency: string, startingDate: string) {
     const month = startingDate[5] + startingDate[6];
     const year = startingDate[0] + startingDate[1] + startingDate[2] + startingDate[3];
 
-    const builtDate = new Date(Number(year), Number(month), Number(day)); // Building a new date with the previously separated values.
+    const builtDate = new Date(Number(year), Number(month) + 1, Number(day)); // Building a new date with the previously separated values.
     let newDate; // Stores the new date values.
     let nextPaymentDate; // Stores a new yyyy-MM-dd string.
 
@@ -42,7 +42,7 @@ function establishPaymentDate(frequency: string, date: string) {
     let nextPaymentDate = calculateNextPayment(frequency, date);
 
     // The result '1' of this submodule means the first date is before the second one - meaning the next payment date should be further than today.
-    if (compareAsc(currentDate, date) != 1) {
+    if (compareAsc(currentDate, nextPaymentDate) != 1) {
         return nextPaymentDate;
     } else {
         establishPaymentDate(frequency, nextPaymentDate); // If the condition is not met, we recall the function with the newly calculated date, until the conditions are met.

@@ -6,7 +6,6 @@ import { Calendar } from "lucide-react";
 import SystemLayout from "@/components/system/SystemLayout";
 import PageTitle from "@/components/system/PageTitle";
 import StatusNumbers from "@/components/system/statistics/StatusNumbers";
-import StatisticCard from "@/components/system/statistics/StatisticCard";
 import CircleChartCard from "@/components/system/statistics/CircleChartCard";
 import RelevantNumbersCard from "@/components/system/statistics/RelevantNumbers";
 import MostFrequentPatients from "@/components/system/statistics/MostFrequentPatients";

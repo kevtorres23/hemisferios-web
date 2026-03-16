@@ -32,7 +32,19 @@ const patientSchema = new mongoose.Schema({
     paymentModality: {
         type: String,
         required: true
-    }
+    },
+    paymentAmount: {
+        type: Number,
+        default: "250",
+        required: true,
+    },
+    visitRegistry: {
+        type: [{
+            date: String,
+            hour: String,
+        }],
+        required: true,
+    },
 },
     { timestamps: true }
 );

@@ -24,12 +24,13 @@ function PatientGrid(props: GridProps) {
     const [cardChecked, setCardChecked] = useState(true);
     const [monthlyChecked, setMonthlyChecked] = useState(true);
     const [weeklyChecked, setWeeklyChecked] = useState(true);
+    const [sessionChecked, setSessionChecked] = useState(true);
 
     let patientData = props.data;
     const [patientPages, setPatientPages] = useState<any[][]>(pageSeparator(patientData))
 
     useEffect(() => {
-        let filteredData: PatientType[] = applyPatientFilters(props.data, cashChecked, cardChecked, weeklyChecked, monthlyChecked);
+        let filteredData: PatientType[] = applyPatientFilters(props.data, cashChecked, cardChecked, weeklyChecked, monthlyChecked, sessionChecked);
 
         setPatientPages(pageSeparator(filteredData));
         setPages(pageSeparator(filteredData).length);
@@ -46,7 +47,7 @@ function PatientGrid(props: GridProps) {
             setCurrentPage(currentPage - 1);
         };
 
-    }, [cashChecked, cardChecked, monthlyChecked, weeklyChecked, props.data]);
+    }, [cashChecked, cardChecked, monthlyChecked, weeklyChecked, sessionChecked, props.data]);
 
     return (
         <div className="w-full flex h-full border border-slate-200 bg-white rounded-lg p-6 flex-col gap-6">
@@ -60,6 +61,7 @@ function PatientGrid(props: GridProps) {
                         onCashChange={(value: boolean) => setCashChecked(value)}
                         onWeeklyChange={(value: boolean) => setWeeklyChecked(value)}
                         onMonthlyChange={(value: boolean) => setMonthlyChecked(value)}
+                        onSessionChange={(value: boolean) => setSessionChecked(value)}
                     />
 
                     <div className="flex flex-row gap-2.5 items-center justify-center">
@@ -100,6 +102,7 @@ function PatientGrid(props: GridProps) {
                                 paymentFrequency={item.paymentFrequency}
                                 paymentModality={item.paymentModality}
                                 appointmentHistory={item.appointmentHistory}
+                                paymentAmount={item.paymentAmount}
                             />
                         )}
                     </div>

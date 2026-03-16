@@ -1,9 +1,8 @@
-import { PatientType } from "@/utils/types";
 import { format } from "date-fns"
 import { es } from "date-fns/locale";
 import Input from "@/components/website/Input";
 import InputWarning from "@/components/website/InputWarning";
-import { InputChange, SelectChange } from "@/utils/website/input-change-handlers";
+import { InputChange, SelectChange, NumberInputChange } from "@/utils/website/input-change-handlers";
 import { SelectFrequency, SelectModality } from "./PaymentSelects";
 import { DayPicker } from "../DayPicker";
 import { useEffect, useState } from "react";
@@ -33,6 +32,7 @@ function NewPatientForm(props: FormProps) {
     const [formattedStartingDate, setFormattedStartingDate] = useState("");
     const [paymentFrequency, setPaymentFrequency] = useState("");
     const [paymentModality, setPaymentModality] = useState("");
+    const [paymentAmount, setPaymentAmount] = useState(0);
 
     // Input validations.
     const [validationsShot, setValidationsShot] = useState(false);
@@ -44,6 +44,7 @@ function NewPatientForm(props: FormProps) {
     const [startingDateValidation, setStartingDateValidation] = useState(false);
     const [frequencyValidation, setFrequencyValidation] = useState(false);
     const [modalityValidation, setModalityValidation] = useState(false);
+    const [amountValidation, setAmountValidation] = useState(false);
 
     useEffect(() => {
         const getEditablePatient = async () => {
@@ -58,6 +59,7 @@ function NewPatientForm(props: FormProps) {
                 setFormattedStartingDate(formattedToWrittenDate(res.data.startingDate));
                 setPaymentFrequency(res.data.paymentFrequency);
                 setPaymentModality(res.data.paymentModality);
+                setPaymentAmount(res.data.paymentAmount);
 
             } catch (error) {
                 console.log("Error while fetching the patient's info:", error);
@@ -87,10 +89,11 @@ function NewPatientForm(props: FormProps) {
         if (!startingDate) { setStartingDateValidation(true); };
         if (!paymentFrequency) { setFrequencyValidation(true); };
         if (!paymentModality) { setModalityValidation(true); };
+        if (!paymentAmount) { setAmountValidation(true) };
 
         if (contactNumber.length < 10) {
             setNumberValidation(true);
-        } else if (patientName && motherSurname && fatherSurname && adultName && contactNumber && startingDate && paymentFrequency && paymentModality) {
+        } else if (patientName && motherSurname && fatherSurname && adultName && contactNumber && startingDate && paymentFrequency && paymentModality && paymentAmount) {
             shootData();
         };
 
@@ -98,7 +101,7 @@ function NewPatientForm(props: FormProps) {
     };
 
     function shootData() {
-        const formattedStartingDate = lessThanTen(startingDate.getFullYear()) + "-" + lessThanTen(startingDate.getMonth() + 1) + "-" + startingDate.getDate();
+        const formattedStartingDate = lessThanTen(startingDate.getFullYear()) + "-" + lessThanTen(startingDate.getMonth() + 1) + "-" + lessThanTen(startingDate.getDate());
 
         const newPatientObject = new Patient
             (
@@ -109,7 +112,8 @@ function NewPatientForm(props: FormProps) {
                 contactNumber,
                 formattedStartingDate,
                 paymentFrequency,
-                paymentModality
+                paymentModality,
+                paymentAmount
             );
 
         if (props.formId === "patientForm") {
@@ -167,6 +171,11 @@ function NewPatientForm(props: FormProps) {
                     {modalityValidation && <InputWarning message="Por favor, selecciona un tipo." />}
                 </div>
             </div>
+
+            <Input type="number" numValue={paymentAmount} label="Cantidad de pago" onInputChange={(e) => setPaymentAmount(e.currentTarget.valueAsNumber)} activeValidation={amountValidation} />
+            {amountValidation && (
+                <InputWarning message="Por favor, ingresa una cantidad." />
+            )}
         </form>
     );
 };

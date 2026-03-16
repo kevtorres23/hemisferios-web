@@ -63,6 +63,7 @@ function SelectFrequency(props: SelectProps) {
                     <SelectGroup>
                         <SelectItem className="text-sm" key={1} value="weekly">Semanal</SelectItem>
                         <SelectItem className="text-sm" key={2} value="monthly">Mensual</SelectItem>
+                        <SelectItem className="text-sm" key={3} value="session">Por sesión</SelectItem>
                     </SelectGroup>
                 </SelectContent>
             </Select>

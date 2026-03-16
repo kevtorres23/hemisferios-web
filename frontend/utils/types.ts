@@ -28,6 +28,7 @@ interface PatientType {
     startingDate: string;
     paymentFrequency: string;
     paymentModality: string;
+    createdAt: string;
 };
 
 interface ScheduleItem {
