@@ -114,11 +114,11 @@ function Statistics() {
                     <div className="second-card-row gap-6 w-full flex lg:flex-row flex-col">
                         <CircleChartCard total={totalCount} pending={pendingCount} finished={finishedCount} cancelled={cancelledCount} />
 
-                        <RelevantNumbersCard />
+                        <RelevantNumbersCard month={displayedMonth}/>
                     </div>
 
                     <div className="third-card-row gap-6 w-full flex lg:flex-row flex-col">
-                        <MostFrequentPatients />
+                        <MostFrequentPatients month={Number(displayedMonth)} />
 
                         <BarChartCard />
                     </div>

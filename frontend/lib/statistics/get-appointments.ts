@@ -5,7 +5,8 @@ import { lessThanTen } from "@/utils/format-availability";
 import { AppointmentType } from "@/utils/types";
 
 /**
- * Gets the appointments whose date is within the limits of the month passed as argument.
+ * Gets all the appointments for a specific range of months.
+ * E.g. From January first to April 31st.
  * @param month 
  * @returns An array containing all the arrays found to be within the limits of the month.
  */
@@ -26,11 +27,5 @@ async function getAppointmentsByRange(month1: number, month2: number) {
         console.log("An error ocurred while fetching the appointments:", error);
     };
 };
-
-/**
- * Gets all the appointments for a specific range of months.
- * E.g. From January first to April 31st.
- * 
- */
 
 export { getAppointmentsByRange };

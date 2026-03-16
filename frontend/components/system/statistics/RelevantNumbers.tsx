@@ -3,8 +3,9 @@ import { getAllPatients } from "@/lib/statistics/get-patients";
 import { establishPaymentDate } from "@/utils/system/patients/next-payments";
 import { stringToDate } from "@/utils/date-methods";
 import { compareAsc, isWithinInterval } from "date-fns";
+import { getDaysInMonth } from "@/utils/system/calendar/get-days-month";
 
-function RelevantNumbersCard() {
+function RelevantNumbersCard({ month }: { month: string }) {
     const [income, setIncome] = useState(1240);
     const [newPatients, setNewPatients] = useState(9);
 
@@ -15,15 +16,23 @@ function RelevantNumbersCard() {
 
             result.forEach((patient) => {
                 let paymentDate = establishPaymentDate(patient.paymentModality, patient.startingDate);
-                let currentDateObject = new Date();
+                let currentDate = new Date();
+                let daysInPassedMonth = getDaysInMonth(currentDate.getFullYear(), Number(month));
+                const year = currentDate.getFullYear();
 
-                if (paymentDate && compareAsc(stringToDate(paymentDate), currentDateObject) === 1) {
-                    calculatedIncome += 250;
-                };
+                if (Number(month) === currentDate.getMonth() + 1) {
+                    if (paymentDate && compareAsc(stringToDate(paymentDate), currentDate) === 1) {
+                        calculatedIncome += 250;
+                    };
+                } else {
+                    if (paymentDate && compareAsc(stringToDate(paymentDate), new Date(year, Number(month), daysInPassedMonth)) === 1) {
+                        calculatedIncome += 250;
+                    };
+                }
 
                 let creationMonth = patient.createdAt[5] + patient.createdAt[6];
 
-                if (Number(creationMonth) === currentDateObject.getMonth() + 1) {
+                if (Number(creationMonth) === currentDate.getMonth() + 1) {
                     createdPatients += 1;
                 }
             });
