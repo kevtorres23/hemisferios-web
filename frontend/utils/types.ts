@@ -16,6 +16,7 @@ interface AppointmentType {
 interface PatientRegistry {
     date: string;
     hour: string;
+    _id: string;
 }
 
 interface PatientType {

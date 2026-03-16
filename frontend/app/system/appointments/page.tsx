@@ -231,7 +231,7 @@ function AppointmentDashboard() {
                 />
             )}
 
-            {view === "cards" && (
+            {view === "cards" && isAnyAppointment && (
                 <CardActionContext.Provider value={onActionSelected}>
                     <AppointmentGrid page="appointments" data={appointmentsData} isLoading={isLoading} />
                 </CardActionContext.Provider>

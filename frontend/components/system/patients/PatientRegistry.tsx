@@ -69,6 +69,11 @@ function PatientRegistryModal(props: RegistryProps) {
         toast.success("Visita añadida.");
     }
 
+    function onDeleteRegistry(id: string) {
+        setRegistry((prev) => prev.filter((registry) => registry._id != id));
+        toast.success("Visita eliminada.")
+    }   
+
     const recordMonths = ["", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
     const recordYears = ["2026", "2025"];
 
@@ -165,7 +170,9 @@ function PatientRegistryModal(props: RegistryProps) {
                 )}
 
                 {!isLoading && registry.length > 0 && (
-                    registry.sort((registryA, registryB) => orderFilter ? compareAsc(registryA.date, registryB.date) : compareAsc(registryB.date, registryA.date)).map((item, id) => <HistoryRegistry key={id} date={format(new Date(item.date), "PPP", { locale: es })} hour={item.hour} />)
+                    registry.sort((registryA, registryB) => orderFilter ? 
+                    compareAsc(registryA.date, registryB.date) : 
+                    compareAsc(registryB.date, registryA.date)).map((item, id) => <HistoryRegistry onDeleteRegistry={() => onDeleteRegistry(item._id)} key={id} _id={item._id} patientId={props.patientId} date={format(new Date(item.date), "PPP", { locale: es })} hour={item.hour} />)
                 )}
             </div>
         </div>
