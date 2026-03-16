@@ -56,7 +56,6 @@ function AppointmentHistory() {
         const fetchAllAppointments = async () => {
             try {
                 const res = await api.get("/appointments/dateRange/" + historyInterval[0] + "/" + historyInterval[1]);
-                console.log(res.data);
                 setAppointmentsData(res.data);
             } catch (error) {
                 console.log("Error while fetching the appointments", error);

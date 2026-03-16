@@ -22,8 +22,6 @@ const comparativePercentages = (prevNums: number, currentNums: number) => {
         result = 100;
     };
 
-    console.log(result);
-
     return result.toFixed(1);
 };
 

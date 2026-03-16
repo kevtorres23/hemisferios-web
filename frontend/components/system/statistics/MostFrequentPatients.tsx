@@ -27,7 +27,7 @@ function FrequentPatientCard(props: FrequencyCard) {
     );
 };
 
-export default function MostFrequentPatients({ month }: { month: number }) {
+export default function MostFrequentPatients({ month, onFinished }: { month: number, onFinished: () => void }) {
     const [patientList, setPatientList] = useState<{ name: string, visits: number }[]>([]);
 
     useEffect(() => {
@@ -57,7 +57,6 @@ export default function MostFrequentPatients({ month }: { month: number }) {
                     fourCounter += 1;
 
                 } else {
-                    console.log(mostFrequent);
                     setPatientList(mostFrequent);
                     return;
                 };
@@ -67,7 +66,7 @@ export default function MostFrequentPatients({ month }: { month: number }) {
             setPatientList(mostFrequent);
         };
 
-        getPatients();
+        getPatients().finally(() => onFinished);
     }, []);
 
     return (
@@ -75,7 +74,7 @@ export default function MostFrequentPatients({ month }: { month: number }) {
             <p className="font-semibold text-slate-800 text-lg">Pacientes más frecuentes</p>
 
             <div className="w-full grid xl:grid-cols-2 lg:grid-cols-1 md:grid-cols-2 grid-cols-1 justify-start items-center gap-5">
-                {patientList.sort((a, b) => (b.visits - a.visits)).map((patient) => <FrequentPatientCard name={patient.name} appointmentNum={patient.visits}/>)}
+                {patientList.sort((a, b) => (b.visits - a.visits)).map((patient, id) => <FrequentPatientCard key={id} name={patient.name} appointmentNum={patient.visits}/>)}
             </div>
         </div>
     );

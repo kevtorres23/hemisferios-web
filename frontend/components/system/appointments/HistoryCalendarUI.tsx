@@ -59,7 +59,7 @@ function HistoryCalendarUI(props: CalendarUIProps) {
                 var hourId = id;
 
                 return (
-                    <div className="calendar-content flex flex-row w-full">
+                    <div key={id} className="calendar-content flex flex-row w-full">
                         <CalendarHour
                             key={id}
                             hour={calendarHours[id]}

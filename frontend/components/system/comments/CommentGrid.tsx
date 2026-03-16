@@ -101,7 +101,6 @@ function CommentGrid(props: GridProps) {
                 }).map((item, id) => {
                     let creationDate = new Date(item.createdAt);
 
-                    console.log(creationDate);
                     return (
                         <CommentCard
                             key={id}

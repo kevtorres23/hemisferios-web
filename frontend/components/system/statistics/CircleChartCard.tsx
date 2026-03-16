@@ -25,7 +25,7 @@ type ChartPercentages = {
     total: number,
     pending: number,
     finished: number,
-    cancelled: number
+    cancelled: number,
 };
 
 export default function CircleChartCard(props: ChartPercentages) {

@@ -3,58 +3,57 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-export default function BarChartCard() {
-    const [month1, setMonth1] = useState(0);
-    const [month2, setMonth2] = useState(0);
-    const [month3, setMonth3] = useState(0);
-    const [month4, setMonth4] = useState(0);
-    const [month5, setMonth5] = useState(0);
-    const [month6, setMonth6] = useState(0);
-    const [monthNums, setMonthNums] = useState<number[]>([]);
+export default function BarChartCard({ onFinished }: { onFinished: () => void; }) {
+    const shortMonths = ["", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
+    const [months, setMonths] = useState<string[]>([]);
+    const [appointmentsByMonth, setAppointmentsByMonth] = useState<number[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [totals, setTotals] = useState(0);
 
     useEffect(() => {
-        const date = new Date();
+        let mounted = true;
 
-        const difference = date.getMonth() + 1 - 6;
-        let iteratorStart;
+        try {
+            const date = new Date();
+            const difference = (date.getMonth() + 1) - 6;
+            let iteratorStart;
 
-        if (difference < 0) {
-            iteratorStart = 1;
-        } else {
-            iteratorStart = difference + 1;
+            if (difference < 0) {
+                iteratorStart = 1;
+            } else {
+                iteratorStart = difference + 1;
+            };
+
+            const monthArray: number[] = [];
+            for (let i = iteratorStart; i < iteratorStart + 6; i++) {
+                monthArray.push(i);
+            };
+            setMonths(monthArray.map(i => shortMonths[i]));
+
+            const firstMonth = getAppointmentsByRange(monthArray[0], monthArray[0]);
+            const secondMonth = getAppointmentsByRange(monthArray[1], monthArray[1]);
+            const thirdMonth = getAppointmentsByRange(monthArray[2], monthArray[2]);
+            const fourthMonth = getAppointmentsByRange(monthArray[3], monthArray[3]);
+            const fifthMonth = getAppointmentsByRange(monthArray[4], monthArray[4]);
+            const sixthMonth = getAppointmentsByRange(monthArray[5], monthArray[5]);
+
+            Promise.all([firstMonth, secondMonth, thirdMonth, fourthMonth, fifthMonth, sixthMonth])
+                .then((responses) => {
+                    for (const response of responses) {
+                        if (mounted) {
+                            setAppointmentsByMonth(appointments => [...appointments, response ? response.length : 0]);
+                        }
+                    };
+                }).finally(() => {
+                    setIsLoading(false)
+                });
+
+        } catch (error) {
+            console.log("An error ocurred:", error);
+        } finally {
+            setIsLoading(false);
+            onFinished();
         };
-
-        const monthArray: number[] = [];
-
-        for (let i = iteratorStart; i < iteratorStart + 6; i++) {
-            monthArray.push(i);
-        };
-
-        setMonthNums(monthArray)
-
-        getAppointmentsByRange(monthArray[0], monthArray[0]).then((result) => {
-            setMonth1(result ? result.length : 0);
-        }).catch((error) => console.log("An error ocurred:", error));
-
-        getAppointmentsByRange(monthArray[1], monthArray[1]).then((result) => {
-            setMonth2(result ? result.length : 0);
-        }).catch((error) => console.log("An error ocurred:", error));
-
-        getAppointmentsByRange(monthArray[2], monthArray[2]).then((result) => {
-            setMonth3(result ? result.length : 0);
-        }).catch((error) => console.log("An error ocurred:", error));
-
-        getAppointmentsByRange(monthArray[3], monthArray[3]).then((result) => {
-            setMonth4(result ? result.length : 0);
-        }).catch((error) => console.log("An error ocurred:", error));
-
-        getAppointmentsByRange(monthArray[4], monthArray[4]).then((result) => {
-            setMonth5(result ? result.length : 0);
-        }).catch((error) => console.log("An error ocurred:", error));
-
-        getAppointmentsByRange(monthArray[5], monthArray[5]).then((result) => {
-            setMonth6(result ? result.length : 0);
-        }).catch((error) => console.log("An error ocurred:", error));
 
     }, []);
 
@@ -65,7 +64,7 @@ export default function BarChartCard() {
         series: [
             {
                 name: "Citas",
-                data: [month1, month2, month3, month4, month5, month6],
+                data: [appointmentsByMonth[0], appointmentsByMonth[1], appointmentsByMonth[2], appointmentsByMonth[3], appointmentsByMonth[4], appointmentsByMonth[5]],
             },
         ],
         options: {
@@ -99,14 +98,7 @@ export default function BarChartCard() {
                         fontWeight: 400,
                     },
                 },
-                categories: [
-                    "Ene",
-                    "Feb",
-                    "Mar",
-                    "Abr",
-                    "May",
-                    "Jun",
-                ],
+                categories: months,
             },
             yaxis: {
                 labels: {
@@ -156,15 +148,19 @@ export default function BarChartCard() {
             <p className="font-semibold text-slate-800 text-lg">Cantidad de citas por mes</p>
 
             <div className="w-full flex xl:flex-row lg:flex-col sm:flex-row flex-col xl:items-center items-start justify-center xl:gap-0 gap-4">
-                <div className="written-data flex flex-col gap-2">
-                    <p className="text-sm font-normal text-slate-500">Citas totales:</p>
+                {total && !isLoading && (
+                    <div className="written-data flex flex-col gap-2">
+                        <p className="text-sm font-normal text-slate-500">Citas totales:</p>
 
-                    <p className="text-5xl font-medium text-slate-900 tracking-tight">{total}</p>
+                        <p className="text-5xl font-medium text-slate-900 tracking-tight">{total}</p>
 
-                    <p className="text-sm font-normal text-slate-500 text-wrap">Registradas en los últimos seis meses.</p>
-                </div>
+                        <p className="text-sm font-normal text-slate-500 text-wrap">Registradas en un periodo de seis meses.</p>
+                    </div>
+                )}
 
-                <Chart {...chartConfig} />
+                {!isLoading && appointmentsByMonth[0] != undefined && months[0] != undefined && (
+                    <Chart {...chartConfig} />
+                )}
             </div>
 
         </div>

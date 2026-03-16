@@ -5,8 +5,8 @@ import { stringToDate } from "@/utils/date-methods";
 import { compareAsc, isWithinInterval } from "date-fns";
 import { getDaysInMonth } from "@/utils/system/calendar/get-days-month";
 
-function RelevantNumbersCard({ month }: { month: string }) {
-    const [income, setIncome] = useState(1240);
+function RelevantNumbersCard({ month, onFinished }: { month: string, onFinished: () => void }) {
+    const [income, setIncome] = useState<number>();
     const [newPatients, setNewPatients] = useState(9);
 
     useEffect(() => {
@@ -39,7 +39,9 @@ function RelevantNumbersCard({ month }: { month: string }) {
 
             setIncome(calculatedIncome);
             setNewPatients(createdPatients);
-        });
+        }).catch((error) => {
+            console.log("An error just ocurred:", error);
+        }).finally(() => onFinished());
 
     }, []);
 
@@ -51,7 +53,7 @@ function RelevantNumbersCard({ month }: { month: string }) {
                 <div className="w-full flex flex-col bg-white border border-slate-200 p-4 gap-3 rounded-md h-full justify-center">
                     <p className="text-base font-medium">Ingresos aproximados</p>
 
-                    <h1 className="text-3xl font-medium text-indigo-500">${income}</h1>
+                    <h1 className="text-3xl font-medium text-indigo-500">${income ? income : "..."}</h1>
 
                     <p className="text-sm w-full text-wrap text-slate-500 font-normal">Calculados en base a los pagos de los pacientes.</p>
                 </div>
