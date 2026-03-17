@@ -70,28 +70,26 @@ function HistoryCalendarUI(props: CalendarUIProps) {
                             var dayId = id;
                             var foundAppointments = calendarContentGenerator(fiveWeeks[week - 1], hourId, dayId, calendarHours, props.data);
                             return (
-                                <>
-                                    <CalendarSpace
-                                        key={id}
-                                        content={
-                                            foundAppointments.length > 0 ? foundAppointments.map((appointment, id) =>
-                                                <AppointmentCardCalendar
-                                                    key={id}
-                                                    _id={appointment._id}
-                                                    cancellationComment={appointment.cancellationComment}
-                                                    patientName={appointment.patientName}
-                                                    motherSurname={appointment.motherSurname}
-                                                    fatherSurname={appointment.fatherSurname}
-                                                    phoneNumber={appointment.phoneNumber}
-                                                    date={appointment.date}
-                                                    hour={appointment.hour}
-                                                    status={appointment.status}
-                                                    page={props.page}
-                                                />
-                                            ) : ""}
-                                        isLast={id === 5}
-                                    />
-                                </>
+                                <CalendarSpace
+                                    key={id}
+                                    content={
+                                        foundAppointments.length > 0 ? foundAppointments.map((appointment, id) =>
+                                            <AppointmentCardCalendar
+                                                key={id}
+                                                _id={appointment._id}
+                                                cancellationComment={appointment.cancellationComment}
+                                                patientName={appointment.patientName}
+                                                motherSurname={appointment.motherSurname}
+                                                fatherSurname={appointment.fatherSurname}
+                                                phoneNumber={appointment.phoneNumber}
+                                                date={appointment.date}
+                                                hour={appointment.hour}
+                                                status={appointment.status}
+                                                page={props.page}
+                                            />
+                                        ) : ""}
+                                    isLast={id === 5}
+                                />
                             );
                         })}
                     </div>

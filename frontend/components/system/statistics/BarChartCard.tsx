@@ -3,12 +3,11 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-export default function BarChartCard({ onFinished }: { onFinished: () => void; }) {
+export default function BarChartCard() {
     const shortMonths = ["", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
     const [months, setMonths] = useState<string[]>([]);
     const [appointmentsByMonth, setAppointmentsByMonth] = useState<number[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [totals, setTotals] = useState(0);
 
     useEffect(() => {
         let mounted = true;
@@ -50,10 +49,7 @@ export default function BarChartCard({ onFinished }: { onFinished: () => void; }
 
         } catch (error) {
             console.log("An error ocurred:", error);
-        } finally {
-            setIsLoading(false);
-            onFinished();
-        };
+        } finally {() => setIsLoading(false);};
 
     }, []);
 
@@ -148,7 +144,7 @@ export default function BarChartCard({ onFinished }: { onFinished: () => void; }
             <p className="font-semibold text-slate-800 text-lg">Cantidad de citas por mes</p>
 
             <div className="w-full flex xl:flex-row lg:flex-col sm:flex-row flex-col xl:items-center items-start justify-center xl:gap-0 gap-4">
-                {total && !isLoading && (
+                {!isLoading && (
                     <div className="written-data flex flex-col gap-2">
                         <p className="text-sm font-normal text-slate-500">Citas totales:</p>
 

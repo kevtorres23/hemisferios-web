@@ -102,7 +102,7 @@ function PatientCard(props: PatientProps) {
                         <CalendarClock size={18} className="text-slate-400" />
                         <p className="text-sm text-slate-950">
                             <span className="text-slate-400 font-normal">Frecuencia de pago: </span>
-                            {props.paymentFrequency === "weekly" ? "Semanal" : (props.paymentFrequency === "monthly" ? "Mensual" : "Semanal")}
+                            {props.paymentFrequency === "weekly" ? "Semanal" : (props.paymentFrequency === "monthly" ? "Mensual" : (props.paymentFrequency === "weekly" ? "Semanal" : "Por sesión"))}
                         </p>
                     </div>
 
@@ -124,7 +124,7 @@ function PatientCard(props: PatientProps) {
                     <div className="date flex flex-row gap-1 items-center justify-center">
                         <HandCoins size={18} className="text-slate-400" />
                         <p className="text-sm text-slate-950">
-                            <span className="text-slate-400 font-normal">Próximo pago:</span> {props.paymentFrequency != "session" ? formattedPayment : "Próxima visita."}
+                            <span className="text-slate-400 font-normal">Próximo pago:</span> {props.paymentFrequency != "session" ? formattedPayment : "Próxima visita"}
                         </p>
                     </div>
                 </DropdownMenuContent>

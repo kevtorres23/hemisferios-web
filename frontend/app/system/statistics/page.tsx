@@ -29,13 +29,11 @@ function Statistics() {
 
     const id = useId();
     const [displayedMonth, setDisplayedMonth] = useState((date.getMonth() + 1).toString());
-    const [sixMonthData, setSixMonthData] = useState<AppointmentType[][]>([[]]);
     const [pendingCount, setPendingCount] = useState(0);
     const [finishedCount, setFinishedCount] = useState(0);
     const [cancelledCount, setCancelledCount] = useState(0);
     const [totalCount, setTotalCount] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
-    const [finishedLoads, setFinishedLoads] = useState(0);
 
     useEffect(() => {
         getAppointmentsByRange(Number(displayedMonth), Number(displayedMonth)).then((result) => {
@@ -70,10 +68,6 @@ function Statistics() {
     }, [displayedMonth]);
 
     const recordMonths = [" ", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-
-    function onFinishedLoading() {
-        setFinishedLoads(finishedLoads => finishedLoads+ 1);
-    };
 
     return (
         <SystemLayout sidebarPage="statistics">
@@ -114,18 +108,18 @@ function Statistics() {
 
             {!isLoading && totalCount > 0 && (
                 <>
-                    <StatusNumbers onFinished={onFinishedLoading} displayedMonth={Number(displayedMonth)} totalCount={totalCount} finishedCount={finishedCount} pendingCount={pendingCount} cancelledCount={cancelledCount}/>
+                    <StatusNumbers displayedMonth={Number(displayedMonth)} totalCount={totalCount} finishedCount={finishedCount} pendingCount={pendingCount} cancelledCount={cancelledCount}/>
 
                     <div className="second-card-row gap-6 w-full flex lg:flex-row flex-col">
                         <CircleChartCard total={totalCount} pending={pendingCount} finished={finishedCount} cancelled={cancelledCount} />
 
-                        <RelevantNumbersCard month={displayedMonth} onFinished={onFinishedLoading}/>
+                        <RelevantNumbersCard month={displayedMonth}/>
                     </div>
 
                     <div className="third-card-row gap-6 w-full flex lg:flex-row flex-col">
-                        <MostFrequentPatients month={Number(displayedMonth)} onFinished={onFinishedLoading} />
+                        <MostFrequentPatients month={Number(displayedMonth)} />
 
-                        <BarChartCard onFinished={onFinishedLoading} />
+                        <BarChartCard />
                     </div>
                 </>
             )}

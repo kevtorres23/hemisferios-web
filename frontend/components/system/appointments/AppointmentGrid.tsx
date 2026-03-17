@@ -124,8 +124,6 @@ function AppointmentGrid(props: GridProps) {
                 </div>
             </div>
 
-            {props.isLoading && <LoadingState message="Cargando citas..." />}
-
             {!props.isLoading && appointmentPages.length === 0 && (
                 <EmptyState
                     header="¡No hay citas que mostrar!"

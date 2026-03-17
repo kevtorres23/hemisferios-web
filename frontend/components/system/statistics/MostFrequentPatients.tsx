@@ -27,7 +27,7 @@ function FrequentPatientCard(props: FrequencyCard) {
     );
 };
 
-export default function MostFrequentPatients({ month, onFinished }: { month: number, onFinished: () => void }) {
+export default function MostFrequentPatients({ month }: { month: number }) {
     const [patientList, setPatientList] = useState<{ name: string, visits: number }[]>([]);
 
     useEffect(() => {
@@ -66,7 +66,7 @@ export default function MostFrequentPatients({ month, onFinished }: { month: num
             setPatientList(mostFrequent);
         };
 
-        getPatients().finally(() => onFinished);
+        getPatients();
     }, []);
 
     return (
