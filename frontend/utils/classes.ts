@@ -1,5 +1,3 @@
-import { PatientHistory } from "./types";
-
 class ContactMessage {
     // Defining the class initializers.
     name: string;

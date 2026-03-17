@@ -52,7 +52,7 @@ function AddRegistry(props: FormProps) {
 
         try {
             let registry = props.patientData.visitRegistry;
-            registry.push({ date: format(date, "yyyy-MM-dd"), hour: hour });
+            registry.push({ date: format(date, "yyyy-MM-dd"), hour: hour, _id:"" });
 
             const updatedPatient = {
                 name: props.patientData.name,

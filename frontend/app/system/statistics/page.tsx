@@ -75,8 +75,6 @@ function Statistics() {
         setFinishedLoads(finishedLoads => finishedLoads+ 1);
     };
 
-    console.log(finishedLoads);
-
     return (
         <SystemLayout sidebarPage="statistics">
 

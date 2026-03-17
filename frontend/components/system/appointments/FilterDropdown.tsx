@@ -54,9 +54,11 @@ const firstDefault = format(new Date(year, fullDays[0].dayNum.month - 1, fullDay
 const secondDefault = format(new Date(year, fullDays[11].dayNum.month - 1, fullDays[11].dayNum.number), "yyyy-MM-dd");
 
 function FilterDropdown(props: FilterProps) {
-    const [pendingChecked, setPendingChecked] = useState(true);
-    const [finishedChecked, setFinishedChecked] = useState(true);
-    const [cancelledChecked, setCancelledChecked] = useState(true);
+    const checkedStatuses = useAppointmentFilters((state: FilterStore) => state.statusObject);
+
+    const [pendingChecked, setPendingChecked] = useState(checkedStatuses.pending);
+    const [finishedChecked, setFinishedChecked] = useState(checkedStatuses.finished);
+    const [cancelledChecked, setCancelledChecked] = useState(checkedStatuses.cancelled);
     const [intervalFirst, setIntervalFirst] = useState(firstDefault);
     const [intervalSecond, setIntervalSecond] = useState(secondDefault)
     const id = useId();
@@ -148,12 +150,12 @@ function FilterDropdown(props: FilterProps) {
                                             <SelectContent>
                                                 <SelectGroup className="max-h-60 overflow-y-scroll">
                                                     <SelectLabel>Del:</SelectLabel>
-                                                    {fullDays.map((day) => {
+                                                    {fullDays.map((day, id) => {
                                                         let date = new Date(year, day.dayNum.month - 1, day.dayNum.number);
                                                         let formattedDay = format(date, "PP", { locale: es });
                                                         let databaseDate = format(date, "yyyy-MM-dd");
                                                         return (
-                                                            <SelectItem value={databaseDate}>{formattedDay}</SelectItem>
+                                                            <SelectItem key={id} value={databaseDate}>{formattedDay}</SelectItem>
                                                         )
                                                     })}
                                                 </SelectGroup>

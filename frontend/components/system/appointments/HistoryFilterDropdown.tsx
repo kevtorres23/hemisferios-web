@@ -19,7 +19,7 @@ type Status = {
     cancelled: boolean
 };
 
-type FilterStore = {
+type HistoryFilterStore = {
     interval: [string, string],
     statusObject: Status,
     updateInterval: (newIntervalArray: [string, string]) => void,
@@ -27,11 +27,13 @@ type FilterStore = {
 };
 
 function HistoryFilterDropdown() {
-    const [finishedChecked, setFinishedChecked] = useState(true);
-    const [cancelledChecked, setCancelledChecked] = useState(true);
+    const historyCheckedStatuses = useHistoryFilters((state: HistoryFilterStore) => state.statusObject);
+
+    const [finishedChecked, setFinishedChecked] = useState(historyCheckedStatuses.finished);
+    const [cancelledChecked, setCancelledChecked] = useState(historyCheckedStatuses.cancelled);
 
     // Store variables (Zustand).
-    const updateStatus = useHistoryFilters((state: FilterStore) => state.updateStatus);
+    const updateStatus = useHistoryFilters((state: HistoryFilterStore) => state.updateStatus);
 
     function onFinishedChange() {
         setFinishedChecked(!finishedChecked);

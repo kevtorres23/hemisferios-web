@@ -42,7 +42,6 @@ function AppointmentDashboard() {
         const fetchAppointments = async () => {
             setIsLoading(true);
             try {
-                console.log(interval[0], interval[1])
                 const res = await api.get("/appointments/dateRange/" + interval[0] + "/" + interval[1]);
                 setAppointmentsData(res.data);
 
@@ -202,19 +201,25 @@ function AppointmentDashboard() {
 
             <FilterBar onViewChange={(selectedView: string) => setView(selectedView)} firstElement={
                 <>
-                    {pendingCounter === 1 && (
+                    {isLoading && (
+                        <p className="text-lg font-medium text-slate-800">
+                            Cargando...
+                        </p>
+                    )}
+
+                    {!isLoading && pendingCounter === 1 && (
                         <p className="text-lg font-medium text-slate-800">
                             Hay <span className="font-semibold text-indigo-500">1</span> cita pendiente
                         </p>
                     )}
 
-                    {pendingCounter === 0 && (
+                    {!isLoading && pendingCounter === 0 && (
                         <p className="text-lg font-medium text-slate-800">
                             ¡No hay citas pendientes!
                         </p>
                     )}
 
-                    {pendingCounter > 1 && (
+                    {!isLoading && pendingCounter > 1 && (
                         <p className="text-lg font-medium text-slate-800">
                             Hay <span className="font-semibold text-indigo-500">{pendingCounter}</span> citas pendientes
                         </p>
@@ -222,6 +227,10 @@ function AppointmentDashboard() {
                 </>
             }
             />
+
+            {isLoading && (
+                <LoadingState message="Cargando citas..." />
+            )}
 
             {!isLoading && !isAnyAppointment && (
                 <EmptyState
