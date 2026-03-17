@@ -2,15 +2,19 @@
 
 import Navbar from "@/components/website/Navbar"
 import Footer from "@/components/website/Footer";
-import { useAppointmentStore } from "@/utils/website/store-appointments";
+import { useAppointmentStore } from "@/utils/website/receipt-store";
+import { redirect } from 'next/navigation';
 import Image from "next/image";
 import music from "../../public/music.png";
 import Receipt from "@/components/website/Receipt";
 import { Check } from "lucide-react";
 
-
 function FinishedAppointment() {
     const createdAppointment = useAppointmentStore((state: any) => state.createdAppointment); // Bringing the just-created appointment object.
+
+    if (!createdAppointment.status || !createdAppointment.patientName || !createdAppointment.motherSurname || !createdAppointment.fatherSurname || !createdAppointment.phoneNumber || !createdAppointment.date || !createdAppointment.hour || !createdAppointment.timestamp) {
+        redirect("/system/appointments")
+    };
     console.log(createdAppointment);
 
     return (
@@ -36,6 +40,7 @@ function FinishedAppointment() {
                     </div>
 
                     <Receipt
+                        status="pending"
                         patientName={createdAppointment.patientName}
                         fatherSurname={createdAppointment.fatherSurname}
                         motherSurname={createdAppointment.motherSurname}

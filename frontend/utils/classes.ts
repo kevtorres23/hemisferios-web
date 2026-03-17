@@ -1,5 +1,3 @@
-import { PatientHistory } from "./types";
-
 class ContactMessage {
     // Defining the class initializers.
     name: string;
@@ -63,9 +61,9 @@ class Patient {
     startingDate: string;
     paymentFrequency: string;
     paymentModality: string;
-    appointmentHistory: PatientHistory[];
+    paymentAmount: number;
 
-    constructor(name: string, fatherSurname: string, motherSurname: string, adultName: string, contactNumber: string, startingDate: string, paymentFrequency: string, paymentModality: string, appointmentHistory: PatientHistory[]) {
+    constructor(name: string, fatherSurname: string, motherSurname: string, adultName: string, contactNumber: string, startingDate: string, paymentFrequency: string, paymentModality: string, paymentAmount: number) {
         this.name = name;
         this.fatherSurname = fatherSurname;
         this.motherSurname = motherSurname;
@@ -74,8 +72,45 @@ class Patient {
         this.startingDate = startingDate;
         this.paymentFrequency = paymentFrequency;
         this.paymentModality = paymentModality;
-        this.appointmentHistory = appointmentHistory;
+        this.paymentAmount = paymentAmount;
     };
 };
 
-export { ContactMessage, Appointment, AppointmentInput, Patient };
+interface ScheduleItem {
+    patientName: string;
+    patientLastName: string;
+    hour: string;
+    day: string;
+};
+
+class Therapist {
+    name: string;
+    lastName: string;
+    startingDate: string;
+    contactNumber: string;
+    schedule: ScheduleItem[] | undefined;
+
+    constructor(name: string, lastName: string, startingDate: string, contactNumber: string, schedule?: ScheduleItem[]) {
+        this.name = name;
+        this.lastName = lastName;
+        this.startingDate = startingDate;
+        this.contactNumber = contactNumber;
+        this.schedule = schedule;
+    }
+};
+
+class ScheduleItemClass {
+    patientName: string;
+    patientLastName: string;
+    hour: string;
+    day: string;
+
+    constructor(patientName: string, patientLastName: string, hour: string, day: string) {
+        this.patientName = patientName;
+        this.patientLastName = patientLastName;
+        this.hour = hour;
+        this.day = day;
+    };
+};
+
+export { ContactMessage, Appointment, AppointmentInput, Patient, Therapist, ScheduleItemClass };

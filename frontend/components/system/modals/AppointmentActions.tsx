@@ -1,17 +1,27 @@
 "use client";
 
 import MediumModal from "./MediumModal";
+import isAvailabilityFull from "@/lib/availability/availability-limit";
+import adjustAvailability from "@/lib/availability/adjust-availability";
+import { AppointmentType } from "@/utils/types";
+import api from "@/lib/axios";
 import SmallModal from "./SmallModal";
 import { Appointment } from "@/utils/classes";
-import AppointmentForm from "@/components/website/NewAppointmentForm";
-import { ModalProps } from "@/utils/types";
-import axios from "axios";
+import AppointmentForm from "@/components/website/AppointmentForm";
+import { ModalProps, ActionModalProps } from "@/utils/types";
 import { useState } from "react";
 
 function NewAppointmentModal(props: ModalProps) {
+    async function saveBtnPressed(receiptObject: Appointment, databaseObject: Appointment) {
+        await api.post("/appointments", databaseObject);
 
-    function saveBtnPressed(receiptObject: Appointment, databaseOject: Appointment) {
-        axios.post("http://localhost:5001/api/appointments", databaseOject);
+        isAvailabilityFull(databaseObject.date, databaseObject.hour)
+            .then((result) => {
+                if (result) {
+                    adjustAvailability(databaseObject.date, databaseObject.hour);
+                };
+            })
+            .catch((error) => console.log("An error ocurred while checking the availability:", error));
 
         props.onSave();
     };
@@ -20,13 +30,44 @@ function NewAppointmentModal(props: ModalProps) {
         <MediumModal
             isVisible={props.isVisible}
             btnType="submit"
-            btnForm="appointmentForm"
+            btnForm="creationForm"
             onClose={props.onClose}
             title="Agendar una cita manualmente"
             confirmationBtnText="Guardar cita"
         >
 
-            <AppointmentForm sendData={saveBtnPressed} formId="appointmentForm" />
+            <AppointmentForm formId="creationForm" isOnModify={false} sendData={saveBtnPressed} modifyData={() => ""} editionId={""} />
+
+        </MediumModal>
+    );
+};
+
+function ModifyAppointmentModal(props: ActionModalProps) {
+    async function editAppointment(databaseObject: Appointment) {
+        await api.put("/appointments/" + props.updateElementId, databaseObject);
+
+        isAvailabilityFull(databaseObject.date, databaseObject.hour)
+            .then((result) => {
+                if (result) {
+                    adjustAvailability(databaseObject.date, databaseObject.hour);
+                };
+            })
+            .catch((error) => console.log("An error ocurred while checking the availability:", error));
+
+        props.onSave();
+    };
+
+    return (
+        <MediumModal
+            isVisible={props.isVisible}
+            btnType="submit"
+            btnForm="modifyForm"
+            onClose={props.onClose}
+            title="Modificar datos de la cita"
+            confirmationBtnText="Guardar cambios"
+        >
+
+            <AppointmentForm formId="modifyForm" isOnModify={true} editionId={props.updateElementId} modifyData={editAppointment} sendData={() => ""} />
 
         </MediumModal>
     );
@@ -48,13 +89,32 @@ function CompleteAppointment(props: ModalProps) {
     );
 };
 
-function CancelAppointmentModal(props: ModalProps) {
+function CancelAppointmentModal(props: ActionModalProps) {
     const [cancellationMsg, setCancellationMsg] = useState("");
 
-    function onSubmitCancellation(e: React.FormEvent) {
+    async function onSubmitCancellation(e: React.FormEvent) {
         e.preventDefault();
 
-        // Logic here to update the cancellation
+        try {
+            const res = await api.get("/appointments/" + props.updateElementId);
+            const foundAppointment: AppointmentType = res.data;
+
+            if (!cancellationMsg) {
+                foundAppointment.cancellationComment = "placeholder";
+                foundAppointment.status = "cancelled";
+                api.put("/appointments/" + props.updateElementId, foundAppointment);
+
+            } else if (foundAppointment != undefined) {
+                foundAppointment.cancellationComment = cancellationMsg;
+                foundAppointment.status = "cancelled";
+                api.put("/appointments/" + props.updateElementId, foundAppointment);
+            };
+
+            props.onSave();
+
+        } catch (error) {
+            console.log("An error ocurred:", error)
+        };
     };
 
     return (
@@ -65,7 +125,6 @@ function CancelAppointmentModal(props: ModalProps) {
             btnType="submit"
             btnForm="cancellationForm"
             onClose={props.onClose}
-            onSave={props.onSave}
             confirmationBtnText="Terminar"
         >
 
@@ -77,7 +136,8 @@ function CancelAppointmentModal(props: ModalProps) {
     );
 };
 
-function PendingAppointment(props: ModalProps) {
+function PendingAppointment(props: ActionModalProps) {
+
     return (
         <SmallModal
             isVisible={props.isVisible}
@@ -93,29 +153,7 @@ function PendingAppointment(props: ModalProps) {
     );
 };
 
-function ModifyAppointmentModal(props: ModalProps) {
-    function saveBtnPressed(receiptObject: Appointment, databaseOject: Appointment) {
-        // PUT axios controller to upadte the appointment.
-    };
-
-    return (
-        <MediumModal
-            isVisible={props.isVisible}
-            btnType="submit"
-            btnForm="modifyAppointment"
-            onClose={props.onClose}
-            title="Modificar datos de la cita"
-            confirmationBtnText="Guardar cambios"
-            onSave={props.onSave}
-        >
-
-            <AppointmentForm isOnModify={true} sendData={saveBtnPressed} formId="modifyAppointment" />
-
-        </MediumModal>
-    );
-};
-
-function RemoveAppointModal(props: ModalProps) {
+function RemoveAppointModal(props: ActionModalProps) {
     return (
         <SmallModal
             isVisible={props.isVisible}

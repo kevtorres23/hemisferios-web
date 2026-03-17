@@ -30,14 +30,14 @@ function SelectModality(props: SelectProps) {
                     <SelectValue className="" placeholder={
                         <div className="flex flex-row gap-2 items-center">
                             <Calendar size={16} />
-                            <p className="sm:text-sm text-base">Selecciona un tipo de pago</p>
+                            <p className="sm:text-sm text-base">Selecciona una opción</p>
                         </div>
                     } />
                 </SelectTrigger>
                 <SelectContent className="bg-white z-999" sideOffset={5} position="popper">
                     <SelectGroup>
-                        <SelectItem className="text-sm" key={1} value="efectivo">Pago en efectivo</SelectItem>
-                        <SelectItem className="text-sm" key={2} value="tarjeta">Pago con tarjeta</SelectItem>
+                        <SelectItem className="text-sm" key={1} value="cash">Pago en efectivo</SelectItem>
+                        <SelectItem className="text-sm" key={2} value="card">Pago con tarjeta</SelectItem>
                     </SelectGroup>
                 </SelectContent>
             </Select>
@@ -55,7 +55,7 @@ function SelectFrequency(props: SelectProps) {
                     <SelectValue className="" placeholder={
                         <div className="flex flex-row gap-2 items-center">
                             <Calendar size={16} />
-                            <p className="sm:text-sm text-base">Seleccion una frecuencia</p>
+                            <p className="sm:text-sm text-base">Seleccion una opción</p>
                         </div>
                     } />
                 </SelectTrigger>
@@ -63,6 +63,7 @@ function SelectFrequency(props: SelectProps) {
                     <SelectGroup>
                         <SelectItem className="text-sm" key={1} value="weekly">Semanal</SelectItem>
                         <SelectItem className="text-sm" key={2} value="monthly">Mensual</SelectItem>
+                        <SelectItem className="text-sm" key={3} value="session">Por sesión</SelectItem>
                     </SelectGroup>
                 </SelectContent>
             </Select>

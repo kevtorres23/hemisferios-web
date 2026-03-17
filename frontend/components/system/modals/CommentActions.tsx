@@ -1,10 +1,9 @@
-import MediumModal from "./MediumModal";
 import SmallModal from "./SmallModal";
-import { Calendar } from "lucide-react";
-import NewTherapistForm from "../therapists/NewTherapistForm";
 import { CommentType } from "@/utils/types";
 import TextMessageModal from "./TextMessageModal";
 import { ModalProps } from "@/utils/types";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 type CommentModalProps = {
     name: string;
@@ -32,10 +31,14 @@ function RemoveCommentModal(props: ModalProps) {
 };
 
 function SeeCommentModal(props: CommentModalProps) {
+    const commentDate = new Date(props.date);
+    console.log(props.date);
+    const formattedDate = format(commentDate, "PPP", { locale: es });
+
     return (
         <TextMessageModal
             title={`Comentario de ${props.name} ${props.lastName}`}
-            desc={`Enviado el ${props.date}`}
+            desc={`Enviado el ${formattedDate}`}
             textMessage={props.message}
             isVisible={props.isVisible}
             buttonText="Cerrar comentario"

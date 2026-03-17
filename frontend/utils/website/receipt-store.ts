@@ -8,7 +8,11 @@ type Appointment = {
     date: string;
     hour: string;
     timestamp: Date;
-}
+};
+
+/**
+ * Globally stores the information of an appointment that was just created by an user to display it in a receipt.
+ */
 
 export const useAppointmentStore = create((set) => ({
     createdAppointment: {},
@@ -23,4 +27,4 @@ export const useAppointmentStore = create((set) => ({
             timestamp: appointmentObject.timestamp,
         }
     }),
-}))
+}));

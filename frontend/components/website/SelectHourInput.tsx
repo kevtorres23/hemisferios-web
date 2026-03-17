@@ -1,6 +1,7 @@
-import { useId } from "react";
+import { useId, useEffect, useState } from "react";
 import { Clock4 } from "lucide-react";
 import { Label } from '@/components/ui/label';
+import { databaseToFormat } from "@/utils/date-methods";
 import {
     Select,
     SelectContent,
@@ -9,20 +10,51 @@ import {
     SelectLabel,
     SelectTrigger,
     SelectValue
-} from '@/components/ui/select'
+} from '@/components/ui/select';
+import { formatAvailability } from "@/utils/format-availability";
+import { DayFormat } from "@/utils/types";
+import api from "@/lib/axios";
 
 type SelectProps = {
     label: string;
+    isOnModify: boolean | undefined;
+    date: string;
+    appointmentId: string;
     value: string;
     onInputChange: (val: string) => void;
-    items: string[] | undefined;
     activeValidation: boolean;
-    selectType: "date" | "hour";
 };
 
 function SelectHourInput(props: SelectProps) {
     const id = useId();
-    
+    const [availableHours, setAvailableHours] = useState<string[]>();
+
+    useEffect(() => {
+        const fetchAvailability = async () => {
+            try {
+                // Variable definition.
+                const appointmentInfo = await api.get("/appointments/" + props.appointmentId);
+                const appointmentDate = props.isOnModify ? databaseToFormat(appointmentInfo.data.date) : props.date;
+                const availability = await api.get("/availability"); // Getting availability from the backend.
+                const formattedAvailability = formatAvailability(availability.data);
+
+                // Update hour availability based on the selected day.
+                formattedAvailability.forEach((dayList: DayFormat[]) => {
+                    dayList.forEach((day) => {
+                        if (day.databaseDate === appointmentDate) {
+                            setAvailableHours(day.hours);
+                        };
+                    });
+                });
+            } catch (error) {
+                console.log("Error fetching availability", error);
+            };
+
+        };
+
+        fetchAvailability();
+    }, [props.date]);
+
     return (
         <div className='w-full space-y-2'>
             <Label className="text-slate-500 font-normal sm:text-sm text-base" htmlFor={id}>{props.label} <span className="text-red-500 text-lg font-semibold">*</span></Label>
@@ -38,9 +70,9 @@ function SelectHourInput(props: SelectProps) {
                 <SelectContent className="bg-white text-sm z-999" sideOffset={5} position="popper">
                     <SelectGroup className="h-80 overflow-y-scroll">
                         <SelectLabel className="text-sm">Hora de la cita</SelectLabel>
-                        {/* Map the available dates from the database*/}
-                        {props.items?.map((item, id) =>
-                            <SelectItem className="text-sm" key={id} value={item}>{item}</SelectItem>
+                        {/* Map the available hours from the database*/}
+                        {availableHours?.map((hour, id) =>
+                            <SelectItem className="text-sm" key={id} value={hour}>{hour}</SelectItem>
                         )}
                     </SelectGroup>
                 </SelectContent>

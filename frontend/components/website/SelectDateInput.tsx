@@ -1,5 +1,7 @@
-import { useId } from "react";
+import { useId, useEffect, useState } from "react";
+import api from "@/lib/axios";
 import { Calendar } from "lucide-react";
+import { formatAvailability } from "@/utils/format-availability";
 import { Label } from '@/components/ui/label';
 import {
     Select,
@@ -11,24 +13,38 @@ import {
     SelectTrigger,
     SelectValue
 } from '@/components/ui/select';
-
-type WeekDayObject = {
-    writtenDate: string,
-    formattedDate: string,
-    databaseId: string,
-}
+import { Availability, DayFormat } from "@/utils/types";
 
 type SelectProps = {
     label: string;
     value: string;
     onInputChange: (val: string) => void;
-    items: { currentWeekList: WeekDayObject[], nextWeekList: WeekDayObject[] };
     activeValidation: boolean;
     selectType: "date" | "hour";
 }
 
 function SelectDateInput(props: SelectProps) {
     const id = useId();
+    const [availableDays, setAvailableDays] = useState<DayFormat[][]>();
+
+    useEffect(() => {
+        const fetchAvailability = async () => {
+            try {
+                // Variable definition.
+                const availability = await api.get("/availability"); // Getting availability from the backend.
+
+                // Update day availability.
+                const formattedAvailability = formatAvailability(availability.data);
+                setAvailableDays(formattedAvailability);
+            } catch (error) {
+                console.log("Error fetching availability", error);
+            };
+
+        };
+
+        fetchAvailability();
+    }, []);
+
     return (
         <div className='w-full space-y-2'>
             <Label className="text-slate-500 font-normal sm:text-sm text-base" htmlFor={id}>{props.label} <span className="text-red-500 text-lg font-semibold">*</span></Label>
@@ -42,20 +58,27 @@ function SelectDateInput(props: SelectProps) {
                     } />
                 </SelectTrigger>
                 <SelectContent className="bg-white z-999" sideOffset={5} position="popper">
-                    <SelectGroup>
-                        <SelectLabel>Esta semana</SelectLabel>
-                        {props.items.currentWeekList.map((item, id) =>
-                            <SelectItem className="text-sm" key={id} value={item.databaseId}>{item.writtenDate}</SelectItem>
-                        )}
-                    </SelectGroup>
-                    <SelectSeparator />
-                    <SelectGroup>
-                        <SelectLabel>Próxima semana</SelectLabel>
-                        {props.items.nextWeekList.map((item, id) =>
-                            <SelectItem className="text-sm" key={id} value={item.databaseId}>{item.writtenDate}</SelectItem>
-                        )}
-                    </SelectGroup>
-                    <SelectSeparator />
+                    {availableDays === undefined ? (
+                        <SelectGroup>
+                            <SelectLabel>No hay disponibilidad</SelectLabel>
+                        </SelectGroup>
+                    ) : (
+                        <>
+                            <SelectGroup>
+                                <SelectLabel>Esta semana</SelectLabel>
+                                {availableDays[0].map((day, id) =>
+                                    <SelectItem className="text-sm" key={id} value={day.databaseDate}>{day.writtenDate}</SelectItem>
+                                )}
+                            </SelectGroup>
+                            <SelectSeparator />
+                            <SelectGroup>
+                                <SelectLabel>Próxima semana</SelectLabel>
+                                {availableDays[1].map((day, id) =>
+                                    <SelectItem className="text-sm" key={id} value={day.databaseDate}>{day.writtenDate}</SelectItem>
+                                )}
+                            </SelectGroup>
+                        </>
+                    )}
                 </SelectContent>
             </Select>
         </div>

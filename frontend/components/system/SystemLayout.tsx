@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import Input from "./Input";
 import InputWarning from "@/components/website/InputWarning";
 import MobileNavbar from "./MobileNavbar";
+import toast, { Toaster } from 'react-hot-toast';
 
 type LoginStore = {
     adminEmail: string,
@@ -52,9 +53,8 @@ function SystemLayout(props: SystemLayoutProps) {
         // Close the credential modal.
         setCredentialsModal(false);
 
-        // Display the success modal and hide it after 3 seconds.
-        setSuccessModal(true);
-        setTimeout(() => setSuccessModal(false), 3000)
+        // Display the success modal and hide it after 2.5 seconds.
+        toast.success(<p>¡Credenciales actualizadas!</p>, {duration: 2500})
     }
 
     if (sessionStore === false) {
@@ -113,11 +113,11 @@ function SystemLayout(props: SystemLayoutProps) {
                     {/* Any other modal(s) will be rendered here*/}
                 </ SmallModal>
 
+                <Toaster/>
+
                 {props.modals}
 
                 <div className="relative overflow-x-hidden md:ml-70 ml-0 lg:min-h-screen h-auto flex md:flex-row flex-col items-start justify-center bg-slate-100 font-sans dark:bg-black">
-
-                    <SuccessModal text="¡Credenciales actualizadas!" isVisible={successModal} />
 
                     <main className={`w-full flex flex-col gap-8 sm:p-12 p-8 items-start justify-start ${(credentialsModal || props.isAnyModal) ? "sm:h-screen h-auto overflow-hidden" : "h-auto"}`}>
                         {props.children}

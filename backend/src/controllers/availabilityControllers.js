@@ -1,5 +1,4 @@
 import Availability from "../models/Availability.js";
-import colors from "colors";
 
 export async function getAvailability(_, res) {
     try {
@@ -15,8 +14,6 @@ export async function getAvailability(_, res) {
 export async function createAvailability(req, res) {
     try {
         const {
-            weekStart,
-            weekFinish,
             lunes,
             martes,
             miercoles,
@@ -26,8 +23,6 @@ export async function createAvailability(req, res) {
         } = req.body;
 
         const newAvailability = new Availability({
-            weekStart,
-            weekFinish,
             lunes,
             martes,
             miercoles,
@@ -49,8 +44,6 @@ export async function createAvailability(req, res) {
 export async function updateAvailability(req, res) {
     try {
         const {
-            weekStart,
-            weekFinish,
             lunes,
             martes,
             miercoles,
@@ -60,8 +53,6 @@ export async function updateAvailability(req, res) {
         } = req.body;
 
         const updatedAvailability = await Availability.findByIdAndUpdate(req.params.id, {
-            weekStart,
-            weekFinish,
             lunes,
             martes,
             miercoles,

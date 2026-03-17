@@ -23,7 +23,7 @@ const appointmentSchema = new mongoose.Schema({
         required: true
     },
     date: {
-        type: String,
+        type: Date,
         required: true
     },
     hour: {
@@ -33,6 +33,7 @@ const appointmentSchema = new mongoose.Schema({
     cancellationComment: {
         type: String,
         required: false,
+        default: "placeholder",
     },
 },
     { timestamps: true }

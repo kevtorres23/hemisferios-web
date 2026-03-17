@@ -44,13 +44,44 @@ export async function createMessage(req, res) {
         const savedMessage = await newMessage.save();
 
         await newMessage.save();
-        res.status(201).json({ message: "Message created successfully!", appointment: savedMessage });
+        res.status(201).json({ message: "Message created successfully!", contactMsg: savedMessage });
 
     } catch (error) {
         console.error("Error in the createMessage controller", error)
         res.status(500).json({ message: "Internal server error." })
     }
 };
+
+export async function updateMessage(req, res) {
+    try {
+        const {
+            name,
+            lastName,
+            phoneNumber,
+            email,
+            message,
+            status
+        } = req.body;
+
+        const updatedComment = await ContactMsg.findByIdAndUpdate(req.params.id, {
+            name,
+            lastName,
+            phoneNumber,
+            email,
+            message,
+            status
+        }, { new: true });
+
+        if (!updatedComment) return res.status(404).json({ message: "Comment not found" }); // Handling possible issues with the passed ID.
+
+        res.status(200).json({ message: "Comment updated successfully!", contactMsg: updatedComment });
+
+    } catch (error) {
+        console.error("Error in the updateMessage controller", error)
+        res.status(500).json({ message: "Internal server error." })
+    }
+};
+
 
 export async function deleteMessage(req, res) {
     try {

@@ -1,6 +1,6 @@
 // REUSABLE UI ELEMENTS USED TO BUILD THE APPOINTMENT CALENDAR.
-
-import { calendarHoursCreator, daysDistance } from "../../../utils/system/calendar-methods";
+import { calendarHoursCreator, hourSorter, calendarContentGenerator } from "../../../utils/system/calendar/calendar-methods";
+import { currentWeekList, nextWeekList } from "@/utils/system/calendar/calendar-variables";
 import { AppointmentCardCalendar } from "./AppointmentCard";
 import { AppointmentType } from "../../../utils/types";
 
@@ -13,7 +13,7 @@ type DayProps = {
 };
 
 type HourProps = {
-    hour: string,
+    hour: string | number,
     isLast: boolean,
 };
 
@@ -25,6 +25,7 @@ type SpaceProps = {
 type CalendarUIProps = {
     data: AppointmentType[],
     page: "history" | "appointments";
+    week: number;
 };
 
 function CalendarDay(props: DayProps) {
@@ -46,21 +47,20 @@ function CalendarHour(props: HourProps) {
 
 function CalendarSpace(props: SpaceProps) {
     return (
-        <div className={`min-w-40 w-full items-center justify-center bg-white border-b border-l border-slate-200 flex flex-row gap-1.5 px-3 py-2 ${props.isLast ? "border-r" : ""}`}>
+        <div className={`min-w-40 w-full items-center justify-center bg-white border-b border-l border-slate-200 flex flex-col gap-2 px-4 py-4 ${props.isLast ? "border-r" : ""}`}>
             {props.content}
         </div>
     );
 };
 
 function CalendarUI(props: CalendarUIProps) {
+
     // Date variables.
-    const calendarHours = calendarHoursCreator(props.data); // An array containing hours that the appointments have and that will be displayed in the calendar.
-    const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+    const hours = calendarHoursCreator(props.data);
+    const calendarHours = hourSorter(hours); // A sorted array containing hours that the appointments have and that will be displayed in the calendar.
 
     const date = new Date();
     const todayNum = date.getDay(); // This is equal to today's week number, for example, 4 (for Jueves).
-    const todayName = dayNames[todayNum]; // This is equal to today's name, for example, "Jueves".
-    const todayMonthNum = date.getDate(); // This is equal to the day of the month, for example, 19.
 
     return (
         <div className="calendar w-full overflow-x-auto flex flex-col">
@@ -69,14 +69,23 @@ function CalendarUI(props: CalendarUIProps) {
                     <p className="opacity-0"> - </p>
                 </div>
 
-                {dayNames.map((_, id) => {
-                    return (id === 0 ? null :
+                {currentWeekList.map((_, id) => {
+                    return (
                         <CalendarDay
-                            dayName={dayNames[id]}
-                            dayNum={todayMonthNum - daysDistance(todayNum, id)}
-                            isActive={todayNum === id}
+                            key={id}
+                            dayName={props.week === 1 ? (
+                                currentWeekList[id].dayName
+                            ) : (
+                                nextWeekList[id].dayName
+                            )}
+                            dayNum={props.week === 1 ? (
+                                currentWeekList[id].dayNum.number
+                            ) : (
+                                nextWeekList[id].dayNum.number
+                            )}
+                            isActive={todayNum === id + 1}
                             isFirst={false}
-                            isLast={id === 6}
+                            isLast={id === 5}
                         />
                     );
                 }
@@ -84,23 +93,70 @@ function CalendarUI(props: CalendarUIProps) {
             </div>
 
             {calendarHours.map((_, id) => {
-                var hours = calendarHours;
+                var hourId = id;
 
                 return (
-                    <div className="flex flex-row w-full">
+                    <div className="calendar-content flex flex-row w-full" key={id}>
                         <CalendarHour
-                            hour={hours[id]}
+                            key={id}
+                            hour={calendarHours[id]}
                             isLast={id === (hours.length - 1)}
                         />
 
-                        {dayNames.map((_, id) => {
-                            return (id === 0 ? null :
-                                <CalendarSpace
-                                    content={""}
-                                    isLast={id === 6}
-                                />
-                            );
-                        }
+                        {props.week === 1 ? (
+                            currentWeekList.map((_, id) => {
+                                var dayId = id;
+                                var foundAppointments = calendarContentGenerator(currentWeekList, hourId, dayId, calendarHours, props.data);
+                                return (
+                                    <CalendarSpace
+                                        key={id}
+                                        content={
+                                            foundAppointments.length > 0 ? foundAppointments.map((appointment, id) =>
+                                                <AppointmentCardCalendar
+                                                    key={id}
+                                                    _id={appointment._id}
+                                                    cancellationComment={appointment.cancellationComment}
+                                                    patientName={appointment.patientName}
+                                                    motherSurname={appointment.motherSurname}
+                                                    fatherSurname={appointment.fatherSurname}
+                                                    phoneNumber={appointment.phoneNumber}
+                                                    date={appointment.date}
+                                                    hour={appointment.hour}
+                                                    status={appointment.status}
+                                                    page={props.page}
+                                                />
+                                            ) : ""}
+                                        isLast={id === 5}
+                                    />
+                                );
+                            })
+                        ) : (
+                            nextWeekList.map((_, id) => {
+                                var dayId = id;
+                                var foundAppointments = calendarContentGenerator(nextWeekList, hourId, dayId, calendarHours, props.data);
+                                return (
+                                    <CalendarSpace
+                                        content={
+                                            foundAppointments.length > 0 ? foundAppointments.map((appointment) =>
+                                                <AppointmentCardCalendar
+                                                    key={id}
+                                                    _id={appointment._id}
+                                                    cancellationComment={appointment.cancellationComment}
+                                                    patientName={appointment.patientName}
+                                                    motherSurname={appointment.motherSurname}
+                                                    fatherSurname={appointment.fatherSurname}
+                                                    phoneNumber={appointment.phoneNumber}
+                                                    date={appointment.date}
+                                                    hour={appointment.hour}
+                                                    status={appointment.status}
+                                                    page={props.page}
+                                                />
+                                            ) : ""}
+                                        isLast={id === 5}
+                                        key={id}
+                                    />
+                                );
+                            })
                         )}
                     </div>
                 )

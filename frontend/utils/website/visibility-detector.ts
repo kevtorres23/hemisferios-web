@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
 
+/**
+ * Checks if an element in the UI is visible by detecting if it enters in the viewport.
+ * @param ref 
+ * @returns A boolean indicating if the element is visible.
+ */
+
 export function isVisible(ref: any) {
     const [isIntersecting, setIsIntersecting] = useState(false);
 

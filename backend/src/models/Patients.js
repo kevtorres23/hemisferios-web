@@ -33,13 +33,18 @@ const patientSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    appointmentHistory: {
+    paymentAmount: {
+        type: Number,
+        default: "250",
+        required: true,
+    },
+    visitRegistry: {
         type: [{
-            date: String,
+            date: Date,
             hour: String,
         }],
-        required: true
-    }
+        required: true,
+    },
 },
     { timestamps: true }
 );

@@ -1,10 +1,17 @@
 import { Dispatch, SetStateAction } from "react";
 
-// The following two functions manipulate an input's value and validation state.
+/**
+ * Handles an text input's value and validation states.
+ * @param e 
+ * @param input 
+ * @param setInput 
+ * @param areValidationsShot 
+ * @param setInputValid 
+ */
 
 function InputChange(
     e: React.ChangeEvent<HTMLInputElement>,
-    input: string,
+    input: string | number,
     setInput: Dispatch<SetStateAction<string>>,
     areValidationsShot: boolean,
     setInputValid: Dispatch<SetStateAction<boolean>>) {
@@ -16,24 +23,47 @@ function InputChange(
     } else {
         setInputValid(false);
     };
-}
+};
 
-// This function manipulates a select's value and validation state.
-
-function SelectChange(
-    value: string,
-    input: string,
-    setInput: Dispatch<SetStateAction<string>>,
+function NumberInputChange(
+    e: React.ChangeEvent<HTMLInputElement>,
+    input: number,
+    setInput: Dispatch<SetStateAction<number>>,
     areValidationsShot: boolean,
     setInputValid: Dispatch<SetStateAction<boolean>>) {
 
-    setInput(value);
+    setInput(e.currentTarget.valueAsNumber);
 
     if (!input && (areValidationsShot === true)) {
         setInputValid(true);
     } else {
         setInputValid(false);
     };
-}
+};
 
-export { InputChange, SelectChange };
+    /**
+     * Handles an select input's value and validation states.
+     * @param e 
+     * @param input 
+     * @param setInput 
+     * @param areValidationsShot 
+     * @param setInputValid 
+     */
+
+    function SelectChange(
+        value: string,
+        input: string,
+        setInput: Dispatch<SetStateAction<string>>,
+        areValidationsShot: boolean,
+        setInputValid: Dispatch<SetStateAction<boolean>>) {
+
+        setInput(value);
+
+        if (!input && (areValidationsShot === true)) {
+            setInputValid(true);
+        } else {
+            setInputValid(false);
+        };
+    }
+
+    export { InputChange, NumberInputChange, SelectChange };

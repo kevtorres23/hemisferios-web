@@ -1,9 +1,10 @@
-import { useContext } from "react";
-import { PatientHistory } from "@/utils/types";
+import { useContext, useState } from "react";
+import { PatientRegistry } from "@/utils/types";
 import { CardActionContext } from "@/app/system/patients/page";
-import PaymentTag from "./PaymentTag";
+import { ModalityTag } from "./PaymentTag";
 import { Button } from "@/components/ui/button";
-import { Ellipsis, SquarePen, Trash, UserRound, Phone, CircleUserRound, History } from "lucide-react";
+import { establishPaymentDate } from "@/utils/system/patients/next-payments";
+import { Ellipsis, SquarePen, Trash, UserRound, Phone, CircleUserRound, HandCoins, CalendarClock, HouseHeart, CircleDollarSign, History } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -11,8 +12,12 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { stringToDate } from "@/utils/date-methods";
+import { es } from "date-fns/locale";
+import { format } from "date-fns";
 
 type PatientProps = {
+    _id: string;
     name: string;
     fatherSurname: string;
     motherSurname: string;
@@ -21,14 +26,29 @@ type PatientProps = {
     startingDate: string;
     paymentFrequency: string;
     paymentModality: string;
-    appointmentHistory: PatientHistory[];
+    paymentAmount: number;
+    appointmentHistory: PatientRegistry[];
 };
 
 function PatientCard(props: PatientProps) {
     const setAction = useContext(CardActionContext);
 
+    const dateConversion = stringToDate(props.startingDate);
+    const startingDate = new Date(dateConversion.getFullYear(), dateConversion.getMonth(), dateConversion.getDate());
+    const formattedDate = format(startingDate, "PP", { locale: es });
+
+    let paymentDate;
+    let formattedPayment;
+
+    if (props.paymentFrequency != "session") {
+        paymentDate = establishPaymentDate(props.paymentFrequency, props.startingDate);
+        const paymentDateConversion = stringToDate(paymentDate ? paymentDate : "");
+        const newPaymentDate = new Date(paymentDateConversion.getFullYear(), paymentDateConversion.getMonth() - 1, paymentDateConversion.getDate());
+        formattedPayment = format(newPaymentDate, "PP", { locale: es });
+    };
+
     return (
-        <div className="relative flex flex-col gap-2.5 overflow-y-visible rounded-md border border-slate-200 p-6 items-start justify-center overflow-x-hidden">
+        <div className="relative flex flex-col gap-2 overflow-y-visible rounded-md border border-slate-200 p-6 items-start justify-center overflow-x-hidden">
 
             <div className="relative w-full flex flex-row justify-between items-center">
                 <div className="user-badge p-1.5 rounded-md bg-[rgb(20,184,166,0.15)]">
@@ -45,19 +65,19 @@ function PatientCard(props: PatientProps) {
                     <DropdownMenuContent className="w-auto" align="start">
 
                         <DropdownMenuGroup className="">
-                            <DropdownMenuItem onClick={() => setAction("history")} className="flex flex-row gap-1.5 items-center">
-                                <History size={16} className="text-slate-800" />
-                                <p className="text-slate-800">Ver historial de citas</p>
-                            </DropdownMenuItem>
-
-                            <DropdownMenuItem onClick={() => setAction("modify")} className="flex flex-row gap-1.5 items-center">
+                            <DropdownMenuItem onClick={() => setAction("modify", props._id)} className="flex flex-row gap-1.5 items-center">
                                 <SquarePen size={16} className="text-slate-800" />
                                 <p className="text-slate-800">Modificar datos</p>
                             </DropdownMenuItem>
 
-                            <DropdownMenuItem onClick={() => setAction("remove")} className="flex flex-row gap-1.5 items-center">
+                            <DropdownMenuItem onClick={() => setAction("remove", props._id)} className="flex flex-row gap-1.5 items-center">
                                 <Trash size={16} className="text-slate-800" />
                                 <p className="text-slate-800">Eliminar paciente</p>
+                            </DropdownMenuItem>
+
+                            <DropdownMenuItem onClick={() => setAction("registry", props._id)} className="flex flex-row gap-1.5 items-center">
+                                <History size={16} className="text-slate-800" />
+                                <p className="text-slate-800">Registro de asistencias</p>
                             </DropdownMenuItem>
 
                         </DropdownMenuGroup>
@@ -68,25 +88,62 @@ function PatientCard(props: PatientProps) {
 
             <p className="text-base font-medium text-slate-900">{props.name} {props.fatherSurname} {props.motherSurname}</p>
 
-            <PaymentTag modality={props.paymentModality} frequency={props.paymentFrequency} />
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button className="px-0! py-0! cursor-pointer" variant={null}>
+                        <ModalityTag modality={props.paymentModality} />
+                    </Button>
+                </DropdownMenuTrigger>
 
-            <div className="date flex flex-row gap-1 items-center justify-center">
-                <UserRound size={16} className="text-slate-400" />
-                <p className="text-sm text-slate-900">
-                    <span className="text-slate-400 font-medium">Responsable:</span> {props.adultName}
-                </p>
-            </div>
+                <DropdownMenuContent className="p-4 flex flex-col gap-3 items-start w-auto">
+                    <p className="text-base font-medium text-slate-900">Datos del pago</p>
 
-            <div className="date flex flex-row gap-1 items-center justify-center">
-                <Phone size={16} className="text-slate-400" />
-                <p className="text-sm text-slate-900">
-                    <span className="text-slate-400 font-medium">Contacto:</span> {props.contactNumber}
-                </p>
-            </div>
+                    <div className="date flex flex-row gap-1 items-center justify-center">
+                        <CalendarClock size={18} className="text-slate-400" />
+                        <p className="text-sm text-slate-950">
+                            <span className="text-slate-400 font-normal">Frecuencia de pago: </span>
+                            {props.paymentFrequency === "weekly" ? "Semanal" : (props.paymentFrequency === "monthly" ? "Mensual" : "Semanal")}
+                        </p>
+                    </div>
 
-            <div className="flex flex-row gap-2">
-                <p className="text-sm font-medium text-indigo-500">Próximo pago: </p>
-                <p className="text-sm font-normal text-slate-900">10 de abril</p>
+                    <div className="date flex flex-row gap-1 items-center justify-center">
+                        <CircleDollarSign size={18} className="text-slate-400" />
+                        <p className="text-sm text-slate-950">
+                            <span className="text-slate-400 font-normal">Cantidad: </span>
+                            ${props.paymentAmount}
+                        </p>
+                    </div>
+
+                    <div className="date flex flex-row gap-1 items-center justify-center">
+                        <HouseHeart size={18} className="text-slate-400" />
+                        <p className="text-sm text-slate-950">
+                            <span className="text-slate-400 font-normal">Fecha de inicio:</span> {formattedDate}
+                        </p>
+                    </div>
+
+                    <div className="date flex flex-row gap-1 items-center justify-center">
+                        <HandCoins size={18} className="text-slate-400" />
+                        <p className="text-sm text-slate-950">
+                            <span className="text-slate-400 font-normal">Próximo pago:</span> {props.paymentFrequency != "session" ? formattedPayment : "Próxima visita."}
+                        </p>
+                    </div>
+                </DropdownMenuContent>
+            </DropdownMenu>
+
+            <div className="flex flex-col gap-3 w-full items-start">
+                <div className="date flex flex-row gap-1 items-center justify-center">
+                    <UserRound size={16} className="text-slate-400" />
+                    <p className="text-sm text-slate-950">
+                        <span className="text-slate-400 font-normal">Responsable:</span> {props.adultName}
+                    </p>
+                </div>
+
+                <div className="date flex flex-row gap-1 items-center justify-center">
+                    <Phone size={16} className="text-slate-400" />
+                    <p className="text-sm text-slate-900">
+                        <span className="text-slate-400 font-normal">Contacto:</span> {props.contactNumber}
+                    </p>
+                </div>
             </div>
         </div>
     );
