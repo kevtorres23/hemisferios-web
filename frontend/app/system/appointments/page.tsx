@@ -235,7 +235,7 @@ function AppointmentDashboard() {
             {!isLoading && !isAnyAppointment && (
                 <EmptyState
                     header="¡No hay citas que mostrar!"
-                    desc="Intenta activar o desactivar algunos filtros para hacer que la información cambie."
+                    desc="Nuevas citas aparecerán aquí cuando sean agendadas por alguien en la página, o aquí, manualmente."
                     image={appointmentsEmpty}
                 />
             )}
@@ -246,7 +246,7 @@ function AppointmentDashboard() {
                 </CardActionContext.Provider>
             )}
 
-            {view === "calendar" && (
+            {view === "calendar" && isAnyAppointment && (
                 <CardActionContext.Provider value={onActionSelected}>
                     <AppointmentCalendar page="appointments" data={appointmentsData} month="" year="" />
                 </CardActionContext.Provider>
