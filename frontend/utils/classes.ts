@@ -76,6 +76,16 @@ class Patient {
     };
 };
 
+class PatientRegistryClass {
+    date: string;
+    hour: string;
+
+    constructor(date: string, hour: string) {
+        this.date = date;
+        this.hour = hour;
+    };
+};
+
 interface ScheduleItem {
     patientName: string;
     patientLastName: string;
@@ -113,4 +123,4 @@ class ScheduleItemClass {
     };
 };
 
-export { ContactMessage, Appointment, AppointmentInput, Patient, Therapist, ScheduleItemClass };
+export { ContactMessage, Appointment, AppointmentInput, Patient, Therapist, ScheduleItemClass, PatientRegistryClass };

@@ -3,7 +3,7 @@ import { PatientRegistry, PatientType } from "@/utils/types";
 import { compareAsc, format } from "date-fns"
 import toast, { Toaster } from 'react-hot-toast';
 import AddRegistry from "./AddRegistryForm";
-import { X, CalendarArrowUp, CalendarArrowDown, Plus, CircleX, CircleCheck } from "lucide-react";
+import { X, CalendarArrowUp, CalendarArrowDown, Plus } from "lucide-react";
 import NormalButton from "@/components/website/NormalButton";
 import CancelButton from "../CancelButton";
 import IconButton from "../IconButton";

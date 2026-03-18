@@ -178,7 +178,7 @@ function FilterDropdown(props: FilterProps) {
                                                         let databaseDate = format(date, "yyyy-MM-dd");
                                                         return (
                                                             // For the second parameter of the interval, we'll skip the first day of the two-week range.
-                                                            id === 0 ? "" : <SelectItem value={databaseDate}>{formattedDay}</SelectItem>
+                                                            id === 0 ? "" : <SelectItem key={id} value={databaseDate}>{formattedDay}</SelectItem>
                                                         )
                                                     })}
                                                 </SelectGroup>

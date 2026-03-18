@@ -1,5 +1,6 @@
 import Input from "@/components/website/Input";
 import InputWarning from "@/components/website/InputWarning";
+import { proseToDate } from "@/utils/date-methods";
 import { InputChange } from "@/utils/website/input-change-handlers";
 import { formattedToWrittenDate } from "@/utils/date-methods";
 import { ScheduleItem } from "@/utils/types";
@@ -69,33 +70,6 @@ function NewTherapistForm(props: FormProps) {
             setNumberValidation(true);
         } else if (therapistName && lastName && contactNumber && formattedStartingDate) {
             shootData();
-        };
-    };
-
-    type Months = "enero" | "febrero" | "marzo" | "abril" | "mayo" | "junio" | "julio" | "agosto" | "septiembre" | "octubre" | "noviembre" | "diciembre";
-
-    function proseToDate(date: string) {
-        const months: Record<Months, string> = {
-            "enero": "01",
-            "febrero": "02",
-            "marzo": "03",
-            "abril": "04",
-            "mayo": "05",
-            "junio": "06",
-            "julio": "07",
-            "agosto": "08",
-            "septiembre": "09",
-            "octubre": "10",
-            "noviembre": "11",
-            "diciembre": "12"
-        }
-
-        const separatedDate = date.split(" de ");
-
-        return {
-            day: Number(separatedDate[0]),
-            month: Number(months[separatedDate[1] as keyof Record<Months, string>]),
-            year: Number(separatedDate[2])
         };
     };
 

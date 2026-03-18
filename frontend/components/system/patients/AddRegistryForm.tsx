@@ -1,5 +1,4 @@
 import React, { useState, useId } from "react";
-import Input from "@/components/website/Input";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import InputWarning from "@/components/website/InputWarning";
@@ -7,6 +6,7 @@ import { DayPicker } from "../DayPicker";
 import { Label } from '@/components/ui/label';
 import { Clock4 } from "lucide-react";
 import { hourFormatter } from "@/utils/hour-methods";
+import { PatientRegistryClass } from "@/utils/classes";
 import {
     Select,
     SelectContent,
@@ -22,6 +22,11 @@ import api from "@/lib/axios";
 type FormProps = {
     patientData: PatientType | undefined;
     onSave: () => void;
+};
+
+type CreatedRegistry = {
+    date: Date;
+    hour: string;
 }
 
 function AddRegistry(props: FormProps) {
@@ -36,7 +41,7 @@ function AddRegistry(props: FormProps) {
 
     function onDateChange(date: Date) {
         setDate(date);
-        setFormattedDate(format(date, "PPP", {locale: es}));
+        setFormattedDate(format(date, "PPP", { locale: es }));
     };
 
     function onHourChange(hour: string) {
@@ -50,28 +55,37 @@ function AddRegistry(props: FormProps) {
             return;
         };
 
-        try {
-            let registry = props.patientData.visitRegistry;
-            registry.push({ date: format(date, "yyyy-MM-dd"), hour: hour, _id:"" });
+        if (!formattedDate) { setFormattedDateValidation(true) };
+        if (!hour) { setHourValidation(true) };
 
-            const updatedPatient = {
-                name: props.patientData.name,
-                fatherSurname: props.patientData.fatherSurname,
-                motherSurname: props.patientData.motherSurname,
-                adultName: props.patientData.adultName,
-                contactNumber: props.patientData.contactNumber,
-                startingDate: props.patientData.startingDate,
-                paymentFrequency: props.patientData.paymentFrequency,
-                paymentModality: props.patientData.paymentModality,
-                paymentAmount: props.patientData.paymentAmount,
-                visitRegistry: registry,
+        if (formattedDate && hour) {
+            try {
+                let registry = props.patientData.visitRegistry;
+                // Create a new array with the already-existing registries of the patient.
+                const updatedRegistries = registry.map((registry) => new PatientRegistryClass(registry.date, registry.hour));
+
+                // Add the new registry to the new list.
+                updatedRegistries.push({date: format(date, "yyyy-MM-dd"), hour: hour });
+
+                const updatedPatient = {
+                    name: props.patientData.name,
+                    fatherSurname: props.patientData.fatherSurname,
+                    motherSurname: props.patientData.motherSurname,
+                    adultName: props.patientData.adultName,
+                    contactNumber: props.patientData.contactNumber,
+                    startingDate: props.patientData.startingDate,
+                    paymentFrequency: props.patientData.paymentFrequency,
+                    paymentModality: props.patientData.paymentModality,
+                    paymentAmount: props.patientData.paymentAmount,
+                    visitRegistry: updatedRegistries,
+                };
+
+                await api.put("/patients/" + props.patientData._id, updatedPatient);
+            } catch (error) {
+                console.log("Something ocurred while updating the patient:", error);
+            } finally {
+                props.onSave();
             };
-
-            await api.put("/patients/" + props.patientData._id, updatedPatient);
-        } catch (error) {
-            console.log("Something ocurred while updating the patient:", error);
-        } finally {
-            props.onSave();
         };
     };
 

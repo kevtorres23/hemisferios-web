@@ -121,7 +121,7 @@ function AppointmentForm(props: FormProps) {
             </div>
 
             <div className="phone-field flex flex-col gap-2 w-full">
-                <Input type="text" textValue={phoneNumber} label="Número de teléfono del adulto responsable:" onInputChange={(e) => InputChange(e, phoneNumber, setPhoneNumber, validationsShot, setNumberValidation)} activeValidation={numberValidation} />
+                <Input maxLength={10} type="text" textValue={phoneNumber} label="Número de teléfono del adulto responsable:" onInputChange={(e) => InputChange(e, phoneNumber, setPhoneNumber, validationsShot, setNumberValidation)} activeValidation={numberValidation} />
                 {numberValidation && <InputWarning message="Por favor, escribe un número de teléfono válido." />}
             </div>
 

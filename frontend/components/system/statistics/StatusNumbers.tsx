@@ -10,7 +10,6 @@ type CardProps = {
     finishedCount: number,
     pendingCount: number,
     cancelledCount: number,
-    onFinished: () => void;
 };
 
 export default function StatusNumbers(props: CardProps) {
@@ -46,7 +45,7 @@ export default function StatusNumbers(props: CardProps) {
             setPrevCancelled(cancelled);
         }).catch((error) => {
             console.log(error);
-        }).finally(() => props.onFinished());
+        });
 
     }, [props.displayedMonth]);
 

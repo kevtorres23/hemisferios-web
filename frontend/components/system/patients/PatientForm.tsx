@@ -8,7 +8,7 @@ import { DayPicker } from "../DayPicker";
 import { useEffect, useState } from "react";
 import { Patient } from "@/utils/classes";
 import { lessThanTen } from "@/utils/format-availability";
-import { formattedToWrittenDate, stringToDate } from "@/utils/date-methods";
+import { formattedToWrittenDate, proseToDate, stringToDate } from "@/utils/date-methods";
 import api from "@/lib/axios";
 
 type FormProps = {
@@ -57,6 +57,7 @@ function NewPatientForm(props: FormProps) {
                 setAdultName(res.data.adultName);
                 setContactNumber(res.data.contactNumber);
                 setFormattedStartingDate(formattedToWrittenDate(res.data.startingDate));
+                setStartingDate(new Date(res.data.startingDate));
                 setPaymentFrequency(res.data.paymentFrequency);
                 setPaymentModality(res.data.paymentModality);
                 setPaymentAmount(res.data.paymentAmount);
@@ -86,7 +87,7 @@ function NewPatientForm(props: FormProps) {
         if (!fatherSurname) { setFatherSurnameValid(true); };
         if (!adultName) { setAdultValidation(true); };
         if (!contactNumber) { setNumberValidation(true); };
-        if (!startingDate) { setStartingDateValidation(true); };
+        if (!startingDate || !formattedStartingDate) { setStartingDateValidation(true); };
         if (!paymentFrequency) { setFrequencyValidation(true); };
         if (!paymentModality) { setModalityValidation(true); };
         if (!paymentAmount) { setAmountValidation(true) };
@@ -101,7 +102,9 @@ function NewPatientForm(props: FormProps) {
     };
 
     function shootData() {
-        const formattedStartingDate = lessThanTen(startingDate.getFullYear()) + "-" + lessThanTen(startingDate.getMonth() + 1) + "-" + lessThanTen(startingDate.getDate());
+        const dateConversion = proseToDate(formattedStartingDate);
+        let convertedDate = new Date(dateConversion.year, dateConversion.month - 1, dateConversion.day);
+        let startDate = format(convertedDate, "yyyy-MM-dd");
 
         const newPatientObject = new Patient
             (
@@ -110,7 +113,7 @@ function NewPatientForm(props: FormProps) {
                 motherSurname,
                 adultName,
                 contactNumber,
-                formattedStartingDate,
+                startDate,
                 paymentFrequency,
                 paymentModality,
                 paymentAmount
@@ -145,17 +148,13 @@ function NewPatientForm(props: FormProps) {
                 <InputWarning message="Por favor, escribe el nombre del adulto responsable." />
             )}
 
-            <Input type="text" textValue={contactNumber} label="Número de contacto" onInputChange={(e) => InputChange(e, contactNumber, setContactNumber, validationsShot, setNumberValidation)} activeValidation={numberValidation} />
+            <Input maxLength={10} type="text" textValue={contactNumber} label="Número de contacto" onInputChange={(e) => InputChange(e, contactNumber, setContactNumber, validationsShot, setNumberValidation)} activeValidation={numberValidation} />
             {numberValidation && (
                 <InputWarning message="Por favor, ingresa un número de teléfono válido." />
             )}
 
             <div className="label gap-3 flex flex-row w-full items-end justify-center">
-
                 <Input type="text" placeholder="Escoge una fecha en el calendario" textValue={formattedStartingDate} label="Fecha de inicio" onInputChange={onStartingDateChange} activeValidation={startingDateValidation} />
-                {startingDateValidation && (
-                    <InputWarning message="Por favor, selecciona una fecha." />
-                )}
 
                 <DayPicker onSelectDate={(date: Date) => onStartingDateChange(date)} />
             </div>

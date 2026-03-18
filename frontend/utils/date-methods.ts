@@ -36,4 +36,36 @@ function formattedToWrittenDate(date: string) {
     return formattedDate
 };
 
-export { stringToDate, formattedToWrittenDate, databaseToFormat };
+/**
+ * Transforms a prose-written date into an object containing its year, month, and day values.
+ * @param date A prose-written date - e.g. 10 de febrero de 2026
+ * @returns An object containing the year, month, and day values of the received date.
+ */
+
+function proseToDate(date: string) {
+    type Months = "enero" | "febrero" | "marzo" | "abril" | "mayo" | "junio" | "julio" | "agosto" | "septiembre" | "octubre" | "noviembre" | "diciembre";
+    const months: Record<Months, string> = {
+        "enero": "01",
+        "febrero": "02",
+        "marzo": "03",
+        "abril": "04",
+        "mayo": "05",
+        "junio": "06",
+        "julio": "07",
+        "agosto": "08",
+        "septiembre": "09",
+        "octubre": "10",
+        "noviembre": "11",
+        "diciembre": "12"
+    }
+
+    const separatedDate = date.split(" de ");
+
+    return {
+        day: Number(separatedDate[0]),
+        month: Number(months[separatedDate[1] as keyof Record<Months, string>]),
+        year: Number(separatedDate[2])
+    };
+};
+
+export { stringToDate, formattedToWrittenDate, databaseToFormat, proseToDate };

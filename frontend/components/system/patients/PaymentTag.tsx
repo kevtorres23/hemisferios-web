@@ -23,16 +23,6 @@ function ModalityTag({ modality }: { modality: "cash" | "card" | "session" | str
                 </>
             )}
 
-            {modality === "session" && (
-                <>
-                    <CalendarCheck2 size={16} />
-
-                    <p className="text-xs font-medium">
-                        Por sesión
-                    </p>
-                </>
-            )}
-
             {modality === "card" && (
                 <>
                     <CreditCard size={16} />

@@ -20,9 +20,11 @@ function calculateNextPayment(frequency: string, startingDate: string) {
 
     if (frequency === "weekly") {
         newDate = addDays(builtDate, 7); // We add seven days to the built date to get the next payment date when it is weekly.
-    } else {
+    } else if (frequency === "monthly") {
         newDate = addMonths(builtDate, 1); // We add 1 month to the built date to get the next payment date when it is monthly.
-    };
+    } else {
+        newDate = addDays(builtDate, 1);
+    }
 
     nextPaymentDate =  newDate.getFullYear() + "-" + lessThanTen(newDate.getMonth()) + "-" + lessThanTen(newDate.getDate());
     return nextPaymentDate;
