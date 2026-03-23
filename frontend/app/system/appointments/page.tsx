@@ -35,7 +35,6 @@ function AppointmentDashboard() {
     const [isLoading, setIsLoading] = useState(true);
     const [completedAction, setCompletedAction] = useState(0);
     const [isAnyAppointment, setIsAnyAppointment] = useState(false);
-
     const [cardAction, setCardAction] = useState("");
 
     useEffect(() => {
@@ -95,11 +94,11 @@ function AppointmentDashboard() {
 
     function onFinishedSelected() {
         toast.promise(
-            updateStatus(appointmentId, "finished").then((result) => {
+            updateStatus(appointmentId, "finished", interval[0], interval[1]).then((result) => {
                 if (result === undefined) {
                     return;
                 };
-
+                
                 setAppointmentsData(result);
 
             }), {
@@ -113,7 +112,7 @@ function AppointmentDashboard() {
 
     function onPendingSelected() {
         toast.promise(
-            updateStatus(appointmentId, "pending").then((result) => {
+            updateStatus(appointmentId, "pending", interval[0], interval[1]).then((result) => {
                 if (result === undefined) {
                     return;
                 };
@@ -126,6 +125,7 @@ function AppointmentDashboard() {
             error: "Hubo un error al actualizar la cita. Inténtalo nuevamente."
         }, { duration: 2000 });
 
+        setCompletedAction((completedAction) => completedAction += 1);
         setCardAction("");
     }
 

@@ -19,19 +19,21 @@ type ModalProps = {
 function MediumModal(props: ModalProps) {
     return (
         <div className={`dark-background ${props.isVisible ? "absolute" : "hidden"} z-999 w-full h-screen top-0 left-0 bg-[rgb(0,0,0,0.25)] flex items-center justify-center`}>
-            <div className="modal-window fixed flex flex-col bg-white sm:max-h-10/12 no-scrollbar overflow-y-scroll sm:h-auto h-full sm:rounded-lg rounded-none p-6 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.2)] gap-5 max-w-xl w-full">
-                <h1 className="text-xl tracking-tight font-semibold text-slate-800">{props.title}</h1>
+            <div className="fixed flex flex-col overflow-hidden sm:rounded-lg rounded-none sm:max-h-10/12 sm:h-auto h-full max-w-xl w-full gap-5">
+                <div className="flex flex-col gap-5 modal-window bg-white overflow-y-scroll sm:rounded-lg rounded-none p-6 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.2)]">
+                    <h1 className="text-xl tracking-tight font-semibold text-slate-800">{props.title}</h1>
 
-                {/* Handle other operations */}
-                {props.children}
+                    {/* Handle other operations */}
+                    {props.children}
 
-                <div className="buttons flex sm:flex-row flex-col w-full gap-4 items-center justify-end">
-                    <div className="flex flex-col w-full">
-                        <CancelButton onClick={props.onClose} text="Cancelar" />
-                    </div>
+                    <div className="buttons flex sm:flex-row flex-col w-full gap-4 items-center justify-end">
+                        <div className="flex flex-col w-full">
+                            <CancelButton isNormal={true} onClick={props.onClose} text="Cancelar" />
+                        </div>
 
-                    <div className="flex flex-col w-full">
-                        <NormalButton type={props.btnType} onClick={props.onSave} text={props.confirmationBtnText} formId={props.btnForm} />
+                        <div className="flex flex-col w-full">
+                            <NormalButton type={props.btnType} onClick={props.onSave} text={props.confirmationBtnText} formId={props.btnForm} />
+                        </div>
                     </div>
                 </div>
             </div>

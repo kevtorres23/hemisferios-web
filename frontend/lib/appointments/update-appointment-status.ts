@@ -1,6 +1,7 @@
 import { AppointmentType } from "@/utils/types";
 import api from "../axios";
-
+import { useAppointmentFilters } from "@/utils/system/appointments/filter-store";
+import { FilterStore } from "@/utils/subtypes";
 
 /**
  * This function updates the status of an appointment for one of the different three that it can have:
@@ -10,7 +11,7 @@ import api from "../axios";
  * @returns The refetched appointments from the database.
  */
 
-async function updateStatus(appointmentId: string, newStatus: "pending" | "finished" | "cancelled") {
+async function updateStatus(appointmentId: string, newStatus: "pending" | "finished" | "cancelled", interval1: string, interval2: string) {
     try {
         // Get the data of the appointment with the given 'appointmentId' argument.
         const res = await api.get("/appointments/" + appointmentId);
@@ -31,9 +32,9 @@ async function updateStatus(appointmentId: string, newStatus: "pending" | "finis
         // We update the appointment with the newly created appointment object.
         await api.put("/appointments/" + appointmentId, newAppointment);
 
-        const newResponse = await api.get("/appointments");
+        const newResponse = await api.get("/appointments/dateRange/" + interval1 + "/" + interval2);
         const updatedAppointments: AppointmentType[] = newResponse.data;
-        return updatedAppointments; // Finally, we refetch the data from the database with the updated set of appointments.
+        return updatedAppointments; // Finally, we return the refetched the data from the database with the updated set of appointments.
 
     } catch (error) {
         console.log("An error ocurred:", error)

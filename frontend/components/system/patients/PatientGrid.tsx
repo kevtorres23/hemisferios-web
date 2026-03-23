@@ -52,7 +52,7 @@ function PatientGrid(props: GridProps) {
     return (
         <div className="w-full flex h-full border border-slate-200 bg-white rounded-lg p-6 flex-col gap-6">
             <div className="flex lg:flex-row flex-col gap-6 lg:items-center items-start justify-between sm:w-auto w-full">
-                <SearchBar onInputChange={(e) => setSearch(e.target.value)} placeholder="Buscar cita por nombre del paciente" />
+                <SearchBar onInputChange={(e) => setSearch(e.target.value)} placeholder="Buscar paciente por su nombre" />
                 <div className="filters flex sm:flex-row flex-col gap-2.5 sm:w-auto w-full items-center">
                     <p className="text-sm font-medium text-slate-500">Filtrar por pago:</p>
 

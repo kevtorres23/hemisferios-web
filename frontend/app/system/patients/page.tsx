@@ -70,7 +70,7 @@ function Patients() {
     };
 
     return (
-        <SystemLayout sidebarPage="patients" isAnyModal={newPatientModal || cardAction === "cancel" || cardAction === "modify" || cardAction === "remove"}
+        <SystemLayout sidebarPage="patients" isAnyModal={newPatientModal || cardAction === "cancel" || cardAction === "modify" || cardAction === "remove" || cardAction === "registry"}
             modals={
                 <>
                     {newPatientModal && (
