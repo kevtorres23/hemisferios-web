@@ -23,7 +23,7 @@ export default function Prices() {
                         <p className="text-slate-900 text-xs font-semibold">SESIÓN INDIVIDUAL</p>
                     </div>
 
-                    <h1 className="price md:text-5xl text-5xl font-medium tracking-tighter">$350</h1>
+                    <h1 className="price md:text-5xl text-5xl font-medium tracking-tighter">$300</h1>
 
                     <p className="description text-base font-normal">Este es el precio por cada una de nuestras sesiones cuando se toman en días escogidos por el adulto responsable.</p>
                 </div>
@@ -32,6 +32,8 @@ export default function Prices() {
                     <div className="tag bg-indigo-100 rounded-full px-3 py-1.5">
                         <p className="text-indigo-500 text-xs font-semibold">SESIÓN MENSUAL</p>
                     </div>
+
+                    {/* 1 a la semana: 1000, 2 a la semana: 2000*/}
 
                     <h1 className="price text-5xl text-slate-900 font-medium tracking-tighter">$5000</h1>
 
