@@ -2,7 +2,6 @@ import SearchBar from "../SearchBar";
 import { useState } from "react";
 import PageNavigator from "../PageNavigator";
 import { TherapistType } from "@/utils/types";
-import { useId } from "react";
 import TherapistCard from "./TherapistCard";
 import { pageSeparator } from "@/utils/system/page-separator";
 
@@ -14,15 +13,15 @@ type GridProps = {
 function TherapistGrid(props: GridProps) {
     let therapistData = props.data;
     let therapistPages = pageSeparator(therapistData);
+    const pages = therapistPages.length;
 
-    const [pages, setPages] = useState(props.data.length === 0 ? 0 : 1);
     const [search, setSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
 
     return (
         <div className="w-full flex h-full border border-slate-200 bg-white rounded-lg p-6 flex-col gap-6">
             <div className="flex lg:flex-row flex-col gap-6 lg:items-center items-start justify-between sm:w-auto w-full">
-                <SearchBar onInputChange={(e) => setSearch(e.target.value)} placeholder="Buscar cita por nombre del paciente" />
+                <SearchBar onInputChange={(e) => setSearch(e.target.value)} placeholder="Buscar terapeuta por nombre" />
 
                 <div className="filters flex sm:flex-row flex-col gap-2.5 sm:w-auto w-full items-center">
                     <div className="flex flex-row gap-2.5 items-center justify-center">

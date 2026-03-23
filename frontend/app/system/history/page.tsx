@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import toast, { Toaster } from 'react-hot-toast';
 import EmptyState from "@/components/system/EmptyState";
 import { historyAvailability } from "@/utils/system/history/history-registry";
+import { calculateMonthRegistries, calculateYearRegistries } from "@/utils/system/history/history-records";
 import { useHistoryFilters } from "@/utils/system/history/filter-store";
 import { FilterStore, HistoryFilterStore, HistoryRegistry } from "@/utils/subtypes";
 import api from "@/lib/axios";
@@ -46,7 +47,6 @@ function AppointmentHistory() {
     const [displayedMonth, setDisplayedMonth] = useState(currentMonthNum);
     const [displayedYear, setDisplayedYear] = useState(currentYear);
     const [appointmentId, setAppointmentId] = useState("");
-    const [registry, setRegistry] = useState<HistoryRegistry>();
 
     const interval = useAppointmentFilters((state: FilterStore) => state.interval)
     const historyInterval = useHistoryFilters((state: HistoryFilterStore) => state.interval);
@@ -64,19 +64,7 @@ function AppointmentHistory() {
             };
         };
 
-        const getHistoryRegistry = async () => {
-            try {
-                const historyRegistry = await historyAvailability();
-                if (historyRegistry) {
-                    setRegistry(historyRegistry);
-                }
-            } catch (error) {
-                console.log("An error ocurred:", error)
-            };
-        };
-
         fetchAllAppointments();
-        getHistoryRegistry();
     }, [historyInterval]);
 
     function showSuccessModal(successMsg: string) {
@@ -121,6 +109,9 @@ function AppointmentHistory() {
         updateHistoryInterval([newIntervalFirst, newIntervalSecond]);
     };
 
+    const monthRegistries = calculateMonthRegistries(Number(displayedYear));
+    const yearRegistries = calculateYearRegistries();
+
     return (
         <SystemLayout sidebarPage="history" isAnyModal={cardAction === "remove"}
             modals={
@@ -143,7 +134,7 @@ function AppointmentHistory() {
                     <p className="text-lg text-nowrap font-medium text-slate-800">Registro de</p>
 
                     <div className="flex flex-row gap-2 items-center justify-center">
-                        <Select defaultValue={currentMonthNum.toString()} value={displayedMonth} onValueChange={onMonthChange}>
+                        <Select value={displayedMonth} onValueChange={onMonthChange}>
                             <SelectTrigger id={id} className={`w-full bg-white sm:text-sm text-base cursor-pointer py-2 px-3`}>
                                 <SelectValue />
                             </SelectTrigger>
@@ -151,15 +142,15 @@ function AppointmentHistory() {
                                 <SelectGroup className="h-80 overflow-y-scroll">
                                     <SelectLabel className="text-sm">Mes del registro:</SelectLabel>
                                     {/* Map the available record months */}
-                                    {registry?.months.map((item, id) => {
+                                    {monthRegistries.map((item, id) => {
+                                        console.log("id del mes:", item.monthNum, "nombre del mes:", item.monthName)
                                         return <SelectItem className="text-sm" key={id} value={item.monthNum}>{item.monthName}</SelectItem>
                                     })}
-                                    <SelectItem className="text-sm" key={id} value={"04"}>{"Abril"}</SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
 
-                        <Select defaultValue="01" value={displayedYear} onValueChange={onYearChange}>
+                        <Select value={displayedYear} onValueChange={onYearChange}>
                             <SelectTrigger id={id} className={`w-full bg-white sm:text-sm text-base cursor-pointer py-2 px-3`}>
                                 <SelectValue />
                             </SelectTrigger>
@@ -167,8 +158,8 @@ function AppointmentHistory() {
                                 <SelectGroup className="h-80 overflow-y-scroll">
                                     <SelectLabel className="text-sm">Año del registro:</SelectLabel>
                                     {/* Map the available record months */}
-                                    {registry?.years.map((item, id) =>
-                                        <SelectItem className="text-sm" key={id} value={item}>{item}</SelectItem>
+                                    {yearRegistries.map((item, id) =>
+                                        <SelectItem className="text-sm" key={id} value={item.toString()}>{item}</SelectItem>
                                     )}
                                 </SelectGroup>
                             </SelectContent>
