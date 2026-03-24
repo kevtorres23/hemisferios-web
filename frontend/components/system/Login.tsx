@@ -1,13 +1,16 @@
 "use client";
 
 import Image from "next/image";
+import { Spinner } from "@/components/ui/spinner"
 import logo from "../../public/hemisferios-logo.png";
 import lofi from "../../public/lofi.png";
 import Input from "@/components/website/Input";
 import { redirect } from 'next/navigation';
 import InputWarning from "@/components/website/InputWarning";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLoginStore } from "../../utils/system/login-store";
+
+import api from "@/lib/axios";
 
 type LoginStore = {
     adminEmail: string,
@@ -15,6 +18,11 @@ type LoginStore = {
     isUserLogged: boolean,
     changeSessionStatus: (newStatus: boolean) => void;
 }
+
+type Credentials = {
+    email: string;
+    hash: string;
+};
 
 function SystemLogin() {
 
@@ -25,7 +33,9 @@ function SystemLogin() {
     // Validation variables.
     const [validationsShot, setValidationsShot] = useState(false);
     const [emailValidation, setEmailValidation] = useState("");
+    const [credentials, setCredentials] = useState<Credentials>();
     const [passwordValidation, setPasswordValidation] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     // State variables (Zustand).
     const savedEmail = useLoginStore((state: LoginStore) => state.adminEmail);
@@ -35,31 +45,46 @@ function SystemLogin() {
 
     if (sessionStore === true) {
         redirect("/system/appointments");
-    }
+    };
 
-    function shootValidations(e: React.FormEvent) {
+    async function shootValidations(e: React.SubmitEvent) {
         setValidationsShot(true);
+        setIsLoading(true);
         e.preventDefault(); // We prevent the form from reloading the page.
 
-        if (!email) {
-            setEmailValidation("empty")
-        };
-        if (!password) {
-            setPasswordValidation("empty")
-        };
-
-        if (email && password) {
-            if ((email === savedEmail) && (password === savedPassword)) {
-                updateSessionStatus(true);
+        try {
+            if (!email) {
+                setEmailValidation("empty");
+                return;
             };
 
-            if (email != savedEmail) {
-                setEmailValidation("wrong");
-            }
+            if (!password) {
+                setPasswordValidation("empty");
+                return;
+            };
 
-            if (password != savedPassword) {
+            const loginObject = {
+                email: email,
+                password: password
+            };
+
+            const loginResult = await api.put("/credentials/login", loginObject);
+
+            if (!loginResult.data.emailResult) {
+                setEmailValidation("wrong");
+                return;
+            };
+
+            if (!loginResult.data.passwordResult) {
                 setPasswordValidation("wrong");
-            }
+                return;
+            };
+
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setValidationsShot(false);
+            setIsLoading(false);
         };
     }
 
@@ -83,19 +108,25 @@ function SystemLogin() {
 
                     <form id="loginForm" onSubmit={(e) => shootValidations(e)} className="inputs flex flex-col gap-4 w-full">
                         <Input grayBg={true} label="Correo electrónico:" type="text" textValue={email} activeValidation={emailValidation != ""} onInputChange={onEmailChange} />
-                        {(emailValidation != "") && (
+                        {emailValidation != "" && (
                             <InputWarning message={emailValidation === "empty" ? "Por favor, ingresa un correo." : "El correo ingresado es incorrecto."} />
                         )}
 
                         <Input grayBg={true} label="Contraseña:" type="text" textValue={password} activeValidation={passwordValidation != ""} onInputChange={onPasswordChange} />
-                        {(passwordValidation != "") && (
+                        {passwordValidation != "" && (
                             <InputWarning message={passwordValidation === "empty" ? "Por favor, ingresa una contraseña." : "La contraseña ingresada es incorrecta."} />
                         )}
 
                     </form>
 
                     <button form="loginForm" type="submit" className="bg-indigo-500 text-white tracking-tight text-base px-4 py-2 flex flex-row items-center justify-center gap-2 rounded-lg cursor-pointer font-normal hover:bg-indigo-400 w-full">
-                        Entrar al sistema
+                        {isLoading && validationsShot && (
+                            <Spinner className="size-6" />
+                        )}
+
+                        {!isLoading && !validationsShot && (
+                            <p className="text-base font-normal text-center">Iniciar sesión</p>
+                        )}
                     </button>
 
                     <p className="uppercase text-sm font-normal text-slate-600">© HEMISFERIOS 2026. TODOS LOS DERECHOS RESERVADOS.</p>
