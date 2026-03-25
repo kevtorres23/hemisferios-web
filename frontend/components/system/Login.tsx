@@ -5,47 +5,20 @@ import { Spinner } from "@/components/ui/spinner"
 import logo from "../../public/hemisferios-logo.png";
 import lofi from "../../public/lofi.png";
 import Input from "@/components/website/Input";
-import { redirect } from 'next/navigation';
 import InputWarning from "@/components/website/InputWarning";
-import { useEffect, useState } from "react";
-import { useLoginStore } from "../../utils/system/login-store";
-
-import api from "@/lib/axios";
-
-type LoginStore = {
-    adminEmail: string,
-    adminPassword: string,
-    isUserLogged: boolean,
-    changeSessionStatus: (newStatus: boolean) => void;
-}
-
-type Credentials = {
-    email: string;
-    hash: string;
-};
+import { handleSession } from "@/lib/session";
+import { useState } from "react";
 
 function SystemLogin() {
-
-    // Input variables.
+    // Input variables. 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     // Validation variables.
     const [validationsShot, setValidationsShot] = useState(false);
     const [emailValidation, setEmailValidation] = useState("");
-    const [credentials, setCredentials] = useState<Credentials>();
     const [passwordValidation, setPasswordValidation] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-
-    // State variables (Zustand).
-    const savedEmail = useLoginStore((state: LoginStore) => state.adminEmail);
-    const savedPassword = useLoginStore((state: LoginStore) => state.adminPassword);
-    const updateSessionStatus = useLoginStore((state: LoginStore) => state.changeSessionStatus);
-    const sessionStore = useLoginStore((state: LoginStore) => state.isUserLogged);
-
-    if (sessionStore === true) {
-        redirect("/system/appointments");
-    };
 
     async function shootValidations(e: React.SubmitEvent) {
         setValidationsShot(true);
@@ -55,11 +28,11 @@ function SystemLogin() {
         try {
             if (!email) {
                 setEmailValidation("empty");
-                return;
-            };
 
-            if (!password) {
-                setPasswordValidation("empty");
+                if (!password) {
+                    setPasswordValidation("empty");
+                };
+
                 return;
             };
 
@@ -68,15 +41,15 @@ function SystemLogin() {
                 password: password
             };
 
-            const loginResult = await api.put("/credentials/login", loginObject);
+            const fieldResults = await handleSession(loginObject);
 
-            if (!loginResult.data.emailResult) {
+            if (fieldResults?.emailStatus === "wrong") {
                 setEmailValidation("wrong");
-                return;
-            };
 
-            if (!loginResult.data.passwordResult) {
-                setPasswordValidation("wrong");
+                if (fieldResults?.passwordStatus === "wrong") {
+                    setPasswordValidation("wrong");
+                };
+
                 return;
             };
 
