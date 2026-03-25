@@ -24,7 +24,8 @@ type Credentials = {
     password: string;
 }
 
-export async function handleSession(loginObject: Credentials) {
+export async function handleSession(isOnDecrypt: boolean, session: string | undefined = "", loginObject?: Credentials) {
+
     const result = await api.put("/credentials/login", loginObject);
 
     const loginData: LoginResult = result.data;
@@ -46,6 +47,18 @@ export async function handleSession(loginObject: Credentials) {
     };
 
     const encodedKey = new TextEncoder().encode(loginData.secretKey);
+
+    if (isOnDecrypt) {
+        try {
+            const { payload } = await jwtVerify(session, encodedKey, {
+                algorithms: ["HS256"]
+            });
+
+            return payload;
+        } catch (error) {
+            console.log("Failed while verifying the session:", error);
+        };
+    };
 
     if (loginData.emailResult && loginData.passwordResult) {
         await createSession(loginData.userId, encodedKey);
@@ -76,7 +89,7 @@ export async function encrypt(payload: SessionPayload, encodedKey: Uint8Array<Ar
         .sign(encodedKey);
 };
 
-export async function decrypt(session = "", encodedKey: Uint8Array<ArrayBuffer>) {
+export async function decrypt(session: string | undefined = "", encodedKey: Uint8Array<ArrayBuffer>) {
     try {
         const { payload } = await jwtVerify(session, encodedKey, {
             algorithms: ["HS256"]
