@@ -80,6 +80,10 @@ function SystemLogin() {
                 return;
             };
 
+            if (loginResult.data.emailResult && loginResult.data.passwordResult) {
+                console.log("Correct!")
+            }
+
         } catch (error) {
             console.log(error);
         } finally {

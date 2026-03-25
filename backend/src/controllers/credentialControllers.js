@@ -1,5 +1,9 @@
 import Credentials from "../models/Credentials.js";
+import dotenv from "dotenv";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+dotenv.config();
 
 export async function getCredentials(_, res) {
     try {
@@ -77,16 +81,12 @@ export async function login(req, res) {
         if (email === storedCredentials[0].email) emailValid = true;
         if (isPassValid) passwordValid = true;
 
-        if (emailValid && passwordValid) {
-            res.send("both are correct babe");
-        } else {
-            res.send(
-                {
-                    emailResult: emailValid,
-                    passwordResult: passwordValid
-                }
-            );
-        };
+        return res.send(
+            {
+                emailResult: emailValid,
+                passwordResult: passwordValid
+            }
+        );
 
     } catch (error) {
         console.log(error);
