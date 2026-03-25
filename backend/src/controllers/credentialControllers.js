@@ -1,10 +1,5 @@
 import Credentials from "../models/Credentials.js";
-import dotenv from "dotenv";
 import bcrypt from "bcrypt";
-
-dotenv.config();
-
-const secretKey = process.env.SESSION_SECRET;
 
 export async function getCredentials(_, res) {
     try {
@@ -67,7 +62,6 @@ export async function updateCredentials(req, res) {
 };
 
 export async function login(req, res) {
-
     try {
         const {
             email,
@@ -77,19 +71,22 @@ export async function login(req, res) {
         const storedCredentials = await Credentials.find();
         let emailValid = false;
         let passwordValid = false;
-        let userId = storedCredentials[0]._id;
 
         const isPassValid = await bcrypt.compare(password, storedCredentials[0].hash);
 
         if (email === storedCredentials[0].email) emailValid = true;
         if (isPassValid) passwordValid = true;
 
-        res.send({
-            emailResult: emailValid,
-            passwordResult: passwordValid,
-            secretKey: secretKey,
-            userId: userId
-        });
+        if (emailValid && passwordValid) {
+            res.send("both are correct babe");
+        } else {
+            res.send(
+                {
+                    emailResult: emailValid,
+                    passwordResult: passwordValid
+                }
+            );
+        };
 
     } catch (error) {
         console.log(error);

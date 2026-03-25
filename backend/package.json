@@ -16,11 +16,9 @@
     "@upstash/redis": "^1.36.2",
     "bcrypt": "^6.0.0",
     "colors": "^1.4.0",
-    "cookies-next": "^6.1.1",
     "cors": "^2.8.6",
     "dotenv": "^17.2.4",
     "express": "^5.2.1",
-    "jose": "^6.2.2",
     "mongoose": "^9.1.6",
     "nodemon": "^3.1.11"
   }

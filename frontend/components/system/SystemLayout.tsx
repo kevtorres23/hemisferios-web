@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Sidebar from "./Sidebar";
 import SmallModal from "./modals/SmallModal";
+import SuccessModal from "./modals/SuccessModal";
 import { useLoginStore } from "../../utils/system/login-store";
+import { redirect } from 'next/navigation';
 import Input from "./Input";
 import InputWarning from "@/components/website/InputWarning";
 import MobileNavbar from "./MobileNavbar";
@@ -34,6 +36,7 @@ function SystemLayout(props: SystemLayoutProps) {
 
     // Modal variables.
     const [logoutModal, setLogoutModal] = useState(false);
+    const [successModal, setSuccessModal] = useState(false);
     const [credentialsModal, setCredentialsModal] = useState(false);
     const [areValidsActive, setAreValidsActive] = useState(false);
     const [credentialEmail, setCredentialEmail] = useState(savedEmail);
@@ -51,74 +54,78 @@ function SystemLayout(props: SystemLayoutProps) {
         setCredentialsModal(false);
 
         // Display the success modal and hide it after 2.5 seconds.
-        toast.success(<p>¡Credenciales actualizadas!</p>, { duration: 2500 })
+        toast.success(<p>¡Credenciales actualizadas!</p>, {duration: 2500})
     }
 
-    return (
-        <>
-            <MobileNavbar activePage={props.sidebarPage} onLogoutPressed={() => setLogoutModal(true)} onCredentialsPressed={() => setCredentialsModal(true)} />
+    if (sessionStore === false) {
+        redirect("/system");
+    } else {
+        return (
+            <>
+                <MobileNavbar activePage={props.sidebarPage} onLogoutPressed={() => setLogoutModal(true)} onCredentialsPressed={() => setCredentialsModal(true)} />
 
-            <Sidebar activePage={props.sidebarPage} onLogoutPressed={() => setLogoutModal(true)} onCredentialsPressed={() => setCredentialsModal(true)} />
+                <Sidebar activePage={props.sidebarPage} onLogoutPressed={() => setLogoutModal(true)} onCredentialsPressed={() => setCredentialsModal(true)} />
 
-            <SmallModal title="Cerrar sesión"
-                message="¿Estás segur@ de que quieres salir del sistema?"
-                isVisible={logoutModal} onClose={() => setLogoutModal(false)}
-                confirmationBtnText="Cerrar sesión"
-                onSave={() => updateSessionStatus(false)}
-            />
+                <SmallModal title="Cerrar sesión"
+                    message="¿Estás segur@ de que quieres salir del sistema?"
+                    isVisible={logoutModal} onClose={() => setLogoutModal(false)}
+                    confirmationBtnText="Cerrar sesión"
+                    onSave={() => updateSessionStatus(false)}
+                />
 
-            <SmallModal title="Configurar credenciales de sesión"
-                message="Estas son las credenciales con las que inicias sesión a este sistema. Puedes actualizarlas editando los campos. "
-                isVisible={credentialsModal} onClose={() => setCredentialsModal(false)}
-                confirmationBtnText="Guardar cambios"
-                onSave={() => onSaveCredentials}
-                btnType="submit"
-                btnForm="updateCredentialsForm"
-            >
+                <SmallModal title="Configurar credenciales de sesión"
+                    message="Estas son las credenciales con las que inicias sesión a este sistema. Puedes actualizarlas editando los campos. "
+                    isVisible={credentialsModal} onClose={() => setCredentialsModal(false)}
+                    confirmationBtnText="Guardar cambios"
+                    onSave={() => onSaveCredentials}
+                    btnType="submit"
+                    btnForm="updateCredentialsForm"
+                >
 
-                <form action="" id="updateCredentialsForm" onSubmit={(e) => onSaveCredentials(e)} className="flex sm:flex-row flex-col w-full gap-3">
-                    <div className=" flex flex-col gap-2 w-full">
-                        <Input type="text"
-                            label="Correo electrónico:"
-                            grayBg={true} value={credentialEmail}
-                            onInputChange={(e: React.ChangeEvent<HTMLInputElement>) => setCredentialEmail(e.currentTarget.value)}
-                            activeValidation={!credentialEmail && areValidsActive}
-                        />
+                    <form action="" id="updateCredentialsForm" onSubmit={(e) => onSaveCredentials(e)} className="flex sm:flex-row flex-col w-full gap-3">
+                        <div className=" flex flex-col gap-2 w-full">
+                            <Input type="text"
+                                label="Correo electrónico:"
+                                grayBg={true} value={credentialEmail}
+                                onInputChange={(e: React.ChangeEvent<HTMLInputElement>) => setCredentialEmail(e.currentTarget.value)}
+                                activeValidation={!credentialEmail && areValidsActive}
+                            />
 
-                        {(!credentialEmail && areValidsActive) && (
-                            <InputWarning message="Por favor, ingresa un correo." />
-                        )}
-                    </div>
+                            {(!credentialEmail && areValidsActive) && (
+                                <InputWarning message="Por favor, ingresa un correo." />
+                            )}
+                        </div>
 
-                    <div className=" flex flex-col gap-2 w-full">
-                        <Input type="text"
-                            label="Contraseña:"
-                            grayBg={true} value={credentialPassword}
-                            onInputChange={(e: React.ChangeEvent<HTMLInputElement>) => setCredentialPassword(e.currentTarget.value)}
-                            activeValidation={!credentialPassword && areValidsActive}
-                        />
+                        <div className=" flex flex-col gap-2 w-full">
+                            <Input type="text"
+                                label="Contraseña:"
+                                grayBg={true} value={credentialPassword}
+                                onInputChange={(e: React.ChangeEvent<HTMLInputElement>) => setCredentialPassword(e.currentTarget.value)}
+                                activeValidation={!credentialPassword && areValidsActive}
+                            />
 
-                        {(!credentialPassword && areValidsActive) && (
-                            <InputWarning message="Por favor, ingresa una contraseña." />
-                        )}
-                    </div>
-                </form>
+                            {(!credentialPassword && areValidsActive) && (
+                                <InputWarning message="Por favor, ingresa una contraseña." />
+                            )}
+                        </div>
+                    </form>
 
-                {/* Any other modal(s) will be rendered here*/}
-            </ SmallModal>
+                    {/* Any other modal(s) will be rendered here*/}
+                </ SmallModal>
 
-            <Toaster />
+                <Toaster/>
 
-            {props.modals}
+                {props.modals}
 
-            <div className="relative overflow-x-hidden md:ml-70 ml-0 lg:min-h-screen h-auto flex md:flex-row flex-col items-start justify-center bg-slate-100 font-sans dark:bg-black">
+                <div className="relative overflow-x-hidden md:ml-70 ml-0 lg:min-h-screen h-auto flex md:flex-row flex-col items-start justify-center bg-slate-100 font-sans dark:bg-black">
 
-                <main className={`w-full flex flex-col gap-8 sm:p-12 p-8 items-start justify-start ${(credentialsModal || props.isAnyModal) ? "sm:h-screen h-auto overflow-hidden" : "h-auto"}`}>
-                    {props.children}
-                </main>
-            </div>
-        </>
-    );
+                    <main className={`w-full flex flex-col gap-8 sm:p-12 p-8 items-start justify-start ${(credentialsModal || props.isAnyModal) ? "sm:h-screen h-auto overflow-hidden" : "h-auto"}`}>
+                        {props.children}
+                    </main>
+                </div>
+            </>
+        );
+    };
 };
 
 export default SystemLayout;
