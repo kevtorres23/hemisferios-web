@@ -20,7 +20,8 @@ const port = process.env.PORT;
 app.use(express.json()); // Parse JSON bodies and allow access to req.body
 app.use(rateLimiter);
 app.use(cors({
-    origin: "http://localhost:3000"
+    origin: "http://localhost:3000",
+    credentials: true
 }));
 
 

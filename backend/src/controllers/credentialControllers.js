@@ -72,23 +72,45 @@ export async function login(req, res) {
             password
         } = req.body;
 
+        let isEmailValid = false;
+        let isPassValid = false;
+        let token = ""
+
         const storedCredentials = await Credentials.find();
-        let emailValid = false;
-        let passwordValid = false;
+        const credentials = storedCredentials[0];
 
-        const isPassValid = await bcrypt.compare(password, storedCredentials[0].hash);
+        isPassValid = await bcrypt.compare(password, credentials.hash);
 
-        if (email === storedCredentials[0].email) emailValid = true;
-        if (isPassValid) passwordValid = true;
+        if (email === credentials.email) {
+            isEmailValid = true;
+        };
 
-        return res.send(
-            {
-                emailResult: emailValid,
-                passwordResult: passwordValid
-            }
-        );
+        if (isEmailValid && isPassValid) {
+            const payload = {
+                user: {
+                    id: credentials._id
+                }
+            };
+
+            token = await jwt.sign(
+                payload,
+                process.env.SESSION_SECRET,
+                { expiresIn: 60 * 60 * 24 * 7 }, // One week
+            );
+        };
+
+        res.json({
+            emailResult: isEmailValid,
+            passwordResult: isPassValid,
+            token: token
+        }).cookie("token", token, {
+            maxAge: 60 * 60 * 24 * 7,
+            httpOnly: true,
+            signed: true,
+        })
 
     } catch (error) {
         console.log(error);
+        res.status(500).send("An error ocurred in the login controller.", error);
     };
 };
