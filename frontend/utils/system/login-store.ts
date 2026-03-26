@@ -5,7 +5,6 @@ type LoginState = {
     adminEmail: string,
     adminPassword: string,
     isUserLogged: boolean,
-    changeSessionStatus: (newStatus: boolean) => void,
     updateEmail: (newEmail: string) => void,
     updatePassword: (newPassword: string) => void,
 };
@@ -18,12 +17,9 @@ type LoginState = {
 
 export const useLoginStore = create<LoginState>()(
     persist((set) => ({
-        adminEmail: "arlet28torres@gmail.com",
-        adminPassword: "h3m1sf3r10s",
+        adminEmail: "",
+        adminPassword: "",
         isUserLogged: false,
-        changeSessionStatus: (newStatus: boolean) => set({
-            isUserLogged: newStatus
-        }),
         updateEmail: (newEmail: string) => set({
             adminEmail: newEmail
         }),
