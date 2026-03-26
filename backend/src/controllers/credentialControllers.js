@@ -74,7 +74,7 @@ export async function login(req, res) {
 
         let isEmailValid = false;
         let isPassValid = false;
-        let token = ""
+        let token = "";
 
         const storedCredentials = await Credentials.find();
         const credentials = storedCredentials[0];
@@ -103,11 +103,7 @@ export async function login(req, res) {
             emailResult: isEmailValid,
             passwordResult: isPassValid,
             token: token
-        }).cookie("token", token, {
-            maxAge: 60 * 60 * 24 * 7,
-            httpOnly: true,
-            signed: true,
-        })
+        });
 
     } catch (error) {
         console.log(error);

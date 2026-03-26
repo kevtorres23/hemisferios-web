@@ -56,7 +56,7 @@ function SystemLogin() {
 
             if (loginResult.data.emailResult && loginResult.data.passwordResult) {
                 try {
-                    await fetch("/api", {
+                    await fetch("/login/api", {
                         method: "POST",
                         body: JSON.stringify({token: loginResult.data.token})
                     });
@@ -97,7 +97,7 @@ function SystemLogin() {
                             <InputWarning message={emailValidation === "empty" ? "Por favor, ingresa un correo." : "El correo ingresado es incorrecto."} />
                         )}
 
-                        <Input grayBg={true} label="Contraseña:" type="text" textValue={password} activeValidation={passwordValidation != ""} onInputChange={onPasswordChange} />
+                        <Input grayBg={true} label="Contraseña:" type="password" textValue={password} activeValidation={passwordValidation != ""} onInputChange={onPasswordChange} />
                         {passwordValidation != "" && (
                             <InputWarning message={passwordValidation === "empty" ? "Por favor, ingresa una contraseña." : "La contraseña ingresada es incorrecta."} />
                         )}

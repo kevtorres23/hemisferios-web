@@ -15,8 +15,6 @@ const publicRoutes = [
 ];
 
 export default async function proxy(request: NextRequest) {
-    console.log("message from proxy");
-
     const path = request.nextUrl.pathname;
     const isProtectedRoute = protectedRoutes.includes(path);
     const isPublicRoute = publicRoutes.includes(path);
