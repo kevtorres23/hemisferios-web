@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { isVisible } from "@/utils/website/visibility-detector";
 import WhiteButton from "@/components/website/WhiteButton";
-import SectionBadge from "@/components/website/SectionBadge";
+import Link from "next/link";
 import Image from "next/image";
 import workTime from "../../../../public/work-time.png"
 
@@ -27,7 +27,9 @@ function CallToAction() {
                 <p className="text-base font-normal/7 lg:text-start text-center text-white w-full">
                     Puedes agendar una cita de una manera fácil y rápida para una entrevista de diagnóstico o una nueva cita, si ya estás registrado en nuestro centro.</p>
 
-                <WhiteButton text="Agendar una cita" />
+                <Link href={"/book-appointment"}>
+                    <WhiteButton text="Agendar una cita" />
+                </Link>
             </div>
 
             {/* Illustration */}

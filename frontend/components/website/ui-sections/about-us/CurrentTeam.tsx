@@ -1,6 +1,11 @@
 "use client";
 
 import TeamMember from "@/components/website/TeamMember";
+import arlet from "../../../../public/arlet_torres.jpg";
+import asriel from "../../../../public/asriel_campuzano.jpg";
+import assiria from "../../../../public/assiria_west.jpeg";
+import hortencia from "../../../../public/hortencia_calleros.jpeg";
+import jaqueline from "../../../../public/jackie_coronado.jpeg";
 import ArletPicture from "../../../../public/person2.png";
 import Image from "next/image";
 import blob from "../../../../public/blob3.png";
@@ -36,17 +41,17 @@ function CurrentTeam() {
             </div>
 
             <div ref={ref2} className={`${isRow1Visible ? "opacity-100 top-0" : "opacity-0 top-20"} relative row1 flex sm:flex-row flex-col md:gap-20 sm:gap-15 gap-10 items-center justify-center transition-all ease-out duration-800`}>
-                <TeamMember name="Arlet Torres" role="COFUNDADORA/TERAPEUTA" picture={ArletPicture} />
+                <TeamMember name="Arlet Torres" role="COFUNDADORA/TERAPEUTA" picture={arlet} />
 
-                <TeamMember name="Asriel Campuzano" role="COFUNDADOR" picture={ArletPicture} />
+                <TeamMember name="Asriel Campuzano" role="COFUNDADOR" picture={asriel} />
             </div>
 
             <div ref={ref3} className={`${isRow2Visible ? "opacity-100 top-0" : "opacity-0 top-20"} relative row1 grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 md:gap-20 sm:gap-15 gap-10 items-center justify-center transition-all ease-out duration-800`}>
-                <TeamMember name="Assiria West" role="TERAPEUTA DE LENGUAJE" picture={ArletPicture} />
+                <TeamMember name="Assiria West" role="TERAPEUTA DE LENGUAJE" picture={assiria} />
 
-                <TeamMember name="Hortencia Calleros" role="TERAPEUTA DE LENGUAJE" picture={ArletPicture} />
+                <TeamMember name="Hortencia Calleros" role="TERAPEUTA DE LENGUAJE" picture={hortencia} />
 
-                <TeamMember name="Jaqueline Coronado" role="RECEPCIONISTA" picture={ArletPicture} />
+                <TeamMember name="Jaqueline Coronado" role="RECEPCIONISTA" picture={jaqueline} />
             </div>
 
         </section>

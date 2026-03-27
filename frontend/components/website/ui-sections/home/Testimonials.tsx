@@ -32,22 +32,22 @@ function Testimonials() {
             <div ref={ref2} className={`${cardsVisible ? "opacity-100 top-0" : "opacity-0 top-16"} relative w-full h-auto grid xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-8 transition-all ease-out duration-1500`}>
                 <TestimonialCard personName="Tomás Gutiérrez"
                     text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                    picture={person1}
-                />
-
-                <TestimonialCard personName="Lucía Méndez"
-                    text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                    picture={person2}
+                    iconColor="orange"
                 />
 
                 <TestimonialCard personName="Eduardo Herrera"
                     text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                    picture={person3}
+                    iconColor="pink"
                 />
 
                 <TestimonialCard personName="Carolina López"
                     text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                    picture={person4}
+                    iconColor="green"
+                />
+
+                <TestimonialCard personName="Lucía Méndez"
+                    text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                    iconColor="sky"
                 />
             </div>
         </section>

@@ -17,11 +17,11 @@ function InitialSection() {
     return (
         <div className={`flex flex-col gap-10 relative items-center justify-center lg:px-20 sm:px-16 px-8 lg:py-16 md:py-10 py-14 h-auto`}>
             {/* Decoration Blobs */}
-            <div className="absolute xl:-left-74 md:-left-46 sm:-left-48 -left-24 sm:top-32 top-48 z-900">
+            <div className="absolute xl:-left-60 md:-left-46 sm:-left-48 -left-24 sm:top-32 top-48 z-900">
                 <Image src={blob} alt="" className="xl:w-70 sm:w-60 w-32 opacity-15" />
             </div>
 
-            <div className="absolute xl:-right-74 md:-right-46 sm:-right-48 -right-24 xl:bottom-64 md:bottom-56 bottom-96 z-900 scale-x-[-1]">
+            <div className="absolute xl:-right-60 md:-right-46 sm:-right-48 -right-24 xl:bottom-64 md:bottom-56 bottom-96 z-900 scale-x-[-1]">
                 <Image src={blob} alt="" className="xl:w-70 sm:w-60 w-32 opacity-15" />
             </div>
 
@@ -32,7 +32,7 @@ function InitialSection() {
                     Servicios de terapia altamente <span className="text-indigo-500">profesionales.</span>
                 </h1>
 
-                <p className="text-base font-normal/7 text-center text-slate-600 md:w-8/12 max-w-full">
+                <p className="sm:text-lg text-base font-normal/7 text-center text-slate-600 md:w-8/12 max-w-full">
                     Te presentamos una descripción completa de los servicios que ofrecemos en nuestro centro, y los precios que tienen las sesiones de terapia.</p>
             </div>
 

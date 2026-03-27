@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import NormalButton from "@/components/website/NormalButton";
 import kids from "../../../../public/kids.png";
 import SectionBadge from "@/components/website/SectionBadge";
@@ -35,7 +36,9 @@ function Dynamism() {
                     Te presentamos una descripción completa de los servicios que ofrecemos en nuestro centro, y los precios que tienen las sesiones de terapia.
                 </p>
 
-                <NormalButton text="Conoce más de nosotros" />
+                <Link href={"/about-us"}>
+                    <NormalButton text="Conoce más de nosotros" />
+                </Link>
             </div>
 
         </main>
