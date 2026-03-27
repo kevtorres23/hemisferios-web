@@ -1,23 +1,16 @@
 "use client";
 
 import Image from "next/image";
+import { Spinner } from "@/components/ui/spinner"
 import logo from "../../public/hemisferios-logo.png";
 import lofi from "../../public/lofi.png";
 import Input from "@/components/website/Input";
 import { redirect } from 'next/navigation';
 import InputWarning from "@/components/website/InputWarning";
 import { useState } from "react";
-import { useLoginStore } from "../../utils/system/login-store";
-
-type LoginStore = {
-    adminEmail: string,
-    adminPassword: string,
-    isUserLogged: boolean,
-    changeSessionStatus: (newStatus: boolean) => void;
-}
+import api from "@/lib/axios";
 
 function SystemLogin() {
-
     // Input variables.
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -26,40 +19,57 @@ function SystemLogin() {
     const [validationsShot, setValidationsShot] = useState(false);
     const [emailValidation, setEmailValidation] = useState("");
     const [passwordValidation, setPasswordValidation] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
-    // State variables (Zustand).
-    const savedEmail = useLoginStore((state: LoginStore) => state.adminEmail);
-    const savedPassword = useLoginStore((state: LoginStore) => state.adminPassword);
-    const updateSessionStatus = useLoginStore((state: LoginStore) => state.changeSessionStatus);
-    const sessionStore = useLoginStore((state: LoginStore) => state.isUserLogged);
-
-    if (sessionStore === true) {
-        redirect("/system/appointments");
-    }
-
-    function shootValidations(e: React.FormEvent) {
+    async function shootValidations(e: React.SubmitEvent) {
         setValidationsShot(true);
+        setIsLoading(true);
         e.preventDefault(); // We prevent the form from reloading the page.
 
-        if (!email) {
-            setEmailValidation("empty")
-        };
-        if (!password) {
-            setPasswordValidation("empty")
-        };
-
-        if (email && password) {
-            if ((email === savedEmail) && (password === savedPassword)) {
-                updateSessionStatus(true);
+        try {
+            if (!email) {
+                setEmailValidation("empty");
+                return;
             };
 
-            if (email != savedEmail) {
-                setEmailValidation("wrong");
-            }
+            if (!password) {
+                setPasswordValidation("empty");
+                return;
+            };
 
-            if (password != savedPassword) {
+            const loginObject = {
+                email: email,
+                password: password
+            };
+
+            const loginResult = await api.put("/credentials/login", loginObject);
+
+            if (!loginResult.data.emailResult) {
+                setEmailValidation("wrong");
+                return;
+            };
+
+            if (!loginResult.data.passwordResult) {
                 setPasswordValidation("wrong");
-            }
+                return;
+            };
+
+            if (loginResult.data.emailResult && loginResult.data.passwordResult) {
+                try {
+                    await fetch("/login/api", {
+                        method: "POST",
+                        body: JSON.stringify({token: loginResult.data.token})
+                    });
+                } catch (error) {
+                    console.log(error);
+                };
+            };
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setValidationsShot(false);
+            setIsLoading(false);
+            redirect("/system/appointments")
         };
     }
 
@@ -83,19 +93,25 @@ function SystemLogin() {
 
                     <form id="loginForm" onSubmit={(e) => shootValidations(e)} className="inputs flex flex-col gap-4 w-full">
                         <Input grayBg={true} label="Correo electrónico:" type="text" textValue={email} activeValidation={emailValidation != ""} onInputChange={onEmailChange} />
-                        {(emailValidation != "") && (
+                        {emailValidation != "" && (
                             <InputWarning message={emailValidation === "empty" ? "Por favor, ingresa un correo." : "El correo ingresado es incorrecto."} />
                         )}
 
-                        <Input grayBg={true} label="Contraseña:" type="text" textValue={password} activeValidation={passwordValidation != ""} onInputChange={onPasswordChange} />
-                        {(passwordValidation != "") && (
+                        <Input grayBg={true} label="Contraseña:" type="password" textValue={password} activeValidation={passwordValidation != ""} onInputChange={onPasswordChange} />
+                        {passwordValidation != "" && (
                             <InputWarning message={passwordValidation === "empty" ? "Por favor, ingresa una contraseña." : "La contraseña ingresada es incorrecta."} />
                         )}
 
                     </form>
 
                     <button form="loginForm" type="submit" className="bg-indigo-500 text-white tracking-tight text-base px-4 py-2 flex flex-row items-center justify-center gap-2 rounded-lg cursor-pointer font-normal hover:bg-indigo-400 w-full">
-                        Entrar al sistema
+                        {isLoading && validationsShot && (
+                            <Spinner className="size-6" />
+                        )}
+
+                        {!isLoading && !validationsShot && (
+                            <p className="text-base font-normal text-center">Iniciar sesión</p>
+                        )}
                     </button>
 
                     <p className="uppercase text-sm font-normal text-slate-600">© HEMISFERIOS 2026. TODOS LOS DERECHOS RESERVADOS.</p>

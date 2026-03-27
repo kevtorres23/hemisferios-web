@@ -7,7 +7,8 @@ import TextButton from "@/components/website/TextButton";
 import BrainTag from "@/components/website/BrainTag";
 import brainIllustration from "../../../../public/hero-brain.png"
 import blob from "../../../../public/blob.png";
-import { isVisible }  from "@/utils/website/visibility-detector";
+import { isVisible } from "@/utils/website/visibility-detector";
+import Link from "next/link";
 
 function HeroSection() {
     const ref1 = useRef(null);
@@ -18,7 +19,7 @@ function HeroSection() {
 
     return (
         <main className="relative overflow-hidden w-full flex lg:flex-row flex-col sm:gap-20 gap-14 justify-center items-center lg:px-0 sm:px-16 px-8 lg:pt-24 lg:pb-36 md:py-20 py-16 h-auto">
-            
+
             {/* Decoration Blobs */}
             <div className="absolute xl:-left-52 md:-left-46 sm:-left-48 -left-30 sm:top-32 top-48 z-900">
                 <Image src={blob} alt="" className="xl:w-70 sm:w-60 w-40 opacity-15" />
@@ -34,9 +35,14 @@ function HeroSection() {
                 <p className="lg:text-5xl/14 text-4xl/12 lg:text-start text-center font-semibold text-slate-950 tracking-tighter w-full">Estimulación, rehabilitación e integración <span className="text-indigo-500">completa.</span></p>
                 <p className="text-base font-normal/7 lg:text-start text-center text-slate-600 w-full">Somos un centro de terapia infantil donde trabajamos para abordar y mejorar diferentes aspectos del funcionamiento cognitivo y comunicativo.</p>
 
-                <div className="flex sm:flex-row flex-col gap-4">
-                    <NormalButton text="Nuestros servicios" />
-                    <TextButton text="Agendar una cita" />
+                <div className="flex sm:flex-row flex-col items-center gap-4">
+                    <Link href={"/services-and-prices"}>
+                        <NormalButton text="Nuestros servicios" />
+                    </Link>
+
+                    <Link href={"/book-appointment"}>
+                        <TextButton text="Agendar una cita" />
+                    </Link>
                 </div>
             </div>
 

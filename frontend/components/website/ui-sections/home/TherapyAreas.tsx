@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import NormalButton from "@/components/website/NormalButton";
 import patient from "../../../../public/patient.png";
+import Link from "next/link";
 import SectionBadge from "@/components/website/SectionBadge";
 import { isVisible } from "@/utils/website/visibility-detector";
 
@@ -30,7 +31,9 @@ function TherapyAreas() {
                     Tratamos casos de dificultades en los trastornos de la comunicación, y usamos procesos especializados que ayudan a niños a mejorar su capacidad comunicativa.
                 </p>
 
-                <NormalButton text="Precios de terapia" />
+                <Link href={"/services-and-prices#prices"}>
+                    <NormalButton text="Precios de terapia" />
+                </Link>
             </div>
 
             {/* Illustration */}
