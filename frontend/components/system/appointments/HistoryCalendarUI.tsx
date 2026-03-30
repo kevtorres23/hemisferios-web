@@ -6,6 +6,7 @@ import { CalendarDay } from "./CalendarElements";
 import { CalendarHour } from "./CalendarElements";
 import { AppointmentCardCalendar } from "./AppointmentCard";
 import { calendarContentGenerator } from "@/utils/system/calendar/calendar-methods";
+import { hourFormatter } from "@/utils/hour-methods";
 
 type weekDayObject = {
     dayName: string,
@@ -62,7 +63,7 @@ function HistoryCalendarUI(props: CalendarUIProps) {
                     <div key={id} className="calendar-content flex flex-row w-full">
                         <CalendarHour
                             key={id}
-                            hour={calendarHours[id]}
+                            hour={hourFormatter(calendarHours[id].toString())}
                             isLast={id === (hours.length - 1)}
                         />
 

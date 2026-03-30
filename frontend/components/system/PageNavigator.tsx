@@ -24,7 +24,7 @@ function PageNavigator(props: NavigatorProps) {
             setIsPreviousDisabled(false);
         }
 
-        if (currentPage === finalPage) {
+        if (currentPage === finalPage || finalPage === 0) {
             setIsNextDisabled(true); // User can't advance more if they are in the last page.
         } else {
             setIsNextDisabled(false);

@@ -3,6 +3,7 @@ import { calendarHoursCreator, hourSorter, calendarContentGenerator } from "../.
 import { currentWeekList, nextWeekList } from "@/utils/system/calendar/calendar-variables";
 import { AppointmentCardCalendar } from "./AppointmentCard";
 import { AppointmentType } from "../../../utils/types";
+import { hourFormatter } from "@/utils/hour-methods";
 
 type DayProps = {
     dayName?: string,
@@ -40,7 +41,7 @@ function CalendarDay(props: DayProps) {
 function CalendarHour(props: HourProps) {
     return (
         <div className={`min-w-16 min-h-20 items-center justify-center bg-slate-100 border-b border-l text-slate-600 border-slate-200 flex flex-row gap-1.5 px-3 py-2 text-sm ${props.isLast ? "rounded-bl-lg" : "rounded-none"}`}>
-            <p className="font-medium uppercase tracking-wide">{props.hour}</p>
+            <p className="font-medium text-center tracking-normal">{props.hour}</p>
         </div>
     );
 };
@@ -99,7 +100,7 @@ function CalendarUI(props: CalendarUIProps) {
                     <div className="calendar-content flex flex-row w-full" key={id}>
                         <CalendarHour
                             key={id}
-                            hour={calendarHours[id]}
+                            hour={hourFormatter(calendarHours[id].toString())}
                             isLast={id === (hours.length - 1)}
                         />
 

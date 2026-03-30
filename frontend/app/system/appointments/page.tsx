@@ -208,13 +208,13 @@ function AppointmentDashboard() {
                     )}
 
                     {!isLoading && pendingCounter === 1 && (
-                        <p className="text-lg font-medium text-slate-800">
+                        <p className="text-lg font-medium text-slate-800 sm:text-start text-center">
                             Hay <span className="font-semibold text-indigo-500">1</span> cita pendiente
                         </p>
                     )}
 
                     {!isLoading && pendingCounter === 0 && (
-                        <p className="text-lg font-medium text-slate-800">
+                        <p className="text-lg font-medium text-slate-800 sm:text-start text-center">
                             ¡No hay citas pendientes!
                         </p>
                     )}

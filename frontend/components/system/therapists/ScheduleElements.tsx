@@ -4,6 +4,7 @@ import { ScheduleItem } from "../../../utils/types";
 import { useContext } from "react";
 import { ScheduleActionContext } from "@/app/system/therapists/page";
 import SchedulePatient from "./SchedulePatientCard";
+import { hourFormatter } from "@/utils/hour-methods";
 
 type DayProps = {
     dayName?: string,
@@ -41,7 +42,7 @@ function ScheduleDay(props: DayProps) {
 function ScheduleHour(props: HourProps) {
     return (
         <div className={`min-w-16 min-h-20 items-center justify-center ${props.mode === "view" ? "bg-slate-100" : "bg-white"} border-b border-l text-slate-600 border-slate-200 flex flex-row gap-1.5 px-3 py-2 text-sm ${props.isLast ? "rounded-bl-lg" : "rounded-none"}`}>
-            <p className="font-medium uppercase tracking-wide">{props.hour}</p>
+            <p className="font-medium text-center tracking-wide">{props.hour}</p>
         </div>
     );
 };
@@ -118,7 +119,7 @@ function ScheduleUI(props: ScheduleUIProps) {
                     <div className="flex flex-row w-full" key={id}>
                         <ScheduleHour
                             key={id}
-                            hour={hours[id]}
+                            hour={hourFormatter(hours[id])}
                             isLast={id === (hours.length - 1)}
                             mode={props.mode}
                         />

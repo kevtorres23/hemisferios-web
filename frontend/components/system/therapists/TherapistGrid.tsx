@@ -32,23 +32,27 @@ function TherapistGrid(props: GridProps) {
                 </div>
             </div>
 
-            <div className="grid w-full xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 grid-cols-1 gap-6">
-                {therapistPages[currentPage - 1].filter((item) => {
-                    return search.toLowerCase() === ""
-                    ? item
-                    : item.name.toLowerCase().includes(search.toLowerCase());
-                }).map((item, id) =>
-                    <TherapistCard
-                        _id={item._id}
-                        key={id}
-                        name={item.name}
-                        lastName={item.lastName}
-                        startingDate={item.startingDate}
-                        contactNumber={item.contactNumber}
-                        schedule={item.schedule}
-                    />
-                )}
-            </div>
+            <>
+                <p className="text-slate-800 font-medium text-lg">Hay <span className="font-semibold text-indigo-500">{props.data.length}</span> terapeutas registrados</p>
+
+                <div className="grid w-full xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 grid-cols-1 gap-6">
+                    {therapistPages[currentPage - 1].filter((item) => {
+                        return search.toLowerCase() === ""
+                            ? item
+                            : item.name.toLowerCase().includes(search.toLowerCase());
+                    }).map((item, id) =>
+                        <TherapistCard
+                            _id={item._id}
+                            key={id}
+                            name={item.name}
+                            lastName={item.lastName}
+                            startingDate={item.startingDate}
+                            contactNumber={item.contactNumber}
+                            schedule={item.schedule}
+                        />
+                    )}
+                </div>
+            </>
         </div>
     );
 };
