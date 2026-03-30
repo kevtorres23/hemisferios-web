@@ -43,7 +43,7 @@ function CommentGrid(props: GridProps) {
             };
 
             setPages(pageSeparator(commentData).length);
-            
+
         } else {
             setCommentPages(pageSeparator(commentData));
             setPages(pageSeparator(commentData).length);
@@ -93,30 +93,34 @@ function CommentGrid(props: GridProps) {
                 </div>
             </div>
 
-            <div className="grid w-full xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 grid-cols-1 gap-6">
-                {commentPages[currentPage - 1].filter((comment: CommentType) => {
-                    return search.toLowerCase() === ""
-                        ? comment
-                        : comment.name.toLowerCase().includes(search.toLowerCase());
-                }).map((item, id) => {
-                    let creationDate = new Date(item.createdAt);
+            <>
+                <p className="text-slate-800 font-medium text-lg">Hay <span className="font-semibold text-indigo-500">{props.data.length}</span> comentarios sin leer</p>
 
-                    return (
-                        <CommentCard
-                            key={id}
-                            _id={item._id}
-                            name={item.name}
-                            lastName={item.lastName}
-                            phoneNumber={item.phoneNumber}
-                            email={item.email}
-                            message={item.message}
-                            createdAt={format(creationDate, "PP", { locale: es })}
-                            status={item.status}
-                        />
-                    )
-                }
-                )}
-            </div>
+                <div className="grid w-full xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 grid-cols-1 gap-6">
+                    {commentPages[currentPage - 1].filter((comment: CommentType) => {
+                        return search.toLowerCase() === ""
+                            ? comment
+                            : comment.name.toLowerCase().includes(search.toLowerCase());
+                    }).map((item, id) => {
+                        let creationDate = new Date(item.createdAt);
+
+                        return (
+                            <CommentCard
+                                key={id}
+                                _id={item._id}
+                                name={item.name}
+                                lastName={item.lastName}
+                                phoneNumber={item.phoneNumber}
+                                email={item.email}
+                                message={item.message}
+                                createdAt={format(creationDate, "PP", { locale: es })}
+                                status={item.status}
+                            />
+                        )
+                    }
+                    )}
+                </div>
+            </>
         </div>
     );
 };

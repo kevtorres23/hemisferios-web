@@ -133,28 +133,34 @@ function AppointmentGrid(props: GridProps) {
             )}
 
             {appointmentPages.length >= 1 && (
-                <div className="grid w-full xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 grid-cols-1 gap-6">
-                    {appointmentPages[currentPage - 1].filter((item: AppointmentType) => {
-                        return search.toLowerCase() === ""
-                            ? item
-                            : item.patientName.toLowerCase().includes(search.toLowerCase()); // Search filter implementation.
-                    }).map((item, id) =>
-                        <AppointmentCard
-                            _id={item._id}
-                            key={id}
-                            status={item.status}
-                            patientName={item.patientName}
-                            fatherSurname={item.fatherSurname}
-                            motherSurname={item.motherSurname}
-                            phoneNumber={item.phoneNumber}
-                            date={item.date} // We pass item.date first by AppointmentFormatter().
-                            hour={item.hour} // We pass item.date first by AppointmentFormatter().
-                            cancellationComment={item.cancellationComment}
-                            timestamp={item.timestamp}
-                            page={props.page}
-                        />
+                <>
+                    {props.page === "history" && (
+                        <p className="text-slate-800 font-medium text-lg">Hay <span className="font-semibold text-indigo-500">{props.data.length}</span> citas en este mes</p>
                     )}
-                </div>
+
+                    <div className="grid w-full xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 grid-cols-1 gap-6">
+                        {appointmentPages[currentPage - 1].filter((item: AppointmentType) => {
+                            return search.toLowerCase() === ""
+                                ? item
+                                : item.patientName.toLowerCase().includes(search.toLowerCase()); // Search filter implementation.
+                        }).map((item, id) =>
+                            <AppointmentCard
+                                _id={item._id}
+                                key={id}
+                                status={item.status}
+                                patientName={item.patientName}
+                                fatherSurname={item.fatherSurname}
+                                motherSurname={item.motherSurname}
+                                phoneNumber={item.phoneNumber}
+                                date={item.date} // We pass item.date first by AppointmentFormatter().
+                                hour={item.hour} // We pass item.date first by AppointmentFormatter().
+                                cancellationComment={item.cancellationComment}
+                                timestamp={item.timestamp}
+                                page={props.page}
+                            />
+                        )}
+                    </div>
+                </>
             )}
         </div>
     )
