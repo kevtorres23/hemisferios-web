@@ -94,7 +94,7 @@ function CommentGrid(props: GridProps) {
             </div>
 
             <>
-                <p className="text-slate-800 font-medium text-lg">Hay <span className="font-semibold text-indigo-500">{props.data.length}</span> comentarios sin leer</p>
+                <p className="text-slate-800 font-medium text-lg">Hay <span className="font-semibold text-indigo-500">{props.data.length}</span> comentarios leídos</p>
 
                 <div className="grid w-full xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-2 grid-cols-1 gap-6">
                     {commentPages[currentPage - 1].filter((comment: CommentType) => {
